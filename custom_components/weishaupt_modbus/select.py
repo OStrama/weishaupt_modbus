@@ -5,8 +5,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .configentry import MyConfigEntry
 from .const import TYPES
-from .coordinator import MyCoordinator
-from .entities import build_entity_list
+from .entity_helpers import build_entity_list
 from .hpconst import DEVICELISTS
 
 
@@ -16,19 +15,14 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Select entry setup."""
-    _modbus_api = config_entry.runtime_data.modbus_api
-
+    _useless = hass
+    # start with an empty list of entries
     entries = []
 
-    for device in DEVICELISTS:
-        coordinator = MyCoordinator(
-            hass=hass,
-            my_api=_modbus_api,
-            api_items=device,
-            p_config_entry=config_entry,
-        )
-        await coordinator.async_config_entry_first_refresh()
+    # we create one communicator per integration only for better performance and to allow dynamic parameters
+    coordinator = config_entry.runtime_data.coordinator
 
+    for device in DEVICELISTS:
         entries = await build_entity_list(
             entries=entries,
             config_entry=config_entry,

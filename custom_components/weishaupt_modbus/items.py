@@ -1,13 +1,14 @@
 """Item classes."""
 
-from .const import TYPES, DeviceConstants, FormatConstants, TypeConstants
+from .const import TYPES, FORMATS, DeviceConstants, FormatConstants, TypeConstants
 
 
-# An item of a status, e.g. error code and error text along with a precise description
-# A class is intentionally defined here because the assignment via dictionaries would not work so elegantly in the end,
-# especially when searching backwards. (At least I don't know how...)
 class StatusItem:
-    """Status item class."""
+    """An item of a status, e.g. error code and error text along with a precise description.
+
+    A class is intentionally defined here because the assignment via dictionaries would not work so elegantly in the end,
+    especially when searching backwards. (At least I don't know how...)
+    """
 
     _number = None
     _text = None
@@ -236,6 +237,7 @@ class WebItem(ApiItem):
         webif_group: str,
         translation_key: str | None = None,
         resultlist=None,
+        params: dict = None,
     ) -> None:
         """WebifItem is used to generate sensors for an Webinterface value.
 
@@ -257,8 +259,9 @@ class WebItem(ApiItem):
             device=device,
             translation_key=translation_key,
             resultlist=resultlist,
+            params=params,
         )
-        _webif_group: str = webif_group
+        self._webif_group: str = webif_group
 
     @property
     def webif_group(self) -> str:
@@ -269,6 +272,19 @@ class WebItem(ApiItem):
     def webif_group(self, val: str) -> None:
         """Set webif_group."""
         self._webif_group: str = val
+
+    def get_value(self, val):
+        if self._format in [
+            FORMATS.TEMPERATUR,
+            FORMATS.ENERGY,
+            FORMATS.POWER,
+            FORMATS.PERCENTAGE,
+            FORMATS.VOLUMENSTROM,
+            FORMATS.TIME_MIN,
+            FORMATS.TIME_H,
+        ]:
+            return val.split(" ")[0]
+        return val
 
 
 class ModbusItem(ApiItem):
@@ -285,6 +301,7 @@ class ModbusItem(ApiItem):
         device: DeviceConstants,
         translation_key: str,
         resultlist=None,
+        params: dict = None,
     ) -> None:
         """ModbusItem is used to generate entitys.
 
@@ -306,6 +323,7 @@ class ModbusItem(ApiItem):
             device=device,
             translation_key=translation_key,
             resultlist=resultlist,
+            params=params,
         )
         self._address: str = address
 

@@ -21,7 +21,8 @@
                     "Name-Device-Prefix": "Name Device Prefix",
                     "Name-Topic-Prefix": "Name Topic Prefix",
                     "Port": "Port",
-                    "Prefix": "Prefix"
+                    "Prefix": "Prefix",
+                    "enable-webif": "enable experimental webif?"
                 }
             }
         }
@@ -1547,6 +1548,21 @@
                     "hp_stoerung": "error",
                     "hp_stoerungsfrei": "no error"
                 }
+            },
+            "tagesarbeitszahl_heute": {
+                "name": "{prefix}Tagesarbeitszahl heute"
+            },
+            "spreizung": {
+                "name": "{prefix}Spreizung"
+            },
+            "jahresarbeitszahl": {
+                "name": "{prefix}Jahresarbeitszahl"
+            },
+            "tagesarbeitszahl_gestern": {
+                "name": "{prefix}Tagesarbeitszahl gestern"
+            },
+            "monatsarbeitszahl": {
+                "name": "{prefix}Monatsarbeitszahl"
             },
             "ww_energie_yesterday": {
                 "name": "{prefix}Hot water energy yesterday"

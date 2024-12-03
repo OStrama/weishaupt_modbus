@@ -3,7 +3,6 @@
 import asyncio
 from datetime import timedelta
 import logging
-import warnings
 
 from pymodbus import ModbusException
 
@@ -11,7 +10,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
 from .configentry import MyConfigEntry
-from .const import CONF_HK2, CONF_HK3, CONF_HK4, CONF_HK5, CONST, FORMATS, TYPES
+from .const import CONF, CONST, FORMATS, TYPES
 from .hpconst import DEVICES, PARAMS_STDTEMP
 from .items import ModbusItem
 from .modbusobject import ModbusAPI, ModbusObject
@@ -56,30 +55,32 @@ class MyCoordinator(DataUpdateCoordinator):
         if mbo is None:
             modbus_item.state = None
         modbus_item.state = await mbo.value
+        log.debug("Get value:%s from item:%s",str(modbus_item.state), modbus_item.translation_key)
         return modbus_item.state
 
-    async def get_value_a(self, modbus_item: ModbusItem):
-        """Read a value from the modbus."""
-        mbo = ModbusObject(self._modbus_api, modbus_item)
-        if mbo is None:
-            return None
-        return await mbo.value
+    def get_value_from_item(self, translation_key: str) -> int:
+        """Read a value from another modbus item"""
+        for _useless, item in enumerate(self._modbusitems):
+            if item.translation_key == translation_key:
+                log.debug("Get calc value:%s from item:%s",str(item.state), item.translation_key)
+                return item.state
+        return None
 
     async def check_configured(self, modbus_item: ModbusItem) -> bool:
         """Check if item is configured."""
-        if self._config_entry.data[CONF_HK2] is False:
+        if self._config_entry.data[CONF.HK2] is False:
             if modbus_item.device is DEVICES.HZ2:
                 return False
 
-        if self._config_entry.data[CONF_HK3] is False:
+        if self._config_entry.data[CONF.HK3] is False:
             if modbus_item.device is DEVICES.HZ3:
                 return False
 
-        if self._config_entry.data[CONF_HK4] is False:
+        if self._config_entry.data[CONF.HK4] is False:
             if modbus_item.device is DEVICES.HZ4:
                 return False
 
-        if self._config_entry.data[CONF_HK5] is False:
+        if self._config_entry.data[CONF.HK5] is False:
             if modbus_item.device is DEVICES.HZ5:
                 return False
         return True
@@ -116,41 +117,14 @@ class MyCoordinator(DataUpdateCoordinator):
                 match item.type:
                     # here the entities are created with the parameters provided
                     # by the ModbusItem object
-                    case TYPES.SENSOR | TYPES.NUMBER_RO | TYPES.NUMBER | TYPES.SELECT:
+                    case (
+                        TYPES.SENSOR
+                        | TYPES.NUMBER_RO
+                        | TYPES.NUMBER
+                        | TYPES.SELECT
+                        | TYPES.SENSOR_CALC
+                    ):
                         await self.get_value(item)
-                    case TYPES.SENSOR_CALC:
-                        r1 = await self.get_value_a(item)
-                        item_x = ModbusItem(
-                            item.params["x"],
-                            "x",
-                            FORMATS.TEMPERATUR,
-                            TYPES.SENSOR_CALC,
-                            DEVICES.SYS,
-                            params=PARAMS_STDTEMP,
-                        )
-                        r2 = await self.get_value(item_x)
-                        if r2 is None:
-                            # use Aussentemperatur if Luftansaugtemperatur not available
-                            item_x = ModbusItem(
-                                item.params["x2"],
-                                "x2",
-                                FORMATS.TEMPERATUR,
-                                TYPES.SENSOR_CALC,
-                                DEVICES.SYS,
-                                params=PARAMS_STDTEMP,
-                            )
-                            r2 = await self.get_value(item_x)
-                        item_y = ModbusItem(
-                            item.params["y"],
-                            "y",
-                            FORMATS.TEMPERATUR,
-                            TYPES.SENSOR_CALC,
-                            DEVICES.WP,
-                            params=PARAMS_STDTEMP,
-                        )
-                        r3 = await self.get_value(item_y)
-
-                        item.state = [r1, r2, r3]
 
     async def _async_update_data(self):
         """Fetch data from API endpoint.
@@ -166,7 +140,7 @@ class MyCoordinator(DataUpdateCoordinator):
             # data retrieved from API.
             try:
                 listening_idx = set(self.async_contexts())
-                return await self.fetch_data(listening_idx)
+                return await self.fetch_data() #listening_idx)
             except ModbusException:
                 log.warning("connection to the heatpump failed")
 
@@ -183,17 +157,17 @@ class MyWebIfCoordinator(DataUpdateCoordinator):
         """Initialize my coordinator."""
         super().__init__(
             hass=hass,
-            logger=_LOGGER,
+            logger=log,
             # Name of the data. For logging purposes.
             name="My sensor",
             # Polling interval. Will only be polled if there are subscribers.
-            update_interval=timedelta(seconds=30),
+            update_interval=timedelta(seconds=60),
             # Set always_update to `False` if the data returned from the
             # api can be compared via `__eq__` to avoid duplicate updates
             # being dispatched to listeners
             always_update=True,
         )
-        self.my_api = config_entry.runtime_data.webif_api
+        self.my_api: WebifConnection = config_entry.runtime_data.webif_api
         # self._device: MyDevice | None = None
 
     async def _async_setup(self):
@@ -216,13 +190,13 @@ class MyWebIfCoordinator(DataUpdateCoordinator):
         try:
             # Note: asyncio.TimeoutError and aiohttp.ClientError are already
             # handled by the data update coordinator.
-            async with asyncio.timeout(10):
+            async with asyncio.timeout(30):
                 # Grab active context variables to limit data required to be fetched from API
                 # Note: using context is not required if there is no need or ability to limit
                 # data retrieved from API.
                 # listening_idx = set(self.async_contexts())
-                return await self.my_api.return_test_data()
-
+                # return await self.my_api.return_test_data()
+                return await self.my_api.get_info()
         except TimeoutError:
             logging.debug(msg="Timeout while fetching data")
         # except ApiAuthError as err:

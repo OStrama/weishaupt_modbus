@@ -10,10 +10,8 @@ import logging
 from pymodbus import ExceptionResponse, ModbusException
 from pymodbus.client import AsyncModbusTcpClient
 
-from homeassistant.const import CONF_HOST, CONF_PORT
-
 from .configentry import MyConfigEntry
-from .const import FORMATS, TYPES
+from .const import FORMATS, TYPES, CONF
 from .items import ModbusItem
 
 logging.basicConfig()
@@ -32,8 +30,8 @@ class ModbusAPI:
         :param config_entry: HASS config entry
         :type config_entry: MyConfigEntry
         """
-        self._ip = config_entry.data[CONF_HOST]
-        self._port = config_entry.data[CONF_PORT]
+        self._ip = config_entry.data[CONF.HOST]
+        self._port = config_entry.data[CONF.PORT]
         self._modbus_client = None
 
     async def connect(self):
@@ -158,6 +156,7 @@ class ModbusObject:
     def validate_modbus_answer(self, mbr) -> int:
         """Check if there's a valid answer from modbus and
         translate it to a valid int depending from type
+
         :param mbr: The modbus response
         :type mbr: modbus response"""
         val = None
@@ -184,7 +183,7 @@ class ModbusObject:
             val = self.check_valid_result(mbr.registers[0])
             log.debug(
                 "Item %s val=%d and invalid = %s",
-                self._modbus_item.name,
+                self._modbus_item.translation_key,
                 val,
                 self._modbus_item.is_invalid,
             )
@@ -193,6 +192,7 @@ class ModbusObject:
     @property
     async def value(self):
         """Returns the value from the modbus register."""
+        log.debug("Start reading modbus for item:%s", self._modbus_item.translation_key)
         if self._modbus_client is None:
             return None
 
@@ -201,13 +201,13 @@ class ModbusObject:
                 match self._modbus_item.type:
                     case TYPES.SENSOR | TYPES.SENSOR_CALC:
                         # Sensor entities are read-only
-                        log.debug("Reading item %s ..", self._modbus_item.name)
-
+                        log.debug("Reading sensor item %s ..", self._modbus_item.translation_key)
                         mbr = await self._modbus_client.read_input_registers(
                             self._modbus_item.address, slave=1
                         )
                         return self.validate_modbus_answer(mbr)
                     case TYPES.SELECT | TYPES.NUMBER | TYPES.NUMBER_RO:
+                        log.debug("Reading numbe or select item %s ..", self._modbus_item.translation_key)
                         mbr = await self._modbus_client.read_holding_registers(
                             self._modbus_item.address, slave=1
                         )
@@ -241,6 +241,7 @@ class ModbusObject:
                     # Sensor entities are read-only
                     return
                 case _:
+                    log.debug("Writing sensor item %s ..", self._modbus_item.translation_key)
                     await self._modbus_client.write_register(
                         self._modbus_item.address,
                         self.check_valid_response(value),

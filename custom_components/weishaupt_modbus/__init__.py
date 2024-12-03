@@ -1,47 +1,34 @@
 """init."""
 
 import json
-from pathlib import Path
 import logging
+from pathlib import Path
 
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import CONF_PASSWORD, CONF_PREFIX, CONF_USERNAME
 from homeassistant.core import HomeAssistant
 
 from .configentry import MyConfigEntry, MyData
-from .const import (
-    CONF_DEVICE_POSTFIX,
-    CONF_HK2,
-    CONF_HK3,
-    CONF_HK4,
-    CONF_HK5,
-    CONF_KENNFELD_FILE,
-    CONF_NAME_DEVICE_PREFIX,
-    CONF_NAME_TOPIC_PREFIX,
-    CONST,
-    FORMATS,
-    TYPES,
-)
+from .const import CONF, CONST, DEVICENAMES, FORMATS, TYPES
+from .coordinator import MyCoordinator
 from .hpconst import (
     DEVICELISTS,
-    MODBUS_HZ_ITEMS,
-    MODBUS_SYS_ITEMS,
-    MODBUS_ST_ITEMS,
-    MODBUS_WP_ITEMS,
-    MODBUS_WW_ITEMS,
-    MODBUS_W2_ITEMS,
-    MODBUS_IO_ITEMS,
     MODBUS_HZ2_ITEMS,
     MODBUS_HZ3_ITEMS,
     MODBUS_HZ4_ITEMS,
     MODBUS_HZ5_ITEMS,
+    MODBUS_HZ_ITEMS,
+    MODBUS_IO_ITEMS,
+    MODBUS_ST_ITEMS,
+    MODBUS_SYS_ITEMS,
+    MODBUS_W2_ITEMS,
+    MODBUS_WP_ITEMS,
+    MODBUS_WW_ITEMS,
 )
 from .items import ModbusItem, StatusItem
+from .kennfeld import PowerMap
+from .migrate_helpers import migrate_entities
 from .modbusobject import ModbusAPI
 from .webif_object import WebifConnection
-from .configentry import MyConfigEntry, MyData
-from .migrate_helpers import migrate_entities
-from .const import DEVICENAMES
 
 logging.basicConfig()
 log = logging.getLogger(__name__)
@@ -62,11 +49,38 @@ async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
     # with your actual devices.
     # hass.data.setdefault(DOMAIN, {})[entry.entry_id] = hub.Hub(hass, entry.data["host"])
     mbapi = ModbusAPI(config_entry=entry)
-    webapi = WebifConnection(config_entry=entry)
     await mbapi.connect()
-    entry.runtime_data = MyData(
-        modbus_api=mbapi, webif_api=webapi, config_dir=hass.config.config_dir, hass=hass
+
+    if entry.data[CONF.CB_WEBIF]:
+        print
+        webapi = WebifConnection(config_entry=entry)
+        await webapi.login()
+    else:
+        webapi = None
+
+    itemlist = []
+
+    for device in DEVICELISTS:
+        for item in device:
+            itemlist.append(item)
+
+    coordinator = MyCoordinator(
+        hass=hass, my_api=mbapi, api_items=itemlist, p_config_entry=entry
     )
+    await coordinator.async_config_entry_first_refresh()
+
+    entry.runtime_data = MyData(
+        modbus_api=mbapi,
+        webif_api=webapi,
+        config_dir=hass.config.config_dir,
+        hass=hass,
+        coordinator=coordinator,
+        powermap=None,
+    )
+
+    pwrmap = PowerMap(entry)
+    await pwrmap.initialize()
+    entry.runtime_data.powermap = pwrmap
 
     # myWebifCon = WebifConnection()
     # data = await myWebifCon.return_test_data()
@@ -117,7 +131,7 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: MyConfigEntry):
 
     new_data = {**config_entry.data}
 
-    if config_entry.version > 3:
+    if config_entry.version > 4:
         # This means the user has downgraded from a future version
         return True
 
@@ -127,27 +141,27 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: MyConfigEntry):
 
     if config_entry.version < 2:
         log.warning("Version <2 detected")
-        new_data[CONF_PREFIX] = CONST.DEF_PREFIX
-        new_data[CONF_DEVICE_POSTFIX] = ""
-        new_data[CONF_KENNFELD_FILE] = CONST.DEF_KENNFELDFILE
+        new_data[CONF.PREFIX] = CONST.DEF_PREFIX
+        new_data[CONF.DEVICE_POSTFIX] = ""
+        new_data[CONF.KENNFELD_FILE] = CONST.DEF_KENNFELDFILE
     if config_entry.version < 3:
         log.warning("Version <3 detected")
-        new_data[CONF_HK2] = False
-        new_data[CONF_HK3] = False
-        new_data[CONF_HK4] = False
-        new_data[CONF_HK5] = False
+        new_data[CONF.HK2] = False
+        new_data[CONF.HK3] = False
+        new_data[CONF.HK4] = False
+        new_data[CONF.HK5] = False
     if config_entry.version < 4:
         log.warning("Version <4 detected")
-        new_data[CONF_NAME_DEVICE_PREFIX] = False
-        new_data[CONF_NAME_TOPIC_PREFIX] = False
+        new_data[CONF.NAME_DEVICE_PREFIX] = False
+        new_data[CONF.NAME_TOPIC_PREFIX] = False
 
     if config_entry.version < 5:
-        new_data[CONF_USERNAME] = ""
-        new_data[CONF_PASSWORD] = ""
+        new_data[CONF.USERNAME] = ""
+        new_data[CONF.PASSWORD] = ""
         hass.config_entries.async_update_entry(
             config_entry, data=new_data, minor_version=1, version=5
         )
-        log.warning("Config entries updated to version 4")
+        log.warning("Config entries updated to version 5")
 
     hass.config_entries.async_update_entry(
         config_entry, data=new_data, minor_version=1, version=6
@@ -164,9 +178,9 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
     if unload_ok:
         try:
-            hass.data[entry.data[CONF_PREFIX]].pop(entry.entry_id)
+            hass.data[entry.data[CONF.PREFIX]].pop(entry.entry_id)
         except KeyError:
-            log.warning("KeyError: %s", str(entry.data[CONF_PREFIX]))
+            log.warning("KeyError: %s", str(entry.data[CONF.PREFIX]))
 
     return unload_ok
 

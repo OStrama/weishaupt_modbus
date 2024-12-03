@@ -3,31 +3,10 @@
 from typing import Any
 from aiofiles.os import scandir
 import voluptuous as vol
-from aiofiles.os import scandir
 from homeassistant import config_entries, exceptions
-from homeassistant.const import (
-    CONF_HOST,
-    CONF_PORT,
-    CONF_PREFIX,
-    CONF_PASSWORD,
-    CONF_USERNAME,
-)
 from homeassistant.core import HomeAssistant
-from homeassistant.data_entry_flow import FlowResult
-from homeassistant.const import CONF_HOST, CONF_PORT, CONF_PREFIX
 import homeassistant.helpers.config_validation as cv
-
-from .const import (
-    CONF_DEVICE_POSTFIX,
-    CONF_HK2,
-    CONF_HK3,
-    CONF_HK4,
-    CONF_HK5,
-    CONF_KENNFELD_FILE,
-    CONF_NAME_DEVICE_PREFIX,
-    CONF_NAME_TOPIC_PREFIX,
-    CONST,
-)
+from .const import CONF, CONST
 
 
 async def build_kennfeld_list(hass: HomeAssistant):
@@ -88,7 +67,7 @@ async def validate_input(data: dict) -> dict[str, Any]:
 class ConfigFlow(config_entries.ConfigFlow, domain=CONST.DOMAIN):
     """Class config flow."""
 
-    VERSION = 4  # 6
+    VERSION = 5  # 6
     # Pick one of the available connection classes in homeassistant/config_entries.py
     # This tells HA if it should be asking for updates, or it'll be notified of updates
     # automatically. This example uses PUSH, as the dummy hub will notify HA of
@@ -110,21 +89,22 @@ class ConfigFlow(config_entries.ConfigFlow, domain=CONST.DOMAIN):
         # did not find out how this works yet.
         data_schema = vol.Schema(
             schema={
-                vol.Required(schema=CONF_HOST): str,
-                vol.Optional(schema=CONF_PORT, default="502"): cv.port,
-                vol.Optional(schema=CONF_PREFIX, default=CONST.DEF_PREFIX): str,
-                vol.Optional(schema=CONF_DEVICE_POSTFIX, default=""): str,
+                vol.Required(schema=CONF.HOST): str,
+                vol.Optional(schema=CONF.PORT, default="502"): cv.port,
+                vol.Optional(schema=CONF.PREFIX, default=CONST.DEF_PREFIX): str,
+                vol.Optional(schema=CONF.DEVICE_POSTFIX, default=""): str,
                 vol.Optional(
-                    schema=CONF_KENNFELD_FILE, default="weishaupt_wbb_kennfeld.json"
+                    schema=CONF.KENNFELD_FILE, default="weishaupt_wbb_kennfeld.json"
                 ): vol.In(container=await build_kennfeld_list(self.hass)),
-                vol.Optional(schema=CONF_HK2, default=False): bool,
-                vol.Optional(schema=CONF_HK3, default=False): bool,
-                vol.Optional(schema=CONF_HK4, default=False): bool,
-                vol.Optional(schema=CONF_HK5, default=False): bool,
-                vol.Optional(schema=CONF_NAME_DEVICE_PREFIX, default=False): bool,
-                vol.Optional(schema=CONF_NAME_TOPIC_PREFIX, default=False): bool,
-                vol.Optional(schema=CONF_USERNAME, default=""): str,
-                vol.Optional(schema=CONF_PASSWORD, default=""): str,
+                vol.Optional(schema=CONF.HK2, default=False): bool,
+                vol.Optional(schema=CONF.HK3, default=False): bool,
+                vol.Optional(schema=CONF.HK4, default=False): bool,
+                vol.Optional(schema=CONF.HK5, default=False): bool,
+                vol.Optional(schema=CONF.NAME_DEVICE_PREFIX, default=False): bool,
+                vol.Optional(schema=CONF.NAME_TOPIC_PREFIX, default=False): bool,
+                vol.Optional(schema=CONF.CB_WEBIF, default=False): bool,
+                vol.Optional(schema=CONF.USERNAME, default=""): str,
+                vol.Optional(schema=CONF.PASSWORD, default=""): str,
             }
         )
 
@@ -161,48 +141,51 @@ class ConfigFlow(config_entries.ConfigFlow, domain=CONST.DOMAIN):
         schema_reconfigure = vol.Schema(
             schema={
                 vol.Required(
-                    schema=CONF_HOST, default=reconfigure_entry.data[CONF_HOST]
+                    schema=CONF.HOST, default=reconfigure_entry.data[CONF.HOST]
                 ): str,
                 vol.Optional(
-                    schema=CONF_PORT, default=reconfigure_entry.data[CONF_PORT]
+                    schema=CONF.PORT, default=reconfigure_entry.data[CONF.PORT]
                 ): cv.port,
                 vol.Optional(
-                    schema=CONF_PREFIX, default=reconfigure_entry.data[CONF_PREFIX]
+                    schema=CONF.PREFIX, default=reconfigure_entry.data[CONF.PREFIX]
                 ): str,
                 # reconfigure of device postfix leads to duplicated devices
                 vol.Optional(
-                    schema=CONF_DEVICE_POSTFIX,
-                    default=reconfigure_entry.data[CONF_DEVICE_POSTFIX],
+                    schema=CONF.DEVICE_POSTFIX,
+                    default=reconfigure_entry.data[CONF.DEVICE_POSTFIX],
                 ): str,
                 vol.Optional(
-                    schema=CONF_KENNFELD_FILE,
-                    default=reconfigure_entry.data[CONF_KENNFELD_FILE],
+                    schema=CONF.KENNFELD_FILE,
+                    default=reconfigure_entry.data[CONF.KENNFELD_FILE],
                 ): vol.In(container=await build_kennfeld_list(hass=self.hass)),
                 vol.Optional(
-                    schema=CONF_HK2, default=reconfigure_entry.data[CONF_HK2]
+                    schema=CONF.HK2, default=reconfigure_entry.data[CONF.HK2]
                 ): bool,
                 vol.Optional(
-                    schema=CONF_HK3, default=reconfigure_entry.data[CONF_HK3]
+                    schema=CONF.HK3, default=reconfigure_entry.data[CONF.HK3]
                 ): bool,
                 vol.Optional(
-                    schema=CONF_HK4, default=reconfigure_entry.data[CONF_HK4]
+                    schema=CONF.HK4, default=reconfigure_entry.data[CONF.HK4]
                 ): bool,
                 vol.Optional(
-                    schema=CONF_HK5, default=reconfigure_entry.data[CONF_HK5]
+                    schema=CONF.HK5, default=reconfigure_entry.data[CONF.HK5]
                 ): bool,
                 vol.Optional(
-                    schema=CONF_NAME_DEVICE_PREFIX,
-                    default=reconfigure_entry.data[CONF_NAME_DEVICE_PREFIX],
+                    schema=CONF.NAME_DEVICE_PREFIX,
+                    default=reconfigure_entry.data[CONF.NAME_DEVICE_PREFIX],
                 ): bool,
                 vol.Optional(
-                    schema=CONF_NAME_TOPIC_PREFIX,
-                    default=reconfigure_entry.data[CONF_NAME_TOPIC_PREFIX],
+                    schema=CONF.NAME_TOPIC_PREFIX,
+                    default=reconfigure_entry.data[CONF.NAME_TOPIC_PREFIX],
                 ): bool,
                 vol.Optional(
-                    schema=CONF_USERNAME, default=reconfigure_entry.data[CONF_USERNAME]
+                    schema=CONF.CB_WEBIF, default=reconfigure_entry.data[CONF.CB_WEBIF]
+                ): bool,
+                vol.Optional(
+                    schema=CONF.USERNAME, default=reconfigure_entry.data[CONF.USERNAME]
                 ): str,
                 vol.Optional(
-                    schema=CONF_PASSWORD, default=reconfigure_entry.data[CONF_PASSWORD]
+                    schema=CONF.PASSWORD, default=reconfigure_entry.data[CONF.PASSWORD]
                 ): str,
             }
         )
@@ -212,9 +195,10 @@ class ConfigFlow(config_entries.ConfigFlow, domain=CONST.DOMAIN):
             data_schema=schema_reconfigure,
             errors=errors,
             description_placeholders={
-                CONF_HOST: "myhostname",
+                CONF.HOST: "myhostname",
             },
         )
+
 
 class InvalidHost(exceptions.HomeAssistantError):
     """Error to indicate there is an invalid hostname."""

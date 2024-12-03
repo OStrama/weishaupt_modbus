@@ -4,13 +4,10 @@ import logging
 
 from homeassistant.util import slugify
 from homeassistant.helpers import entity_registry as er
-from homeassistant.const import CONF_PREFIX
 from homeassistant.core import callback
 
 from .const import (
-    CONF_DEVICE_POSTFIX,
-    CONF_NAME_DEVICE_PREFIX,
-    CONF_NAME_TOPIC_PREFIX,
+    CONF,
     CONST,
     TYPES,
 )
@@ -26,18 +23,18 @@ def create_new_entity_id(
     config_entry: MyConfigEntry, modbus_item: ModbusItem, platform: str, device: str
 ):
     """created an entity ID according to new style"""
-    dev_postfix = "_" + config_entry.data[CONF_DEVICE_POSTFIX]
+    dev_postfix = "_" + config_entry.data[CONF.DEVICE_POSTFIX]
     if dev_postfix == "_":
         dev_postfix = ""
 
     device_name = device + dev_postfix
 
-    if config_entry.data[CONF_NAME_DEVICE_PREFIX]:
+    if config_entry.data[CONF.NAME_DEVICE_PREFIX]:
         name_device_prefix = CONST.DEF_PREFIX + "_"
     else:
         name_device_prefix = ""
 
-    if config_entry.data[CONF_NAME_TOPIC_PREFIX]:
+    if config_entry.data[CONF.NAME_TOPIC_PREFIX]:
         name_topic_prefix = reverse_device_list[modbus_item.device] + "_"
     else:
         name_topic_prefix = ""
@@ -49,12 +46,12 @@ def create_new_entity_id(
 
 def create_unique_id(config_entry: MyConfigEntry, modbus_item: ModbusItem):
     """created an UID according to old style"""
-    dev_postfix = "_" + config_entry.data[CONF_DEVICE_POSTFIX]
+    dev_postfix = "_" + config_entry.data[CONF.DEVICE_POSTFIX]
 
     if dev_postfix == "_":
         dev_postfix = ""
 
-    return str(config_entry.data[CONF_PREFIX] + modbus_item.name + dev_postfix)
+    return str(config_entry.data[CONF.PREFIX] + modbus_item.name + dev_postfix)
 
 
 @callback

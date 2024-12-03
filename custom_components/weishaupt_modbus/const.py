@@ -4,6 +4,11 @@ from dataclasses import dataclass
 from datetime import timedelta
 
 from homeassistant.const import (
+    CONF_HOST,
+    CONF_PORT,
+    CONF_PASSWORD,
+    CONF_PREFIX,
+    CONF_USERNAME,
     PERCENTAGE,
     UnitOfEnergy,
     UnitOfPower,
@@ -12,16 +17,28 @@ from homeassistant.const import (
     UnitOfVolumeFlowRate,
 )
 
-CONF_DEVICE_POSTFIX = "Device-Postfix"
-CONF_KENNFELD_FILE = "Kennfeld-File"
-CONF_HK2 = "Heizkreis 2"
-CONF_HK3 = "Heizkreis 3"
-CONF_HK4 = "Heizkreis 4"
-CONF_HK5 = "Heizkreis 5"
-CONF_NAME_DEVICE_PREFIX = "Name-Device-Prefix"
-CONF_NAME_TOPIC_PREFIX = "Name-Topic-Prefix"
 
-name_list = []
+@dataclass(frozen=True)
+class ConfConstants:
+    """Constants used for configurastion"""
+
+    HOST = CONF_HOST
+    PORT = CONF_PORT
+    PREFIX = CONF_PREFIX
+    DEVICE_POSTFIX = "Device-Postfix"
+    KENNFELD_FILE = "Kennfeld-File"
+    HK2 = "Heizkreis 2"
+    HK3 = "Heizkreis 3"
+    HK4 = "Heizkreis 4"
+    HK5 = "Heizkreis 5"
+    NAME_DEVICE_PREFIX = "Name-Device-Prefix"
+    NAME_TOPIC_PREFIX = "Name-Topic-Prefix"
+    CB_WEBIF = "enable-webif"
+    PASSWORD = CONF_PASSWORD
+    USERNAME = CONF_USERNAME
+
+
+CONF = ConfConstants()
 
 
 @dataclass(frozen=True)
@@ -115,3 +132,15 @@ class DeviceNameConstants:
 
 
 DEVICENAMES = DeviceNameConstants()
+
+
+@dataclass(frozen=True)
+class CalcConstants:
+    """Main constants."""
+
+    POWER = "power"
+    QUOTIENT = "quotient"
+    DIFFERENCE = "difference"
+
+
+CALCTYPES = CalcConstants()

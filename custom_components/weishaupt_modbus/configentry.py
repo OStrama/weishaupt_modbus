@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
-# from .modbusobject import ModbusAPI
+# from .coordinator import MyCoordinator
 
 
 @dataclass
@@ -16,6 +16,8 @@ class MyData:
     webif_api: any
     config_dir: str
     hass: HomeAssistant
+    coordinator: any  # MyCoordinator
+    powermap: any
 
 
 type MyConfigEntry = ConfigEntry[MyData]
