@@ -55,13 +55,15 @@ class WebifConnection:
                 ) as response:
                     if response.status == 200:
                         self._connected = True
+                        # print(await response.text())
                     else:
                         self._connected = False
             except TimeoutError:
                 self._connected = False
-                logging.debug(msg="Timeout while logging in")
+                logging.error(msg="Timeout while logging in")
+
         else:
-            log.warning("No user / password specified for webif")
+            logging.error("No user / password specified for webif")
             self._connected = False
 
     async def return_test_data(self) -> dict[str, str]:
@@ -118,7 +120,7 @@ class WebifConnection:
             logging.debug(msg="Timeout while getting info")
             return None
 
-    async def get_info_wp(self) -> None:
+    async def fake_info_wp(self) -> None:
         """Return Info -> Heizkreis1."""
         # if self._connected == False:
         #    return None
@@ -146,6 +148,39 @@ class WebifConnection:
             else:
                 logging.debug("Update failed. return None")
                 print(await INFO_WP())
+                print(navs)
+                return None
+        else:
+            return None
+
+    async def fake_info_hk1(self) -> None:
+        """Return Info -> Heizkreis1."""
+        # if self._connected == False:
+        #    return None
+        # async with self._session.get(
+        #    url="/settings_export.html?stack=0C00000100000000008000F9AF010002000301,0C000C1900000000000000F9AF020003000401"
+        # ) as response:
+        #    if response.status != 200:
+        #        logging.debug(msg="Error: " & str(response.status))
+        #        return None
+        # logging.debug(msg=await response.text())
+        # print(await response.text())
+        if True:
+            main_page = BeautifulSoup(markup=INFO_HK1, features="html.parser")
+            navs: Tag | NavigableString | None = main_page.findAll(
+                "div", class_="col-3"
+            )
+            # print(navs)
+
+            if len(navs) == 3:
+                values_nav = navs[2]
+                self._values["Info"] = {"Heizkreis1": self.get_values(soup=values_nav)}
+                logging.debug(msg=self._values)
+                print(self._values["Info"]["Heizkreis1"])
+                return self._values["Info"]["Heizkreis1"]
+            else:
+                logging.debug("Update failed. return None")
+                print(await INFO_HK1())
                 print(navs)
                 return None
         else:
@@ -575,4 +610,191 @@ INFO_WP = """
 </body>
 
 </html>
+"""
+
+
+INFO_HK1 = """
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>
+WEM Lokal</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/dashboard.css" rel="stylesheet">
+
+    <link href="css/bootstrap-datepicker3.standalone.css" rel="stylesheet">
+
+    <script src="js/jquery-3.5.1.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/Chart.bundle.min.js"></script>
+    <script src="js/moment.js"></script>
+    <script src="js/bootstrap-datepicker.js"></script>
+    <script src="js/bootstrap-datepicker.de.min.js"></script>
+    <style>
+    .browseobj {
+      background-color: lightgrey;
+      color: black;
+    }
+    .activeobj {
+      background-color: darkgrey;
+    }
+    </style>
+
+  </head>
+
+  <body>
+    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
+			<a class="navbar-brand col-sm-3 col-md-2 mr-0" href="/home.html">EC-BIBLOCK COM V5.3 Rev. 9</a>
+      <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+<span class="navbar-text">Hallo Mad_One!</span>				</li>
+			</ul>
+      <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+		     <a class="nav-link" href="logout.html">Ausloggen</a>
+				</li>
+			</ul>
+		</nav>
+	  <div class="container-fluid">
+		<div class="row">
+<nav class="col-md-2 d-none d-md-block bg-light sidebar mt-5">
+  <div class="sidebar-sticky">
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a class="nav-link" href="/home.html">
+Dashboard        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/monitor.html">
+Monitor        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active" href="/settings_export.html">
+Profimodus        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/settings.html">
+Einstellungen        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+<h1 class="h2">Profimodus</h1>
+</div>
+<div class="container mx-0"><div class="row">
+<div class="col-3">
+<div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical"><a class="nav-link browseobj activeobj" href="/settings_export.html?stack=0C00000100000000008000F9AF010002000301" role="tab">
+<h5>Info</h5>
+
+</a>
+<a class="nav-link browseobj" href="/settings_export.html?stack=0600000100000000008000F9AF010011000301" role="tab">
+<h5>Systembetriebsart</h5>
+
+</a>
+<a class="nav-link browseobj" href="/settings_export.html?stack=3200000100000000008000F9AF010002000301" role="tab">
+<h5>Heizkreis 1</h5>
+
+</a>
+<a class="nav-link browseobj" href="/settings_export.html?stack=3300000100000000008000F9AF010002000301" role="tab">
+<h5>Heizkreis 2</h5>
+
+</a>
+<a class="nav-link browseobj" href="/settings_export.html?stack=4600000100000000008000F9AF010002000301" role="tab">
+<h5>Warmwasser</h5>
+
+</a>
+<a class="nav-link browseobj" href="/settings_export.html?stack=6400000100000000008000F9AF010002000301" role="tab">
+<h5>Wärmepumpe</h5>
+
+</a>
+<a class="nav-link browseobj" href="/settings_export.html?stack=6500000100000000008000F9AF010002000301" role="tab">
+<h5>2. WEZ</h5>
+
+</a>
+<a class="nav-link browseobj" href="/settings_export.html?stack=BE00000100000000008000F9AF010002000301" role="tab">
+<h5>Eingänge</h5>
+
+</a>
+<a class="nav-link browseobj" href="/settings_export.html?stack=C200000100000000008000F9AF010002000301" role="tab">
+<h5>Ausgänge</h5>
+
+</a>
+<a class="nav-link browseobj" href="/settings_export.html?stack=0100000100000000008000F9AF010002000301" role="tab">
+<h5>Einstellungen</h5>
+
+</a>
+<a class="nav-link browseobj" href="/settings_export.html?stack=C300000100000000008000F9AF010002000301" role="tab">
+<h5>Fehlerspeicher</h5>
+
+</a>
+<a class="nav-link browseobj" href="/settings_export.html?stack=5800000100000000008000F9AF010002000301" role="tab">
+<h5>Energiemanagement</h5>
+
+</a>
+</div></div>
+<div class="col-3">
+<div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical"><a class="nav-link browseobj activeobj" href="/settings_export.html?stack=0C00000100000000008000F9AF010002000301,0C000C1900000000000000F9AF020003000401" role="tab">
+<h5>Heizkreis 1</h5>
+
+</a>
+<a class="nav-link browseobj" href="/settings_export.html?stack=0C00000100000000008000F9AF010002000301,0C000C2200000000000000F9AF020003000401" role="tab">
+<h5>Wärmepumpe</h5>
+
+</a>
+<a class="nav-link browseobj" href="/settings_export.html?stack=0C00000100000000008000F9AF010002000301,0C000C2300000000000000F9AF020003000401" role="tab">
+<h5>2. WEZ</h5>
+
+</a>
+<a class="nav-link browseobj" href="/settings_export.html?stack=0C00000100000000008000F9AF010002000301,0C000C2700000000000000F9AF020003000401" role="tab">
+<h5>Statistik</h5>
+
+</a>
+</div></div>
+<div class="col-3">
+<div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical"><div class="nav-link browseobj" role="tab">
+<h5>Außentemperatur</h5>
+3.0 °C
+</div>
+<div class="nav-link browseobj" role="tab">
+<h5>AT Mittelwert</h5>
+3.5 °C
+</div>
+<div class="nav-link browseobj" role="tab">
+<h5>AT Langzeitwert</h5>
+4.5 °C
+</div>
+<div class="nav-link browseobj" role="tab">
+<h5>Raumsolltemperatur</h5>
+23.0 °C
+</div>
+<div class="nav-link browseobj" role="tab">
+<h5>Vorlaufsolltemperatur</h5>
+30.5 °C
+</div>
+<div class="nav-link browseobj" role="tab">
+<h5>Vorlauftemperatur</h5>
+31.0 °C
+</div>
+</div></div>
+</div></div><div class="container mx-0 mt-1"><form action="/settings_export.html" method="GET">
+<div class="row"><label for="access_code">Zugriffscode verändern</label>
+</div><div class="row"><input type="text" maxlength="4" required="true" id="access_code" name="access_code"
+></div><div class="row mt-1"><button type="submit" class="btn btn-sm btn-success">Anwenden</button></main>
+
+      </div>
+    </div>
+
+  </body>
+</html>
+
 """

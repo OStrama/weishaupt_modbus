@@ -52,7 +52,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
     await mbapi.connect()
 
     if entry.data[CONF.CB_WEBIF]:
-        print
         webapi = WebifConnection(config_entry=entry)
         await webapi.login()
     else:

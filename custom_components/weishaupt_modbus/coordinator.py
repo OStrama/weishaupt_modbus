@@ -55,14 +55,22 @@ class MyCoordinator(DataUpdateCoordinator):
         if mbo is None:
             modbus_item.state = None
         modbus_item.state = await mbo.value
-        log.debug("Get value:%s from item:%s",str(modbus_item.state), modbus_item.translation_key)
+        log.debug(
+            "Get value:%s from item:%s",
+            str(modbus_item.state),
+            modbus_item.translation_key,
+        )
         return modbus_item.state
 
     def get_value_from_item(self, translation_key: str) -> int:
         """Read a value from another modbus item"""
         for _useless, item in enumerate(self._modbusitems):
             if item.translation_key == translation_key:
-                log.debug("Get calc value:%s from item:%s",str(item.state), item.translation_key)
+                log.debug(
+                    "Get calc value:%s from item:%s",
+                    str(item.state),
+                    item.translation_key,
+                )
                 return item.state
         return None
 
@@ -140,7 +148,7 @@ class MyCoordinator(DataUpdateCoordinator):
             # data retrieved from API.
             try:
                 listening_idx = set(self.async_contexts())
-                return await self.fetch_data() #listening_idx)
+                return await self.fetch_data()  # listening_idx)
             except ModbusException:
                 log.warning("connection to the heatpump failed")
 
@@ -196,7 +204,14 @@ class MyWebIfCoordinator(DataUpdateCoordinator):
                 # data retrieved from API.
                 # listening_idx = set(self.async_contexts())
                 # return await self.my_api.return_test_data()
-                return await self.my_api.get_info()
+                print("Fetching Data")
+                items = {}
+                info_hk1 = await self.my_api.fake_info_hk1()
+                info_waermepumpe = await self.my_api.fake_info_wp()
+                items.update(info_hk1)
+                items.update(info_waermepumpe)
+                print(items)
+                return items
         except TimeoutError:
             logging.debug(msg="Timeout while fetching data")
         # except ApiAuthError as err:

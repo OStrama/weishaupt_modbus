@@ -1083,6 +1083,27 @@ WEBIF_INFO_HEIZKREIS1: list[WebItem] = [
     WebItem(name="Vorlauftemperatur", mformat=FORMATS.TEMPERATUR, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIH", translation_key="webif_info_heizkreis1_vorlauftemperatur"),
 ]
 
+WEBIF_INFO_WAERMEPUMPE: list[WebItem] = [
+    WebItem(name="Betrieb", mformat=FORMATS.STATUS, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_waermepumpe_betrieb"),
+    WebItem(name="Störmeldung", mformat=FORMATS.STATUS, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_waermepumpe_stoermeldung"),
+    WebItem(name="Warmwassertemperatur", mformat=FORMATS.TEMPERATUR, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_waermepumpe_warmwassertemperatur"),
+    WebItem(name="Leistungsanforderung", mformat=FORMATS.PERCENTAGE, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_waermepumpe_leistungsanforderung"),
+    WebItem(name="Solltemperatur", mformat=FORMATS.TEMPERATUR, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_waermepumpe_solltemperatur"),
+    WebItem(name="Schaltdifferenz dynamisch", mformat=FORMATS.TEMPERATUR, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_waermepumpe_schaltdifferenz_dynamisch"),
+    WebItem(name="Vorlauftemperatur", mformat=FORMATS.TEMPERATUR, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_waermepumpe_vorlauftemperatur"),
+    WebItem(name="Rücklauftemperatur", mformat=FORMATS.TEMPERATUR, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_waermepumpe_ruecklauftemperatur"),
+    WebItem(name="Drehzahl Pumpe M1", mformat=FORMATS.PERCENTAGE, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_waermepumpe_drehzahl_pumpe_m1"),
+    #WebItem(name="Volumenstrom", mformat=FORMATS.VOLUMENSTROM, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_waermepumpe_volumenstrom"),
+    WebItem(name="Stellung Umschaltventil", mformat=FORMATS.STATUS, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_waermepumpe_stellung_umschaltventil"),
+    WebItem(name="Version WWP-SG", mformat=FORMATS.STATUS, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_waermepumpe_version_wwpsg"),
+    WebItem(name="Version WWP-EC WBB", mformat=FORMATS.STATUS, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_waermepumpe_version_wwpecwbb"),
+    WebItem(name="Soll Leistung", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_waermepumpe_soll_leistung"),
+    WebItem(name="Ist Leistung", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_waermepumpe_ist_leistung"),
+    WebItem(name="Expansionsventil AG Eintr", mformat=FORMATS.TEMPERATUR, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_waermepumpe_expansionsvent_ag_eintr"),
+
+
+ ]
+
 DEVICELISTS: list = [
     MODBUS_SYS_ITEMS,
     MODBUS_WP_ITEMS,

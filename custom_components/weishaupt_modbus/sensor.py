@@ -12,7 +12,7 @@ from .const import CONF, TYPES
 from .coordinator import MyWebIfCoordinator
 from .entities import MyWebifSensorEntity
 from .entity_helpers import build_entity_list
-from .hpconst import DEVICELISTS, WEBIF_INFO_HEIZKREIS1
+from .hpconst import DEVICELISTS, WEBIF_INFO_HEIZKREIS1, WEBIF_INFO_WAERMEPUMPE
 
 logging.basicConfig()
 log: logging.Logger = logging.getLogger(name=__name__)
@@ -71,7 +71,18 @@ async def async_setup_entry(
                 )
             )
 
-    #    entries = entries + webifentries
+        webifcoordinator2 = MyWebIfCoordinator(hass=hass, config_entry=config_entry)
+        for webifitem in WEBIF_INFO_WAERMEPUMPE:
+            webifentries.append(  # noqa: PERF401
+                MyWebifSensorEntity(
+                    config_entry=config_entry,
+                    api_item=webifitem,
+                    coordinator=webifcoordinator2,
+                    idx=1,
+                )
+            )
+        entries = entries + webifentries
+
     async_add_entities(
         entries,
         update_before_add=True,
