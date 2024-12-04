@@ -5,13 +5,15 @@ from datetime import timedelta
 
 from homeassistant.const import (
     CONF_HOST,
-    CONF_PORT,
     CONF_PASSWORD,
+    CONF_PORT,
     CONF_PREFIX,
     CONF_USERNAME,
     PERCENTAGE,
+    REVOLUTIONS_PER_MINUTE,
     UnitOfEnergy,
     UnitOfPower,
+    UnitOfPressure,
     UnitOfTemperature,
     UnitOfTime,
     UnitOfVolumeFlowRate,
@@ -61,8 +63,10 @@ class FormatConstants:
     """Format constants."""
 
     TEMPERATUR = UnitOfTemperature.CELSIUS
+    TEMPERATUR_DELTA = UnitOfTemperature.KELVIN
     ENERGY = UnitOfEnergy.KILO_WATT_HOUR
     POWER = UnitOfPower.WATT
+    POWER_KW = UnitOfPower.KILO_WATT
     PERCENTAGE = PERCENTAGE
     NUMBER = ""
     STATUS = "Status"
@@ -70,7 +74,10 @@ class FormatConstants:
     KENNLINIE = " "  # has to be different from NUMBER we'd have to separate unit strings and format...
     TIME_MIN = UnitOfTime.MINUTES
     TIME_H = UnitOfTime.HOURS
+    RPM = REVOLUTIONS_PER_MINUTE
+    PRESSURE = UnitOfPressure.BAR
     UNKNOWN = "?"
+    ANZAHL = None
 
 
 FORMATS = FormatConstants()

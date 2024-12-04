@@ -277,13 +277,20 @@ class WebItem(ApiItem):
         if self._format in [
             FORMATS.TEMPERATUR,
             FORMATS.ENERGY,
-            FORMATS.POWER,
             FORMATS.PERCENTAGE,
-            FORMATS.VOLUMENSTROM,
+            FORMATS.POWER,
+            FORMATS.POWER_KW,
             FORMATS.TIME_MIN,
             FORMATS.TIME_H,
+            FORMATS.PRESSURE,
+            FORMATS.RPM,
+            FORMATS.TEMPERATUR_DELTA,
         ]:
             return val.split(" ")[0]
+        elif self._format == FORMATS.VOLUMENSTROM:
+            return val[:-4]
+        elif self._format == FORMATS.ANZAHL:
+            return int(val)
         return val
 
 
