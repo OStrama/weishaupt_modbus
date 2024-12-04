@@ -49,11 +49,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
     # with your actual devices.
     # hass.data.setdefault(DOMAIN, {})[entry.entry_id] = hub.Hub(hass, entry.data["host"])
     mbapi = ModbusAPI(config_entry=entry)
-    await mbapi.connect()
+    # await mbapi.connect()
 
     if entry.data[CONF.CB_WEBIF]:
         webapi = WebifConnection(config_entry=entry)
-        await webapi.login()
+        # await webapi.login()
     else:
         webapi = None
 
