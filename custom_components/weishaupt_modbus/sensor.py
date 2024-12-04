@@ -12,7 +12,7 @@ from .const import CONF, TYPES
 from .coordinator import MyWebIfCoordinator
 from .entities import MyWebifSensorEntity
 from .entity_helpers import build_entity_list
-from .hpconst import DEVICELISTS, WEBIF_INFO_HEIZKREIS1, WEBIF_INFO_WAERMEPUMPE
+from .hpconst import DEVICELISTS, WEBIF_ITEMS
 
 logging.basicConfig()
 log: logging.Logger = logging.getLogger(name=__name__)
@@ -61,7 +61,7 @@ async def async_setup_entry(
 
     if config_entry.data[CONF.CB_WEBIF]:
         webifcoordinator = MyWebIfCoordinator(hass=hass, config_entry=config_entry)
-        for webifitem in WEBIF_INFO_HEIZKREIS1:
+        for webifitem in WEBIF_ITEMS:
             webifentries.append(  # noqa: PERF401
                 MyWebifSensorEntity(
                     config_entry=config_entry,
@@ -71,16 +71,16 @@ async def async_setup_entry(
                 )
             )
 
-        webifcoordinator2 = MyWebIfCoordinator(hass=hass, config_entry=config_entry)
-        for webifitem in WEBIF_INFO_WAERMEPUMPE:
-            webifentries.append(  # noqa: PERF401
-                MyWebifSensorEntity(
-                    config_entry=config_entry,
-                    api_item=webifitem,
-                    coordinator=webifcoordinator2,
-                    idx=1,
-                )
-            )
+        # webifcoordinator2 = MyWebIfCoordinator(hass=hass, config_entry=config_entry)
+        # for webifitem in WEBIF_INFO_WAERMEPUMPE:
+        #    webifentries.append(  # noqa: PERF401
+        #        MyWebifSensorEntity(
+        #            config_entry=config_entry,
+        #            api_item=webifitem,
+        #            coordinator=webifcoordinator2,
+        #            idx=1,
+        #        )
+        #    )
         entries = entries + webifentries
 
     async_add_entities(

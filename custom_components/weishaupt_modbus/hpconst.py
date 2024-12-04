@@ -1099,8 +1099,9 @@ WEBIF_INFO_WAERMEPUMPE: list[WebItem] = [
     WebItem(name="Version WWP-EC WBB", mformat=FORMATS.STATUS, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_waermepumpe_version_wwpecwbb"),
     WebItem(name="Soll Leistung", mformat=FORMATS.POWER_KW, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_waermepumpe_soll_leistung"),
     WebItem(name="Ist Leistung", mformat=FORMATS.POWER_KW, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_waermepumpe_ist_leistung"),
-    WebItem(name="Expansionsventil AG Eintr", mformat=FORMATS.TEMPERATUR, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_waermepumpe_expansionsvent_ag_eintr"),
-    WebItem(name="Wärmetauscher AG Austrit", mformat=FORMATS.TEMPERATUR, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_waermepumpe_luftansaugtemperatur"),
+    WebItem(name="Expansionsventil AG Eintr", mformat=FORMATS.TEMPERATUR, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_waermepumpe_expansionsventil_ag_eintr"),
+    WebItem(name="Luftansaugtemperatur", mformat=FORMATS.TEMPERATUR, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_waermepumpe_luftansaugtemperatur"),
+    WebItem(name="Wärmetauscher AG Austrit", mformat=FORMATS.TEMPERATUR, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_waermepumpe_waermetauscher_ag_austritt"),
     WebItem(name="Verdichtersauggastemp.", mformat=FORMATS.TEMPERATUR, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_waermepumpe_verdichter_ansauggasstemp"),
     WebItem(name="EVI Sauggastemperatur", mformat=FORMATS.TEMPERATUR, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_waermepumpe_evi_sauggastemperatur"),
     WebItem(name="Kältemittel IG Austritt", mformat=FORMATS.TEMPERATUR, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_waermepumpe_kaeltemittel_ig_austritt"),
@@ -1113,7 +1114,7 @@ WEBIF_INFO_WAERMEPUMPE: list[WebItem] = [
     WebItem(name="Mitteldruck", mformat=FORMATS.PRESSURE, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_waermepumpe_mitteldruck"),
     WebItem(name="Sättigungstemperatur EVI", mformat=FORMATS.TEMPERATUR, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_waermepumpe_saettigungstemp_evi"),
     WebItem(name="Überhitzung Heizen", mformat=FORMATS.TEMPERATUR_DELTA, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_waermepumpe_ueberhitzung_heizen"),
-    WebItem(name="Öffnungsgrad EXV Heizen", mformat=FORMATS.TEMPERATUR, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_waermepumpe_oeffnungsgrad_exv_heizen"),
+    WebItem(name="Öffnungsgrad EXV Heizen", mformat=FORMATS.PERCENTAGE, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_waermepumpe_oeffnungsgrad_exv_heizen"),
     WebItem(name="Überhitzung Verdichter", mformat=FORMATS.TEMPERATUR_DELTA, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_waermepumpe_ueberhitzung_verdichter"),
     WebItem(name="Öffnungsgrad EXV Kühlen", mformat=FORMATS.PERCENTAGE, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_waermepumpe_oeffnungsgrad_exv_kuehlen"),
     WebItem(name="Überhitzung EVI", mformat=FORMATS.TEMPERATUR_DELTA, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_waermepumpe_ueberhitzung_evi"),
@@ -1125,6 +1126,34 @@ WEBIF_INFO_WAERMEPUMPE: list[WebItem] = [
     WebItem(name="Außengerät Variante", mformat=FORMATS.STATUS, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_waermepumpe_aussengeraet_variante"),
 
  ]
+
+WEBIF_INFO_2WEZ = [
+        WebItem(name="Status", mformat=FORMATS.STATUS, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_2wez_status"),
+        WebItem(name="Status E-Heizung 1", mformat=FORMATS.STATUS, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_2wez_status_eheizung"),
+        WebItem(name="Status E-Heizung 2", mformat=FORMATS.STATUS, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_2wez_status_eheizung2"),
+        WebItem(name="Betriebsstunden E1", mformat=FORMATS.TIME_H, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_2wez_betriebsstunden_e1"),
+        WebItem(name="Betriebsstunden E2", mformat=FORMATS.TIME_H, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_2wez_betriebsstunden_e2"),
+        WebItem(name="Schaltspiele E1", mformat=FORMATS.ANZAHL, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_2wez_schaltspiele_e1"),
+        WebItem(name="Schaltspiele E2", mformat=FORMATS.ANZAHL, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_2wez_schaltspiele_e2"),
+]
+
+WEBIF_INFO_STATISTIK = [
+            WebItem(name="th. Energie Heizen Tag", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_statistik_th_energie_heizen_tag"),
+            WebItem(name="th. Energie WW Tag", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_statistik_th_energie_ww_tag"),
+            WebItem(name="th. Energie gesamt Tag", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_statistik_th_energie_gesamt_tag"),
+            WebItem(name="elektrische Energie Tag", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_statistik_elektrische_energie_tag"),
+            WebItem(name="th. Energie Heizen Monat", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_statistik_th_energie_heizen_monat"),
+            WebItem(name="th. Energie WW Monat", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_statistik_th_energie_ww_monat"),
+            WebItem(name="th. Energie gesamt Monat", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_statistik_th_energie_gesamt_monat"),
+            WebItem(name="elektrische Energie Monat", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_statistik_elektrische_energie_monat"),
+            WebItem(name="th. Energie Heizen Jahr", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_statistik_th_energie_heizen_jahr"),
+            WebItem(name="th. Energie WW Jahr", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_statistik_th_energie_ww_jahr"),
+            WebItem(name="th. Energie gesamt Jahr", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_statistik_th_energie_ges_jahr"),
+            WebItem(name="elektrische Energie Jahr", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIW", translation_key="webif_info_statistik_elektrische_energie_jahr"),
+
+]
+
+WEBIF_ITEMS = WEBIF_INFO_HEIZKREIS1 + WEBIF_INFO_WAERMEPUMPE + WEBIF_INFO_2WEZ + WEBIF_INFO_STATISTIK
 
 DEVICELISTS: list = [
     MODBUS_SYS_ITEMS,
