@@ -115,6 +115,9 @@ class DeviceConstants:
     IO = "dev_ein_aus"
 
     WIH = "Webif Info Heizkreis"
+    WIW = "Webif Info Wärmepumpe"
+    WI2 = "Webif Info 2. Wärmeerzeuger"
+    WIS = "Webif Info Statistik"
 
 
 DEVICES = DeviceConstants()
