@@ -89,7 +89,13 @@ class WebifConnection:
             return None
         try:
             async with self._session.get(
-                url="/settings_export.html?stack=0C00000100000000008000F9AF010002000301,0C000C1900000000000000F9AF020003000401"
+                # token = F9AF
+                # token = 0F4C
+                url="/settings_export.html?stack=0C00000100000000008000"
+                + self._config_entry.data[CONF.WEBIF_TOKEN]
+                + "010002000301,0C000C1900000000000000"
+                + self._config_entry.data[CONF.WEBIF_TOKEN]
+                + "020003000401"
             ) as response:
                 if response.status != 200:
                     logging.debug(msg="Error: " & str(response.status))

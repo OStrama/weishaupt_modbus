@@ -22,7 +22,8 @@
                     "Name-Topic-Prefix": "Name Topic Prefix",
                     "Port": "Port",
                     "Prefix": "Prefix",
-                    "enable-webif": "enable experimental webif?"
+                    "enable-webif": "enable experimental webif?",
+                    "Web-IF-Token": "four letter web-IF token, see readme"
                 }
             }
         }
@@ -996,6 +997,21 @@
             "hz_vl_temp5": {
                 "name": "{prefix}Heat circuit feed temperature 5"
             },
+            "hz_vl_solltemp": {
+                "name": "{prefix}Heat circuit feed setpoint temperature"
+            },
+            "hz_vl_solltemp2": {
+                "name": "{prefix}Heat circuit feed setpoint temperature2"
+            },
+            "hz_vl_solltemp3": {
+                "name": "{prefix}Heat circuit feed setpoint temperature3"
+            },
+            "hz_vl_solltemp4": {
+                "name": "{prefix}Heat circuit feed setpoint temperature4"
+            },
+            "hz_vl_solltemp5": {
+                "name": "{prefix}Heat circuit feed setpoint temperature5"
+            },
             "konf_ausg_h12": {
                 "name": "{prefix}Conf. Output H1.2",
                 "state": {
@@ -1324,19 +1340,7 @@
                 "name": "{prefix}Feed temperature präzise(Summenvorlauf(B7))"
             },
             "vl_temp": {
-                "name": "{prefix}Feed setpoint temperature"
-            },
-            "vl_temp2": {
-                "name": "{prefix}Feed setpoint temperature 2"
-            },
-            "vl_temp3": {
-                "name": "{prefix}Feed setpoint temperature 3"
-            },
-            "vl_temp4": {
-                "name": "{prefix}Feed setpoint temperature 4"
-            },
-            "vl_temp5": {
-                "name": "{prefix}Feed setpoint temperature 5"
+                "name": "{prefix}Feed temperature"
             },
             "w2_konf": {
                 "name": "{prefix}W2_Configuration",

@@ -64,10 +64,10 @@ async def validate_input(data: dict) -> dict[str, Any]:
     return {"title": data["host"]}
 
 
-class ConfigFlow(config_entries.ConfigFlow, domain=CONST.DOMAIN):
+class ConfigFlow(config_entries.ConfigFlow, domain=CONST.DOMAIN):  # pylint: disable=W0223
     """Class config flow."""
 
-    VERSION = 5  # 6
+    VERSION = 5
     # Pick one of the available connection classes in homeassistant/config_entries.py
     # This tells HA if it should be asking for updates, or it'll be notified of updates
     # automatically. This example uses PUSH, as the dummy hub will notify HA of
@@ -105,6 +105,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=CONST.DOMAIN):
                 vol.Optional(schema=CONF.CB_WEBIF, default=False): bool,
                 vol.Optional(schema=CONF.USERNAME, default=""): str,
                 vol.Optional(schema=CONF.PASSWORD, default=""): str,
+                vol.Optional(schema=CONF.WEBIF_TOKEN, default=""): str,
             }
         )
 
@@ -119,7 +120,8 @@ class ConfigFlow(config_entries.ConfigFlow, domain=CONST.DOMAIN):
             except Exception:  # noqa: BLE001
                 errors["base"] = "unknown error"
 
-        # If there is no user input or there were errors, show the form again, including any errors that were found with the input.
+        # If there is no user input or there were errors, show the form again,
+        # #including any errors that were found with the input.
         return self.async_show_form(
             step_id="user", data_schema=data_schema, errors=errors
         )
@@ -186,6 +188,10 @@ class ConfigFlow(config_entries.ConfigFlow, domain=CONST.DOMAIN):
                 ): str,
                 vol.Optional(
                     schema=CONF.PASSWORD, default=reconfigure_entry.data[CONF.PASSWORD]
+                ): str,
+                vol.Optional(
+                    schema=CONF.WEBIF_TOKEN,
+                    default=reconfigure_entry.data[CONF.WEBIF_TOKEN],
                 ): str,
             }
         )

@@ -9,14 +9,6 @@ from homeassistant.const import (
     CONF_PORT,
     CONF_PREFIX,
     CONF_USERNAME,
-    PERCENTAGE,
-    REVOLUTIONS_PER_MINUTE,
-    UnitOfEnergy,
-    UnitOfPower,
-    UnitOfPressure,
-    UnitOfTemperature,
-    UnitOfTime,
-    UnitOfVolumeFlowRate,
 )
 
 
@@ -38,6 +30,7 @@ class ConfConstants:
     CB_WEBIF = "enable-webif"
     PASSWORD = CONF_PASSWORD
     USERNAME = CONF_USERNAME
+    WEBIF_TOKEN = "Web-IF-Token"
 
 
 CONF = ConfConstants()
@@ -62,22 +55,11 @@ CONST = MainConstants()
 class FormatConstants:
     """Format constants."""
 
-    TEMPERATUR = UnitOfTemperature.CELSIUS
-    TEMPERATUR_DELTA = UnitOfTemperature.KELVIN
-    ENERGY = UnitOfEnergy.KILO_WATT_HOUR
-    POWER = UnitOfPower.WATT
-    POWER_KW = UnitOfPower.KILO_WATT
-    PERCENTAGE = PERCENTAGE
-    NUMBER = ""
-    STATUS = "Status"
-    VOLUMENSTROM = UnitOfVolumeFlowRate.CUBIC_METERS_PER_HOUR
-    KENNLINIE = " "  # has to be different from NUMBER we'd have to separate unit strings and format...
-    TIME_MIN = UnitOfTime.MINUTES
-    TIME_H = UnitOfTime.HOURS
-    RPM = REVOLUTIONS_PER_MINUTE
-    PRESSURE = UnitOfPressure.BAR
-    UNKNOWN = "?"
-    ANZAHL = None
+    TEMPERATUR = "temperature"
+    PERCENTAGE = "percentage"
+    NUMBER = "number"
+    STATUS = "status"
+    UNKNOWN = "unknown"
 
 
 FORMATS = FormatConstants()
@@ -142,15 +124,3 @@ class DeviceNameConstants:
 
 
 DEVICENAMES = DeviceNameConstants()
-
-
-@dataclass(frozen=True)
-class CalcConstants:
-    """Main constants."""
-
-    POWER = "power"
-    QUOTIENT = "quotient"
-    DIFFERENCE = "difference"
-
-
-CALCTYPES = CalcConstants()

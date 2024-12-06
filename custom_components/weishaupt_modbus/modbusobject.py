@@ -181,18 +181,11 @@ class ModbusObject:
             # THIS IS NOT A PYTHON EXCEPTION, but a valid modbus message
         if len(mbr.registers) > 0:
             val = self.check_valid_result(mbr.registers[0])
-            log.debug(
-                "Item %s val=%d and invalid = %s",
-                self._modbus_item.translation_key,
-                val,
-                self._modbus_item.is_invalid,
-            )
             return val
 
     @property
     async def value(self):
         """Returns the value from the modbus register."""
-        log.debug("Start reading modbus for item:%s", self._modbus_item.translation_key)
         if self._modbus_client is None:
             return None
 
@@ -201,13 +194,11 @@ class ModbusObject:
                 match self._modbus_item.type:
                     case TYPES.SENSOR | TYPES.SENSOR_CALC:
                         # Sensor entities are read-only
-                        log.debug("Reading sensor item %s ..", self._modbus_item.translation_key)
                         mbr = await self._modbus_client.read_input_registers(
                             self._modbus_item.address, slave=1
                         )
                         return self.validate_modbus_answer(mbr)
                     case TYPES.SELECT | TYPES.NUMBER | TYPES.NUMBER_RO:
-                        log.debug("Reading numbe or select item %s ..", self._modbus_item.translation_key)
                         mbr = await self._modbus_client.read_holding_registers(
                             self._modbus_item.address, slave=1
                         )
@@ -241,7 +232,6 @@ class ModbusObject:
                     # Sensor entities are read-only
                     return
                 case _:
-                    log.debug("Writing sensor item %s ..", self._modbus_item.translation_key)
                     await self._modbus_client.write_register(
                         self._modbus_item.address,
                         self.check_valid_response(value),

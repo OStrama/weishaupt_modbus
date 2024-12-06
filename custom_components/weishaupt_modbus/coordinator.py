@@ -10,14 +10,34 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
 from .configentry import MyConfigEntry
-from .const import CONF, CONST, FORMATS, TYPES
-from .hpconst import DEVICES, PARAMS_STDTEMP
+from .const import CONST, TYPES, DEVICES, CONF
 from .items import ModbusItem
 from .modbusobject import ModbusAPI, ModbusObject
 from .webif_object import WebifConnection
 
 logging.basicConfig()
 log = logging.getLogger(__name__)
+
+
+async def check_configured(
+    modbus_item: ModbusItem, config_entry: MyConfigEntry
+) -> bool:
+    """Check if item is configured.
+
+    :param modbus_item: definition of modbus item
+    :type modbus_item: ModbusItem
+    :param config_entry: HASS config entry
+    :type config_entry: MyConfigEntry
+    """
+    if modbus_item.device is DEVICES.HZ2:
+        return config_entry.data[CONF.HK2]
+    if modbus_item.device is DEVICES.HZ3:
+        return config_entry.data[CONF.HK3]
+    if modbus_item.device is DEVICES.HZ4:
+        return config_entry.data[CONF.HK4]
+    if modbus_item.device is DEVICES.HZ5:
+        return config_entry.data[CONF.HK5]
+    return True
 
 
 class MyCoordinator(DataUpdateCoordinator):
@@ -44,7 +64,7 @@ class MyCoordinator(DataUpdateCoordinator):
             always_update=True,
         )
         self._modbus_api = my_api
-        self._device = None  #: MyDevice | None = None
+        self._device = None
         self._modbusitems = api_items
         self._number_of_items = len(api_items)
         self._config_entry = p_config_entry
@@ -54,44 +74,16 @@ class MyCoordinator(DataUpdateCoordinator):
         mbo = ModbusObject(self._modbus_api, modbus_item)
         if mbo is None:
             modbus_item.state = None
-        modbus_item.state = await mbo.value
-        log.debug(
-            "Get value:%s from item:%s",
-            str(modbus_item.state),
-            modbus_item.translation_key,
-        )
+        else:
+            modbus_item.state = await mbo.value
         return modbus_item.state
 
     def get_value_from_item(self, translation_key: str) -> int:
         """Read a value from another modbus item"""
         for _useless, item in enumerate(self._modbusitems):
             if item.translation_key == translation_key:
-                log.debug(
-                    "Get calc value:%s from item:%s",
-                    str(item.state),
-                    item.translation_key,
-                )
                 return item.state
         return None
-
-    async def check_configured(self, modbus_item: ModbusItem) -> bool:
-        """Check if item is configured."""
-        if self._config_entry.data[CONF.HK2] is False:
-            if modbus_item.device is DEVICES.HZ2:
-                return False
-
-        if self._config_entry.data[CONF.HK3] is False:
-            if modbus_item.device is DEVICES.HZ3:
-                return False
-
-        if self._config_entry.data[CONF.HK4] is False:
-            if modbus_item.device is DEVICES.HZ4:
-                return False
-
-        if self._config_entry.data[CONF.HK5] is False:
-            if modbus_item.device is DEVICES.HZ5:
-                return False
-        return True
 
     async def _async_setup(self):
         """Set up the coordinator.
@@ -102,7 +94,7 @@ class MyCoordinator(DataUpdateCoordinator):
         This method will be called automatically during
         coordinator.async_config_entry_first_refresh.
         """
-        await self.fetch_data()
+        await self._modbus_api.connect()
 
     async def fetch_data(self, idx=None):
         """Fetch all values from the modbus."""
@@ -120,8 +112,9 @@ class MyCoordinator(DataUpdateCoordinator):
         # await self._modbus_api.connect()
         for index in to_update:
             item = self._modbusitems[index]
-            # At setup the coordinator has to be called before buildentitylist. Therefore check if we should add HZ2,3,4,5...
-            if await self.check_configured(item) is True:
+            # At setup the coordinator has to be called before buildentitylist.
+            # Therefore check if we should add HZ2,3,4,5...
+            if await check_configured(item, self._config_entry) is True:
                 match item.type:
                     # here the entities are created with the parameters provided
                     # by the ModbusItem object

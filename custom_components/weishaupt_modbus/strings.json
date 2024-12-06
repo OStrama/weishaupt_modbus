@@ -22,7 +22,8 @@
                     "Name-Topic-Prefix": "Name Topic Prefix",
                     "Port": "Port",
                     "Prefix": "Prefix",
-                    "enable-webif": "enable experimental webif?"
+                    "enable-webif": "enable experimental webif?",
+                    "Web-IF-Token": "4-Zeichen web-IF token, siehe readme"
                 }
             }
         }
@@ -996,6 +997,21 @@
             "hz_vl_temp5": {
                 "name": "{prefix}HZ_Vorlauftemperatur5"
             },
+            "hz_vl_solltemp": {
+                "name": "{prefix}Vorlaufsolltemperatur"
+            },
+            "hz_vl_solltemp2": {
+                "name": "{prefix}Vorlaufsolltemperatur2"
+            },
+            "hz_vl_solltemp3": {
+                "name": "{prefix}Vorlaufsolltemperatur3"
+            },
+            "hz_vl_solltemp4": {
+                "name": "{prefix}Vorlaufsolltemperatur4"
+            },
+            "hz_vl_solltemp5": {
+                "name": "{prefix}Vorlaufsolltemperatur5"
+            },
             "konf_ausg_h12": {
                 "name": "{prefix}Konf. Ausgang H1.2",
                 "state": {
@@ -1324,19 +1340,7 @@
                 "name": "{prefix}Vorlauftemperatur präzise(Summenvorlauf(B7))"
             },
             "vl_temp": {
-                "name": "{prefix}Vorlaufsolltemperatur"
-            },
-            "vl_temp2": {
-                "name": "{prefix}Vorlaufsolltemperatur2"
-            },
-            "vl_temp3": {
-                "name": "{prefix}Vorlaufsolltemperatur3"
-            },
-            "vl_temp4": {
-                "name": "{prefix}Vorlaufsolltemperatur4"
-            },
-            "vl_temp5": {
-                "name": "{prefix}Vorlaufsolltemperatur5"
+                "name": "{prefix}Vorlauftemperatur"
             },
             "w2_konf": {
                 "name": "{prefix}W2_Konfiguration",

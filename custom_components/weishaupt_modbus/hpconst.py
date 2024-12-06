@@ -1,10 +1,17 @@
 """Heatpump constants."""
 
 import copy
-from homeassistant.components.sensor import SensorDeviceClass
-from homeassistant.const import UnitOfTime
+from homeassistant.components.sensor import SensorDeviceClass, SensorStateClass
+from homeassistant.const import (
+    UnitOfTime,
+    UnitOfEnergy,
+    UnitOfPower,
+    UnitOfTemperature,
+    UnitOfVolumeFlowRate,
+    PERCENTAGE,
+)
 
-from .const import DEVICES, FORMATS, TYPES, CALCTYPES
+from .const import DEVICES, FORMATS, TYPES
 from .items import ModbusItem, StatusItem, WebItem
 
 reverse_device_list: dict[str, str] = {
@@ -694,7 +701,7 @@ IO_STATUS: list[StatusItem] = [
 # Description of physical units via the status list #
 #####################################################
 
-PARAMS_PERCENTAGE: dict = {"min": 0, "max": 100, "precision": 0}
+PARAMS_PERCENTAGE: dict = {"min": 0, "max": 100, "precision": 0, "unit": PERCENTAGE}
 
 PARAMS_ROOMTEMP: dict = {
     "min": 16,
@@ -703,6 +710,8 @@ PARAMS_ROOMTEMP: dict = {
     "divider": 10,
     "deviceclass": SensorDeviceClass.TEMPERATURE,
     "precision": 1,
+    "unit": UnitOfTemperature.CELSIUS,
+    "stateclass": SensorStateClass.MEASUREMENT,
 }
 
 PARAMS_ROOMTEMP_LOW: dict = {
@@ -714,6 +723,8 @@ PARAMS_ROOMTEMP_LOW: dict = {
     "dynamic_max": "raum_soll_temp_normal",
     "precision": 1,
     "icon": "mdi:thermometer-low",
+    "unit": UnitOfTemperature.CELSIUS,
+    "stateclass": SensorStateClass.MEASUREMENT,
 }
 
 PARAMS_ROOMTEMP_MID: dict = {
@@ -725,6 +736,8 @@ PARAMS_ROOMTEMP_MID: dict = {
     "dynamic_min": "raum_soll_temp_absenk",
     "dynamic_max": "raum_soll_temp_komf",
     "precision": 1,
+    "unit": UnitOfTemperature.CELSIUS,
+    "stateclass": SensorStateClass.MEASUREMENT,
 }
 
 PARAMS_ROOMTEMP_HIGH: dict = {
@@ -736,6 +749,8 @@ PARAMS_ROOMTEMP_HIGH: dict = {
     "dynamic_min": "raum_soll_temp_normal",
     "precision": 1,
     "icon": "mdi:thermometer-high",
+    "unit": UnitOfTemperature.CELSIUS,
+    "stateclass": SensorStateClass.MEASUREMENT,
 }
 
 PARAMS_WATERTEMP: dict = {
@@ -746,6 +761,8 @@ PARAMS_WATERTEMP: dict = {
     "deviceclass": SensorDeviceClass.TEMPERATURE,
     "precision": 1,
     "icon": "mdi:thermometer-water",
+    "unit": UnitOfTemperature.CELSIUS,
+    "stateclass": SensorStateClass.MEASUREMENT,
 }
 
 PARAMS_WATERTEMP_LOW: dict = {
@@ -757,6 +774,8 @@ PARAMS_WATERTEMP_LOW: dict = {
     "dynamic_max": "ww_normal",
     "precision": 1,
     "icon": "mdi:thermometer-water",
+    "unit": UnitOfTemperature.CELSIUS,
+    "stateclass": SensorStateClass.MEASUREMENT,
 }
 
 PARAMS_WATERTEMP_HIGH: dict = {
@@ -768,6 +787,8 @@ PARAMS_WATERTEMP_HIGH: dict = {
     "dynamic_min": "ww_absenk",
     "precision": 1,
     "icon": "mdi:thermometer-water",
+    "unit": UnitOfTemperature.CELSIUS,
+    "stateclass": SensorStateClass.MEASUREMENT,
 }
 
 
@@ -778,6 +799,8 @@ PARAMS_SGREADYTEMP: dict = {
     "divider": 10,
     "deviceclass": SensorDeviceClass.TEMPERATURE,
     "precision": 1,
+    "unit": UnitOfTemperature.CELSIUS,
+    "stateclass": SensorStateClass.MEASUREMENT,
 }
 
 PARAMS_BIVALENZTEMP: dict = {
@@ -787,6 +810,8 @@ PARAMS_BIVALENZTEMP: dict = {
     "divider": 10,
     "deviceclass": SensorDeviceClass.TEMPERATURE,
     "precision": 1,
+    "unit": UnitOfTemperature.CELSIUS,
+    "stateclass": SensorStateClass.MEASUREMENT,
 }
 
 PARAMS_STDTEMP: dict = {
@@ -796,6 +821,8 @@ PARAMS_STDTEMP: dict = {
     "divider": 10,
     "deviceclass": SensorDeviceClass.TEMPERATURE,
     "precision": 1,
+    "unit": UnitOfTemperature.CELSIUS,
+    "stateclass": SensorStateClass.MEASUREMENT,
 }
 
 
@@ -806,6 +833,7 @@ PARAMS_HZKENNLINIE: dict = {
     "divider": 100,
     "precision": 2,
     "icon": "mdi:chart-line",
+    "stateclass": SensorStateClass.MEASUREMENT,
 }
 
 PARAMS_FLOWRATE: dict = {
@@ -814,6 +842,8 @@ PARAMS_FLOWRATE: dict = {
     "step": 0.1,
     "divider": 100,
     "precision": 2,
+    "unit": UnitOfVolumeFlowRate.CUBIC_METERS_PER_HOUR,
+    "stateclass": SensorStateClass.MEASUREMENT,
 }
 
 PARAMS_ENERGY: dict = {
@@ -821,60 +851,72 @@ PARAMS_ENERGY: dict = {
     "max": 999999999999,
     "deviceclass": SensorDeviceClass.ENERGY,
     "precision": 0,
+    "unit": UnitOfEnergy.KILO_WATT_HOUR,
+    "stateclass": SensorStateClass.TOTAL_INCREASING,
 }
 
 PARAMS_CALCPOWER: dict = {
     "min": 0,
     "max": 50000,
-    "x": "luftansautgemp",  # 30002,
-    "y": "vl_temp",  # 33104,
-    "x2": "aussentemp",  # 30001,
+    "val_1": "luftansautgemp",  # 30002,
+    "val_2": "vl_temp",  # 33104,
+    "val_3": "aussentemp",  # 30001,
     "deviceclass": SensorDeviceClass.POWER,
-    "calculation_type": CALCTYPES.POWER,
     "precision": 0,
+    "unit": UnitOfPower.WATT,
+    "stateclass": SensorStateClass.MEASUREMENT,
+    "calculation": "(val_0 / 100) * power.map(val_1, val_2)",
 }
 
 PARAMS_CALCSPREIZUNG: dict = {
     "min": 0,
     "max": 50,
     "divider": 10,
-    "diff_val": "rl_temp",  # 30001,
+    "val_1": "rl_temp",  # 30001,
     "deviceclass": SensorDeviceClass.TEMPERATURE,
-    "calculation_type": CALCTYPES.DIFFERENCE,
     "precision": 1,
+    "unit": UnitOfTemperature.CELSIUS,
+    "stateclass": SensorStateClass.MEASUREMENT,
+    "calculation": "val_0 - val_1/10",
 }
 
 
 PARAMS_CALCTAZ: dict = {
     "min": 0,
     "max": 50,
-    "denominator": "el_energie_heute",
-    "calculation_type": CALCTYPES.QUOTIENT,
+    "val_1": "el_energie_heute",
     "precision": 2,
+    "stateclass": SensorStateClass.MEASUREMENT,
+    "icon": "mdi:sigma",
+    "calculation": "val_0 / val_1",
 }
 
 PARAMS_CALCTAZ2: dict = {
     "min": 0,
     "max": 50,
-    "denominator": "el_energie_gestern",
-    "calculation_type": CALCTYPES.QUOTIENT,
+    "val_1": "el_energie_gestern",
     "precision": 2,
+    "icon": "mdi:sigma",
+    "calculation": "val_0 / val_1",
 }
 
 PARAMS_CALCMAZ: dict = {
     "min": 0,
     "max": 50,
-    "denominator": "el_energie_monat",
-    "calculation_type": CALCTYPES.QUOTIENT,
+    "val_1": "el_energie_monat",
     "precision": 2,
+    "stateclass": SensorStateClass.MEASUREMENT,
+    "icon": "mdi:sigma",
+    "calculation": "val_0 / val_1",
 }
 
 PARAMS_CALCJAZ: dict = {
     "min": 0,
     "max": 50,
     "denominator": "el_energie_jahr",
-    "calculation_type": CALCTYPES.QUOTIENT,
     "precision": 2,
+    "stateclass": SensorStateClass.MEASUREMENT,
+    "icon": "mdi:sigma",
 }
 
 PARAMS_ALERT: dict = {"icon": "mdi:alert"}
@@ -882,6 +924,8 @@ PARAMS_ALERT: dict = {"icon": "mdi:alert"}
 PARAMS_OPMODE: dict = {"icon": "mdi:heat-pump"}
 
 PARAMS_PARTY: dict = {"icon": "mdi:glass-cocktail"}
+
+PARAMS_TIME_H: dict = {"icon": "mdi:clock-time-eight", "unit": UnitOfTime.HOURS}
 
 
 # pylint: disable=line-too-long
@@ -905,15 +949,15 @@ MODBUS_SYS_ITEMS: list[ModbusItem] = [
 MODBUS_WP_ITEMS: list[ModbusItem] = [
     ModbusItem( address=33101, name="Betrieb", mformat=FORMATS.STATUS, mtype=TYPES.SENSOR, device=DEVICES.WP, resultlist=HP_BETRIEB, params = PARAMS_OPMODE, translation_key="wp_betrieb"),
     ModbusItem( address=33102, name="Störmeldung", mformat=FORMATS.STATUS, mtype=TYPES.SENSOR, device=DEVICES.WP, resultlist=HP_STOERMELDUNG, params=PARAMS_ALERT, translation_key="wp_stoermeldung"),
-    ModbusItem( address=33103, name="Leistungsanforderung", mformat=FORMATS.PERCENTAGE, mtype=TYPES.SENSOR, device=DEVICES.WP, translation_key="leistungsanforderung"),
-    ModbusItem( address=33103, name="Wärmeleistung", mformat=FORMATS.POWER, mtype=TYPES.SENSOR_CALC, device=DEVICES.WP, params=PARAMS_CALCPOWER, translation_key="waermeleistung"),
+    ModbusItem( address=33103, name="Leistungsanforderung", mformat=FORMATS.PERCENTAGE, mtype=TYPES.SENSOR, device=DEVICES.WP, params=PARAMS_PERCENTAGE,translation_key="leistungsanforderung"),
+    ModbusItem( address=33103, name="Wärmeleistung", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR_CALC, device=DEVICES.WP, params=PARAMS_CALCPOWER, translation_key="waermeleistung"),
     ModbusItem( address=33104, name="Vorlauftemperatur", mformat=FORMATS.TEMPERATUR, mtype=TYPES.SENSOR, device=DEVICES.WP, params=PARAMS_STDTEMP, translation_key="vl_temp"),
     ModbusItem( address=33105, name="Rücklauftemperatur", mformat=FORMATS.TEMPERATUR, mtype=TYPES.SENSOR,  device=DEVICES.WP, params=PARAMS_STDTEMP, translation_key="rl_temp"),
     ModbusItem( address=33106, name="Verdampfungstemperatur", mformat=FORMATS.TEMPERATUR, mtype=TYPES.SENSOR, device=DEVICES.WP, params=PARAMS_STDTEMP, translation_key="verdampfungs_temp"),
     ModbusItem( address=33107, name="Verdichtersauggastemp", mformat=FORMATS.TEMPERATUR, mtype=TYPES.SENSOR, device=DEVICES.WP, params=PARAMS_STDTEMP, translation_key="verdichter_ansaug_gas_temp"),
     ModbusItem( address=33108, name="Weichentemperatur", mformat=FORMATS.TEMPERATUR, mtype=TYPES.SENSOR, device=DEVICES.WP, params=PARAMS_STDTEMP, translation_key="weichen_temp"),
     ModbusItem( address=33109, name="Anforderung(Vorlauf regenerativ)", mformat=FORMATS.TEMPERATUR, mtype=TYPES.SENSOR, device=DEVICES.WP, params=PARAMS_STDTEMP, translation_key="anforderung_vl_regenerativ"),
-    ModbusItem( address=33110, name="Puffertemperatur?", mformat=FORMATS.UNKNOWN, mtype=TYPES.SENSOR, device=DEVICES.WP, translation_key="puffer_temp"),
+    ModbusItem( address=33110, name="Puffertemperatur?", mformat=FORMATS.UNKNOWN, mtype=TYPES.SENSOR, device=DEVICES.WP, params=PARAMS_STDTEMP, translation_key="puffer_temp"),
     ModbusItem( address=33111, name="Vorlauftemperatur präzise(Summenvorlauf(B7))", mformat=FORMATS.TEMPERATUR, mtype=TYPES.SENSOR, device=DEVICES.WP, params=PARAMS_STDTEMP, translation_key="vl_praeziese_summenvorlauf_b7"),
     ModbusItem( address=33111, name="Spreizung", mformat=FORMATS.TEMPERATUR, mtype=TYPES.SENSOR_CALC, device=DEVICES.WP, params=PARAMS_CALCSPREIZUNG, translation_key="spreizung"),
 
@@ -924,16 +968,16 @@ MODBUS_WP_ITEMS: list[ModbusItem] = [
     ModbusItem( address=43105, name="Sollwert Pumpe Leistung Kühlen", mformat=FORMATS.PERCENTAGE, mtype=TYPES.NUMBER_RO, device=DEVICES.WP, params=PARAMS_PERCENTAGE, translation_key="sollwert_pumpe_leistung_kuehlen"),
     ModbusItem( address=43106, name="Sollwert Pumpe Leistung Warmwasser", mformat=FORMATS.PERCENTAGE, mtype=TYPES.NUMBER_RO, device=DEVICES.WP, params=PARAMS_PERCENTAGE, translation_key="sollwert_pumpe_leitung_ww"),
     ModbusItem( address=43107, name="Sollwert Pumpe Leistung Abtaubetrieb", mformat=FORMATS.PERCENTAGE, mtype=TYPES.NUMBER_RO, device=DEVICES.WP, params=PARAMS_PERCENTAGE, translation_key="sollwert_pumpe_leistung_abtau"),
-    ModbusItem( address=43108, name="Sollwert Volumenstrom Heizen", mformat=FORMATS.VOLUMENSTROM, mtype=TYPES.NUMBER_RO, device=DEVICES.WP, params=PARAMS_FLOWRATE, translation_key="soll_volumenstrom_heizen"),
-    ModbusItem( address=43109, name="Sollwert Volumenstrom Kühlen", mformat=FORMATS.VOLUMENSTROM, mtype=TYPES.NUMBER_RO,  device=DEVICES.WP, params=PARAMS_FLOWRATE, translation_key="soll_volumenstrom_kuehlen"),
-    ModbusItem( address=43110, name="Sollwert Volumenstrom Warmwasser", mformat=FORMATS.VOLUMENSTROM, mtype=TYPES.NUMBER_RO, device=DEVICES.WP, params=PARAMS_FLOWRATE, translation_key="soll_volumenstrom_ww"),
+    ModbusItem( address=43108, name="Sollwert Volumenstrom Heizen", mformat=FORMATS.NUMBER, mtype=TYPES.NUMBER_RO, device=DEVICES.WP, params=PARAMS_FLOWRATE, translation_key="soll_volumenstrom_heizen"),
+    ModbusItem( address=43109, name="Sollwert Volumenstrom Kühlen", mformat=FORMATS.NUMBER, mtype=TYPES.NUMBER_RO,  device=DEVICES.WP, params=PARAMS_FLOWRATE, translation_key="soll_volumenstrom_kuehlen"),
+    ModbusItem( address=43110, name="Sollwert Volumenstrom Warmwasser", mformat=FORMATS.NUMBER, mtype=TYPES.NUMBER_RO, device=DEVICES.WP, params=PARAMS_FLOWRATE, translation_key="soll_volumenstrom_ww"),
 ] # noqa: E501
 
 MODBUS_HZ_ITEMS = [
     ModbusItem( address=31101, name="Raumsolltemperatur", mformat=FORMATS.TEMPERATUR, mtype=TYPES.SENSOR, device=DEVICES.HZ, params=PARAMS_ROOMTEMP, translation_key="raum_soll_temp"),
     ModbusItem( address=31102, name="Raumtemperatur", mformat=FORMATS.TEMPERATUR, mtype=TYPES.SENSOR, device=DEVICES.HZ, params=PARAMS_ROOMTEMP, translation_key="raum_temp"),
-    ModbusItem( address=31103, name="Raumfeuchte", mformat=FORMATS.PERCENTAGE, mtype=TYPES.SENSOR, device=DEVICES.HZ, translation_key="raum_feuchte"),
-    ModbusItem( address=31104, name="Vorlaufsolltemperatur", mformat=FORMATS.TEMPERATUR, mtype=TYPES.SENSOR, device=DEVICES.HZ, params=PARAMS_STDTEMP, translation_key="vl_temp"),
+    ModbusItem( address=31103, name="Raumfeuchte", mformat=FORMATS.PERCENTAGE, mtype=TYPES.SENSOR, device=DEVICES.HZ, params=PARAMS_PERCENTAGE, translation_key="raum_feuchte"),
+    ModbusItem( address=31104, name="Vorlaufsolltemperatur", mformat=FORMATS.TEMPERATUR, mtype=TYPES.SENSOR, device=DEVICES.HZ, params=PARAMS_STDTEMP, translation_key="hz_vl_solltemp"),
     ModbusItem( address=31105, name="HZ_Vorlauftemperatur", mformat=FORMATS.TEMPERATUR, mtype=TYPES.SENSOR, device=DEVICES.HZ, params=PARAMS_STDTEMP, translation_key="hz_vl_temp"),
     ModbusItem( address=31106, name="Adr. 31106", mformat=FORMATS.UNKNOWN, mtype=TYPES.SENSOR, device=DEVICES.HZ, translation_key="adr31106"),
     ModbusItem( address=41101, name="HZ_Konfiguration", mformat=FORMATS.STATUS, mtype=TYPES.NUMBER_RO, device=DEVICES.HZ, resultlist=HZ_KONFIGURATION, translation_key="hz_konf"),
@@ -943,7 +987,7 @@ MODBUS_HZ_ITEMS = [
     ModbusItem( address=41105, name="Raumsolltemperatur Komfort", mformat=FORMATS.TEMPERATUR, mtype=TYPES.NUMBER, device=DEVICES.HZ, params=PARAMS_ROOMTEMP_HIGH, translation_key="raum_soll_temp_komf"),
     ModbusItem( address=41106, name="Raumsolltemperatur Normal", mformat=FORMATS.TEMPERATUR, mtype=TYPES.NUMBER, device=DEVICES.HZ, params=PARAMS_ROOMTEMP_MID, translation_key="raum_soll_temp_normal"),
     ModbusItem( address=41107, name="Raumsolltemperatur Absenk", mformat=FORMATS.TEMPERATUR, mtype=TYPES.NUMBER, device=DEVICES.HZ, params=PARAMS_ROOMTEMP_LOW, translation_key="raum_soll_temp_absenk"),
-    ModbusItem( address=41108, name="Heizkennlinie", mformat=FORMATS.KENNLINIE, mtype=TYPES.NUMBER, device=DEVICES.HZ, params=PARAMS_HZKENNLINIE, translation_key="heizkennlinie"),
+    ModbusItem( address=41108, name="Heizkennlinie", mformat=FORMATS.NUMBER, mtype=TYPES.NUMBER, device=DEVICES.HZ, params=PARAMS_HZKENNLINIE, translation_key="heizkennlinie"),
     ModbusItem( address=41109, name="Sommer Winter Umschaltung", mformat=FORMATS.TEMPERATUR, mtype=TYPES.NUMBER, device=DEVICES.HZ, params=PARAMS_ROOMTEMP, translation_key="so_wi_umschalt"),
     ModbusItem( address=41110, name="Heizen Konstanttemperatur", mformat=FORMATS.TEMPERATUR, mtype=TYPES.NUMBER_RO, device=DEVICES.HZ, params=PARAMS_ROOMTEMP, translation_key="heiz_konstanttemp"),
     ModbusItem( address=41111, name="Heizen Konstanttemp Absenk", mformat=FORMATS.TEMPERATUR, mtype=TYPES.NUMBER_RO, device=DEVICES.HZ, params=PARAMS_ROOMTEMP, translation_key="heiz_konstanttemp_absenk"),
@@ -1003,11 +1047,11 @@ MODBUS_WW_ITEMS: list[ModbusItem] = [
 MODBUS_W2_ITEMS: list[ModbusItem] = [
     ModbusItem( address=34101, name="Status 2. WEZ", mformat=FORMATS.STATUS, mtype=TYPES.SENSOR, device=DEVICES.W2, resultlist=W2_STATUS, translation_key="status_2_wez"),
     ModbusItem( address=34102, name="Schaltspiele E-Heizung 1", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.W2, translation_key="schaltsp_e1"),
-    ModbusItem( address=34103, name="Betriebsstunden E1", mformat=FORMATS.TIME_H, mtype=TYPES.SENSOR, device=DEVICES.W2, translation_key="betriebss_e1"),
+    ModbusItem( address=34103, name="Betriebsstunden E1", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.W2,params = PARAMS_TIME_H, translation_key="betriebss_e1"),
     ModbusItem( address=34104, name="Status E-Heizung 1", mformat=FORMATS.STATUS, mtype=TYPES.SENSOR, device=DEVICES.W2, resultlist=W2_STATUS, translation_key="status_e1"),
     ModbusItem( address=34105, name="Status E-Heizung 2", mformat=FORMATS.STATUS, mtype=TYPES.SENSOR, device=DEVICES.W2, resultlist=W2_STATUS, translation_key="status_e2"),
     ModbusItem( address=34106, name="Schaltspiele E-Heizung 2", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.W2, translation_key="schaltsp_e2"),
-    ModbusItem( address=34107, name="Betriebsstunden E2", mformat=FORMATS.TIME_H, mtype=TYPES.SENSOR, device=DEVICES.W2, translation_key="betriebss_e2"),
+    ModbusItem( address=34107, name="Betriebsstunden E2", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.W2, params = PARAMS_TIME_H, translation_key="betriebss_e2"),
     ModbusItem( address=44101, name="W2_Konfiguration", mformat=FORMATS.STATUS, mtype=TYPES.SENSOR, device=DEVICES.W2, resultlist=W2_KONFIG, translation_key="w2_konf"),
     ModbusItem( address=44102, name="Konfiguration EP1", mformat=FORMATS.STATUS, mtype=TYPES.SENSOR, device=DEVICES.W2, resultlist=EP1_KONFIG, translation_key="adr44102"),
     ModbusItem( address=44103, name="Konfiguration EP2", mformat=FORMATS.STATUS, mtype=TYPES.SENSOR, device=DEVICES.W2, resultlist=EP2_KONFIG, translation_key="adr44103"),
@@ -1017,38 +1061,38 @@ MODBUS_W2_ITEMS: list[ModbusItem] = [
 ] # noqa: E501
 
 MODBUS_ST_ITEMS: list[ModbusItem] = [
-    ModbusItem( address=36101, name="Gesamt Energie heute", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="ges_energie_heute"),
+    ModbusItem( address=36101, name="Gesamt Energie heute", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="ges_energie_heute"),
     ModbusItem( address=36101, name="Tagesarbeitszahl heute", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR_CALC, device=DEVICES.ST, params=PARAMS_CALCTAZ, translation_key="tagesarbeitszahl_heute"),
-    ModbusItem( address=36102, name="Gesamt Energie gestern", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="ges_energie_gestern"),
+    ModbusItem( address=36102, name="Gesamt Energie gestern", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="ges_energie_gestern"),
     ModbusItem( address=36102, name="Tagesarbeitszahl gestern", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR_CALC, device=DEVICES.ST, params=PARAMS_CALCTAZ2, translation_key="tagesarbeitszahl_gestern"),
-    ModbusItem( address=36103, name="Gesamt Energie Monat", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="ges_energie_monat"),
+    ModbusItem( address=36103, name="Gesamt Energie Monat", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="ges_energie_monat"),
     ModbusItem( address=36103, name="Monatsarbeitszahl", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR_CALC, device=DEVICES.ST, params=PARAMS_CALCMAZ, translation_key="monatsarbeitszahl"),
-    ModbusItem( address=36104, name="Gesamt Energie Jahr", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="ges_energie_jahr"),
+    ModbusItem( address=36104, name="Gesamt Energie Jahr", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="ges_energie_jahr"),
     ModbusItem( address=36104, name="Jahresarbeitszahl", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR_CALC, device=DEVICES.ST, params=PARAMS_CALCJAZ, translation_key="jahresarbeitszahl"),
-    ModbusItem( address=36201, name="Heizen Energie heute", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="heiz_energie_heute"),
-    ModbusItem( address=36202, name="Heizen Energie gestern", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="heiz_energie_getern"),
-    ModbusItem( address=36203, name="Heizen Energie Monat", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="heiz_energie_monat"),
-    ModbusItem( address=36204, name="Heizen Energie Jahr", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="heiz_energie_jahr"),
-    ModbusItem( address=36301, name="Warmwasser Energie heute", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="ww_energie_heute"),
-    ModbusItem( address=36302, name="Warmwasser Energie gestern", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="ww_energie_gestern"),
-    ModbusItem( address=36303, name="Warmwasser Energie Monat", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="ww_energie_monat"),
-    ModbusItem( address=36304, name="Warmwasser Energie Jahr", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="ww_energie_jahr"),
-    ModbusItem( address=36401, name="Kühlen Energie heute", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="kuehl_energie_heute"),
-    ModbusItem( address=36402, name="Kühlen Energie gestern", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="kuehl_energie_gestern"),
-    ModbusItem( address=36403, name="Kühlen Energie Monat", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="kuehl_energie_monat"),
-    ModbusItem( address=36404, name="Kühlen Energie Jahr", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="kuehl_energie_jahr"),
-    ModbusItem( address=36501, name="Abtauen Energie heute", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="abtau_energie_heute"),
-    ModbusItem( address=36502, name="Abtauen Energie gestern", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY,translation_key="abtau_energie_gester"),
-    ModbusItem( address=36503, name="Abtauen Energie Monat", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="abtau_energie_monat"),
-    ModbusItem( address=36504, name="Abtauen Energie Jahr", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="abtau_energie_jahr"),
-    ModbusItem( address=36601, name="Gesamt Energie II heute", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="ges_energie_2_heute"),
-    ModbusItem( address=36602, name="Gesamt Energie II gestern", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="ges_energie_2_gestern"),
-    ModbusItem( address=36603, name="Gesamt Energie II Monat", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="ges_energie_2_monat"),
-    ModbusItem( address=36604, name="Gesamt Energie II Jahr", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="ges_energie_2_jahr"),
-    ModbusItem( address=36701, name="Elektr. Energie heute", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="el_energie_heute"),
-    ModbusItem( address=36702, name="Elektr. Energie gestern", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="el_energie_gestern"),
-    ModbusItem( address=36703, name="Elektr. Energie Monat", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="el_energie_monat"),
-    ModbusItem( address=36704, name="Elektr. Energie Jahr", mformat=FORMATS.ENERGY, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="el_energie_jahr"),
+    ModbusItem( address=36201, name="Heizen Energie heute", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="heiz_energie_heute"),
+    ModbusItem( address=36202, name="Heizen Energie gestern", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="heiz_energie_getern"),
+    ModbusItem( address=36203, name="Heizen Energie Monat", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="heiz_energie_monat"),
+    ModbusItem( address=36204, name="Heizen Energie Jahr", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="heiz_energie_jahr"),
+    ModbusItem( address=36301, name="Warmwasser Energie heute", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="ww_energie_heute"),
+    ModbusItem( address=36302, name="Warmwasser Energie gestern", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="ww_energie_gestern"),
+    ModbusItem( address=36303, name="Warmwasser Energie Monat", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="ww_energie_monat"),
+    ModbusItem( address=36304, name="Warmwasser Energie Jahr", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="ww_energie_jahr"),
+    ModbusItem( address=36401, name="Kühlen Energie heute", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="kuehl_energie_heute"),
+    ModbusItem( address=36402, name="Kühlen Energie gestern", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="kuehl_energie_gestern"),
+    ModbusItem( address=36403, name="Kühlen Energie Monat", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="kuehl_energie_monat"),
+    ModbusItem( address=36404, name="Kühlen Energie Jahr", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="kuehl_energie_jahr"),
+    ModbusItem( address=36501, name="Abtauen Energie heute", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="abtau_energie_heute"),
+    ModbusItem( address=36502, name="Abtauen Energie gestern", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY,translation_key="abtau_energie_gester"),
+    ModbusItem( address=36503, name="Abtauen Energie Monat", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="abtau_energie_monat"),
+    ModbusItem( address=36504, name="Abtauen Energie Jahr", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="abtau_energie_jahr"),
+    ModbusItem( address=36601, name="Gesamt Energie II heute", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="ges_energie_2_heute"),
+    ModbusItem( address=36602, name="Gesamt Energie II gestern", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="ges_energie_2_gestern"),
+    ModbusItem( address=36603, name="Gesamt Energie II Monat", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="ges_energie_2_monat"),
+    ModbusItem( address=36604, name="Gesamt Energie II Jahr", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="ges_energie_2_jahr"),
+    ModbusItem( address=36701, name="Elektr. Energie heute", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="el_energie_heute"),
+    ModbusItem( address=36702, name="Elektr. Energie gestern", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="el_energie_gestern"),
+    ModbusItem( address=36703, name="Elektr. Energie Monat", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="el_energie_monat"),
+    ModbusItem( address=36704, name="Elektr. Energie Jahr", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="el_energie_jahr"),
     ModbusItem( address=36801, name="Adr. 36801", mformat=FORMATS.UNKNOWN, mtype=TYPES.SENSOR, device=DEVICES.ST, translation_key="adr36801"),
 ]
 

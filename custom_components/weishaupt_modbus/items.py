@@ -82,6 +82,7 @@ class ApiItem:
     _is_invalid = False
     _translation_key: str = ""
     _params = None
+    _divider = 1
 
     def __init__(
         self,
@@ -103,6 +104,7 @@ class ApiItem:
         self._is_invalid = False
         self._translation_key = translation_key
         self._params = params
+        self._divider = 1
 
     @property
     def params(self) -> dict:
@@ -112,6 +114,15 @@ class ApiItem:
     @params.setter
     def params(self, val: dict):
         self._params = val
+
+    @property
+    def divider(self) -> dict:
+        """Return state."""
+        return self._divider
+
+    @divider.setter
+    def divider(self, val: dict):
+        self._divider = val
 
     @property
     def is_invalid(self) -> bool:
@@ -276,15 +287,7 @@ class WebItem(ApiItem):
     def get_value(self, val):
         if self._format in [
             FORMATS.TEMPERATUR,
-            FORMATS.ENERGY,
             FORMATS.PERCENTAGE,
-            FORMATS.POWER,
-            FORMATS.POWER_KW,
-            FORMATS.TIME_MIN,
-            FORMATS.TIME_H,
-            FORMATS.PRESSURE,
-            FORMATS.RPM,
-            FORMATS.TEMPERATUR_DELTA,
         ]:
             return val.split(" ")[0]
         elif self._format == FORMATS.VOLUMENSTROM:

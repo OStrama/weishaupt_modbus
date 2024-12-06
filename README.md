@@ -1,3 +1,12 @@
+# 1.0.5pre4
+- more calculated sensors supported. This is now be done internally by eval() so that future enhancements are easier
+- for interpolation of the heating power map now more precise cubic splines are used when scipy is installed on the platform. Scipy is not listed as requirement, since this was causing issues in past. So if you want to use more precise interpolation, please install scipy manually by "pip install scipy".
+- specific icons are used for some entities, to be completed in future
+- limits for setpoint temperatures now are dynamically as they are acepted by the device. (example: when comfort temperature is set to 22 degree, normal temperature cannot set to a higher value. This is now reflected in the min/max limits of the temperatures.)
+- Experimental Web-Interface: WHen available, some data are fetched from the local web-IF of the device. Therefore username and password are required as well as an individual token. The token can be obtained as follows:
+   1. open the web interface in browser and navigate to "info".
+   2. In the address-bar of the browser you will see a link like this: http://192.168.xxx.xxx/settings_export.html?stack=0C00000100000000008000TTTT010002000301. The characters on the position of the "TTTT" show your individual token.
+    
 # 1.0.4
 - Translation is enabled now.
 - Enabling translations required change to new entity name style. We try to migrate the existing entities, so that the statistics remain. Due to issues in HAs recorder service this is not always stable. In case of lost statistics and if you want to manually migrate them, please have a look at the renaming tool in the subfolder entity_rename

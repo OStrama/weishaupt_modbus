@@ -9,11 +9,25 @@ from numpy.polynomial import Chebyshev
 
 from .configentry import MyConfigEntry
 
-# from scipy.interpolate import CubicSpline
 from .const import CONF, CONST
 
 logging.basicConfig()
 log = logging.getLogger(__name__)
+
+SPLINE_AVAILABLE = True
+try:
+    import scipy  # noqa F401 pylint: disable=W0611
+except ModuleNotFoundError:
+    log.warning(
+        "Scipy not available, use less precise Chebyshef interpolation for heating power"
+    )
+    SPLINE_AVAILABLE = False
+
+if SPLINE_AVAILABLE is True:
+    log.info(
+        "Scipy available, use precise cubic spline interpolation for heating power"
+    )
+    from scipy.interpolate import CubicSpline  # pylint: disable=E0401
 
 
 class PowerMap:
@@ -148,16 +162,18 @@ class PowerMap:
         t = np.linspace(-30, 40, 71)
         # cubic spline interpolation of power curves
         for idx in range(len(self._r_to_interpolate)):
-            # f = CubicSpline(self.known_x, self.interp_y[idx], bc_type='natural')
-            f = Chebyshev.fit(self.known_x, self._interp_y[idx], deg=8)
+            if SPLINE_AVAILABLE is True:
+                f = CubicSpline(self.known_x, self._interp_y[idx], bc_type="natural")
+            else:
+                f = Chebyshev.fit(self.known_x, self._interp_y[idx], deg=8)
             self._max_power.append(f(t))
 
     def map(self, x, y):
         """Map."""
-        x = x - self.known_x[0]
+        x = x / 10 - self.known_x[0]
         x = max(x, 0)
         x = min(x, 70)
-        y = y - self.known_t[0]
+        y = y / 10 - self.known_t[0]
         y = max(y, 0)
         y = min(y, self._steps - 1)
 

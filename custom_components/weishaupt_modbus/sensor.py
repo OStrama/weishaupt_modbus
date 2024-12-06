@@ -32,7 +32,6 @@ async def async_setup_entry(
     coordinator = config_entry.runtime_data.coordinator
 
     for device in DEVICELISTS:
-        log.debug("Adding entries to entity list ..")
         entries = await build_entity_list(
             entries=entries,
             config_entry=config_entry,
@@ -70,17 +69,6 @@ async def async_setup_entry(
                     idx=1,
                 )
             )
-
-        # webifcoordinator2 = MyWebIfCoordinator(hass=hass, config_entry=config_entry)
-        # for webifitem in WEBIF_INFO_WAERMEPUMPE:
-        #    webifentries.append(  # noqa: PERF401
-        #        MyWebifSensorEntity(
-        #            config_entry=config_entry,
-        #            api_item=webifitem,
-        #            coordinator=webifcoordinator2,
-        #            idx=1,
-        #        )
-        #    )
         entries = entries + webifentries
 
     async_add_entities(
