@@ -285,15 +285,8 @@ class WebItem(ApiItem):
         self._webif_group: str = val
 
     def get_value(self, val):
-        if self._format in [
-            FORMATS.TEMPERATUR,
-            FORMATS.PERCENTAGE,
-        ]:
+        if self._format in [FORMATS.TEMPERATUR, FORMATS.PERCENTAGE, FORMATS.NUMBER]:
             return val.split(" ")[0]
-        elif self._format == FORMATS.VOLUMENSTROM:
-            return val[:-4]
-        elif self._format == FORMATS.ANZAHL:
-            return int(val)
         return val
 
 
