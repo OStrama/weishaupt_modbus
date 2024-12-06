@@ -5,6 +5,7 @@ import copy
 from homeassistant.components.sensor import SensorDeviceClass, SensorStateClass
 from homeassistant.const import (
     PERCENTAGE,
+    REVOLUTIONS_PER_MINUTE,
     UnitOfEnergy,
     UnitOfPower,
     UnitOfPressure,
@@ -849,6 +850,17 @@ PARAMS_STDPRESSURE: dict = {
     "stateclass": SensorStateClass.MEASUREMENT,
 }
 
+PARAMS_STDPRPM: dict = {
+    "min": 0,
+    "max": 10000,
+    "step": 0.5,
+    "divider": 1,
+    # "deviceclass": SensorDeviceClass.,
+    "precision": 1,
+    "unit": REVOLUTIONS_PER_MINUTE,
+    "stateclass": SensorStateClass.MEASUREMENT,
+}
+
 
 PARAMS_HZKENNLINIE: dict = {
     "min": 0.05,
@@ -1161,12 +1173,12 @@ WEBIF_INFO_WAERMEPUMPE: list[WebItem] = [
     WebItem(name="Vorlauftemperatur", mformat=FORMATS.TEMPERATUR, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_STDTEMP, webif_group="WIW", translation_key="webif_info_waermepumpe_vorlauftemperatur"),
     WebItem(name="Rücklauftemperatur", mformat=FORMATS.TEMPERATUR, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_STDTEMP, webif_group="WIW", translation_key="webif_info_waermepumpe_ruecklauftemperatur"),
     WebItem(name="Drehzahl Pumpe M1", mformat=FORMATS.PERCENTAGE, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_PERCENTAGE, webif_group="WIW", translation_key="webif_info_waermepumpe_drehzahl_pumpe_m1"),
-    #WebItem(name="Volumenstrom", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_waermepumpe_volumenstrom"),
+    WebItem(name="Volumenstrom", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_FLOWRATE, webif_group="WIW", translation_key="webif_info_waermepumpe_volumenstrom"),
     WebItem(name="Stellung Umschaltventil", mformat=FORMATS.STATUS, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_waermepumpe_stellung_umschaltventil"),
     WebItem(name="Version WWP-SG", mformat=FORMATS.STATUS, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_waermepumpe_version_wwpsg"),
     WebItem(name="Version WWP-EC WBB", mformat=FORMATS.STATUS, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_waermepumpe_version_wwpecwbb"),
-    WebItem(name="Soll Leistung", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_waermepumpe_soll_leistung"),
-    WebItem(name="Ist Leistung", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_STDTEMP, webif_group="WIW", translation_key="webif_info_waermepumpe_ist_leistung"),
+    WebItem(name="Soll Leistung", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_ENERGY, webif_group="WIW", translation_key="webif_info_waermepumpe_soll_leistung"),
+    WebItem(name="Ist Leistung", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_ENERGY, webif_group="WIW", translation_key="webif_info_waermepumpe_ist_leistung"),
     WebItem(name="Expansionsventil AG Eintr", mformat=FORMATS.TEMPERATUR, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_STDTEMP, webif_group="WIW", translation_key="webif_info_waermepumpe_expansionsventil_ag_eintr"),
     WebItem(name="Luftansaugtemperatur", mformat=FORMATS.TEMPERATUR, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_STDTEMP, webif_group="WIW", translation_key="webif_info_waermepumpe_luftansaugtemperatur"),
     WebItem(name="Wärmetauscher AG Austrit", mformat=FORMATS.TEMPERATUR, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_STDTEMP, webif_group="WIW", translation_key="webif_info_waermepumpe_waermetauscher_ag_austritt"),
@@ -1190,7 +1202,7 @@ WEBIF_INFO_WAERMEPUMPE: list[WebItem] = [
     WebItem(name="Betriebsstd. Verdichter", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_TIME_H, webif_group="WIW", translation_key="webif_info_waermepumpe_betriebsstund_verdichter"),
     WebItem(name="Schaltspiele Verdichter", mformat=FORMATS.STATUS, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_waermepumpe_schaltspiele_verdichter"),
     WebItem(name="Schaltspiele Abtauen", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_waermepumpe_schaltspiele_abtauen"),
-    WebItem(name="Verdichter", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_waermepumpe_verdichter"),
+    WebItem(name="Verdichter", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_STDPRPM, webif_group="WIW", translation_key="webif_info_waermepumpe_verdichter"),
     WebItem(name="Außengerät Variante", mformat=FORMATS.STATUS, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_waermepumpe_aussengeraet_variante"),
 
  ]

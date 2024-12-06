@@ -1,6 +1,8 @@
 """Item classes."""
 
-from .const import TYPES, FORMATS, DeviceConstants, FormatConstants, TypeConstants
+from homeassistant.const import UnitOfVolumeFlowRate
+
+from .const import FORMATS, TYPES, DeviceConstants, FormatConstants, TypeConstants
 
 
 class StatusItem:
@@ -286,6 +288,9 @@ class WebItem(ApiItem):
 
     def get_value(self, val):
         if self._format in [FORMATS.TEMPERATUR, FORMATS.PERCENTAGE, FORMATS.NUMBER]:
+            if self._params is not None:
+                if self._params["unit"] == UnitOfVolumeFlowRate.CUBIC_METERS_PER_HOUR:
+                    return val[:-4]
             return val.split(" ")[0]
         return val
 
