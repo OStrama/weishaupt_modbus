@@ -430,14 +430,20 @@ class MyWebifSensorEntity(CoordinatorEntity, SensorEntity, MyEntity):
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
         # print(self.coordinator.data)
-        if self.coordinator.data is not None:
-            val = self._api_item.get_value(self.coordinator.data[self._api_item.name])
-            self._attr_native_value = val
-            self.async_write_ha_state()
-        else:
-            logging.warning(
-                "Update of %s failed. None response from server", self._api_item.name
-            )
+        try:
+            if self.coordinator.data is not None:
+                val = self._api_item.get_value(
+                    self.coordinator.data[self._api_item.name]
+                )
+                self._attr_native_value = val
+                self.async_write_ha_state()
+            else:
+                log.warning(
+                    "Update of %s failed. None response from server",
+                    self._api_item.name,
+                )
+        except KeyError:
+            log.warning("Key Error: %s", self._api_item.name)
 
     async def async_turn_on(self, **kwargs):  # pylint: disable=W0613
         """Turn the light on.

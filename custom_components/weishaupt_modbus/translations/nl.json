@@ -1,0 +1,1592 @@
+{
+  "config" : {
+    "abort" : {
+      "already_configured" : "Account is reeds geconfigureerd"
+    },
+    "error" : {
+      "cannot_connect" : "Connectie gefaald",
+      "invalid_auth" : "Ongeldige logingegevens",
+      "unknown" : "Onverwachte fout"
+    },
+    "step" : {
+      "user" : {
+        "data" : {
+          "Device-Postfix" : "Device postfix",
+          "Heizkreis 2" : "2de verwarmingskring",
+          "Heizkreis 3" : "3de verwarmingskring",
+          "Heizkreis 4" : "4de verwarmingskring",
+          "Heizkreis 5" : "5de verwarmingskring",
+          "Host" : "Host!",
+          "Kennfeld-File" : "Filename Kennfeld",
+          "Name-Device-Prefix" : "Name Device Prefix",
+          "Name-Topic-Prefix" : "Name Topic Prefix",
+          "Port" : "Poort",
+          "Prefix" : "Prefix"
+        }
+      }
+    }
+  },
+  "device" : {
+    "dev_system" : {
+      "name" : "Systeem{postfix}"
+    },
+    "dev_waermepumpe" : {
+      "name" : "Warmtepomp{postfix}"
+    },
+    "dev_warmwasser" : {
+      "name" : "Warmwater{postfix}"
+    },
+    "dev_heizkreis" : {
+      "name" : "Verwarmingscircuit{postfix}"
+    },
+    "dev_heizkreis2" : {
+      "name" : "Verwarmingscircuit2{postfix}"
+    },
+    "dev_heizkreis3" : {
+      "name" : "Verwarmingscircuit3{postfix}"
+    },
+    "dev_heizkreis4" : {
+      "name" : "Verwarmingscircuit4{postfix}"
+    },
+    "dev_heizkreis5" : {
+      "name" : "Verwarmingscircuit5{postfix}"
+    },
+    "dev_waermeerzeuger2" : {
+      "name" : "2de warmtebron{postfix}"
+    },
+    "dev_statistik" : {
+      "name" : "Statistieken{postfix}"
+    },
+    "dev_unknown" : {
+      "name" : "Onbekend{postfix}"
+    },
+    "dev_ein_aus" : {
+      "name" : "Input/output{postfix}"
+    }
+  },
+  "entity" : {
+    "number" : {
+      "bivalenztemp" : {
+        "name" : "{prefix}Bivalente temperatuur"
+      },
+      "bivalenztemp_ww" : {
+        "name" : "{prefix}Bivalente temperatuur WW"
+      },
+      "grenztemp" : {
+        "name" : "{prefix}Grenstemperatuur"
+      },
+      "heizkennlinie" : {
+        "name" : "{prefix}Verwarmingscurve"
+      },
+      "heizkennlinie2" : {
+        "name" : "{prefix}Verwarmingscurve2"
+      },
+      "heizkennlinie3" : {
+        "name" : "{prefix}Verwarmingscurve3"
+      },
+      "heizkennlinie4" : {
+        "name" : "{prefix}Verwarmingscurve4"
+      },
+      "heizkennlinie5" : {
+        "name" : "{prefix}Verwarmingscurve5"
+      },
+      "raum_soll_temp_absenk" : {
+        "name" : "{prefix}Doel kamertemperatuur verlaging"
+      },
+      "raum_soll_temp_absenk2" : {
+        "name" : "{prefix}Doel kamertemperatuur verlaging2"
+      },
+      "raum_soll_temp_absenk3" : {
+        "name" : "{prefix}Doel kamertemperatuur verlaging3"
+      },
+      "raum_soll_temp_absenk4" : {
+        "name" : "{prefix}Doel kamertemperatuur verlaging4"
+      },
+      "raum_soll_temp_absenk5" : {
+        "name" : "{prefix}Doel kamertemperatuur verlaging5"
+      },
+      "raum_soll_temp_komf" : {
+        "name" : "{prefix}Doel kamertemperatuur comfort"
+      },
+      "raum_soll_temp_komf2" : {
+        "name" : "{prefix}Doel kamertemperatuur comfort2"
+      },
+      "raum_soll_temp_komf3" : {
+        "name" : "{prefix}Doel kamertemperatuur comfort3"
+      },
+      "raum_soll_temp_komf4" : {
+        "name" : "{prefix}Doel kamertemperatuur comfort4"
+      },
+      "raum_soll_temp_komf5" : {
+        "name" : "{prefix}Doel kamertemperatuur comfort5"
+      },
+      "raum_soll_temp_normal" : {
+        "name" : "{prefix}Doel kamertemperatuur normaal"
+      },
+      "raum_soll_temp_normal2" : {
+        "name" : "{prefix}Doel kamertemperatuur normaal2"
+      },
+      "raum_soll_temp_normal3" : {
+        "name" : "{prefix}Doel kamertemperatuur normaal3"
+      },
+      "raum_soll_temp_normal4" : {
+        "name" : "{prefix}Doel kamertemperatuur normaal4"
+      },
+      "raum_soll_temp_normal5" : {
+        "name" : "{prefix}Doel kamertemperatuur normaal5"
+      },
+      "sgr_anhebung" : {
+        "name" : "{prefix}SG Ready-boost"
+      },
+      "so_wi_umschalt" : {
+        "name" : "{prefix}Zomer-winterschakeling"
+      },
+      "so_wi_umschalt2" : {
+        "name" : "{prefix}Zomer-winterschakeling2"
+      },
+      "so_wi_umschalt3" : {
+        "name" : "{prefix}Zomer-winterschakeling3"
+      },
+      "so_wi_umschalt4" : {
+        "name" : "{prefix}Zomer-winterschakeling4"
+      },
+      "so_wi_umschalt5" : {
+        "name" : "{prefix}Zomer-winterschakeling5"
+      },
+      "ww_absenk" : {
+        "name" : "{prefix}Warmwater Verlaging"
+      },
+      "ww_normal" : {
+        "name" : "{prefix}Warmwater Normaal"
+      }
+    },
+    "select" : {
+      "hz_operationmode" : {
+        "name" : "{prefix}Bedrijfsmodus",
+        "state" : {
+          "hz_operationmode_lowering" : "Verlagingsbedrijf",
+          "hz_operationmode_automatic" : "Automatisch",
+          "hz_operationmode_normal" : "Normaal",
+          "hz_operationmode_standby" : "Standby",
+          "hz_operationmode_comfort" : "Comfort"
+        }
+      },
+      "hz_operationmode2" : {
+        "name" : "{prefix}Bedrijfsmodus2",
+        "state" : {
+          "hz_operationmode_lowering" : "Verlagingsbedrijf",
+          "hz_operationmode_automatic" : "Automatisch",
+          "hz_operationmode_normal" : "Normaal",
+          "hz_operationmode_standby" : "Standby",
+          "hz_operationmode_comfort" : "Comfort"
+        }
+      },
+      "hz_operationmode3" : {
+        "name" : "{prefix}Bedrijfsmodus3",
+        "state" : {
+          "hz_operationmode_lowering" : "Verlagingsbedrijf",
+          "hz_operationmode_automatic" : "Automatisch",
+          "hz_operationmode_normal" : "Normaal",
+          "hz_operationmode_standby" : "Standby",
+          "hz_operationmode_comfort" : "Comfort"
+        }
+      },
+      "hz_operationmode4" : {
+        "name" : "{prefix}Bedrijfsmodus4",
+        "state" : {
+          "hz_operationmode_lowering" : "Verlagingsbedrijf",
+          "hz_operationmode_automatic" : "Automatisch",
+          "hz_operationmode_normal" : "Normaal",
+          "hz_operationmode_standby" : "Standby",
+          "hz_operationmode_comfort" : "Comfort"
+        }
+      },
+      "hz_operationmode5" : {
+        "name" : "{prefix}Bedrijfsmodus5",
+        "state" : {
+          "hz_operationmode_lowering" : "Verlagingsbedrijf",
+          "hz_operationmode_automatic" : "Automatisch",
+          "hz_operationmode_normal" : "Normaal",
+          "hz_operationmode_standby" : "Standby",
+          "hz_operationmode_comfort" : "Comfort"
+        }
+      },
+      "party_pause" : {
+        "name" : "{prefix}Pause / Party",
+        "state" : {
+          "hz_party_0_5" : "Party 0.5h",
+          "hz_party_1" : "Party 1.0h",
+          "hz_party_10" : "Party 10.0h",
+          "hz_party_10_5" : "Party 10.5h",
+          "hz_party_11" : "Party 11.0h",
+          "hz_party_11_5" : "Party 11.5h",
+          "hz_party_12" : "Party 12.0h",
+          "hz_party_1_5" : "Party 1.5h",
+          "hz_party_2" : "Party 2.0h",
+          "hz_party_2_5" : "Party 2.5h",
+          "hz_party_3" : "Party 3.0h",
+          "hz_party_3_5" : "Party 3.5h",
+          "hz_party_4" : "Party 4.0h",
+          "hz_party_4_5" : "Party 4.5h",
+          "hz_party_5" : "Party 5.0h",
+          "hz_party_5_5" : "Party 5.5h",
+          "hz_party_6" : "Party 6.0h",
+          "hz_party_6_5" : "Party 6.5h",
+          "hz_party_7" : "Party 7.0h",
+          "hz_party_7_5" : "Party 7.5h",
+          "hz_party_8" : "Party 8.0h",
+          "hz_party_8_5" : "Party 8.5h",
+          "hz_party_9" : "Party 9.0h",
+          "hz_party_9_5" : "Party 9.5h",
+          "hz_party_pause_auto" : "Automatisch",
+          "hz_pause_0_5" : "Pause 0.5h",
+          "hz_pause_1" : "Pause 1.0h",
+          "hz_pause_10" : "Pause 10.0h",
+          "hz_pause_10_5" : "Pause 10.5h",
+          "hz_pause_11" : "Pause 11.0h",
+          "hz_pause_11_5" : "Pause 11.5h",
+          "hz_pause_12" : "Pause 12.0h",
+          "hz_pause_1_5" : "Pause 1.5h",
+          "hz_pause_2" : "Pause 2.0h",
+          "hz_pause_2_5" : "Pause 2.5h",
+          "hz_pause_3" : "Pause 3.0h",
+          "hz_pause_3_5" : "Pause 3.5h",
+          "hz_pause_4" : "Pause 4.0h",
+          "hz_pause_4_5" : "Pause 4.5h",
+          "hz_pause_5" : "Pause 5.0h",
+          "hz_pause_5_5" : "Pause 5.5h",
+          "hz_pause_6" : "Pause 6.0h",
+          "hz_pause_6_5" : "Pause 6.5h",
+          "hz_pause_7" : "Pause 7.0h",
+          "hz_pause_7_5" : "Pause 7.5h",
+          "hz_pause_8" : "Pause 8.0h",
+          "hz_pause_8_5" : "Pause 8.5h",
+          "hz_pause_9" : "Pause 9.0h",
+          "hz_pause_9_5" : "Pause 9.5h"
+        }
+      },
+      "party_pause2" : {
+        "name" : "{prefix}Pause / Party2",
+        "state" : {
+          "hz_party_0_5" : "Party 0.5h",
+          "hz_party_1" : "Party 1.0h",
+          "hz_party_10" : "Party 10.0h",
+          "hz_party_10_5" : "Party 10.5h",
+          "hz_party_11" : "Party 11.0h",
+          "hz_party_11_5" : "Party 11.5h",
+          "hz_party_12" : "Party 12.0h",
+          "hz_party_1_5" : "Party 1.5h",
+          "hz_party_2" : "Party 2.0h",
+          "hz_party_2_5" : "Party 2.5h",
+          "hz_party_3" : "Party 3.0h",
+          "hz_party_3_5" : "Party 3.5h",
+          "hz_party_4" : "Party 4.0h",
+          "hz_party_4_5" : "Party 4.5h",
+          "hz_party_5" : "Party 5.0h",
+          "hz_party_5_5" : "Party 5.5h",
+          "hz_party_6" : "Party 6.0h",
+          "hz_party_6_5" : "Party 6.5h",
+          "hz_party_7" : "Party 7.0h",
+          "hz_party_7_5" : "Party 7.5h",
+          "hz_party_8" : "Party 8.0h",
+          "hz_party_8_5" : "Party 8.5h",
+          "hz_party_9" : "Party 9.0h",
+          "hz_party_9_5" : "Party 9.5h",
+          "hz_party_pause_auto" : "Automatisch",
+          "hz_pause_0_5" : "Pause 0.5h",
+          "hz_pause_1" : "Pause 1.0h",
+          "hz_pause_10" : "Pause 10.0h",
+          "hz_pause_10_5" : "Pause 10.5h",
+          "hz_pause_11" : "Pause 11.0h",
+          "hz_pause_11_5" : "Pause 11.5h",
+          "hz_pause_12" : "Pause 12.0h",
+          "hz_pause_1_5" : "Pause 1.5h",
+          "hz_pause_2" : "Pause 2.0h",
+          "hz_pause_2_5" : "Pause 2.5h",
+          "hz_pause_3" : "Pause 3.0h",
+          "hz_pause_3_5" : "Pause 3.5h",
+          "hz_pause_4" : "Pause 4.0h",
+          "hz_pause_4_5" : "Pause 4.5h",
+          "hz_pause_5" : "Pause 5.0h",
+          "hz_pause_5_5" : "Pause 5.5h",
+          "hz_pause_6" : "Pause 6.0h",
+          "hz_pause_6_5" : "Pause 6.5h",
+          "hz_pause_7" : "Pause 7.0h",
+          "hz_pause_7_5" : "Pause 7.5h",
+          "hz_pause_8" : "Pause 8.0h",
+          "hz_pause_8_5" : "Pause 8.5h",
+          "hz_pause_9" : "Pause 9.0h",
+          "hz_pause_9_5" : "Pause 9.5h"
+        }
+      },
+      "party_pause3" : {
+        "name" : "{prefix}Pause / Party3",
+        "state" : {
+          "hz_party_0_5" : "Party 0.5h",
+          "hz_party_1" : "Party 1.0h",
+          "hz_party_10" : "Party 10.0h",
+          "hz_party_10_5" : "Party 10.5h",
+          "hz_party_11" : "Party 11.0h",
+          "hz_party_11_5" : "Party 11.5h",
+          "hz_party_12" : "Party 12.0h",
+          "hz_party_1_5" : "Party 1.5h",
+          "hz_party_2" : "Party 2.0h",
+          "hz_party_2_5" : "Party 2.5h",
+          "hz_party_3" : "Party 3.0h",
+          "hz_party_3_5" : "Party 3.5h",
+          "hz_party_4" : "Party 4.0h",
+          "hz_party_4_5" : "Party 4.5h",
+          "hz_party_5" : "Party 5.0h",
+          "hz_party_5_5" : "Party 5.5h",
+          "hz_party_6" : "Party 6.0h",
+          "hz_party_6_5" : "Party 6.5h",
+          "hz_party_7" : "Party 7.0h",
+          "hz_party_7_5" : "Party 7.5h",
+          "hz_party_8" : "Party 8.0h",
+          "hz_party_8_5" : "Party 8.5h",
+          "hz_party_9" : "Party 9.0h",
+          "hz_party_9_5" : "Party 9.5h",
+          "hz_party_pause_auto" : "Automatisch",
+          "hz_pause_0_5" : "Pause 0.5h",
+          "hz_pause_1" : "Pause 1.0h",
+          "hz_pause_10" : "Pause 10.0h",
+          "hz_pause_10_5" : "Pause 10.5h",
+          "hz_pause_11" : "Pause 11.0h",
+          "hz_pause_11_5" : "Pause 11.5h",
+          "hz_pause_12" : "Pause 12.0h",
+          "hz_pause_1_5" : "Pause 1.5h",
+          "hz_pause_2" : "Pause 2.0h",
+          "hz_pause_2_5" : "Pause 2.5h",
+          "hz_pause_3" : "Pause 3.0h",
+          "hz_pause_3_5" : "Pause 3.5h",
+          "hz_pause_4" : "Pause 4.0h",
+          "hz_pause_4_5" : "Pause 4.5h",
+          "hz_pause_5" : "Pause 5.0h",
+          "hz_pause_5_5" : "Pause 5.5h",
+          "hz_pause_6" : "Pause 6.0h",
+          "hz_pause_6_5" : "Pause 6.5h",
+          "hz_pause_7" : "Pause 7.0h",
+          "hz_pause_7_5" : "Pause 7.5h",
+          "hz_pause_8" : "Pause 8.0h",
+          "hz_pause_8_5" : "Pause 8.5h",
+          "hz_pause_9" : "Pause 9.0h",
+          "hz_pause_9_5" : "Pause 9.5h"
+        }
+      },
+      "party_pause4" : {
+        "name" : "{prefix}Pause / Party4",
+        "state" : {
+          "hz_party_0_5" : "Party 0.5h",
+          "hz_party_1" : "Party 1.0h",
+          "hz_party_10" : "Party 10.0h",
+          "hz_party_10_5" : "Party 10.5h",
+          "hz_party_11" : "Party 11.0h",
+          "hz_party_11_5" : "Party 11.5h",
+          "hz_party_12" : "Party 12.0h",
+          "hz_party_1_5" : "Party 1.5h",
+          "hz_party_2" : "Party 2.0h",
+          "hz_party_2_5" : "Party 2.5h",
+          "hz_party_3" : "Party 3.0h",
+          "hz_party_3_5" : "Party 3.5h",
+          "hz_party_4" : "Party 4.0h",
+          "hz_party_4_5" : "Party 4.5h",
+          "hz_party_5" : "Party 5.0h",
+          "hz_party_5_5" : "Party 5.5h",
+          "hz_party_6" : "Party 6.0h",
+          "hz_party_6_5" : "Party 6.5h",
+          "hz_party_7" : "Party 7.0h",
+          "hz_party_7_5" : "Party 7.5h",
+          "hz_party_8" : "Party 8.0h",
+          "hz_party_8_5" : "Party 8.5h",
+          "hz_party_9" : "Party 9.0h",
+          "hz_party_9_5" : "Party 9.5h",
+          "hz_party_pause_auto" : "Automatisch",
+          "hz_pause_0_5" : "Pause 0.5h",
+          "hz_pause_1" : "Pause 1.0h",
+          "hz_pause_10" : "Pause 10.0h",
+          "hz_pause_10_5" : "Pause 10.5h",
+          "hz_pause_11" : "Pause 11.0h",
+          "hz_pause_11_5" : "Pause 11.5h",
+          "hz_pause_12" : "Pause 12.0h",
+          "hz_pause_1_5" : "Pause 1.5h",
+          "hz_pause_2" : "Pause 2.0h",
+          "hz_pause_2_5" : "Pause 2.5h",
+          "hz_pause_3" : "Pause 3.0h",
+          "hz_pause_3_5" : "Pause 3.5h",
+          "hz_pause_4" : "Pause 4.0h",
+          "hz_pause_4_5" : "Pause 4.5h",
+          "hz_pause_5" : "Pause 5.0h",
+          "hz_pause_5_5" : "Pause 5.5h",
+          "hz_pause_6" : "Pause 6.0h",
+          "hz_pause_6_5" : "Pause 6.5h",
+          "hz_pause_7" : "Pause 7.0h",
+          "hz_pause_7_5" : "Pause 7.5h",
+          "hz_pause_8" : "Pause 8.0h",
+          "hz_pause_8_5" : "Pause 8.5h",
+          "hz_pause_9" : "Pause 9.0h",
+          "hz_pause_9_5" : "Pause 9.5h"
+        }
+      },
+      "party_pause5" : {
+        "name" : "{prefix}Pause / Party5",
+        "state" : {
+          "hz_party_0_5" : "Party 0.5h",
+          "hz_party_1" : "Party 1.0h",
+          "hz_party_10" : "Party 10.0h",
+          "hz_party_10_5" : "Party 10.5h",
+          "hz_party_11" : "Party 11.0h",
+          "hz_party_11_5" : "Party 11.5h",
+          "hz_party_12" : "Party 12.0h",
+          "hz_party_1_5" : "Party 1.5h",
+          "hz_party_2" : "Party 2.0h",
+          "hz_party_2_5" : "Party 2.5h",
+          "hz_party_3" : "Party 3.0h",
+          "hz_party_3_5" : "Party 3.5h",
+          "hz_party_4" : "Party 4.0h",
+          "hz_party_4_5" : "Party 4.5h",
+          "hz_party_5" : "Party 5.0h",
+          "hz_party_5_5" : "Party 5.5h",
+          "hz_party_6" : "Party 6.0h",
+          "hz_party_6_5" : "Party 6.5h",
+          "hz_party_7" : "Party 7.0h",
+          "hz_party_7_5" : "Party 7.5h",
+          "hz_party_8" : "Party 8.0h",
+          "hz_party_8_5" : "Party 8.5h",
+          "hz_party_9" : "Party 9.0h",
+          "hz_party_9_5" : "Party 9.5h",
+          "hz_party_pause_auto" : "Automatisch",
+          "hz_pause_0_5" : "Pause 0.5h",
+          "hz_pause_1" : "Pause 1.0h",
+          "hz_pause_10" : "Pause 10.0h",
+          "hz_pause_10_5" : "Pause 10.5h",
+          "hz_pause_11" : "Pause 11.0h",
+          "hz_pause_11_5" : "Pause 11.5h",
+          "hz_pause_12" : "Pause 12.0h",
+          "hz_pause_1_5" : "Pause 1.5h",
+          "hz_pause_2" : "Pause 2.0h",
+          "hz_pause_2_5" : "Pause 2.5h",
+          "hz_pause_3" : "Pause 3.0h",
+          "hz_pause_3_5" : "Pause 3.5h",
+          "hz_pause_4" : "Pause 4.0h",
+          "hz_pause_4_5" : "Pause 4.5h",
+          "hz_pause_5" : "Pause 5.0h",
+          "hz_pause_5_5" : "Pause 5.5h",
+          "hz_pause_6" : "Pause 6.0h",
+          "hz_pause_6_5" : "Pause 6.5h",
+          "hz_pause_7" : "Pause 7.0h",
+          "hz_pause_7_5" : "Pause 7.5h",
+          "hz_pause_8" : "Pause 8.0h",
+          "hz_pause_8_5" : "Pause 8.5h",
+          "hz_pause_9" : "Pause 9.0h",
+          "hz_pause_9_5" : "Pause 9.5h"
+        }
+      },
+      "sys_operationmode" : {
+        "name" : "{prefix}Systembedrijfsmodus",
+        "state" : {
+          "sys_operationmode_2ndheatsource" : "2de warmtebron",
+          "sys_operationmode_automatic" : "Automatisch",
+          "sys_operationmode_heating" : "Verwarmen",
+          "sys_operationmode_cooling" : "Koelen",
+          "sys_operationmode_summer" : "Zomer",
+          "sys_operationmode_standby" : "Standby"
+        }
+      },
+      "ww_push" : {
+        "name" : "{prefix}Warmwater Push",
+        "state" : {
+          "ww_push_10" : "10 min",
+          "ww_push_100" : "100 min",
+          "ww_push_105" : "105 min",
+          "ww_push_110" : "110 min",
+          "ww_push_115" : "115 min",
+          "ww_push_120" : "120 min",
+          "ww_push_125" : "125 min",
+          "ww_push_130" : "130 min",
+          "ww_push_135" : "135 min",
+          "ww_push_140" : "140 min",
+          "ww_push_145" : "145 min",
+          "ww_push_15" : "15 min",
+          "ww_push_150" : "150 min",
+          "ww_push_155" : "155 min",
+          "ww_push_160" : "160 min",
+          "ww_push_165" : "165 min",
+          "ww_push_170" : "170 min",
+          "ww_push_175" : "175 min",
+          "ww_push_180" : "180 min",
+          "ww_push_185" : "185 min",
+          "ww_push_190" : "190 min",
+          "ww_push_195" : "195 min",
+          "ww_push_20" : "20 min",
+          "ww_push_200" : "200 min",
+          "ww_push_205" : "205 min",
+          "ww_push_210" : "210 min",
+          "ww_push_215" : "215 min",
+          "ww_push_220" : "220 min",
+          "ww_push_225" : "225 min",
+          "ww_push_230" : "230 min",
+          "ww_push_235" : "235 min",
+          "ww_push_25" : "25 min",
+          "ww_push_30" : "30 min",
+          "ww_push_35" : "35 min",
+          "ww_push_40" : "40 min",
+          "ww_push_45" : "45 min",
+          "ww_push_5" : "5 min",
+          "ww_push_50" : "50 min",
+          "ww_push_55" : "55 min",
+          "ww_push_60" : "60 min",
+          "ww_push_65" : "65 min",
+          "ww_push_70" : "70 min",
+          "ww_push_75" : "75 min",
+          "ww_push_80" : "80 min",
+          "ww_push_85" : "85 min",
+          "ww_push_90" : "90 min",
+          "ww_push_95" : "95 min",
+          "ww_push_aus" : "Uit"
+        }
+      }
+    },
+    "sensor" : {
+      "abtau_energie_gester" : {
+        "name" : "{prefix}Ontdooi Energie gisteren"
+      },
+      "abtau_energie_heute" : {
+        "name" : "{prefix}Ontdooi Energie vandaag"
+      },
+      "abtau_energie_jahr" : {
+        "name" : "{prefix}Ontdooi Energie jaar"
+      },
+      "abtau_energie_monat" : {
+        "name" : "{prefix}Ontdooi Energie maand"
+      },
+      "adr31106" : {
+        "name" : "{prefix}Adr. 31106"
+      },
+      "adr311062" : {
+        "name" : "{prefix}Adr. 311062"
+      },
+      "adr311063" : {
+        "name" : "{prefix}Adr. 311063"
+      },
+      "adr311064" : {
+        "name" : "{prefix}Adr. 311064"
+      },
+      "adr311065" : {
+        "name" : "{prefix}Adr. 311065"
+      },
+      "adr36801" : {
+        "name" : "{prefix}Adr. 36801"
+      },
+      "adr44102" : {
+        "name" : "{prefix}Configuratie EP1",
+        "state" : {
+          "w2_konf_0" : "Geactiveerd",
+          "w2_konf_1" : "Uit"
+        }
+      },
+      "adr44103" : {
+        "name" : "{prefix}Configuratie EP2",
+        "state" : {
+          "w2_konf_0" : "Geactiveerd",
+          "w2_konf_1" : "Uit"
+        }
+      },
+      "anf_typ" : {
+        "name" : "{prefix}Aanvraagtype",
+        "state" : {
+          "hz_anforderung_aus" : "Uit",
+          "hz_anforderung_konstant" : "Constant",
+          "hz_anforderung_witterungsgefuehrt" : "Weersafhankelijk"
+        }
+      },
+      "anf_typ2" : {
+        "name" : "{prefix}Aanvraagtype2",
+        "state" : {
+          "hz_anforderung_aus" : "Uit",
+          "hz_anforderung_konstant" : "Constant",
+          "hz_anforderung_witterungsgefuehrt" : "Weersafhankelijk"
+        }
+      },
+      "anf_typ3" : {
+        "name" : "{prefix}Aanvraagtype3",
+        "state" : {
+          "hz_anforderung_aus" : "Uit",
+          "hz_anforderung_konstant" : "Constant",
+          "hz_anforderung_witterungsgefuehrt" : "Weersafhankelijk"
+        }
+      },
+      "anf_typ4" : {
+        "name" : "{prefix}Aanvraagtype4",
+        "state" : {
+          "hz_anforderung_aus" : "Uit",
+          "hz_anforderung_konstant" : "Constant",
+          "hz_anforderung_witterungsgefuehrt" : "Weersafhankelijk"
+        }
+      },
+      "anf_typ5" : {
+        "name" : "{prefix}Aanvraagtype5",
+        "state" : {
+          "hz_anforderung_aus" : "Uit",
+          "hz_anforderung_konstant" : "Constant",
+          "hz_anforderung_witterungsgefuehrt" : "Weersafhankelijk"
+        }
+      },
+      "anforderung_vl_regenerativ" : {
+        "name" : "{prefix}Vraag (regeneratieve stroom)"
+      },
+      "ausg_h12" : {
+        "name" : "{prefix}Uitgang H1.2"
+      },
+      "ausg_h13" : {
+        "name" : "{prefix}Uitgang H1.3"
+      },
+      "ausg_h14" : {
+        "name" : "{prefix}Uitgang H1.4"
+      },
+      "ausg_h15" : {
+        "name" : "{prefix}Uitgang H1.5"
+      },
+      "aussentemp" : {
+        "name" : "{prefix}Buitentemperatuur"
+      },
+      "betriebsanzeige" : {
+        "name" : "{prefix}Vermogensweergave",
+        "state" : {
+          "system_operationmode_undefined" : "ongedefinieerd",
+          "system_operationmode_relaistest" : "relais-test",
+          "system_operationmode_sgtariff" : "SG-tarief",
+          "system_operationmode_sgmax" : "SG-maximaal",
+          "system_operationmode_tariffload" : "Tarieflading",
+          "system_operationmode_elevatedoperation" : "Verhoogde werking",
+          "system_operationmode_standbytime" : "Standtijd",
+          "system_operationmode_standby" : "Standby",
+          "system_operationmode_rinse" : "Spoelen",
+          "system_operationmode_frosprotection" : "Vorstbescherming",
+          "system_operationmode_heating" : "Verwarming",
+          "system_operationmode_emergencystop" : "Noodstop",
+          "system_operationmode_hotwater" : "Warmwater",
+          "system_operationmode_legionellaprotection" : "Legionellabescherming",
+          "system_operationmode_switchheatingcooling" : "Omschakeling verwarmen/koelen",
+          "system_operationmode_cooling" : "Koelen",
+          "system_operationmode_passivecooling" : "Passieve koeling",
+          "system_operationmode_summer" : "Zomer",
+          "system_operationmode_swimmingpool" : "Zwembadbedrijf",
+          "system_operationmode_vacation" : "Vakantie",
+          "system_operationmode_screedprogram" : "Estrich-programma",
+          "system_operationmode_locked" : "Geblokkeerd",
+          "system_operationmode_diagnosis" : "Diagnose",
+          "system_operationmode_lockedat" : "Blokkade buitentemperatuur",
+          "system_operationmode_lockedsummer" : "Zomerblokkade",
+          "system_operationmode_lockedwinter" : "Winterblokkade",
+          "system_operationmode_applicationlimit" : "Toepassingsgrens",
+          "system_operationmode_lockedcv" : "CV-blokkade",
+          "system_operationmode_lowering" : "Verlaagde werking",
+          "system_operationmode_regenerativeflow" : "Aanvoer regeneratief",
+          "system_operationmode_manual" : "Manueel",
+          "system_operationmode_oilrecirculation" : "Olie-terugvoer",
+          "system_operationmode_manualheating" : "Manueel verwarmen",
+          "system_operationmode_manualcooling" : "Manueel koelen",
+          "system_operationmode_manualdefrost" : "Manueel ontdooien",
+          "system_operationmode_defrost" : "Ontdooien",
+          "system_operationmode_manual2ndheatsource" : "2e warmtewisselaar"
+        }
+      },
+      "betriebss_e1" : {
+        "name" : "{prefix}Bedrijfsuren E1"
+      },
+      "betriebss_e2" : {
+        "name" : "{prefix}Bedrijfsuren E2"
+      },
+      "eing_de1" : {
+        "name" : "{prefix}Ingang DE1",
+        "state" : {
+          "w2_status_aus" : "Uit",
+          "w2_status_ein" : "Aan"
+        }
+      },
+      "eing_de2" : {
+        "name" : "{prefix}Ingang DE2",
+        "state" : {
+          "w2_status_aus" : "Uit",
+          "w2_status_ein" : "Aan"
+        }
+      },
+      "el_energie_yesterday" : {
+        "name" : "{prefix}Elektr. Energie gisteren"
+      },
+      "el_energie_heute" : {
+        "name" : "{prefix}Elektr. Energie vandaag"
+      },
+      "el_energie_jahr" : {
+        "name" : "{prefix}Elektr. Energie jaar"
+      },
+      "el_energie_monat" : {
+        "name" : "{prefix}Elektr. Energie maand"
+      },
+      "fehler" : {
+        "name" : "{prefix}Fout",
+        "state" : {
+          "sys_fehler_1" : "Koelmiddelfsensor expansieventiel ingang (T1)",
+          "sys_fehler_10" : "Hogedruksensor (P2)",
+          "sys_fehler_101" : "Warmtepomp wordt buiten de werkgrenzen bediend",
+          "sys_fehler_102" : "Maximale ontdooitijd overschreden",
+          "sys_fehler_103" : "Communicatie koelcircuit defect",
+          "sys_fehler_104" : "Drukgastemperatuur te hoog",
+          "sys_fehler_105" : "Stroomverbruik van de omvormer te hoog",
+          "sys_fehler_106" : "Stroomverbruik te hoog",
+          "sys_fehler_107" : "Gelijkspanning op de omvormer te hoog",
+          "sys_fehler_108" : "Gelijkspanning op de omvormer te laag",
+          "sys_fehler_109" : "Warmtepomp wordt buiten het toegestane spanningsbereik bediend",
+          "sys_fehler_11" : "Middendruksensor (P3)",
+          "sys_fehler_110" : "Warmtepomp wordt buiten het toegestane spanningsbereik bediend",
+          "sys_fehler_111" : "Hogedrukschakelaar geactiveerd",
+          "sys_fehler_112" : "Omvormer oververhit",
+          "sys_fehler_113" : "Omvormer oververhit",
+          "sys_fehler_114" : "Positie van de compressormotor kan niet worden bepaald",
+          "sys_fehler_117" : "Gelijkspanning op de omvormer te laag",
+          "sys_fehler_118" : "Stroom tussen omvormer en compressor te hoog",
+          "sys_fehler_119" : "Stroomverbruik van de compressor te hoog - tijdsoverschrijding",
+          "sys_fehler_12" : "Expansieventiel koelen defect",
+          "sys_fehler_120" : "Omvormertemperatuur te hoog",
+          "sys_fehler_121" : "Spanning op de omvormer te laag",
+          "sys_fehler_122" : "Modbus-configuratiefout",
+          "sys_fehler_123" : "Geen Modbus-verbinding",
+          "sys_fehler_124" : "Drukgastemperatuur te hoog",
+          "sys_fehler_127" : "Omvormertemperatuur te hoog",
+          "sys_fehler_128" : "Omvormer oververhit",
+          "sys_fehler_129" : "Modbus-communicatie defect",
+          "sys_fehler_13" : "Geen communicatie met de omvormer",
+          "sys_fehler_130" : "Modbus-communicatie defect",
+          "sys_fehler_133" : "Elektronica storing",
+          "sys_fehler_135" : "Hogedrukschakelaar defect",
+          "sys_fehler_136" : "Compressor past niet bij configuratie",
+          "sys_fehler_137" : "Hogedrukschakelaar past niet bij configuratie",
+          "sys_fehler_14" : "Geen communicatie met buiteneenheid",
+          "sys_fehler_140" : "Drukgastemperatuur te laag",
+          "sys_fehler_143" : "Omvormertemperatuur te laag",
+          "sys_fehler_144" : "Temperatuur smoorspoel te laag",
+          "sys_fehler_15" : "Hogedrukschakelaar geactiveerd",
+          "sys_fehler_150" : "Compressor stroomsensor fase U fout",
+          "sys_fehler_151" : "Compressor stroomsensor fase V fout",
+          "sys_fehler_152" : "Compressor stroomsensor fase W fout",
+          "sys_fehler_153" : "Stroomsensor fout",
+          "sys_fehler_154" : "Omvormer temperatuursensor fout",
+          "sys_fehler_155" : "Temperatuursensor fout",
+          "sys_fehler_156" : "Drukgassensor (DT)",
+          "sys_fehler_157" : "Geen communicatie met besturingsbord koelaggregaat",
+          "sys_fehler_158" : "EEPROM-geheugenfout",
+          "sys_fehler_159" : "Stroomverbruik te hoog",
+          "sys_fehler_16" : "Omvormer geblokkeerd, 10 fouten in de laatste 10 uur",
+          "sys_fehler_160" : "Warmtepomp wordt buiten het toegestane spanningsbereik bediend",
+          "sys_fehler_161" : "Warmtepomp wordt buiten het toegestane spanningsbereik bediend",
+          "sys_fehler_162" : "Gelijkspanning op de omvormer te hoog",
+          "sys_fehler_163" : "Gelijkspanning op de omvormer te laag",
+          "sys_fehler_164" : "Hogedrukschakelaar geactiveerd",
+          "sys_fehler_165" : "Fase tussen ingang en compressor onderbroken",
+          "sys_fehler_166" : "Omvormer oververhit",
+          "sys_fehler_167" : "Omvormer oververhit",
+          "sys_fehler_168" : "Configuratiefout compressor",
+          "sys_fehler_169" : "Stroomverbruik compressor te hoog",
+          "sys_fehler_17" : "EEPROM-geheugenfout",
+          "sys_fehler_170" : "Compressor fase U overspanning",
+          "sys_fehler_171" : "Compressor fase V overspanning",
+          "sys_fehler_172" : "Compressor fase W overspanning",
+          "sys_fehler_173" : "Faseverlies op de compressor",
+          "sys_fehler_174" : "Compressor geblokkeerd",
+          "sys_fehler_175" : "Compressor start niet",
+          "sys_fehler_176" : "Onregelmatige spanningsvoorziening omvormer",
+          "sys_fehler_177" : "Compressor overbelast",
+          "sys_fehler_178" : "Temperatuur drukgassensor (DT) te hoog",
+          "sys_fehler_179" : "Temperatuur omvormer",
+          "sys_fehler_18" : "Geen Modbus-communicatie tussen EC-regelaar en koelbord",
+          "sys_fehler_180" : "Compressor geblokkeerd",
+          "sys_fehler_181" : "Compressor geblokkeerd",
+          "sys_fehler_182" : "Stroomverbruik te hoog",
+          "sys_fehler_183" : "Stroomverbruik te hoog",
+          "sys_fehler_184" : "Spanning te hoog",
+          "sys_fehler_19" : "Warmtepomp uitgeschakeld door omvormeralarm",
+          "sys_fehler_2" : "Luchtinlaatsensor (T2)",
+          "sys_fehler_20" : "Compressor past niet bij configuratie",
+          "sys_fehler_21" : "Lagedrukstoring",
+          "sys_fehler_22" : "Te lage oververhitting",
+          "sys_fehler_23" : "Te hoge oververhitting",
+          "sys_fehler_24" : "EVI te hoge oververhitting",
+          "sys_fehler_25" : "Te weinig koelmiddel",
+          "sys_fehler_26" : "Hogedrukstoring",
+          "sys_fehler_27" : "Condensatietemperatuur te laag",
+          "sys_fehler_28" : "Condensatietemperatuur te hoog",
+          "sys_fehler_29" : "Verdampingstemperatuur te laag",
+          "sys_fehler_3" : "Warmtewisselaarsensor AG uitgang (T3)",
+          "sys_fehler_30" : "Verdampingstemperatuur te hoog",
+          "sys_fehler_32" : "Warmtepomp niet compatibel",
+          "sys_fehler_33" : "EC-regelaar heeft geen verbinding met uitbreidingsmodule EM-HK",
+          "sys_fehler_4" : "Compressoraanvoergassensor (T4)",
+          "sys_fehler_40" : "Volumestroom te laag",
+          "sys_fehler_41" : "Verschil LWT/retour negatief / Vierwegklep schakelt na ontdooien niet terug; na 3 waarschuwingen blokkeert het systeem",
+          "sys_fehler_43" : "Ventilator geblokkeerd",
+          "sys_fehler_44" : "Ventilatorsnelheid te laag",
+          "sys_fehler_47" : "Communicatie EC-regelaar naar koelplaat defect",
+          "sys_fehler_5" : "EVI-aanzuiggassensor (T5)",
+          "sys_fehler_50" : "Buitensensor (B1) onderbroken",
+          "sys_fehler_51" : "Buitensensor (B1) kortgesloten",
+          "sys_fehler_52" : "Verdeelsensor (B2) onderbroken",
+          "sys_fehler_53" : "Verdeelsensor (B2) kortgesloten",
+          "sys_fehler_54" : "Warmwatersensor (B3) onderbroken",
+          "sys_fehler_55" : "Warmwatersensor (B3) kortgesloten",
+          "sys_fehler_56" : "Condensorstromingssensor (B4) onderbroken",
+          "sys_fehler_57" : "Condensorstromingssensor (B4) kortgesloten",
+          "sys_fehler_58" : "Stroomsensor (B7) onderbroken",
+          "sys_fehler_59" : "Stroomsensor (B7) kortgesloten",
+          "sys_fehler_6" : "Koudemiddelsensor IG-uitgang (T6)",
+          "sys_fehler_60" : "Retourstromingssensor (B9) onderbroken",
+          "sys_fehler_61" : "Retourstromingssensor (B9) kortgesloten",
+          "sys_fehler_64" : "Buffersensor (B11) onderbroken",
+          "sys_fehler_65" : "Buffersensor (B11) kortgesloten",
+          "sys_fehler_65535" : "geen fout",
+          "sys_fehler_66" : "Regeneratieve mengsensor (B2.1) onderbroken",
+          "sys_fehler_67" : "Regeneratieve mengsensor (B2.1) kortgesloten",
+          "sys_fehler_7" : "Oliekartsensor (T7)",
+          "sys_fehler_70" : "Tweede verwarmingscircuitstromingssensor (B6.2) onderbroken",
+          "sys_fehler_71" : "Tweede verwarmingscircuitstromingssensor (B6.2) kortgesloten",
+          "sys_fehler_72" : "Sensor (T1.2) onderbroken",
+          "sys_fehler_73" : "Sensor (T1.2) kortgesloten",
+          "sys_fehler_74" : "Sensor (T2.2) onderbroken",
+          "sys_fehler_75" : "Sensor (T2.2) kortgesloten",
+          "sys_fehler_8" : "Expansieventiel EVI",
+          "sys_fehler_9" : "Lagedruksensor (P1)",
+          "sys_fehler_90" : "Analoog ingang AE1 onderbroken",
+          "sys_fehler_91" : "Analoog ingang AE1 kortgesloten",
+          "sys_fehler_92" : "Analoog ingang AE2 onderbroken",
+          "sys_fehler_93" : "Analoog ingang AE2 kortgesloten",
+          "sys_fehler_94" : "Analoog ingang AE3 onderbroken",
+          "sys_fehler_95" : "Analoog ingang AE3 kortgesloten"
+        }
+      },
+      "fehlerfrei" : {
+        "name" : "{prefix}Foutvrij",
+        "state" : {
+          "fehler_aktiv" : "Fout actief",
+          "stoerungsfreier_betrieb" : "Storingsbedrijf"
+        }
+      },
+      "ges_energie_2_yesterday" : {
+        "name" : "{prefix}Totale Energie II gisteren"
+      },
+      "ges_energie_today" : {
+        "name" : "{prefix}Totale Energie II vandaag"
+      },
+      "ges_energie_year" : {
+        "name" : "{prefix}Totale Energie II jaar"
+      },
+      "ges_energie_2_monat" : {
+        "name" : "{prefix}Totale Energie II maand"
+      },
+      "ges_energie_yesterday" : {
+        "name" : "{prefix}Totale Energie gisteren"
+      },
+      "ges_energie_heute" : {
+        "name" : "{prefix}Totale Energie vandaag"
+      },
+      "ges_energie_jahr" : {
+        "name" : "{prefix}Totale Energie jaar"
+      },
+      "ges_energie_monat" : {
+        "name" : "{prefix}Totale Energie maand"
+      },
+      "heiz_energie_getern" : {
+        "name" : "{prefix}Verwarmingsenergie gisteren"
+      },
+      "heiz_energie_heute" : {
+        "name" : "{prefix}Verwarmingsenergie vandaag"
+      },
+      "heiz_energie_jahr" : {
+        "name" : "{prefix}Verwarmingsenergie jaar"
+      },
+      "heiz_energie_monat" : {
+        "name" : "{prefix}Verwarmingsenergie maand"
+      },
+      "heiz_konstanttemp" : {
+        "name" : "{prefix}Verwarming constante temperatuur"
+      },
+      "heiz_konstanttemp2" : {
+        "name" : "{prefix}Verwarming constante temperatuur2"
+      },
+      "heiz_konstanttemp3" : {
+        "name" : "{prefix}Verwarming constante temperatuur3"
+      },
+      "heiz_konstanttemp4" : {
+        "name" : "{prefix}Verwarming constante temperatuur4"
+      },
+      "heiz_konstanttemp5" : {
+        "name" : "{prefix}Verwarming constante temperatuur5"
+      },
+      "heiz_konstanttemp_absenk" : {
+        "name" : "{prefix}Verwarming constante temperatuur verlaging"
+      },
+      "heiz_konstanttemp_absenk2" : {
+        "name" : "{prefix}Verwarming constante temperatuur verlaging2"
+      },
+      "heiz_konstanttemp_absenk3" : {
+        "name" : "{prefix}Verwarming constante temperatuur verlaging3"
+      },
+      "heiz_konstanttemp_absenk4" : {
+        "name" : "{prefix}Verwarming constante temperatuur verlaging4"
+      },
+      "heiz_konstanttemp_absenk5" : {
+        "name" : "{prefix}Verwarming constante temperatuur verlaging5"
+      },
+      "hz_konf" : {
+        "name" : "{prefix}Verwarmingscircuitconfiguratie",
+        "state" : {
+          "hp_konf_aus" : "uit",
+          "hp_konf_mischkreis" : "Mengcircuit",
+          "hp_konf_pumpenkreis" : "Pompcircuit",
+          "hp_konf_sollwert_pumpe_m1" : "Streefwaarde (pomp M1)"
+        }
+      },
+      "hz_konf2" : {
+        "name" : "{prefix}Verwarmingscircuitconfiguratie 2",
+        "state" : {
+          "hp_konf_aus" : "uit",
+          "hp_konf_mischkreis" : "Mengcircuit",
+          "hp_konf_pumpenkreis" : "Pompcircuit",
+          "hp_konf_sollwert_pumpe_m1" : "Streefwaarde (pomp M1)"
+        }
+      },
+      "hz_konf3" : {
+        "name" : "{prefix}Verwarmingscircuitconfiguratie 3",
+        "state" : {
+          "hp_konf_aus" : "uit",
+          "hp_konf_mischkreis" : "Mengcircuit",
+          "hp_konf_pumpenkreis" : "Pompcircuit",
+          "hp_konf_sollwert_pumpe_m1" : "Streefwaarde (pomp M1)"
+        }
+      },
+      "hz_konf4" : {
+        "name" : "{prefix}Verwarmingscircuitconfiguratie 4",
+        "state" : {
+          "hp_konf_aus" : "uit",
+          "hp_konf_mischkreis" : "Mengcircuit",
+          "hp_konf_pumpenkreis" : "Pompcircuit",
+          "hp_konf_sollwert_pumpe_m1" : "Streefwaarde (pomp M1)"
+        }
+      },
+      "hz_konf5" : {
+        "name" : "{prefix}Verwarmingscircuitconfiguratie 5",
+        "state" : {
+          "hp_konf_aus" : "uit",
+          "hp_konf_mischkreis" : "Mengcircuit",
+          "hp_konf_pumpenkreis" : "Pompcircuit",
+          "hp_konf_sollwert_pumpe_m1" : "Streefwaarde (pomp M1)"
+        }
+      },
+      "hz_vl_temp" : {
+        "name" : "{prefix}Verwarmingscircuit-aanvoertemperatuur"
+      },
+      "hz_vl_temp2" : {
+        "name" : "{prefix}Verwarmingscircuit-aanvoertemperatuur 2"
+      },
+      "hz_vl_temp3" : {
+        "name" : "{prefix}Verwarmingscircuit-aanvoertemperatuur 3"
+      },
+      "hz_vl_temp4" : {
+        "name" : "{prefix}Verwarmingscircuit-aanvoertemperatuur 4"
+      },
+      "hz_vl_temp5" : {
+        "name" : "{prefix}Verwarmingscircuit-aanvoertemperatuur 5"
+      },
+      "konf_ausg_h12" : {
+        "name" : "{prefix}Conf. Output H1.2",
+        "state" : {
+          "io_konf_0" : "0",
+          "io_konf_1" : "1",
+          "io_konf_2" : "2",
+          "io_konf_3" : "3",
+          "io_konf_4" : "4",
+          "io_konf_5" : "5",
+          "io_konf_6" : "6",
+          "io_konf_65535" : "65535",
+          "io_konf_7" : "7"
+        }
+      },
+      "konf_ausg_h13" : {
+        "name" : "{prefix}Conf. Output  H1.3",
+        "state" : {
+          "io_konf_0" : "0",
+          "io_konf_1" : "1",
+          "io_konf_2" : "2",
+          "io_konf_3" : "3",
+          "io_konf_4" : "4",
+          "io_konf_5" : "5",
+          "io_konf_6" : "6",
+          "io_konf_65535" : "65535",
+          "io_konf_7" : "7"
+        }
+      },
+      "konf_ausg_h14" : {
+        "name" : "{prefix}Conf. Output  H1.4",
+        "state" : {
+          "io_konf_0" : "0",
+          "io_konf_1" : "1",
+          "io_konf_2" : "2",
+          "io_konf_3" : "3",
+          "io_konf_4" : "4",
+          "io_konf_5" : "5",
+          "io_konf_6" : "6",
+          "io_konf_65535" : "65535",
+          "io_konf_7" : "7"
+        }
+      },
+      "konf_ausg_h15" : {
+        "name" : "{prefix}Conf. Output  H1.5",
+        "state" : {
+          "io_konf_0" : "0",
+          "io_konf_1" : "1",
+          "io_konf_2" : "2",
+          "io_konf_3" : "3",
+          "io_konf_4" : "4",
+          "io_konf_5" : "5",
+          "io_konf_6" : "6",
+          "io_konf_65535" : "65535",
+          "io_konf_7" : "7"
+        }
+      },
+      "konf_eing_de1" : {
+        "name" : "{prefix}Conf. Input DE1",
+        "state" : {
+          "io_konf_in_0" : "SG Klaar",
+          "io_konf_in_1" : "EVU-blokkering",
+          "io_konf_in_10" : "Producent blokkeren HZ en WW",
+          "io_konf_in_11" : "Warmwater standby",
+          "io_konf_in_12" : "Warmwater verlaging",
+          "io_konf_in_13" : "Warmwater normaal",
+          "io_konf_in_14" : "Warmwater PUSH",
+          "io_konf_in_15" : "Dauwpuntbewaking",
+          "io_konf_in_16" : "Verwarmingscircuit ... standby",
+          "io_konf_in_17" : "Verwarmingscircuit ... verlaging",
+          "io_konf_in_18" : "Verwarmingscircuit ... normaal",
+          "io_konf_in_19" : "Verwarmingscircuit ... comfort",
+          "io_konf_in_2" : "Verhoogde werking",
+          "io_konf_in_20" : "2e warmtebron",
+          "io_konf_in_21" : "Compressor blokkeren",
+          "io_konf_in_3" : "HK blokkeren",
+          "io_konf_in_4" : "HZ/koeling omschakeling",
+          "io_konf_in_5" : "Slaapmodus",
+          "io_konf_in_6" : "Noodstop",
+          "io_konf_in_65535" : "UIT",
+          "io_konf_in_7" : "Systeem standby",
+          "io_konf_in_8" : "Producent blokkeren HZ",
+          "io_konf_in_9" : "Producent blokkeren WW"
+        }
+      },
+      "konf_eing_de2" : {
+        "name" : "{prefix}Conf. Input DE2",
+        "state" : {
+          "io_konf_in_0" : "SG Klaar",
+          "io_konf_in_1" : "EVU-blokkering",
+          "io_konf_in_10" : "Producent blokkeren HZ en WW",
+          "io_konf_in_11" : "Warmwater standby",
+          "io_konf_in_12" : "Warmwater verlaging",
+          "io_konf_in_13" : "Warmwater normaal",
+          "io_konf_in_14" : "Warmwater PUSH",
+          "io_konf_in_15" : "Dauwpuntbewaking",
+          "io_konf_in_16" : "Verwarmingscircuit ... standby",
+          "io_konf_in_17" : "Verwarmingscircuit ... verlaging",
+          "io_konf_in_18" : "Verwarmingscircuit ... normaal",
+          "io_konf_in_19" : "Verwarmingscircuit ... comfort",
+          "io_konf_in_2" : "Verhoogde werking",
+          "io_konf_in_20" : "2e warmtebron",
+          "io_konf_in_21" : "Compressor blokkeren",
+          "io_konf_in_3" : "HK blokkeren",
+          "io_konf_in_4" : "HZ/koeling omschakeling",
+          "io_konf_in_5" : "Slaapmodus",
+          "io_konf_in_6" : "Noodstop",
+          "io_konf_in_65535" : "UIT",
+          "io_konf_in_7" : "Systeem standby",
+          "io_konf_in_8" : "Producent blokkeren HZ",
+          "io_konf_in_9" : "Producent blokkeren WW"
+        }
+      },
+      "konf_eing_sgr1" : {
+        "name" : "{prefix}Conf. Input SGR1",
+        "state" : {
+          "io_konf_in_0" : "SG Klaar",
+          "io_konf_in_1" : "EVU-blokkering",
+          "io_konf_in_10" : "Producent blokkeren HZ en WW",
+          "io_konf_in_11" : "Warmwater standby",
+          "io_konf_in_12" : "Warmwater verlaging",
+          "io_konf_in_13" : "Warmwater normaal",
+          "io_konf_in_14" : "Warmwater PUSH",
+          "io_konf_in_15" : "Dauwpuntbewaking",
+          "io_konf_in_16" : "Verwarmingscircuit ... standby",
+          "io_konf_in_17" : "Verwarmingscircuit ... verlaging",
+          "io_konf_in_18" : "Verwarmingscircuit ... normaal",
+          "io_konf_in_19" : "Verwarmingscircuit ... comfort",
+          "io_konf_in_2" : "Verhoogde werking",
+          "io_konf_in_20" : "2e warmtebron",
+          "io_konf_in_21" : "Compressor blokkeren",
+          "io_konf_in_3" : "HK blokkeren",
+          "io_konf_in_4" : "HZ/koeling omschakeling",
+          "io_konf_in_5" : "Slaapmodus",
+          "io_konf_in_6" : "Noodstop",
+          "io_konf_in_65535" : "UIT",
+          "io_konf_in_7" : "Systeem standby",
+          "io_konf_in_8" : "Producent blokkeren HZ",
+          "io_konf_in_9" : "Producent blokkeren WW"
+        }
+      },
+      "konf_eing_sgr2" : {
+        "name" : "{prefix}Conf. Input SGR2",
+        "state" : {
+          "io_konf_in_0" : "SG Klaar",
+          "io_konf_in_1" : "EVU-blokkering",
+          "io_konf_in_10" : "Producent blokkeren HZ en WW",
+          "io_konf_in_11" : "Warmwater standby",
+          "io_konf_in_12" : "Warmwater verlaging",
+          "io_konf_in_13" : "Warmwater normaal",
+          "io_konf_in_14" : "Warmwater PUSH",
+          "io_konf_in_15" : "Dauwpuntbewaking",
+          "io_konf_in_16" : "Verwarmingscircuit ... standby",
+          "io_konf_in_17" : "Verwarmingscircuit ... verlaging",
+          "io_konf_in_18" : "Verwarmingscircuit ... normaal",
+          "io_konf_in_19" : "Verwarmingscircuit ... comfort",
+          "io_konf_in_2" : "Verhoogde werking",
+          "io_konf_in_20" : "2e warmtebron",
+          "io_konf_in_21" : "Compressor blokkeren",
+          "io_konf_in_3" : "HK blokkeren",
+          "io_konf_in_4" : "HZ/koeling omschakeling",
+          "io_konf_in_5" : "Slaapmodus",
+          "io_konf_in_6" : "Noodstop",
+          "io_konf_in_65535" : "UIT",
+          "io_konf_in_7" : "Systeem standby",
+          "io_konf_in_8" : "Producent blokkeren HZ",
+          "io_konf_in_9" : "Producent blokkeren WW"
+        }
+      },
+      "kuehl_energie_yesterday" : {
+        "name" : "{prefix}Koelenergie gisteren"
+      },
+      "kuehl_energie_heute" : {
+        "name" : "{prefix}Koelenergie vandaag"
+      },
+      "kuehl_energie_jahr" : {
+        "name" : "{prefix}Koelenergie jaar"
+      },
+      "kuehl_energie_monat" : {
+        "name" : "{prefix}Koelenergie maand"
+      },
+      "kuehl_konstanttemp" : {
+        "name" : "{prefix}Koelconstante temperatuur"
+      },
+      "kuehl_konstanttemp2" : {
+        "name" : "{prefix}Koelconstante temperatuur 2"
+      },
+      "kuehl_konstanttemp3" : {
+        "name" : "{prefix}Koelconstante temperatuur 3"
+      },
+      "kuehl_konstanttemp4" : {
+        "name" : "{prefix}Koelconstante temperatuur 4"
+      },
+      "kuehl_konstanttemp5" : {
+        "name" : "{prefix}Koelconstante temperatuur 5"
+      },
+      "leistungsanforderung" : {
+        "name" : "{prefix}Vermogensaanvraag"
+      },
+      "luftansautgemp" : {
+        "name" : "{prefix}Luchtinlaattemperatuur"
+      },
+      "puffer_temp" : {
+        "name" : "{prefix}Buffertemperatuur"
+      },
+      "pumpe_einschaltart" : {
+        "name" : "{prefix}Pompbedrijfsmodus"
+      },
+      "raum_feuchte" : {
+        "name" : "{prefix}Ruimtevochtigheid"
+      },
+      "raum_feuchte2" : {
+        "name" : "{prefix}Ruimtevochtigheid 2"
+      },
+      "raum_feuchte3" : {
+        "name" : "{prefix}Ruimtevochtigheid 3"
+      },
+      "raum_feuchte4" : {
+        "name" : "{prefix}Ruimtevochtigheid 4"
+      },
+      "raum_feuchte5" : {
+        "name" : "{prefix}Ruimtevochtigheid 5"
+      },
+      "raum_soll_temp" : {
+        "name" : "{prefix}Ruimte streeftemperatuur"
+      },
+      "raum_soll_temp2" : {
+        "name" : "{prefix}Ruimte streeftemperatuur 2"
+      },
+      "raum_soll_temp3" : {
+        "name" : "{prefix}Ruimte streeftemperatuur 3"
+      },
+      "raum_soll_temp4" : {
+        "name" : "{prefix}Ruimte streeftemperatuur 4"
+      },
+      "raum_soll_temp5" : {
+        "name" : "{prefix}Ruimte streeftemperatuur 5"
+      },
+      "raum_temp" : {
+        "name" : "{prefix}Ruimtetemperatuur"
+      },
+      "raum_temp2" : {
+        "name" : "{prefix}Ruimtetemperatuur 2"
+      },
+      "raum_temp3" : {
+        "name" : "{prefix}Ruimtetemperatuur 3"
+      },
+      "raum_temp4" : {
+        "name" : "{prefix}Ruimtetemperatuur 4"
+      },
+      "raum_temp5" : {
+        "name" : "{prefix}Ruimtetemperatuur 5"
+      },
+      "rl_temp" : {
+        "name" : "{prefix}Retourstromingstemperatuur"
+      },
+      "ruhemodus" : {
+        "name" : "{prefix}Stille mode",
+        "state" : {
+          "hp_ruhemodus_0" : "Uit",
+          "hp_ruhemodus_1" : "80 %",
+          "hp_ruhemodus_2" : "60 %",
+          "hp_ruhemodus_3" : "40 %"
+        }
+      },
+      "schaltsp_e1" : {
+        "name" : "{prefix}Schakelcycli E-verwarming 1"
+      },
+      "schaltsp_e2" : {
+        "name" : "{prefix}Schakelcycli E-verwarming 2"
+      },
+      "sgr1" : {
+        "name" : "{prefix}SG-Klaar 1"
+      },
+      "sgr2" : {
+        "name" : "{prefix}SG-Klaar 2"
+      },
+      "soll_volumenstrom_heizen" : {
+        "name" : "{prefix}Streefwaarde volumestroom Verwarming"
+      },
+      "soll_volumenstrom_kuehlen" : {
+        "name" : "{prefix}Streefwaarde volumestroom Koeling"
+      },
+      "soll_volumenstrom_ww" : {
+        "name" : "{prefix}Streefwaarde volumestroom Warm water"
+      },
+      "sollwert_pumpe_leistung_abtau" : {
+        "name" : "{prefix}Streefwaarde pompprestatie Ontdooien"
+      },
+      "sollwert_pumpe_leistung_heizen" : {
+        "name" : "{prefix}Streefwaarde pompprestatie Verwarming"
+      },
+      "sollwert_pumpe_leistung_kuehlen" : {
+        "name" : "{prefix}Streefwaarde pompprestatie Koeling"
+      },
+      "sollwert_pumpe_leitung_ww" : {
+        "name" : "{prefix}Streefwaarde pompprestatie Warm water"
+      },
+      "status_2_wez" : {
+        "name" : "{prefix}Status 2e warmtebron",
+        "state" : {
+          "w2_status_aus" : "Uit",
+          "w2_status_ein" : "Aan"
+        }
+      },
+      "status_e1" : {
+        "name" : "{prefix}Status E-Verwarmer 1",
+        "state" : {
+          "w2_status_aus" : "Uit",
+          "w2_status_ein" : "Aan"
+        }
+      },
+      "status_e2" : {
+        "name" : "{prefix}Status E-Verwarmer 2",
+        "state" : {
+          "w2_status_aus" : "Uit",
+          "w2_status_ein" : "Aan"
+        }
+      },
+      "verdampfungs_temp" : {
+        "name" : "{prefix}Verdampingstemperatuur"
+      },
+      "verdichter_ansaug_gas_temp" : {
+        "name" : "{prefix}Compressor aanzuiggastemperatuur"
+      },
+      "vl_praeziese_summenvorlauf_b7" : {
+        "name" : "{prefix}Voorlooptemperatuur precies (Summenvorlauf(B7))"
+      },
+      "vl_temp" : {
+        "name" : "{prefix}Voorloop streeftemperatuur"
+      },
+      "vl_temp2" : {
+        "name" : "{prefix}Voorloop streeftemperatuur 2"
+      },
+      "vl_temp3" : {
+        "name" : "{prefix}Voorloop streeftemperatuur 3"
+      },
+      "vl_temp4" : {
+        "name" : "{prefix}Voorloop streeftemperatuur 4"
+      },
+      "vl_temp5" : {
+        "name" : "{prefix}Voorloop streeftemperatuur 5"
+      },
+      "w2_konf" : {
+        "name" : "{prefix}W2_Configuratie",
+        "state" : {
+          "w2_konf_0" : "0",
+          "w2_konf_1" : "1"
+        }
+      },
+      "waermeleistung" : {
+        "name" : "{prefix}Verwarmingsvermogen"
+      },
+      "warnung" : {
+        "name" : "{prefix}Waarschuwing",
+        "state" : {
+          "sys_fehler_1" : "Koelmiddelsensor expansieventiel inlaat (T1)",
+          "sys_fehler_10" : "Hogedruksensor (P2)",
+          "sys_fehler_101" : "Warmtepomp wordt buiten de bedrijfsgrenzen gebruikt",
+          "sys_fehler_102" : "Maximale ontdooitijd overschreden",
+          "sys_fehler_103" : "Communicatie koelcircuit defect",
+          "sys_fehler_104" : "Uitlaatgastemperatuur te hoog",
+          "sys_fehler_105" : "Stroomverbruik van inverter te hoog",
+          "sys_fehler_106" : "Stroomverbruik te hoog",
+          "sys_fehler_107" : "Gelijkspanning op inverter te hoog",
+          "sys_fehler_108" : "Gelijkspanning op inverter te laag",
+          "sys_fehler_109" : "Warmtepomp werkt buiten het toegestane spanningsbereik",
+          "sys_fehler_11" : "Mediumdruksensor (P3)",
+          "sys_fehler_110" : "Warmtepomp werkt buiten het toegestane spanningsbereik",
+          "sys_fehler_111" : "Hogedrukschakelaar geactiveerd",
+          "sys_fehler_112" : "Inverter oververhit",
+          "sys_fehler_113" : "Inverter oververhit",
+          "sys_fehler_114" : "Positie compressor motor niet bepaalbaar",
+          "sys_fehler_117" : "Gelijkspanning op inverter te laag",
+          "sys_fehler_118" : "Stroom tussen inverter en compressor te hoog",
+          "sys_fehler_119" : "Stroomverbruik compressor te hoog (timeout)",
+          "sys_fehler_12" : "Koel expansieventiel defect",
+          "sys_fehler_120" : "Invertertemperatuur te hoog",
+          "sys_fehler_121" : "Spanning op inverter te laag",
+          "sys_fehler_122" : "Modbus-configuratiefout",
+          "sys_fehler_123" : "Geen Modbus-verbinding",
+          "sys_fehler_124" : "Uitlaatgastemperatuur te hoog",
+          "sys_fehler_127" : "Invertertemperatuur te hoog",
+          "sys_fehler_128" : "Inverter is oververhit",
+          "sys_fehler_129" : "Modbus-communicatie defect",
+          "sys_fehler_13" : "Geen communicatie met inverter",
+          "sys_fehler_130" : "Modbus-communicatie defect",
+          "sys_fehler_133" : "Elektronicafout",
+          "sys_fehler_135" : "Hogedrukschakelaar defect",
+          "sys_fehler_136" : "Compressor komt niet overeen met configuratie",
+          "sys_fehler_137" : "Hogedrukschakelaar komt niet overeen met configuratie",
+          "sys_fehler_14" : "Geen communicatie met de buitenunit",
+          "sys_fehler_140" : "Uitlaatgastemperatuur te laag",
+          "sys_fehler_143" : "Invertertemperatuur te laag",
+          "sys_fehler_144" : "Spoeltemperatuur te laag",
+          "sys_fehler_15" : "Hogedrukschakelaar geactiveerd",
+          "sys_fehler_150" : "Stroomsensor compressor fase U fout",
+          "sys_fehler_151" : "Stroomsensor compressor fase V fout",
+          "sys_fehler_152" : "Stroomsensor compressor fase W fout",
+          "sys_fehler_153" : "Stroomsensor fout",
+          "sys_fehler_154" : "Invertertemperatuursensor fout",
+          "sys_fehler_155" : "Temperatuursensor fout",
+          "sys_fehler_156" : "Uitlaatgastemperatuursensor (DT)",
+          "sys_fehler_157" : "Geen communicatie met koelunit besturingsbord",
+          "sys_fehler_158" : "EEPROM-geheugenfout",
+          "sys_fehler_159" : "Stroomverbruik te hoog",
+          "sys_fehler_16" : "Inverter uitgeschakeld door 10 fouten in 10 uur",
+          "sys_fehler_160" : "Warmtepomp werkt buiten het toegestane spanningsbereik",
+          "sys_fehler_161" : "Warmtepomp werkt buiten het toegestane spanningsbereik",
+          "sys_fehler_162" : "Gelijkspanning op inverter te hoog",
+          "sys_fehler_163" : "Gelijkspanning op inverter te laag",
+          "sys_fehler_164" : "Hogedrukschakelaar geactiveerd",
+          "sys_fehler_165" : "Fase tussen ingang en compressor onderbroken",
+          "sys_fehler_166" : "Inverter oververhit",
+          "sys_fehler_167" : "Inverter oververhit",
+          "sys_fehler_168" : "Compressorconfiguratiefout",
+          "sys_fehler_169" : "Stroomverbruik compressor te hoog",
+          "sys_fehler_17" : "EEPROM-geheugenfout",
+          "sys_fehler_170" : "Overvoltage compressor fase U",
+          "sys_fehler_171" : "Overvoltage compressor fase V",
+          "sys_fehler_172" : "Overvoltage compressor fase W",
+          "sys_fehler_173" : "Fasefout compressor",
+          "sys_fehler_174" : "Compressor geblokkeerd",
+          "sys_fehler_175" : "Compressor start niet",
+          "sys_fehler_176" : "Onregelmatige spanning op inverter",
+          "sys_fehler_177" : "Compressor overbelast",
+          "sys_fehler_178" : "Temperatuur uitlaatgassensor (DT) te hoog",
+          "sys_fehler_179" : "Temperatuur op inverter",
+          "sys_fehler_18" : "Geen Modbus-communicatie tussen EC-controller en koelunit besturingsbord",
+          "sys_fehler_180" : "Compressor geblokkeerd",
+          "sys_fehler_181" : "Compressor geblokkeerd",
+          "sys_fehler_182" : "Stroomverbruik te hoog",
+          "sys_fehler_183" : "Stroomverbruik te hoog",
+          "sys_fehler_184" : "Spanning te hoog",
+          "sys_fehler_19" : "Warmtepomp uitgeschakeld door inverteralarm",
+          "sys_fehler_2" : "Luchtaanzuigsensor (T2)",
+          "sys_fehler_20" : "Compressor komt niet overeen met configuratie",
+          "sys_fehler_21" : "Laagdrukfout",
+          "sys_fehler_22" : "Onvoldoende oververhitting",
+          "sys_fehler_23" : "Overmatige oververhitting",
+          "sys_fehler_24" : "EVI te hoge oververhitting",
+          "sys_fehler_25" : "Koelmiddelhoeveelheid te laag",
+          "sys_fehler_26" : "Hogedrukfout",
+          "sys_fehler_27" : "Condensatietemperatuur te laag",
+          "sys_fehler_28" : "Condensatietemperatuur te hoog",
+          "sys_fehler_29" : "Verdampingstemperatuur te laag",
+          "sys_fehler_3" : "Warmtewisselaar sensor AG uitlaat (T3)",
+          "sys_fehler_30" : "Verdampingstemperatuur te hoog",
+          "sys_fehler_32" : "Warmtepomp niet compatibel",
+          "sys_fehler_33" : "EC-controller heeft geen verbinding met expansiemodule EM-HK",
+          "sys_fehler_4" : "Compressoraanzuiggassensor (T4)",
+          "sys_fehler_40" : "Debiet te laag",
+          "sys_fehler_41" : "Negatief temperatuurverschil LWT/retour; vierwegklep schakelt niet terug na ontdooien (systeem blokkeert na 3 waarschuwingen)",
+          "sys_fehler_43" : "Ventilator geblokkeerd",
+          "sys_fehler_44" : "Ventilatorsnelheid te laag",
+          "sys_fehler_47" : "Communicatie EC-controller naar besturingsbord koelunit defect",
+          "sys_fehler_5" : "EVI-aanzuiggassensor (T5)",
+          "sys_fehler_50" : "Buitensensor (B1) onderbroken",
+          "sys_fehler_51" : "Buitensensor (B1) kortgesloten",
+          "sys_fehler_52" : "Puntsensor (B2) onderbroken",
+          "sys_fehler_53" : "Puntsensor (B2) kortgesloten",
+          "sys_fehler_54" : "Tapwatersensor (B3) onderbroken",
+          "sys_fehler_55" : "Tapwatersensor (B3) kortgesloten",
+          "sys_fehler_56" : "Condensor debietsensor (B4) onderbroken",
+          "sys_fehler_57" : "Condensor debietsensor (B4) kortgesloten",
+          "sys_fehler_58" : "Voelersensor (B7) onderbroken",
+          "sys_fehler_59" : "Voelersensor (B7) kortgesloten",
+          "sys_fehler_6" : "Koelmiddelsensor IG uitlaat (T6)",
+          "sys_fehler_60" : "Retoursensor (B9) onderbroken",
+          "sys_fehler_61" : "Retoursensor (B9) kortgesloten",
+          "sys_fehler_64" : "Buffersensor (B11) onderbroken",
+          "sys_fehler_65" : "Buffersensor (B11) kortgesloten",
+          "sys_fehler_65535" : "Geen fout",
+          "sys_fehler_66" : "Regeneratieve mengsensor (B2.1) onderbroken",
+          "sys_fehler_67" : "Regeneratieve mengsensor (B2.1) kortgesloten",
+          "sys_fehler_7" : "Oliecartertemperatuursensor (T7)",
+          "sys_fehler_70" : "Tweede verwarmingscircuit debietsensor (B6.2) onderbroken",
+          "sys_fehler_71" : "Tweede verwarmingscircuit debietsensor (B6.2) kortgesloten",
+          "sys_fehler_72" : "Sensor (T1.2) onderbroken",
+          "sys_fehler_73" : "Sensor (T1.2) kortgesloten",
+          "sys_fehler_74" : "Sensor (T2.2) onderbroken",
+          "sys_fehler_75" : "Sensor (T2.2) kortgesloten",
+          "sys_fehler_8" : "Expansieventiel EVI",
+          "sys_fehler_9" : "Laagdruksensor (P1)",
+          "sys_fehler_90" : "Analoog ingang AE1 onderbroken",
+          "sys_fehler_91" : "Analoog ingang AE1 kortgesloten",
+          "sys_fehler_92" : "Analoog ingang AE2 onderbroken",
+          "sys_fehler_93" : "Analoog ingang AE2 kortgesloten",
+          "sys_fehler_94" : "Analoog ingang AE3 onderbroken",
+          "sys_fehler_95" : "Analoog ingang AE3 kortgesloten"
+        }
+      },
+      "weichen_temp" : {
+        "name" : "{prefix}Switch temperature"
+      },
+      "wp_betrieb" : {
+        "name" : "{prefix}Operation",
+        "state" : {
+          "heatpump_operationmode_undefined" : "ongedefinieerd",
+          "heatpump_operationmode_relaistest" : "relais-test",
+          "heatpump_operationmode_evu" : "EVU_SPERRE",
+          "heatpump_operationmode_sgtariff" : "SG-tarief",
+          "heatpump_operationmode_sgmax" : "SG-maximaal",
+          "heatpump_operationmode_tariffload" : "Tarieflading",
+          "heatpump_operationmode_elevatedoperation" : "Verhoogde werking",
+          "heatpump_operationmode_standbytime" : "Standtijd",
+          "heatpump_operationmode_standby" : "Standby",
+          "heatpump_operationmode_rinse" : "Spoelen",
+          "heatpump_operationmode_frosprotection" : "Vorstbescherming",
+          "heatpump_operationmode_heating" : "Verwarming",
+          "heatpump_operationmode_emergencystop" : "Noodstop",
+          "heatpump_operationmode_hotwater" : "Warmwater",
+          "heatpump_operationmode_legionellaprotection" : "Legionellabescherming",
+          "heatpump_operationmode_switchheatingcooling" : "Omschakeling verwarmen/koelen",
+          "heatpump_operationmode_cooling" : "Koelen",
+          "heatpump_operationmode_passivecooling" : "Passieve koeling",
+          "heatpump_operationmode_summer" : "Zomer",
+          "heatpump_operationmode_swimmingpool" : "Zwembadbedrijf",
+          "heatpump_operationmode_vacation" : "Vakantie",
+          "heatpump_operationmode_screedprogram" : "Estrich-programma",
+          "heatpump_operationmode_locked" : "Geblokkeerd",
+          "heatpump_operationmode_diagnosis" : "Diagnose",
+          "heatpump_operationmode_lockedat" : "Blokkade buitentemperatuur",
+          "heatpump_operationmode_lockedsummer" : "Zomerblokkade",
+          "heatpump_operationmode_lockedwinter" : "Winterblokkade",
+          "heatpump_operationmode_applicationlimit" : "Toepassingsgrens",
+          "heatpump_operationmode_lockedcv" : "CV-blokkade",
+          "heatpump_operationmode_lowering" : "Verlaagde werking",
+          "heatpump_operationmode_manual" : "Manueel",
+          "heatpump_operationmode_oilrecirculation" : "Olie-terugvoer",
+          "heatpump_operationmode_manualheating" : "Manueel verwarmen",
+          "heatpump_operationmode_manualcooling" : "Manueel koelen",
+          "heatpump_operationmode_manualdefrost" : "Manueel ontdooien",
+          "heatpump_operationmode_defrost" : "Ontdooien",
+          "heatpump_operationmode_manual2ndheatsource" : "2e warmtewisselaar"
+        }
+      },
+      "wp_konf" : {
+        "name" : "{prefix}Configuratie",
+        "state" : {
+          "hp_conf_1" : "Verwarming",
+          "hp_conf_2" : "Verwarming, Koeling",
+          "hp_conf_3" : "Verwarming, Koeling",
+          "hp_conf_4" : "Verwarming, Warm water",
+          "hp_konf_0" : "Niet geconfigureerd"
+        }
+      },
+      "wp_stoermeldung" : {
+        "name" : "{prefix}Foutmelding",
+        "state" : {
+          "hp_stoerung" : "Fout",
+          "hp_stoerungsfrei" : "Geen fout"
+        }
+      },
+      "ww_energie_yesterday" : {
+        "name" : "{prefix}Warm water energie gisteren"
+      },
+      "ww_energie_heute" : {
+        "name" : "{prefix}Warm water energie vandaag"
+      },
+      "ww_energie_jahr" : {
+        "name" : "{prefix}Warm water energie dit jaar"
+      },
+      "ww_energie_monat" : {
+        "name" : "{prefix}Warm water energie deze maand"
+      },
+      "ww_konf" : {
+        "name" : "{prefix}WW_Configuratie",
+        "state" : {
+          "ww_konf_aus" : "Uit",
+          "ww_konf_pumpe" : "Pomp",
+          "ww_konf_umlenkventil" : "Omschakelklep"
+        }
+      },
+      "ww_soll_temp" : {
+        "name" : "{prefix}Instelwaarde warmwatertemperatuur"
+      },
+      "ww_temp" : {
+        "name" : "{prefix}Warmwatertemperatuur"
+      }
+    }
+  },
+  "options" : {
+    "step" : {
+      "init" : {
+        "data" : {
+          "api_scan_interval" : "Api scan interval (default = 300 sec)",
+          "language" : "Language (default = en)",
+          "mode" : "Mode(default = api)",
+          "scan_interval" : "Web scraping interval (default = 1800 sec)"
+        }
+      }
+    }
+  },
+  "title" : "Weishaupt Warmtepomp"
+}

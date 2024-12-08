@@ -163,54 +163,54 @@
             }
         },
         "select": {
-            "hz_betriebsart": {
+            "hz_operationmode": {
                 "name": "{prefix}Operation mode",
                 "state": {
-                    "hz_betriebsart_absenk": "Lowering mode",
-                    "hz_betriebsart_auto": "Automatic",
-                    "hz_betriebsart_normal": "Normal",
-                    "hz_betriebsart_standy": "Standby",
-                    "hz_betriebsat_komfort": "Comfort"
+                    "hz_operationmode_lowering": "Lowering mode",
+                    "hz_operationmode_automatic": "Automatic",
+                    "hz_operationmode_normal": "Normal",
+                    "hz_operationmode_standby": "Standby",
+                    "hz_operationmode_comfort": "Comfort"
                 }
             },
-            "hz_betriebsart2": {
+            "hz_operationmode2": {
                 "name": "{prefix}Operation mode2",
                 "state": {
-                    "hz_betriebsart_absenk": "Lowering mode",
-                    "hz_betriebsart_auto": "Automatic",
-                    "hz_betriebsart_normal": "Normal",
-                    "hz_betriebsart_standy": "Standby",
-                    "hz_betriebsat_komfort": "Comfort"
+                    "hz_operationmode_lowering": "Lowering mode",
+                    "hz_operationmode_automatic": "Automatic",
+                    "hz_operationmode_normal": "Normal",
+                    "hz_operationmode_standby": "Standby",
+                    "hz_operationmode_comfort": "Comfort"
                 }
             },
-            "hz_betriebsart3": {
+            "hz_operationmode3": {
                 "name": "{prefix}Operation mode3",
                 "state": {
-                    "hz_betriebsart_absenk": "Lowering mode",
-                    "hz_betriebsart_auto": "Automatic",
-                    "hz_betriebsart_normal": "Normal",
-                    "hz_betriebsart_standy": "Standby",
-                    "hz_betriebsat_komfort": "Comfort"
+                    "hz_operationmode_lowering": "Lowering mode",
+                    "hz_operationmode_automatic": "Automatic",
+                    "hz_operationmode_normal": "Normal",
+                    "hz_operationmode_standby": "Standby",
+                    "hz_operationmode_comfort": "Comfort"
                 }
             },
-            "hz_betriebsart4": {
+            "hz_operationmode4": {
                 "name": "{prefix}Operation mode4",
                 "state": {
-                    "hz_betriebsart_absenk": "Lowering mode",
-                    "hz_betriebsart_auto": "Automatic",
-                    "hz_betriebsart_normal": "Normal",
-                    "hz_betriebsart_standy": "Standby",
-                    "hz_betriebsat_komfort": "Comfort"
+                    "hz_operationmode_lowering": "Lowering mode",
+                    "hz_operationmode_automatic": "Automatic",
+                    "hz_operationmode_normal": "Normal",
+                    "hz_operationmode_standby": "Standby",
+                    "hz_operationmode_comfort": "Comfort"
                 }
             },
-            "hz_betriebsart5": {
+            "hz_operationmode5": {
                 "name": "{prefix}Operation mode5",
                 "state": {
-                    "hz_betriebsart_absenk": "Lowering mode",
-                    "hz_betriebsart_auto": "Automatic",
-                    "hz_betriebsart_normal": "Normal",
-                    "hz_betriebsart_standy": "Standby",
-                    "hz_betriebsat_komfort": "Comfort"
+                    "hz_operationmode_lowering": "Lowering mode",
+                    "hz_operationmode_automatic": "Automatic",
+                    "hz_operationmode_normal": "Normal",
+                    "hz_operationmode_standby": "Standby",
+                    "hz_operationmode_comfort": "Comfort"
                 }
             },
             "party_pause": {
@@ -483,15 +483,15 @@
                     "hz_pause_9_5": "Pause 9.5h"
                 }
             },
-            "systembetriebsart": {
+            "sys_operationmode": {
                 "name": "{prefix}System operation mode",
                 "state": {
-                    "sys_betriebsart_2wez": "2nd heat source",
-                    "sys_betriebsart_automatik": "Automatic",
-                    "sys_betriebsart_heizen": "Heating",
-                    "sys_betriebsart_kuehlen": "Cooling",
-                    "sys_betriebsart_sommer": "Summer",
-                    "sys_betriebsart_standby": "Standby"
+                    "sys_operationmode_2ndheatsource": "2nd heat source",
+                    "sys_operationmode_automatic": "Automatic",
+                    "sys_operationmode_heating": "Heating",
+                    "sys_operationmode_cooling": "Cooling",
+                    "sys_operationmode_summer": "Summer",
+                    "sys_operationmode_standby": "Standby"
                 }
             },
             "ww_push": {
@@ -654,43 +654,43 @@
             "betriebsanzeige": {
                 "name": "{prefix}Operation indicator",
                 "state": {
-                    "sys_betrieb_0": "undefined",
-                    "sys_betrieb_1": "Relais test",
-                    "sys_betrieb_11": "SG tariff",
-                    "sys_betrieb_12": "SG maximum",
-                    "sys_betrieb_13": "Tariff load",
-                    "sys_betrieb_14": "Elevated operation",
-                    "sys_betrieb_15": "Standby time",
-                    "sys_betrieb_16": "Standby",
-                    "sys_betrieb_17": "Rinse",
-                    "sys_betrieb_18": "Frost protection",
-                    "sys_betrieb_19": "Heating mode",
-                    "sys_betrieb_2": "Emergency stop",
-                    "sys_betrieb_20": "Hot water mode",
-                    "sys_betrieb_21": "Legionella protection",
-                    "sys_betrieb_22": "Switchover HZ KU",
-                    "sys_betrieb_23": "Cooling mode",
-                    "sys_betrieb_24": "Passive cooling",
-                    "sys_betrieb_25": "Summer mode",
-                    "sys_betrieb_26": "Swimming pool mode",
-                    "sys_betrieb_27": "Vacation",
-                    "sys_betrieb_28": "Screed program",
-                    "sys_betrieb_29": "Locked",
-                    "sys_betrieb_3": "Diagnosis",
-                    "sys_betrieb_30": "Lock AT",
-                    "sys_betrieb_31": "Lock summer",
-                    "sys_betrieb_32": "Winter lock",
-                    "sys_betrieb_33": "Application limit",
-                    "sys_betrieb_34": "HK block",
-                    "sys_betrieb_35": "Lowering mode",
-                    "sys_betrieb_36": "Regenerative flow",
-                    "sys_betrieb_4": "Manual mode",
-                    "sys_betrieb_43": "Oil recirculation",
-                    "sys_betrieb_5": "Manual heating",
-                    "sys_betrieb_6": "Manual cooling",
-                    "sys_betrieb_7": "Manual defrost",
-                    "sys_betrieb_8": "Defrost",
-                    "sys_betrieb_9": "2nd heat source"
+                    "system_operationmode_undefined": "undefined",
+                    "system_operationmode_relaistest": "Relais test",
+                    "system_operationmode_sgtariff": "SG tariff",
+                    "system_operationmode_sgmax": "SG maximum",
+                    "system_operationmode_tariffload": "Tariff load",
+                    "system_operationmode_elevatedoperation": "Elevated operation",
+                    "system_operationmode_standbytime": "Standby time",
+                    "system_operationmode_standby": "Standby",
+                    "system_operationmode_rinse": "Rinse",
+                    "system_operationmode_frosprotection": "Frost protection",
+                    "system_operationmode_heating": "Heating mode",
+                    "system_operationmode_emergencystop": "Emergency stop",
+                    "system_operationmode_hotwater": "Hot water mode",
+                    "system_operationmode_legionellaprotection": "Legionella protection",
+                    "system_operationmode_switchheatingcooling": "Switchover HZ KU",
+                    "system_operationmode_cooling": "Cooling mode",
+                    "system_operationmode_passivecooling": "Passive cooling",
+                    "system_operationmode_summer": "Summer mode",
+                    "system_operationmode_swimmingpool": "Swimming pool mode",
+                    "system_operationmode_vacation": "Vacation",
+                    "system_operationmode_screedprogram": "Screed program",
+                    "system_operationmode_locked": "Locked",
+                    "system_operationmode_diagnosis": "Diagnosis",
+                    "system_operationmode_lockedat": "Lock AT",
+                    "system_operationmode_lockedsummer": "Lock summer",
+                    "system_operationmode_lockedwinter": "Winter lock",
+                    "system_operationmode_applicationlimit": "Application limit",
+                    "system_operationmode_lockedcv": "HK block",
+                    "system_operationmode_lowering": "Lowering mode",
+                    "system_operationmode_regenerativeflow": "Regenerative flow",
+                    "system_operationmode_manual": "Manual mode",
+                    "system_operationmode_oilrecirculation": "Oil recirculation",
+                    "system_operationmode_manualheating": "Manual heating",
+                    "system_operationmode_manualcooling": "Manual cooling",
+                    "system_operationmode_manualdefrost": "Manual defrost",
+                    "system_operationmode_defrost": "Defrost",
+                    "system_operationmode_manual2ndheatsource": "2nd heat source"
                 }
             },
             "betriebss_e1": {
@@ -1497,43 +1497,43 @@
             "wp_betrieb": {
                 "name": "{prefix}Operation",
                 "state": {
-                    "hp_betrieb_0": "Undefined",
-                    "hp_betrieb_1": "Relay test",
-                    "hp_betrieb_10": "EVU_SPERRE",
-                    "hp_betrieb_11": "SG tariff",
-                    "hp_betrieb_12": "SG Maximum",
-                    "hp_betrieb_13": "Tariff load",
-                    "hp_betrieb_14": "Increased operation",
-                    "hp_betrieb_15": "Standstill time",
-                    "hp_betrieb_16": "Standby mode",
-                    "hp_betrieb_17": "Rinsing mode",
-                    "hp_betrieb_18": "Frost protection",
-                    "hp_betrieb_19": "Heating mode",
-                    "hp_betrieb_2": "Emergency stop",
-                    "hp_betrieb_20": "Hot water mode",
-                    "hp_betrieb_21": "Legionella protection",
-                    "hp_betrieb_22": "Switchover HZ KU",
-                    "hp_betrieb_23": "Cooling mode",
-                    "hp_betrieb_24": "Passive cooling",
-                    "hp_betrieb_25": "Summer mode",
-                    "hp_betrieb_26": "Swimming pool",
-                    "hp_betrieb_27": "Vacation",
-                    "hp_betrieb_28": "Screed",
-                    "hp_betrieb_29": "Locked",
-                    "hp_betrieb_3": "Diagnosis",
-                    "hp_betrieb_30": "Lock AT",
-                    "hp_betrieb_31": "Lock summer",
-                    "hp_betrieb_32": "Winter lock",
-                    "hp_betrieb_33": "Application limit",
-                    "hp_betrieb_34": "HK lock",
-                    "hp_betrieb_35": "lowering",
-                    "hp_betrieb_4": "Manual mode",
-                    "hp_betrieb_43": "Oil return",
-                    "hp_betrieb_5": "Manual mode heating",
-                    "hp_betrieb_6": "Manual mode cooling",
-                    "hp_betrieb_7": "Manual defrosting mode",
-                    "hp_betrieb_8": "Defrost",
-                    "hp_betrieb_9": "2nd heat source"
+                    "heatpump_operationmode_undefined": "Undefined",
+                    "heatpump_operationmode_relaistest": "Relay test",
+                    "heatpump_operationmode_evu": "EVU_SPERRE",
+                    "heatpump_operationmode_sgtariff": "SG tariff",
+                    "heatpump_operationmode_sgmax": "SG Maximum",
+                    "heatpump_operationmode_tariffload": "Tariff load",
+                    "heatpump_operationmode_elevatedoperation": "Increased operation",
+                    "heatpump_operationmode_standbytime": "Standstill time",
+                    "heatpump_operationmode_standby": "Standby mode",
+                    "heatpump_operationmode_rinse": "Rinsing mode",
+                    "heatpump_operationmode_frosprotection": "Frost protection",
+                    "heatpump_operationmode_heating": "Heating mode",
+                    "heatpump_operationmode_emergencystop": "Emergency stop",
+                    "heatpump_operationmode_hotwater": "Hot water mode",
+                    "heatpump_operationmode_legionellaprotection": "Legionella protection",
+                    "heatpump_operationmode_switchheatingcooling": "Switchover HZ KU",
+                    "heatpump_operationmode_cooling": "Cooling mode",
+                    "heatpump_operationmode_passivecooling": "Passive cooling",
+                    "heatpump_operationmode_summer": "Summer mode",
+                    "heatpump_operationmode_swimmingpool": "Swimming pool",
+                    "heatpump_operationmode_vacation": "Vacation",
+                    "heatpump_operationmode_screedprogram": "Screed",
+                    "heatpump_operationmode_locked": "Locked",
+                    "heatpump_operationmode_diagnosis": "Diagnosis",
+                    "heatpump_operationmode_lockedat": "Lock AT",
+                    "hp_bheatpump_operationmode_lockedsummeretrieb_31": "Lock summer",
+                    "heatpump_operationmode_lockedwinter": "Winter lock",
+                    "heatpump_operationmode_applicationlimit": "Application limit",
+                    "heatpump_operationmode_lockedcv": "HK lock",
+                    "heatpump_operationmode_lowering": "lowering",
+                    "heatpump_operationmode_manual": "Manual mode",
+                    "heatpump_operationmode_oilrecirculation": "Oil return",
+                    "heatpump_operationmode_manualheating": "Manual mode heating",
+                    "heatpump_operationmode_manualcooling": "Manual mode cooling",
+                    "heatpump_operationmode_manualdefrost": "Manual defrosting mode",
+                    "heatpump_operationmode_defrost": "Defrost",
+                    "heatpump_operationmode_manual2ndheatsource": "2nd heat source"
                 }
             },
             "wp_konf": {

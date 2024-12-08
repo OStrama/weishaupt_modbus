@@ -163,54 +163,54 @@
             }
         },
         "select": {
-            "hz_betriebsart": {
+            "hz_operationmode": {
                 "name": "{prefix}Betriebsart",
                 "state": {
-                    "hz_betriebsart_absenk": "Absenkbetrieb",
-                    "hz_betriebsart_auto": "Automatik",
-                    "hz_betriebsart_normal": "Normal",
-                    "hz_betriebsart_standy": "Standby",
-                    "hz_betriebsat_komfort": "Komfort"
+                    "hz_operationmode_lowering": "Absenkbetrieb",
+                    "hz_operationmode_automatic": "Automatik",
+                    "hz_operationmode_normal": "Normal",
+                    "hz_operationmode_standby": "Standby",
+                    "hz_operationmode_comfort": "Komfort"
                 }
             },
-            "hz_betriebsart2": {
+            "hz_operationmode2": {
                 "name": "{prefix}Betriebsart2",
                 "state": {
-                    "hz_betriebsart_absenk": "Absenkbetrieb",
-                    "hz_betriebsart_auto": "Automatik",
-                    "hz_betriebsart_normal": "Normal",
-                    "hz_betriebsart_standy": "Standby",
-                    "hz_betriebsat_komfort": "Komfort"
+                    "hz_operationmode_lowering": "Absenkbetrieb",
+                    "hz_operationmode_automatic": "Automatik",
+                    "hz_operationmode_normal": "Normal",
+                    "hz_operationmode_standby": "Standby",
+                    "hz_operationmode_comfort": "Komfort"
                 }
             },
-            "hz_betriebsart3": {
+            "hz_operationmode3": {
                 "name": "{prefix}Betriebsart3",
                 "state": {
-                    "hz_betriebsart_absenk": "Absenkbetrieb",
-                    "hz_betriebsart_auto": "Automatik",
-                    "hz_betriebsart_normal": "Normal",
-                    "hz_betriebsart_standy": "Standby",
-                    "hz_betriebsat_komfort": "Komfort"
+                    "hz_operationmode_lowering": "Absenkbetrieb",
+                    "hz_operationmode_automatic": "Automatik",
+                    "hz_operationmode_normal": "Normal",
+                    "hz_operationmode_standby": "Standby",
+                    "hz_operationmode_comfort": "Komfort"
                 }
             },
-            "hz_betriebsart4": {
+            "hz_operationmode4": {
                 "name": "{prefix}Betriebsart4",
                 "state": {
-                    "hz_betriebsart_absenk": "Absenkbetrieb",
-                    "hz_betriebsart_auto": "Automatik",
-                    "hz_betriebsart_normal": "Normal",
-                    "hz_betriebsart_standy": "Standby",
-                    "hz_betriebsat_komfort": "Komfort"
+                    "hz_operationmode_lowering": "Absenkbetrieb",
+                    "hz_operationmode_automatic": "Automatik",
+                    "hz_operationmode_normal": "Normal",
+                    "hz_operationmode_standby": "Standby",
+                    "hz_operationmode_comfort": "Komfort"
                 }
             },
-            "hz_betriebsart5": {
+            "hz_operationmode5": {
                 "name": "{prefix}Betriebsart5",
                 "state": {
-                    "hz_betriebsart_absenk": "Absenkbetrieb",
-                    "hz_betriebsart_auto": "Automatik",
-                    "hz_betriebsart_normal": "Normal",
-                    "hz_betriebsart_standy": "Standby",
-                    "hz_betriebsat_komfort": "Komfort"
+                    "hz_operationmode_lowering": "Absenkbetrieb",
+                    "hz_operationmode_automatic": "Automatik",
+                    "hz_operationmode_normal": "Normal",
+                    "hz_operationmode_standby": "Standby",
+                    "hz_operationmode_comfort": "Komfort"
                 }
             },
             "party_pause": {
@@ -483,15 +483,15 @@
                     "hz_pause_9_5": "Pause 9.5h"
                 }
             },
-            "systembetriebsart": {
+            "sys_operationmode": {
                 "name": "{prefix}Systembetriebsart",
                 "state": {
-                    "sys_betriebsart_2wez": "2.WEZ",
-                    "sys_betriebsart_automatik": "Automatik",
-                    "sys_betriebsart_heizen": "Heizen",
-                    "sys_betriebsart_kuehlen": "Kühlen",
-                    "sys_betriebsart_sommer": "Sommer",
-                    "sys_betriebsart_standby": "Standby"
+                    "sys_operationmode_2ndheatsource": "2.WEZ",
+                    "sys_operationmode_automatic": "Automatik",
+                    "sys_operationmode_heating": "Heizen",
+                    "sys_operationmode_cooling": "Kühlen",
+                    "sys_operationmode_summer": "Sommer",
+                    "sys_operationmode_standby": "Standby"
                 }
             },
             "ww_push": {
@@ -654,43 +654,43 @@
             "betriebsanzeige": {
                 "name": "{prefix}Betriebsanzeige",
                 "state": {
-                    "sys_betrieb_0": "undefiniert",
-                    "sys_betrieb_1": "Relaistest",
-                    "sys_betrieb_11": "SG Tarif",
-                    "sys_betrieb_12": "SG Maximal",
-                    "sys_betrieb_13": "Tarifladung",
-                    "sys_betrieb_14": "Erhöhter Betrieb",
-                    "sys_betrieb_15": "Standzeit",
-                    "sys_betrieb_16": "Standby",
-                    "sys_betrieb_17": "Spülen",
-                    "sys_betrieb_18": "Frostschutz",
-                    "sys_betrieb_19": "Heizbetrieb",
-                    "sys_betrieb_2": "Notaus",
-                    "sys_betrieb_20": "Warmwasserbetrieb",
-                    "sys_betrieb_21": "Legionellenschutz",
-                    "sys_betrieb_22": "Umschaltung HZ KU",
-                    "sys_betrieb_23": "Kühlbetrieb",
-                    "sys_betrieb_24": "Passive Kühlung",
-                    "sys_betrieb_25": "Sommerbetrieb",
-                    "sys_betrieb_26": "Schwimmbadbetrieb",
-                    "sys_betrieb_27": "Urlaub",
-                    "sys_betrieb_28": "Estrichprogramm",
-                    "sys_betrieb_29": "Gesperrt",
-                    "sys_betrieb_3": "Diagnose",
-                    "sys_betrieb_30": "Sperre AT",
-                    "sys_betrieb_31": "Sperre Sommer",
-                    "sys_betrieb_32": "Sperre Winter",
-                    "sys_betrieb_33": "Einsatzgrenze",
-                    "sys_betrieb_34": "HK Sperre",
-                    "sys_betrieb_35": "Absenkbetrieb",
-                    "sys_betrieb_36": "Vorlauf regenerativ",
-                    "sys_betrieb_4": "Handbetrieb",
-                    "sys_betrieb_43": "Ölrückführung",
-                    "sys_betrieb_5": "Handbetrieb Heizen",
-                    "sys_betrieb_6": "Handbetrieb Kühlen",
-                    "sys_betrieb_7": "Manueller Abtaubetrieb",
-                    "sys_betrieb_8": "Abtauen",
-                    "sys_betrieb_9": "2. WEZ"
+                    "system_operationmode_undefined": "undefiniert",
+                    "system_operationmode_relaistest": "Relaistest",
+                    "system_operationmode_sgtariff": "SG Tarif",
+                    "system_operationmode_sgmax": "SG Maximal",
+                    "system_operationmode_tariffload": "Tarifladung",
+                    "system_operationmode_elevatedoperation": "Erhöhter Betrieb",
+                    "system_operationmode_standbytime": "Standzeit",
+                    "system_operationmode_standby": "Standby",
+                    "system_operationmode_rinse": "Spülen",
+                    "system_operationmode_frosprotection": "Frostschutz",
+                    "system_operationmode_heating": "Heizbetrieb",
+                    "system_operationmode_emergencystop": "Notaus",
+                    "system_operationmode_hotwater": "Warmwasserbetrieb",
+                    "system_operationmode_legionellaprotection": "Legionellenschutz",
+                    "system_operationmode_switchheatingcooling": "Umschaltung HZ KU",
+                    "system_operationmode_cooling": "Kühlbetrieb",
+                    "system_operationmode_passivecooling": "Passive Kühlung",
+                    "system_operationmode_summer": "Sommerbetrieb",
+                    "system_operationmode_swimmingpool": "Schwimmbadbetrieb",
+                    "system_operationmode_vacation": "Urlaub",
+                    "system_operationmode_screedprogram": "Estrichprogramm",
+                    "system_operationmode_locked": "Gesperrt",
+                    "system_operationmode_diagnosis": "Diagnose",
+                    "system_operationmode_lockedat": "Sperre AT",
+                    "system_operationmode_lockedsummer": "Sperre Sommer",
+                    "system_operationmode_lockedwinter": "Sperre Winter",
+                    "system_operationmode_applicationlimit": "Einsatzgrenze",
+                    "system_operationmode_lockedcv": "HK Sperre",
+                    "system_operationmode_lowering": "Absenkbetrieb",
+                    "system_operationmode_regenerativeflow": "Vorlauf regenerativ",
+                    "system_operationmode_manual": "Handbetrieb",
+                    "system_operationmode_oilrecirculation": "Ölrückführung",
+                    "system_operationmode_manualheating": "Handbetrieb Heizen",
+                    "system_operationmode_manualcooling": "Handbetrieb Kühlen",
+                    "system_operationmode_manualdefrost": "Manueller Abtaubetrieb",
+                    "system_operationmode_defrost": "Abtauen",
+                    "system_operationmode_manual2ndheatsource": "2. WEZ"
                 }
             },
             "betriebss_e1": {
@@ -871,19 +871,19 @@
                     "stoerungsfreier_betrieb": "Störungsfreier Betrieb"
                 }
             },
-            "ges_energie_2_gestern": {
+            "ges_energie_2_yesterday": {
                 "name": "{prefix}Gesamt Energie II gestern"
             },
-            "ges_energie_2_heute": {
+            "ges_energie_today": {
                 "name": "{prefix}Gesamt Energie II heute"
             },
-            "ges_energie_2_jahr": {
+            "ges_energie_year": {
                 "name": "{prefix}Gesamt Energie II Jahr"
             },
             "ges_energie_2_monat": {
                 "name": "{prefix}Gesamt Energie II Monat"
             },
-            "ges_energie_gestern": {
+            "ges_energie_yesterday": {
                 "name": "{prefix}Gesamt Energie gestern"
             },
             "ges_energie_heute": {
@@ -1497,43 +1497,43 @@
             "wp_betrieb": {
                 "name": "{prefix}Betrieb",
                 "state": {
-                    "hp_betrieb_0": "Undefiniert",
-                    "hp_betrieb_1": "Relaistest",
-                    "hp_betrieb_10": "EVU_SPERRE",
-                    "hp_betrieb_11": "SG Tarif",
-                    "hp_betrieb_12": "SG Maximal",
-                    "hp_betrieb_13": "Tarifladung",
-                    "hp_betrieb_14": "Erhöhter Betrieb",
-                    "hp_betrieb_15": "Standzeit",
-                    "hp_betrieb_16": "Standbybetrieb",
-                    "hp_betrieb_17": "Spülbetrieb",
-                    "hp_betrieb_18": "Frostschutz",
-                    "hp_betrieb_19": "Heizbetrieb",
-                    "hp_betrieb_2": "Notaus",
-                    "hp_betrieb_20": "Warmwasserbetrieb",
-                    "hp_betrieb_21": "Legionellenschutz",
-                    "hp_betrieb_22": "Umschaltung HZ KU",
-                    "hp_betrieb_23": "Kühlbetrieb",
-                    "hp_betrieb_24": "Passive Kühlung",
-                    "hp_betrieb_25": "Sommerbetrieb",
-                    "hp_betrieb_26": "Schwimmbad",
-                    "hp_betrieb_27": "Urlaub",
-                    "hp_betrieb_28": "Estrich",
-                    "hp_betrieb_29": "Gesperrt",
-                    "hp_betrieb_3": "Diagnose",
-                    "hp_betrieb_30": "Sperre AT",
-                    "hp_betrieb_31": "Sperre Sommer",
-                    "hp_betrieb_32": "Sperre Winter",
-                    "hp_betrieb_33": "Einsatzgrenze",
-                    "hp_betrieb_34": "HK Sperre",
-                    "hp_betrieb_35": "Absenk",
-                    "hp_betrieb_4": "Handbetrieb",
-                    "hp_betrieb_43": "Ölrückführung",
-                    "hp_betrieb_5": "Handbetrieb Heizen",
-                    "hp_betrieb_6": "Handbetrieb Kühlen",
-                    "hp_betrieb_7": "Manueller Abtaubetrieb",
-                    "hp_betrieb_8": "Abtauen",
-                    "hp_betrieb_9": "WEZ2"
+                    "heatpump_operationmode_undefined": "Undefiniert",
+                    "heatpump_operationmode_relaistest": "Relaistest",
+                    "heatpump_operationmode_evu": "EVU_SPERRE",
+                    "heatpump_operationmode_sgtariff": "SG Tarif",
+                    "heatpump_operationmode_sgmax": "SG Maximal",
+                    "heatpump_operationmode_tariffload": "Tarifladung",
+                    "heatpump_operationmode_elevatedoperation": "Erhöhter Betrieb",
+                    "heatpump_operationmode_standbytime": "Standzeit",
+                    "heatpump_operationmode_standby": "Standbybetrieb",
+                    "heatpump_operationmode_rinse": "Spülbetrieb",
+                    "heatpump_operationmode_frosprotection": "Frostschutz",
+                    "heatpump_operationmode_heating": "Heizbetrieb",
+                    "heatpump_operationmode_emergencystop": "Notaus",
+                    "heatpump_operationmode_hotwater": "Warmwasserbetrieb",
+                    "heatpump_operationmode_legionellaprotection": "Legionellenschutz",
+                    "heatpump_operationmode_switchheatingcooling": "Umschaltung HZ KU",
+                    "heatpump_operationmode_cooling": "Kühlbetrieb",
+                    "heatpump_operationmode_passivecooling": "Passive Kühlung",
+                    "heatpump_operationmode_summer": "Sommerbetrieb",
+                    "heatpump_operationmode_swimmingpool": "Schwimmbad",
+                    "heatpump_operationmode_vacation": "Urlaub",
+                    "heatpump_operationmode_screedprogram": "Estrich",
+                    "heatpump_operationmode_locked": "Gesperrt",
+                    "heatpump_operationmode_diagnosis": "Diagnose",
+                    "heatpump_operationmode_lockedat": "Sperre AT",
+                    "heatpump_operationmode_lockedsummer": "Sperre Sommer",
+                    "heatpump_operationmode_lockedwinter": "Sperre Winter",
+                    "heatpump_operationmode_applicationlimit": "Einsatzgrenze",
+                    "heatpump_operationmode_lockedcv": "HK Sperre",
+                    "heatpump_operationmode_lowering": "Absenk",
+                    "heatpump_operationmode_manual": "Handbetrieb",
+                    "heatpump_operationmode_oilrecirculation": "Ölrückführung",
+                    "heatpump_operationmode_manualheating": "Handbetrieb Heizen",
+                    "heatpump_operationmode_manualcooling": "Handbetrieb Kühlen",
+                    "heatpump_operationmode_manualdefrost": "Manueller Abtaubetrieb",
+                    "heatpump_operationmode_defrost": "Abtauen",
+                    "heatpump_operationmode_manual2ndheatsource": "WEZ2"
                 }
             },
             "wp_konf": {

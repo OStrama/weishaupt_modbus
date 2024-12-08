@@ -188,95 +188,317 @@ SYS_FEHLERFREI: list[StatusItem] = [
 ]
 
 SYS_BETRIEBSANZEIGE: list[StatusItem] = [
-    StatusItem(number=0, text="undefiniert", translation_key="sys_betrieb_0"),
-    StatusItem(number=1, text="Relaistest", translation_key="sys_betrieb_1"),
-    StatusItem(number=2, text="Notaus", translation_key="sys_betrieb_2"),
-    StatusItem(number=3, text="Diagnose", translation_key="sys_betrieb_3"),
-    StatusItem(number=4, text="Handbetrieb", translation_key="sys_betrieb_4"),
-    StatusItem(number=5, text="Handbetrieb Heizen", translation_key="sys_betrieb_5"),
-    StatusItem(number=6, text="Handbetrieb Kühlen", translation_key="sys_betrieb_6"),
     StatusItem(
-        number=7, text="Manueller Abtaubetrieb", translation_key="sys_betrieb_7"
+        number=0, text="undefiniert", translation_key="system_operationmode_undefined"
     ),
-    StatusItem(number=8, text="Abtauen", translation_key="sys_betrieb_8"),
-    StatusItem(number=9, text="2. WEZ", translation_key="sys_betrieb_9"),
-    StatusItem(number=10, text="EVU_SPERRE", translation_key="sys_betrieb_11"),
-    StatusItem(number=11, text="SG Tarif", translation_key="sys_betrieb_11"),
-    StatusItem(number=12, text="SG Maximal", translation_key="sys_betrieb_12"),
-    StatusItem(number=13, text="Tarifladung", translation_key="sys_betrieb_13"),
-    StatusItem(number=14, text="Erhöhter Betrieb", translation_key="sys_betrieb_14"),
-    StatusItem(number=15, text="Standzeit", translation_key="sys_betrieb_15"),
-    StatusItem(number=16, text="Standby", translation_key="sys_betrieb_16"),
-    StatusItem(number=17, text="Spülen", translation_key="sys_betrieb_17"),
-    StatusItem(number=18, text="Frostschutz", translation_key="sys_betrieb_18"),
-    StatusItem(number=19, text="Heizbetrieb", translation_key="sys_betrieb_19"),
-    StatusItem(number=20, text="Warmwasserbetrieb", translation_key="sys_betrieb_20"),
-    StatusItem(number=21, text="Legionellenschutz", translation_key="sys_betrieb_21"),
-    StatusItem(number=22, text="Umschaltung HZ KU", translation_key="sys_betrieb_22"),
-    StatusItem(number=23, text="Kühlbetrieb", translation_key="sys_betrieb_23"),
-    StatusItem(number=24, text="Passive Kühlung", translation_key="sys_betrieb_24"),
-    StatusItem(number=25, text="Sommerbetrieb", translation_key="sys_betrieb_25"),
-    StatusItem(number=26, text="Schwimmbadbetrieb", translation_key="sys_betrieb_26"),
-    StatusItem(number=27, text="Urlaub", translation_key="sys_betrieb_27"),
-    StatusItem(number=28, text="Estrichprogramm", translation_key="sys_betrieb_28"),
-    StatusItem(number=29, text="Gesperrt", translation_key="sys_betrieb_29"),
-    StatusItem(number=30, text="Sperre AT", translation_key="sys_betrieb_30"),
-    StatusItem(number=31, text="Sperre Sommer", translation_key="sys_betrieb_31"),
-    StatusItem(number=32, text="Sperre Winter", translation_key="sys_betrieb_32"),
-    StatusItem(number=33, text="Einsatzgrenze", translation_key="sys_betrieb_33"),
-    StatusItem(number=34, text="HK Sperre", translation_key="sys_betrieb_34"),
-    StatusItem(number=35, text="Absenkbetrieb", translation_key="sys_betrieb_35"),
-    StatusItem(number=36, text="Vorlauf regenerativ", translation_key="sys_betrieb_36"),
-    StatusItem(number=43, text="Ölrückführung", translation_key="sys_betrieb_43"),
+    StatusItem(
+        number=1, text="Relaistest", translation_key="system_operationmode_relaistest"
+    ),
+    StatusItem(
+        number=2, text="Notaus", translation_key="system_operationmode_emergencystop"
+    ),
+    StatusItem(
+        number=3, text="Diagnose", translation_key="system_operationmode_diagnosis"
+    ),
+    StatusItem(
+        number=4, text="Handbetrieb", translation_key="system_operationmode_manual"
+    ),
+    StatusItem(
+        number=5,
+        text="Handbetrieb Heizen",
+        translation_key="system_operationmode_manualheating",
+    ),
+    StatusItem(
+        number=6,
+        text="Handbetrieb Kühlen",
+        translation_key="system_operationmode_manualcooling",
+    ),
+    StatusItem(
+        number=7,
+        text="Manueller Abtaubetrieb",
+        translation_key="system_operationmode_manualdefrost",
+    ),
+    StatusItem(
+        number=8, text="Abtauen", translation_key="system_operationmode_defrost"
+    ),
+    StatusItem(
+        number=9,
+        text="2. WEZ",
+        translation_key="system_operationmode_manual2ndheatsource",
+    ),
+    StatusItem(
+        number=10, text="EVU_SPERRE", translation_key="system_operationmode_sgtariff"
+    ),
+    StatusItem(
+        number=11, text="SG Tarif", translation_key="system_operationmode_sgtariff"
+    ),
+    StatusItem(
+        number=12, text="SG Maximal", translation_key="system_operationmode_sgmax"
+    ),
+    StatusItem(
+        number=13, text="Tarifladung", translation_key="system_operationmode_tariffload"
+    ),
+    StatusItem(
+        number=14,
+        text="Erhöhter Betrieb",
+        translation_key="system_operationmode_elevatedoperation",
+    ),
+    StatusItem(
+        number=15, text="Standzeit", translation_key="system_operationmode_standbytime"
+    ),
+    StatusItem(
+        number=16, text="Standby", translation_key="system_operationmode_standby"
+    ),
+    StatusItem(number=17, text="Spülen", translation_key="system_operationmode_rinse"),
+    StatusItem(
+        number=18,
+        text="Frostschutz",
+        translation_key="system_operationmode_frosprotection",
+    ),
+    StatusItem(
+        number=19, text="Heizbetrieb", translation_key="system_operationmode_heating"
+    ),
+    StatusItem(
+        number=20,
+        text="Warmwasserbetrieb",
+        translation_key="system_operationmode_hotwater",
+    ),
+    StatusItem(
+        number=21,
+        text="Legionellenschutz",
+        translation_key="system_operationmode_legionellaprotection",
+    ),
+    StatusItem(
+        number=22,
+        text="Umschaltung HZ KU",
+        translation_key="system_operationmode_switchheatingcooling",
+    ),
+    StatusItem(
+        number=23, text="Kühlbetrieb", translation_key="system_operationmode_cooling"
+    ),
+    StatusItem(
+        number=24,
+        text="Passive Kühlung",
+        translation_key="system_operationmode_passivecooling",
+    ),
+    StatusItem(
+        number=25, text="Sommerbetrieb", translation_key="system_operationmode_summer"
+    ),
+    StatusItem(
+        number=26,
+        text="Schwimmbadbetrieb",
+        translation_key="system_operationmode_swimmingpool",
+    ),
+    StatusItem(
+        number=27, text="Urlaub", translation_key="system_operationmode_vacation"
+    ),
+    StatusItem(
+        number=28,
+        text="Estrichprogramm",
+        translation_key="system_operationmode_screedprogram",
+    ),
+    StatusItem(
+        number=29, text="Gesperrt", translation_key="system_operationmode_locked"
+    ),
+    StatusItem(
+        number=30, text="Sperre AT", translation_key="system_operationmode_lockedat"
+    ),
+    StatusItem(
+        number=31,
+        text="Sperre Sommer",
+        translation_key="system_operationmode_lockedsummer",
+    ),
+    StatusItem(
+        number=32,
+        text="Sperre Winter",
+        translation_key="system_operationmode_lockedwinter",
+    ),
+    StatusItem(
+        number=33,
+        text="Einsatzgrenze",
+        translation_key="system_operationmode_applicationlimit",
+    ),
+    StatusItem(
+        number=34, text="HK Sperre", translation_key="system_operationmode_lockedcv"
+    ),
+    StatusItem(
+        number=35, text="Absenkbetrieb", translation_key="system_operationmode_lowering"
+    ),
+    StatusItem(
+        number=36,
+        text="Vorlauf regenerativ",
+        translation_key="system_operationmode_regenerativeflow",
+    ),
+    StatusItem(
+        number=43,
+        text="Ölrückführung",
+        translation_key="system_operationmode_oilrecirculation",
+    ),
 ]
 
 SYS_BETRIEBSART: list[StatusItem] = [
-    StatusItem(number=0, text="Automatik", translation_key="sys_betriebsart_automatik"),
-    StatusItem(number=1, text="Heizen", translation_key="sys_betriebsart_heizen"),
-    StatusItem(number=2, text="Kühlen", translation_key="sys_betriebsart_kuehlen"),
-    StatusItem(number=3, text="Sommer", translation_key="sys_betriebsart_sommer"),
-    StatusItem(number=4, text="Standby", translation_key="sys_betriebsart_standby"),
-    StatusItem(number=5, text="2.WEZ", translation_key="sys_betriebsart_2wez"),
+    StatusItem(
+        number=0, text="Automatik", translation_key="sys_operationmode_automatic"
+    ),
+    StatusItem(number=1, text="Heizen", translation_key="sys_operationmode_heating"),
+    StatusItem(number=2, text="Kühlen", translation_key="sys_operationmode_cooling"),
+    StatusItem(number=3, text="Sommer", translation_key="sys_operationmode_summer"),
+    StatusItem(number=4, text="Standby", translation_key="sys_operationmode_standby"),
+    StatusItem(
+        number=5, text="2.WEZ", translation_key="sys_operationmode_2ndheatsource"
+    ),
 ]
 
 HP_BETRIEB: list[StatusItem] = [
-    StatusItem(number=0, text="Undefiniert", translation_key="hp_betrieb_0"),
-    StatusItem(number=1, text="Relaistest", translation_key="hp_betrieb_1"),
-    StatusItem(number=2, text="Notaus", translation_key="hp_betrieb_2"),
-    StatusItem(number=3, text="Diagnose", translation_key="hp_betrieb_3"),
-    StatusItem(number=4, text="Handbetrieb", translation_key="hp_betrieb_4"),
-    StatusItem(number=5, text="Handbetrieb Heizen", translation_key="hp_betrieb_5"),
-    StatusItem(number=6, text="Handbetrieb Kühlen", translation_key="hp_betrieb_6"),
-    StatusItem(number=7, text="Manueller Abtaubetrieb", translation_key="hp_betrieb_7"),
-    StatusItem(number=8, text="Abtauen", translation_key="hp_betrieb_8"),
-    StatusItem(number=9, text="WEZ2", translation_key="hp_betrieb_9"),
-    StatusItem(number=10, text="EVU_SPERRE", translation_key="hp_betrieb_10"),
-    StatusItem(number=11, text="SG Tarif", translation_key="hp_betrieb_11"),
-    StatusItem(number=12, text="SG Maximal", translation_key="hp_betrieb_12"),
-    StatusItem(number=13, text="Tarifladung", translation_key="hp_betrieb_13"),
-    StatusItem(number=14, text="Erhöhter Betrieb", translation_key="hp_betrieb_14"),
-    StatusItem(number=15, text="Standzeit", translation_key="hp_betrieb_15"),
-    StatusItem(number=16, text="Standbybetrieb", translation_key="hp_betrieb_16"),
-    StatusItem(number=17, text="Spülbetrieb", translation_key="hp_betrieb_17"),
-    StatusItem(number=18, text="Frostschutz", translation_key="hp_betrieb_18"),
-    StatusItem(number=19, text="Heizbetrieb", translation_key="hp_betrieb_19"),
-    StatusItem(number=20, text="Warmwasserbetrieb", translation_key="hp_betrieb_20"),
-    StatusItem(number=21, text="Legionellenschutz", translation_key="hp_betrieb_21"),
-    StatusItem(number=22, text="Umschaltung HZ KU", translation_key="hp_betrieb_22"),
-    StatusItem(number=23, text="Kühlbetrieb", translation_key="hp_betrieb_23"),
-    StatusItem(number=24, text="Passive Kühlung", translation_key="hp_betrieb_24"),
-    StatusItem(number=25, text="Sommerbetrieb", translation_key="hp_betrieb_25"),
-    StatusItem(number=26, text="Schwimmbad", translation_key="hp_betrieb_26"),
-    StatusItem(number=27, text="Urlaub", translation_key="hp_betrieb_27"),
-    StatusItem(number=28, text="Estrich", translation_key="hp_betrieb_28"),
-    StatusItem(number=29, text="Gesperrt", translation_key="hp_betrieb_29"),
-    StatusItem(number=30, text="Sperre AT", translation_key="hp_betrieb_30"),
-    StatusItem(number=31, text="Sperre Sommer", translation_key="hp_betrieb_31"),
-    StatusItem(number=32, text="Sperre Winter", translation_key="hp_betrieb_32"),
-    StatusItem(number=33, text="Einsatzgrenze", translation_key="hp_betrieb_33"),
-    StatusItem(number=34, text="HK Sperre", translation_key="hp_betrieb_34"),
-    StatusItem(number=35, text="Absenk", translation_key="hp_betrieb_35"),
-    StatusItem(number=43, text="Ölrückführung", translation_key="hp_betrieb_43"),
+    StatusItem(
+        number=0, text="Undefiniert", translation_key="heatpump_operationmode_undefined"
+    ),
+    StatusItem(
+        number=1, text="Relaistest", translation_key="heatpump_operationmode_relaistest"
+    ),
+    StatusItem(
+        number=2, text="Notaus", translation_key="heatpump_operationmode_emergencystop"
+    ),
+    StatusItem(
+        number=3, text="Diagnose", translation_key="heatpump_operationmode_diagnosis"
+    ),
+    StatusItem(
+        number=4, text="Handbetrieb", translation_key="heatpump_operationmode_manual"
+    ),
+    StatusItem(
+        number=5,
+        text="Handbetrieb Heizen",
+        translation_key="heatpump_operationmode_manualheating",
+    ),
+    StatusItem(
+        number=6,
+        text="Handbetrieb Kühlen",
+        translation_key="heatpump_operationmode_manualcooling",
+    ),
+    StatusItem(
+        number=7,
+        text="Manueller Abtaubetrieb",
+        translation_key="heatpump_operationmode_manualdefrost",
+    ),
+    StatusItem(
+        number=8, text="Abtauen", translation_key="heatpump_operationmode_defrost"
+    ),
+    StatusItem(
+        number=9,
+        text="WEZ2",
+        translation_key="heatpump_operationmode_manual2ndheatsource",
+    ),
+    StatusItem(
+        number=10, text="EVU_SPERRE", translation_key="heatpump_operationmode_evu"
+    ),
+    StatusItem(
+        number=11, text="SG Tarif", translation_key="heatpump_operationmode_sgtariff"
+    ),
+    StatusItem(
+        number=12, text="SG Maximal", translation_key="heatpump_operationmode_sgmax"
+    ),
+    StatusItem(
+        number=13,
+        text="Tarifladung",
+        translation_key="heatpump_operationmode_tariffload",
+    ),
+    StatusItem(
+        number=14,
+        text="Erhöhter Betrieb",
+        translation_key="heatpump_operationmode_elevatedoperation",
+    ),
+    StatusItem(
+        number=15,
+        text="Standzeit",
+        translation_key="heatpump_operationmode_standbytime",
+    ),
+    StatusItem(
+        number=16,
+        text="Standbybetrieb",
+        translation_key="heatpump_operationmode_standby",
+    ),
+    StatusItem(
+        number=17, text="Spülbetrieb", translation_key="heatpump_operationmode_rinse"
+    ),
+    StatusItem(
+        number=18,
+        text="Frostschutz",
+        translation_key="heatpump_operationmode_frosprotection",
+    ),
+    StatusItem(
+        number=19, text="Heizbetrieb", translation_key="heatpump_operationmode_heating"
+    ),
+    StatusItem(
+        number=20,
+        text="Warmwasserbetrieb",
+        translation_key="heatpump_operationmode_hotwater",
+    ),
+    StatusItem(
+        number=21,
+        text="Legionellenschutz",
+        translation_key="heatpump_operationmode_legionellaprotection",
+    ),
+    StatusItem(
+        number=22,
+        text="Umschaltung HZ KU",
+        translation_key="heatpump_operationmode_switchheatingcooling",
+    ),
+    StatusItem(
+        number=23, text="Kühlbetrieb", translation_key="heatpump_operationmode_cooling"
+    ),
+    StatusItem(
+        number=24,
+        text="Passive Kühlung",
+        translation_key="heatpump_operationmode_passivecooling",
+    ),
+    StatusItem(
+        number=25, text="Sommerbetrieb", translation_key="heatpump_operationmode_summer"
+    ),
+    StatusItem(
+        number=26,
+        text="Schwimmbad",
+        translation_key="heatpump_operationmode_swimmingpool",
+    ),
+    StatusItem(
+        number=27, text="Urlaub", translation_key="heatpump_operationmode_vacation"
+    ),
+    StatusItem(
+        number=28,
+        text="Estrich",
+        translation_key="heatpump_operationmode_screedprogram",
+    ),
+    StatusItem(
+        number=29, text="Gesperrt", translation_key="heatpump_operationmode_locked"
+    ),
+    StatusItem(
+        number=30, text="Sperre AT", translation_key="heatpump_operationmode_lockedat"
+    ),
+    StatusItem(
+        number=31,
+        text="Sperre Sommer",
+        translation_key="heatpump_operationmode_lockedsummer",
+    ),
+    StatusItem(
+        number=32,
+        text="Sperre Winter",
+        translation_key="heatpump_operationmode_lockedwinter",
+    ),
+    StatusItem(
+        number=33,
+        text="Einsatzgrenze",
+        translation_key="heatpump_operationmode_applicationlimit",
+    ),
+    StatusItem(
+        number=34, text="HK Sperre", translation_key="heatpump_operationmode_lockedcv"
+    ),
+    StatusItem(
+        number=35, text="Absenk", translation_key="heatpump_operationmode_lowering"
+    ),
+    StatusItem(
+        number=43,
+        text="Ölrückführung",
+        translation_key="heatpump_operationmode_oilrecirculation",
+    ),
 ]
 
 HP_STOERMELDUNG: list[StatusItem] = [
@@ -313,11 +535,15 @@ HZ_ANFORDERUNG: list[StatusItem] = [
 ]
 
 HZ_BETRIEBSART: list[StatusItem] = [
-    StatusItem(number=0, text="Automatik", translation_key="hz_betriebsart_auto"),
-    StatusItem(number=1, text="Komfort", translation_key="hz_betriebsat_komfort"),
-    StatusItem(number=2, text="Normal", translation_key="hz_betriebsart_normal"),
-    StatusItem(number=3, text="Absenkbetrieb", translation_key="hz_betriebsart_absenk"),
-    StatusItem(number=4, text="Standby", translation_key="hz_betriebsart_standy"),
+    StatusItem(
+        number=0, text="Automatik", translation_key="hz_operationmode_automatic"
+    ),
+    StatusItem(number=1, text="Komfort", translation_key="hz_operationmode_comfort"),
+    StatusItem(number=2, text="Normal", translation_key="hz_operationmode_normal"),
+    StatusItem(
+        number=3, text="Absenkbetrieb", translation_key="hz_operationmode_lowering"
+    ),
+    StatusItem(number=4, text="Standby", translation_key="hz_operationmode_standby"),
 ]
 
 HZ_PARTY_PAUSE: list[StatusItem] = [
@@ -988,7 +1214,7 @@ MODBUS_SYS_ITEMS: list[ModbusItem] = [
     ModbusItem( address=30004, name="Warnung", mformat=FORMATS.STATUS, mtype=TYPES.SENSOR, device=DEVICES.SYS, resultlist=SYS_FEHLER, params=PARAMS_ALERT, translation_key="warnung"), # same codes as for warnings
     ModbusItem( address=30005, name="Fehlerfrei", mformat=FORMATS.STATUS, mtype=TYPES.SENSOR, device=DEVICES.SYS, resultlist=SYS_FEHLERFREI, params=PARAMS_ALERT, translation_key="fehlerfrei"),
     ModbusItem( address=30006, name="Betriebsanzeige", mformat=FORMATS.STATUS, mtype=TYPES.SENSOR, device=DEVICES.SYS, resultlist=SYS_BETRIEBSANZEIGE, params = PARAMS_OPMODE, translation_key="betriebsanzeige"),
-    ModbusItem( address=40001,  name="Systembetriebsart", mformat=FORMATS.STATUS, mtype=TYPES.SELECT, device=DEVICES.SYS, resultlist=SYS_BETRIEBSART, params = PARAMS_OPMODE, translation_key="systembetriebsart"),
+    ModbusItem( address=40001,  name="Systembetriebsart", mformat=FORMATS.STATUS, mtype=TYPES.SELECT, device=DEVICES.SYS, resultlist=SYS_BETRIEBSART, params = PARAMS_OPMODE, translation_key="sys_operationmode"),
 ]
 
 MODBUS_WP_ITEMS: list[ModbusItem] = [
@@ -1027,7 +1253,7 @@ MODBUS_HZ_ITEMS = [
     ModbusItem( address=31106, name="Adr. 31106", mformat=FORMATS.UNKNOWN, mtype=TYPES.SENSOR, device=DEVICES.HZ, translation_key="adr31106"),
     ModbusItem( address=41101, name="HZ_Konfiguration", mformat=FORMATS.STATUS, mtype=TYPES.NUMBER_RO, device=DEVICES.HZ, resultlist=HZ_KONFIGURATION, translation_key="hz_konf"),
     ModbusItem( address=41102, name="Anforderung Typ", mformat=FORMATS.STATUS, mtype=TYPES.NUMBER_RO, device=DEVICES.HZ, resultlist=HZ_ANFORDERUNG, translation_key="anf_typ"),
-    ModbusItem( address=41103, name="Betriebsart", mformat=FORMATS.STATUS, mtype=TYPES.SELECT, device=DEVICES.HZ, resultlist=HZ_BETRIEBSART, translation_key="hz_betriebsart"),
+    ModbusItem( address=41103, name="Betriebsart", mformat=FORMATS.STATUS, mtype=TYPES.SELECT, device=DEVICES.HZ, resultlist=HZ_BETRIEBSART, translation_key="hz_operationmode"),
     ModbusItem( address=41104, name="Pause / Party", mformat=FORMATS.STATUS, mtype=TYPES.SELECT, device=DEVICES.HZ, resultlist=HZ_PARTY_PAUSE, params = PARAMS_PARTY, translation_key="party_pause"),
     ModbusItem( address=41105, name="Raumsolltemperatur Komfort", mformat=FORMATS.TEMPERATUR, mtype=TYPES.NUMBER, device=DEVICES.HZ, params=PARAMS_ROOMTEMP_HIGH, translation_key="raum_soll_temp_komf"),
     ModbusItem( address=41106, name="Raumsolltemperatur Normal", mformat=FORMATS.TEMPERATUR, mtype=TYPES.NUMBER, device=DEVICES.HZ, params=PARAMS_ROOMTEMP_MID, translation_key="raum_soll_temp_normal"),
@@ -1108,7 +1334,7 @@ MODBUS_W2_ITEMS: list[ModbusItem] = [
 MODBUS_ST_ITEMS: list[ModbusItem] = [
     ModbusItem( address=36101, name="Gesamt Energie heute", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="ges_energie_heute"),
     ModbusItem( address=36101, name="Tagesarbeitszahl heute", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR_CALC, device=DEVICES.ST, params=PARAMS_CALCTAZ, translation_key="tagesarbeitszahl_heute"),
-    ModbusItem( address=36102, name="Gesamt Energie gestern", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="ges_energie_gestern"),
+    ModbusItem( address=36102, name="Gesamt Energie gestern", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="ges_energie_yesterday"),
     ModbusItem( address=36102, name="Tagesarbeitszahl gestern", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR_CALC, device=DEVICES.ST, params=PARAMS_CALCTAZ2, translation_key="tagesarbeitszahl_gestern"),
     ModbusItem( address=36103, name="Gesamt Energie Monat", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="ges_energie_monat"),
     ModbusItem( address=36103, name="Monatsarbeitszahl", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR_CALC, device=DEVICES.ST, params=PARAMS_CALCMAZ, translation_key="monatsarbeitszahl"),
@@ -1130,10 +1356,10 @@ MODBUS_ST_ITEMS: list[ModbusItem] = [
     ModbusItem( address=36502, name="Abtauen Energie gestern", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY,translation_key="abtau_energie_gester"),
     ModbusItem( address=36503, name="Abtauen Energie Monat", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="abtau_energie_monat"),
     ModbusItem( address=36504, name="Abtauen Energie Jahr", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="abtau_energie_jahr"),
-    ModbusItem( address=36601, name="Gesamt Energie II heute", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="ges_energie_2_heute"),
-    ModbusItem( address=36602, name="Gesamt Energie II gestern", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="ges_energie_2_gestern"),
+    ModbusItem( address=36601, name="Gesamt Energie II heute", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="ges_energie_today"),
+    ModbusItem( address=36602, name="Gesamt Energie II gestern", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="ges_energie_2_yesterday"),
     ModbusItem( address=36603, name="Gesamt Energie II Monat", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="ges_energie_2_monat"),
-    ModbusItem( address=36604, name="Gesamt Energie II Jahr", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="ges_energie_2_jahr"),
+    ModbusItem( address=36604, name="Gesamt Energie II Jahr", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="ges_energie_year"),
     ModbusItem( address=36701, name="Elektr. Energie heute", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="el_energie_heute"),
     ModbusItem( address=36702, name="Elektr. Energie gestern", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="el_energie_gestern"),
     ModbusItem( address=36703, name="Elektr. Energie Monat", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="el_energie_monat"),
