@@ -46,25 +46,32 @@ class WebifConnection:
 
     async def login(self) -> None:
         """Log into the portal. Create cookie to stay logged in for the session."""
+        self._connected = False
         jar = aiohttp.CookieJar(unsafe=True)
         self._session = aiohttp.ClientSession(base_url=self._base_url, cookie_jar=jar)
-        if self._username != "" and self._password != "":
-            try:
-                async with self._session.post(
-                    "/login.html",
-                    data={"user": self._username, "pass": self._password},
-                ) as response:
-                    if response.status == 200:
-                        self._connected = True
-                    else:
-                        self._connected = False
-            except TimeoutError:
-                self._connected = False
-                logging.error(msg="Timeout while logging in")
-
-        else:
+        if self._username == "" or self._password == "":
             logging.error("No user / password specified for webif")
+
+        try:
+            async with self._session.post(
+                "/login.html",
+                data={"user": self._username, "pass": self._password},
+            ) as response:
+                if response.status != 200:
+                    logging.error(
+                        msg="HTTP Error: " & response.status & " while logging in."
+                    )
+
+                main_page = BeautifulSoup(markup=INFO_WP, features="html.parser")
+                navs: Tag | NavigableString | None = main_page.findAll(
+                    "div", class_="col-3"
+                )
+                if len(navs) == 1:
+                    self._connected = True
+
+        except TimeoutError:
             self._connected = False
+            logging.error(msg="Timeout while logging in")
 
     async def close(self) -> None:
         """Close connection to WebIf."""
