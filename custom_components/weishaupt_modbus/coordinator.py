@@ -10,7 +10,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
 from .configentry import MyConfigEntry
-from .const import CONST, TYPES, DEVICES, CONF
+from .const import CONF, CONST, DEVICES, TYPES
 from .items import ModbusItem
 from .modbusobject import ModbusAPI, ModbusObject
 from .webif_object import WebifConnection
@@ -79,7 +79,7 @@ class MyCoordinator(DataUpdateCoordinator):
         return modbus_item.state
 
     def get_value_from_item(self, translation_key: str) -> int:
-        """Read a value from another modbus item"""
+        """Read a value from another modbus item."""
         for _useless, item in enumerate(self._modbusitems):
             if item.translation_key == translation_key:
                 return item.state

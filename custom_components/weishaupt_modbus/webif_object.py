@@ -52,7 +52,11 @@ class WebifConnection:
         """Log into the portal. Create cookie to stay logged in for the session."""
         self._connected = False
         jar = aiohttp.CookieJar(unsafe=True)
-        self._session = aiohttp.ClientSession(base_url=self._base_url, cookie_jar=jar)
+        self._session = aiohttp.ClientSession(
+            base_url=self._base_url,
+            cookie_jar=jar,
+            raise_for_status=self.set_last_api_call(),
+        )
         if self._username == "" or self._password == "":
             logging.error("No user / password specified for webif")
 
@@ -149,15 +153,25 @@ class WebifConnection:
         myreturn.update(info_statistics)
         return myreturn
 
+    def set_last_api_call(self):
+        """Set the last API call to the current time.
+
+        This is used to throttle the API calls, so we don't overload the server.
+        """
+        self._last_api_call = time.time()
+
     async def wait_cooldown(self):
-        """Wait if the last API call was less than 60 seconds ago.
+        """Wait if the last API call was less than self._time_between_api_calls seconds ago.
 
         This prevents hammering the API and killing the server.
         """
         time_since_last_call = time.time() - self._last_api_call
         if (time_since_last_call) < self._time_between_api_calls:
             await asyncio.sleep(self._time_between_api_calls - time_since_last_call)
-        self._last_api_call = time.time()
+
+        self._last_api_call = (
+            time.time()
+        )  # Only usefull with fake values. Remove in production version.
 
     async def fake_info_hk1(self) -> None:
         """Return FAKE Info -> Heizkreis1."""
