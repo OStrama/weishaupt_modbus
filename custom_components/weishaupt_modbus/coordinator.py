@@ -191,8 +191,8 @@ class MyWebIfCoordinator(DataUpdateCoordinator):
         try:
             # Note: asyncio.TimeoutError and aiohttp.ClientError are already
             # handled by the data update coordinator.
-            async with asyncio.timeout(30):
-                items = await self.my_api.get_fake_info()
+            async with asyncio.timeout(500):
+                items = await self.my_api.get_info()
                 # print(items)
                 return items
         except TimeoutError:

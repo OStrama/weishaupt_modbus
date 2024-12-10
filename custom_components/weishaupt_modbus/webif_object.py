@@ -34,7 +34,7 @@ class WebifConnection:
     _connected: bool = False
     _values = {}
     _last_api_call = 0
-    _time_between_api_calls = 5
+    _time_between_api_calls = 30
 
     def __init__(self, config_entry: MyConfigEntry) -> None:
         """Initialize the WebIf connection.
@@ -70,10 +70,9 @@ class WebifConnection:
                     logging.error(
                         msg="HTTP Error: " & response.status & " while logging in."
                     )
-
                 main_page = BeautifulSoup(markup=INFO_WP, features="html.parser")
                 navs: Tag | NavigableString | None = main_page.findAll(
-                    "div", class_="col-3"
+                    "span", class_="navbar-text"
                 )
                 if len(navs) == 1:
                     self._connected = True
@@ -96,7 +95,9 @@ class WebifConnection:
                 # token = 0F4C
                 url="/settings_export.html?stack=0C00000100000000008000"
                 + self._config_entry.data[CONF.WEBIF_TOKEN]
-                + "010002000301,0C000C1900000000000000"
+                + "010002000301,0C000C"
+                + "19"
+                + "00000000000000"
                 + self._config_entry.data[CONF.WEBIF_TOKEN]
                 + "020003000401"
             ) as response:
@@ -124,6 +125,125 @@ class WebifConnection:
             logging.debug(msg="Timeout while getting info")
             return None
 
+    async def get_info_wp(self) -> None:
+        """Return Info -> Heizkreis1."""
+        if self._connected is False:
+            return None
+        # print("trying to fetch info -> wp")
+        try:
+            async with self._session.get(
+                # token = F9AF
+                # token = 0F4C
+                url="/settings_export.html?stack=0C00000100000000008000"
+                + self._config_entry.data[CONF.WEBIF_TOKEN]
+                + "010002000301,0C000C"
+                + "22"
+                + "00000000000000"
+                + self._config_entry.data[CONF.WEBIF_TOKEN]
+                + "020003000401"
+            ) as response:
+                self._last_api_call = time.time()
+                if response.status != 200:
+                    logging.debug(msg="Error: " & str(response.status))
+                    return None
+                main_page = BeautifulSoup(
+                    markup=await response.text(), features="html.parser"
+                )
+                navs: Tag | NavigableString | None = main_page.findAll(
+                    "div", class_="col-3"
+                )
+
+                if len(navs) == 3:
+                    values_nav = navs[2]
+                    self._values["Info"] = {
+                        "Wärmepumpe": self.get_values(soup=values_nav)
+                    }
+                    logging.debug(msg=self._values)
+                    return self._values["Info"]["Wärmepumpe"]
+                logging.debug("Update failed. return None")
+                return None
+        except TimeoutError:
+            logging.debug(msg="Timeout while getting info")
+            return None
+
+    async def get_info_2wez(self) -> None:
+        """Return Info -> Heizkreis1."""
+        if self._connected is False:
+            return None
+        try:
+            async with self._session.get(
+                # token = F9AF
+                # token = 0F4C
+                url="/settings_export.html?stack=0C00000100000000008000"
+                + self._config_entry.data[CONF.WEBIF_TOKEN]
+                + "010002000301,0C000C"
+                + "23"
+                + "00000000000000"
+                + self._config_entry.data[CONF.WEBIF_TOKEN]
+                + "020003000401"
+            ) as response:
+                self._last_api_call = time.time()
+                if response.status != 200:
+                    logging.debug(msg="Error: " & str(response.status))
+                    return None
+                main_page = BeautifulSoup(
+                    markup=await response.text(), features="html.parser"
+                )
+                navs: Tag | NavigableString | None = main_page.findAll(
+                    "div", class_="col-3"
+                )
+
+                if len(navs) == 3:
+                    values_nav = navs[2]
+                    self._values["Info"] = {"2.WEZ": self.get_values(soup=values_nav)}
+                    logging.debug(msg=self._values)
+                    return self._values["Info"]["2.WEZ"]
+                logging.debug("Update failed. return None")
+                return None
+        except TimeoutError:
+            logging.debug(msg="Timeout while getting info")
+            return None
+
+    async def get_info_statistik(self) -> None:
+        """Return Info -> Heizkreis1."""
+        if self._connected is False:
+            return None
+        try:
+            async with self._session.get(
+                # token = F9AF
+                # token = 0F4C
+                url="/settings_export.html?stack=0C00000100000000008000"
+                + self._config_entry.data[CONF.WEBIF_TOKEN]
+                + "010002000301,0C000C"
+                + "27"
+                + "00000000000000"
+                + self._config_entry.data[CONF.WEBIF_TOKEN]
+                + "020003000401"
+            ) as response:
+                self._last_api_call = time.time()
+                if response.status != 200:
+                    logging.debug(msg="Error: " & str(response.status))
+                    return None
+                main_page = BeautifulSoup(
+                    markup=await response.text(), features="html.parser"
+                )
+                navs: Tag | NavigableString | None = main_page.findAll(
+                    "div", class_="col-3"
+                )
+
+                if len(navs) == 3:
+                    values_nav = navs[2]
+                    self._values["Info"] = {
+                        "Statistik": self.get_values(soup=values_nav)
+                    }
+                    logging.debug(msg=self._values)
+                    return self._values["Info"]["Statistik"]
+                logging.debug("Update failed. return None")
+                return None
+        except TimeoutError:
+            logging.debug(msg="Timeout while getting info")
+            return None
+
     async def fake_info_wp(self) -> None:
         """Return FAKE Info -> Wärmepumpe."""
         main_page = BeautifulSoup(markup=INFO_WP, features="html.parser")
@@ -135,6 +255,31 @@ class WebifConnection:
             return self._values["Info"]["Wärmepumpe"]
         logging.debug("Update failed. return None")
         return None
+
+    async def get_info(self):
+        """Collect all info and return it as dict."""
+        myreturn = {}
+        await self.wait_cooldown()
+        info_wp = await self.get_info_wp()
+        # print(info_wp)
+        await self.wait_cooldown()
+        info_2wez = await self.get_info_2wez()
+        # print(info_2wez)
+        await self.wait_cooldown()
+        info_hk1 = await self.get_info_hk()
+        # print(info_hk1)
+        await self.wait_cooldown()
+        info_statistics = await self.get_info_statistik()
+        # print(info_statistics)
+        if info_wp is not None:
+            myreturn.update(info_wp)
+        if info_2wez is not None:
+            myreturn.update(info_2wez)
+        if info_hk1 is not None:
+            myreturn.update(info_hk1)
+        if info_statistics is not None:
+            myreturn.update(info_statistics)
+        return myreturn
 
     async def get_fake_info(self):
         """Collect all fake info and return it as dict."""

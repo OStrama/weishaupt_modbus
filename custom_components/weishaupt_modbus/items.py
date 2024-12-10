@@ -292,6 +292,9 @@ class WebItem(ApiItem):
                 if self._params["unit"] == UnitOfVolumeFlowRate.CUBIC_METERS_PER_HOUR:
                     return val[:-4]
             return val.split(" ")[0]
+        if self._translation_key == "webif_info_waermepumpe_leistungsanforderung":
+            if val == "Aus":
+                return 0
         return val
 
 

@@ -171,12 +171,12 @@ class PowerMap:
                 f = Chebyshev.fit(self.known_x, self._interp_y[idx], deg=8)
             self._max_power.append(f(self._all_t))
 
-        try:
-            await self._config_entry.runtime_data.hass.async_add_executor_job(
-                self.plot_kennfeld_to_file
-            )
-        except RuntimeError:
-            log.warning("Reconfigure powermap")
+        # try:
+        # await self._config_entry.runtime_data.hass.async_add_executor_job(
+        #    self.plot_kennfeld_to_file
+        # )
+        # except RuntimeError:
+        #    log.warning("Reconfigure powermap")
 
     def map(self, x, y):
         """Map."""
