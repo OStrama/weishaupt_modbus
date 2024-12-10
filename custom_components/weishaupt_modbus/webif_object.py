@@ -4,7 +4,9 @@ A webif object that contains a webif item and communicates with the webif.
 It contains a webif client for setting and getting webif values
 """
 
+import asyncio
 import logging
+import time
 
 import aiohttp
 from bs4 import BeautifulSoup
@@ -31,6 +33,8 @@ class WebifConnection:
     _login_url: str = "/login.html"
     _connected: bool = False
     _values = {}
+    _last_api_call = 0
+    _time_between_api_calls = 5
 
     def __init__(self, config_entry: MyConfigEntry) -> None:
         """Initialize the WebIf connection.
@@ -57,6 +61,7 @@ class WebifConnection:
                 "/login.html",
                 data={"user": self._username, "pass": self._password},
             ) as response:
+                self._last_api_call = time.time()
                 if response.status != 200:
                     logging.error(
                         msg="HTTP Error: " & response.status & " while logging in."
@@ -77,7 +82,7 @@ class WebifConnection:
         """Close connection to WebIf."""
         await self._session.close()
 
-    async def get_info(self) -> None:
+    async def get_info_hk(self) -> None:
         """Return Info -> Heizkreis1."""
         if self._connected is False:
             return None
@@ -91,6 +96,7 @@ class WebifConnection:
                 + self._config_entry.data[CONF.WEBIF_TOKEN]
                 + "020003000401"
             ) as response:
+                self._last_api_call = time.time()
                 if response.status != 200:
                     logging.debug(msg="Error: " & str(response.status))
                     return None
@@ -125,6 +131,33 @@ class WebifConnection:
             return self._values["Info"]["Wärmepumpe"]
         logging.debug("Update failed. return None")
         return None
+
+    async def get_fake_info(self):
+        """Collect all fake info and return it as dict."""
+        myreturn = {}
+        await self.wait_cooldown()
+        info_wp = await self.fake_info_wp()
+        await self.wait_cooldown()
+        info_2wez = await self.fake_info_2wez()
+        await self.wait_cooldown()
+        info_hk1 = await self.fake_info_hk1()
+        await self.wait_cooldown()
+        info_statistics = await self.fake_info_statistik()
+        myreturn.update(info_wp)
+        myreturn.update(info_2wez)
+        myreturn.update(info_hk1)
+        myreturn.update(info_statistics)
+        return myreturn
+
+    async def wait_cooldown(self):
+        """Wait if the last API call was less than 60 seconds ago.
+
+        This prevents hammering the API and killing the server.
+        """
+        time_since_last_call = time.time() - self._last_api_call
+        if (time_since_last_call) < self._time_between_api_calls:
+            await asyncio.sleep(self._time_between_api_calls - time_since_last_call)
+        self._last_api_call = time.time()
 
     async def fake_info_hk1(self) -> None:
         """Return FAKE Info -> Heizkreis1."""

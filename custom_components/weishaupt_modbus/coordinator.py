@@ -192,21 +192,7 @@ class MyWebIfCoordinator(DataUpdateCoordinator):
             # Note: asyncio.TimeoutError and aiohttp.ClientError are already
             # handled by the data update coordinator.
             async with asyncio.timeout(30):
-                # Grab active context variables to limit data required to be fetched from API
-                # Note: using context is not required if there is no need or ability to limit
-                # data retrieved from API.
-                # listening_idx = set(self.async_contexts())
-                # return await self.my_api.return_test_data()
-                # print("Fetching Data")
-                items = {}
-                info_hk1 = await self.my_api.fake_info_hk1()
-                info_waermepumpe = await self.my_api.fake_info_wp()
-                info_2wez = await self.my_api.fake_info_2wez()
-                info_statistik = await self.my_api.fake_info_statistik()
-                items.update(info_hk1)
-                items.update(info_waermepumpe)
-                items.update(info_2wez)
-                items.update(info_statistik)
+                items = await self.my_api.get_fake_info()
                 # print(items)
                 return items
         except TimeoutError:

@@ -189,6 +189,9 @@ class ModbusObject:
         if self._modbus_client is None:
             return None
 
+        if self._modbus_client.connected is False:
+            return None
+
         if not self._modbus_item.is_invalid:
             try:
                 match self._modbus_item.type:
@@ -217,6 +220,8 @@ class ModbusObject:
                     str(self._modbus_item.name),
                 )
                 return None
+
+        return None
 
     # @value.setter
     async def setvalue(self, value) -> None:
