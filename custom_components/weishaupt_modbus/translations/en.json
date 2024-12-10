@@ -1554,19 +1554,19 @@
                 }
             },
             "tagesarbeitszahl_heute": {
-                "name": "{prefix}Tagesarbeitszahl heute"
+                "name": "{prefix}Daily performance factor today"
             },
             "spreizung": {
-                "name": "{prefix}Spreizung"
+                "name": "{prefix}Spread"
             },
             "jahresarbeitszahl": {
-                "name": "{prefix}Jahresarbeitszahl"
+                "name": "{prefix}Annual performance factor"
             },
             "tagesarbeitszahl_gestern": {
-                "name": "{prefix}Tagesarbeitszahl gestern"
+                "name": "{prefix}Daily performance factor yesterday"
             },
             "monatsarbeitszahl": {
-                "name": "{prefix}Monatsarbeitszahl"
+                "name": "{prefix}Monthly performance factor"
             },
             "ww_energie_yesterday": {
                 "name": "{prefix}Hot water energy yesterday"

@@ -7,6 +7,8 @@ import aiofiles
 import numpy as np
 from numpy.polynomial import Chebyshev
 
+import matplotlib.pyplot as plt
+
 from .configentry import MyConfigEntry
 
 from .const import CONF, CONST
@@ -99,6 +101,7 @@ class PowerMap:
         self._max_power = []
         self._interp_y = []
         self._r_to_interpolate = 0
+        self._all_t = None
 
     async def initialize(self):
         """Initialize the power map."""
@@ -159,14 +162,21 @@ class PowerMap:
 
         # at second step, power vs. outside temp are interpolated using cubic splines
         # we want to have samples at every integer °C
-        t = np.linspace(-30, 40, 71)
+        self._all_t = np.linspace(-30, 40, 71)
         # cubic spline interpolation of power curves
         for idx in range(len(self._r_to_interpolate)):
             if SPLINE_AVAILABLE is True:
                 f = CubicSpline(self.known_x, self._interp_y[idx], bc_type="natural")
             else:
                 f = Chebyshev.fit(self.known_x, self._interp_y[idx], deg=8)
-            self._max_power.append(f(t))
+            self._max_power.append(f(self._all_t))
+
+        try:
+            await self._config_entry.runtime_data.hass.async_add_executor_job(
+                self.plot_kennfeld_to_file
+            )
+        except RuntimeError:
+            log.warning("Reconfigure powermap")
 
     def map(self, x, y):
         """Map."""
@@ -179,34 +189,29 @@ class PowerMap:
 
         return self._max_power[int(y)][int(x)]
 
+    def plot_kennfeld_to_file(self):
+        """plots the kennfeld file into png image for display"""
+        plt.plot(self._all_t, np.transpose(self._max_power))
+        plt.ylabel("Max Power")
+        plt.xlabel("°C")
+        plt.grid()
+        plt.xlim(-25, 40)
+        plt.ylim(2000, 12000)
 
-# map = PowerMap()
-
-# plt.plot(t, np.transpose(map.max_power))
-# plt.ylabel("Max Power")
-# plt.xlabel("°C")
-# plt.show()
-
-# kennfeld = {'known_x': map.known_x,
-#            'known_y': map.known_y,
-#            'known_t': map.known_t}
-
-# with open("sample1.json", "w") as outfile:
-#    outfile.write(kennfeld)
-
-
-# with open("sample2.json", "w") as outfile:
-#    json.dump(kennfeld, outfile)
-
-# with open('sample2.json', 'r') as openfile:
-
-# Reading from json file
-# json_object = json.load(openfile)
-
-# map.known_x = json_object['known_x']
-# map.known_y = json_object['known_y']
-# map.known_t = json_object['known_t']
-
-# print(map.known_x)
-# print(map.known_y)
-# print(map.known_t)
+        try:
+            filepath = (
+                self._config_entry.runtime_data.config_dir
+                + "/www/local/"
+                + CONST.DOMAIN
+                + "_powermap.png"
+            )
+            plt.savefig(filepath)
+            log.info(
+                "Write power map image file %s",
+                filepath,
+            )
+        except OSError:
+            log.warning(
+                "Error writing power map image file %s",
+                filepath,
+            )

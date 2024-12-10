@@ -7,7 +7,7 @@
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/OStrama/weishaupt_modbus/issues",
   "loggers": ["weishaupt_modbus"],
-  "requirements": ["pymodbus>=3.6.8", "aiofiles>=24.1.0", "beautifulsoup4>=4.12.3"],
+  "requirements": ["pymodbus>=3.6.8", "aiofiles>=24.1.0", "beautifulsoup4>=4.12.3", "matplotlib>=3.9.2"],
   "version": "1.0.5"
 }
 

@@ -1323,19 +1323,7 @@
         "name" : "{prefix}Voorlooptemperatuur precies (Summenvorlauf(B7))"
       },
       "vl_temp" : {
-        "name" : "{prefix}Voorloop streeftemperatuur"
-      },
-      "vl_temp2" : {
-        "name" : "{prefix}Voorloop streeftemperatuur 2"
-      },
-      "vl_temp3" : {
-        "name" : "{prefix}Voorloop streeftemperatuur 3"
-      },
-      "vl_temp4" : {
-        "name" : "{prefix}Voorloop streeftemperatuur 4"
-      },
-      "vl_temp5" : {
-        "name" : "{prefix}Voorloop streeftemperatuur 5"
+        "name" : "{prefix}aanvoertemperatuur"
       },
       "w2_konf" : {
         "name" : "{prefix}W2_Configuratie",
@@ -1547,6 +1535,21 @@
           "hp_stoerung" : "Fout",
           "hp_stoerungsfrei" : "Geen fout"
         }
+      },
+      "tagesarbeitszahl_heute": {
+        "name": "{prefix}Dagelijkse prestatiefactor vandaag"
+      },
+      "spreizung": {
+          "name": "{prefix}Spreiding"
+      },
+      "jahresarbeitszahl": {
+          "name": "{prefix}Jaarlijkse prestatiefactor"
+      },
+      "tagesarbeitszahl_gestern": {
+          "name": "{prefix}Dagelijkse prestatiefactor gisteren"
+      },
+      "monatsarbeitszahl": {
+          "name": "{prefix}Maandelijks prestatiefactor"
       },
       "ww_energie_yesterday" : {
         "name" : "{prefix}Warm water energie gisteren"
