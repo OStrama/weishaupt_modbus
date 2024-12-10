@@ -162,7 +162,7 @@ class MyWebIfCoordinator(DataUpdateCoordinator):
             # Name of the data. For logging purposes.
             name="My sensor",
             # Polling interval. Will only be polled if there are subscribers.
-            update_interval=timedelta(seconds=60),
+            update_interval=timedelta(seconds=300),
             # Set always_update to `False` if the data returned from the
             # api can be compared via `__eq__` to avoid duplicate updates
             # being dispatched to listeners
@@ -191,7 +191,7 @@ class MyWebIfCoordinator(DataUpdateCoordinator):
         try:
             # Note: asyncio.TimeoutError and aiohttp.ClientError are already
             # handled by the data update coordinator.
-            async with asyncio.timeout(500):
+            async with asyncio.timeout(600):
                 items = await self.my_api.get_info()
                 # print(items)
                 return items

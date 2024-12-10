@@ -34,7 +34,7 @@ class WebifConnection:
     _connected: bool = False
     _values = {}
     _last_api_call = 0
-    _time_between_api_calls = 30
+    _time_between_api_calls = 60
 
     def __init__(self, config_entry: MyConfigEntry) -> None:
         """Initialize the WebIf connection.

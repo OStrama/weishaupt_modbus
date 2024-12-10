@@ -287,14 +287,15 @@ class WebItem(ApiItem):
         self._webif_group: str = val
 
     def get_value(self, val):
+        if self._translation_key == "webif_info_waermepumpe_leistungsanforderung":
+            if val == "Aus":
+                return 0
+
         if self._format in [FORMATS.TEMPERATUR, FORMATS.PERCENTAGE, FORMATS.NUMBER]:
             if self._params is not None:
                 if self._params["unit"] == UnitOfVolumeFlowRate.CUBIC_METERS_PER_HOUR:
                     return val[:-4]
             return val.split(" ")[0]
-        if self._translation_key == "webif_info_waermepumpe_leistungsanforderung":
-            if val == "Aus":
-                return 0
         return val
 
 
