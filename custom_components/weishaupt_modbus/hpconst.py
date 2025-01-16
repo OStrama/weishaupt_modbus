@@ -1139,10 +1139,11 @@ PARAMS_CALCMAZ: dict = {
 PARAMS_CALCJAZ: dict = {
     "min": 0,
     "max": 50,
-    "denominator": "el_energie_jahr",
+    "val_1": "el_energie_jahr",
     "precision": 2,
     "stateclass": SensorStateClass.MEASUREMENT,
     "icon": "mdi:sigma",
+    "calculation": "val_0 / val_1",    
 }
 
 PARAMS_ALERT: dict = {"icon": "mdi:alert"}
