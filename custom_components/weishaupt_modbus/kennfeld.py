@@ -7,7 +7,6 @@ import aiofiles
 import numpy as np
 from numpy.polynomial import Chebyshev
 
-import matplotlib.pyplot as plt
 
 from .configentry import MyConfigEntry
 
@@ -25,11 +24,19 @@ except ModuleNotFoundError:
     )
     SPLINE_AVAILABLE = False
 
+
 if SPLINE_AVAILABLE is True:
     log.info(
         "Scipy available, use precise cubic spline interpolation for heating power"
     )
     from scipy.interpolate import CubicSpline  # pylint: disable=E0401
+
+MATPLOTLIB_AVAILABLE = True
+try:
+    import matplotlib.pyplot as plt
+except ModuleNotFoundError:
+    log.warning("Matplotlib not available. Can't create power map image file")
+    SPLINE_AVAILABLE = False
 
 
 class PowerMap:
@@ -172,9 +179,10 @@ class PowerMap:
             self._max_power.append(f(self._all_t))
 
         try:
-            await self._config_entry.runtime_data.hass.async_add_executor_job(
-                self.plot_kennfeld_to_file
-            )
+            if MATPLOTLIB_AVAILABLE:
+                await self._config_entry.runtime_data.hass.async_add_executor_job(
+                    self.plot_kennfeld_to_file
+                )
         except RuntimeError:
             log.warning("Reconfigure powermap")
 
