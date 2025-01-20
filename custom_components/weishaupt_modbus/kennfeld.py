@@ -36,7 +36,7 @@ try:
     import matplotlib.pyplot as plt
 except ModuleNotFoundError:
     log.warning("Matplotlib not available. Can't create power map image file")
-    SPLINE_AVAILABLE = False
+    MATPLOTLIB_AVAILABLE = False
 
 
 class PowerMap:
