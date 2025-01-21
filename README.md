@@ -1,3 +1,6 @@
+# 1.0.7
+- Removed matplotlib as a requirement due to failing installations on Raspi/ARM
+
 # 1.0.6
 - corrected calculation of JAZ
 
