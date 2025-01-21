@@ -34,6 +34,7 @@ async def main():  # noqa: D103
                 val = rr.registers[0]
         except ModbusException as exc:
             val = exc
+            print(val)
         if rr.isError():
             val = rr
         if isinstance(rr, ExceptionResponse):
