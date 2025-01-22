@@ -927,6 +927,31 @@ IO_STATUS: list[StatusItem] = [
 # Description of physical units via the status list #
 #####################################################
 
+##############################################################################################################################
+# A parameter list that can contain the following elements:
+# all of the entries are optional on general
+# "min": The lowest allowed value of the entity that can be set by the user if read/write. 
+#        Not needed for SENSOR, SELECT, SENSOR_CALC
+# "dynamic_min": The translation key of another entity of this integration. The content of this entity will be used as min val
+# "max": The highest allowed value of the entity that can be set by the user if read/write. 
+#        Not needed for SENSOR, SELECT, SENSOR_CALC
+# "dynamic_max": The translation key of another entity of this integration. The content of this entity will be used as max val
+# "step": the step when entity is r/w, values can only be set according this step
+# "divider": On modbus, values usually are coded as int. To get the real float number, 
+#            the modbus value has to be divided by this value
+# "deviceclass": one of the SensorDeviceClass entries of HomeAssistant definition
+# "precision": number of digits after the decimal point
+# "unit": the unit of the sensor. When ever possible, use one of the pre-defined units of HomeAssistant
+# "stateclass": one of the SensorStateClass types to control storage of the entity in the recorder database
+# "icon": The icon name as it is used in Home Assistant
+#
+# For SENSOR_CALC only:
+# "val_1" .. "val_8": translation keys of other entities that should be used to calculate the value of this entity
+# "calculation": A string that can be used by the eval() command to calculate the sensor value. All Python operations
+#                and the variables val_0 .. val_8 can be used here
+#                The value of the modbus address of the entity itself is available in val_0
+##############################################################################################################################
+
 PARAMS_PERCENTAGE: dict = {"min": 0, "max": 100, "precision": 0, "unit": PERCENTAGE}
 
 PARAMS_ROOMTEMP: dict = {
@@ -1160,6 +1185,29 @@ PARAMS_TIME_H: dict = {"icon": "mdi:clock-time-eight", "unit": UnitOfTime.HOURS}
 ##############################################################################################################################
 # Modbus Register List:                                                                                                      #
 # https://docs.google.com/spreadsheets/d/1EZ3QgyB41xaXo4B5CfZe0Pi8KPwzIGzK/edit?gid=1730751621#gid=1730751621                #
+##############################################################################################################################
+
+##############################################################################################################################
+# Here are some lists that represent the entities of each device that will be created.
+# Every list contains of some ModbusItem objects that have a constructor with the following parameters:
+#
+# address: The Modbus addres as it is mentioned in the heatpump's documentation
+# name:    The entity name. Please note: This entry today only is used to automatically generate translation files.
+#          It will be removed in future versions
+# mformat: One of the formats defined in FORMATS as they are TEMPERATUR, PERCENTAGE, NUMBER, STATUS or UNKNOWN
+#          The format is used to control the conversion of the modbus register entry to the entity variable and back
+# mtype:   The type of entity. Currently supported are:
+#              SENSOR: A standard sensor entity
+#              SENSOR_CALC: A "calculated" sensor. That means, the content of this entity is derived from other entities
+#                           of this integration. The definition of the calculation is done in params
+#              SELECT: A select entity
+#              NUMBER: A number entity. The value of this entity can be changed by the user interface
+#              NUMBER_RO: In principle, this is also a number entity that ir writable. But to avoid damages at the heatpump
+#                         we decided to make this entity read only. 
+# device: The devise this entity is assigned to. Devices are used here to group the entities in a meaningful way
+# params: Parameters to control the behavior of the entity, see description of the params lists
+# translation_key: The identifier that points to the right translation key. Therefore, the files strings.json and the 
+#                  language specific files in the subfolder "translations" have to be up-to-date
 ##############################################################################################################################
 
 # fmt: off
