@@ -11,7 +11,7 @@ from pymodbus import ExceptionResponse, ModbusException
 from pymodbus.client import AsyncModbusTcpClient
 
 from .configentry import MyConfigEntry
-from .const import FORMATS, TYPES, CONF
+from .const import CONF, FORMATS, TYPES
 from .items import ModbusItem
 
 logging.basicConfig()
@@ -19,10 +19,7 @@ log = logging.getLogger(__name__)
 
 
 class ModbusAPI:
-    """
-    ModbusAPI class that provides a connection to the modbus,
-    which is used by the ModbusItems.
-    """
+    """ModbusAPI class provides a connection to the modbus, which is used by the ModbusItems."""
 
     def __init__(self, config_entry: MyConfigEntry) -> None:
         """Construct ModbusAPI.
@@ -44,12 +41,11 @@ class ModbusAPI:
                 await self._modbus_client.connect()
                 if self._modbus_client.connected:
                     return self._modbus_client.connected
-                else:
-                    await asyncio.sleep(1)
-            log.info("Connection to heatpump succeeded")
+                await asyncio.sleep(1)
+            log.info("Connection to heat pump succeeded")
 
         except ModbusException:
-            log.warning("Connection to heatpump failed")
+            log.warning("Connection to heat pump failed")
             return None
         return self._modbus_client.connected
 
@@ -58,9 +54,9 @@ class ModbusAPI:
         try:
             self._modbus_client.close()
         except ModbusException:
-            log.warning("Closing connection to heatpump failed")
+            log.warning("Closing connection to heat pump failed")
             return False
-        log.info("Connection to heatpump closed")
+        log.info("Connection to heat pump closed")
         return True
 
     def get_device(self):
@@ -100,11 +96,11 @@ class ModbusObject:
                 return val
 
     def check_temperature(self, val) -> int:
-        """Check availability of temperature item and translate
-        return value to valid int
+        """Check availability of temperature item and translate return value to valid int.
 
         :param val: The value from the modbus
-        :type val: int"""
+        :type val: int
+        """
         match val:
             case -32768:
                 # No Sensor installed, remove it from the list
@@ -126,17 +122,17 @@ class ModbusObject:
                 return val
 
     def check_percentage(self, val) -> int:
-        """Check availability of percentage item and translate
-        return value to valid int
+        """Check availability of percentage item and translate.
 
+        return value to valid int
         :param val: The value from the modbus
-        :type val: int"""
+        :type val: int
+        """
         if val == 65535:
             self._modbus_item.is_invalid = True
             return None
-        else:
-            self._modbus_item.is_invalid = False
-            return val
+        self._modbus_item.is_invalid = False
+        return val
 
     def check_status(self, val) -> int:
         """Check general availability of item."""
@@ -154,11 +150,11 @@ class ModbusObject:
                 return val
 
     def validate_modbus_answer(self, mbr) -> int:
-        """Check if there's a valid answer from modbus and
-        translate it to a valid int depending from type
+        """Check if there's a valid answer from modbus and translate it to a valid int depending from type.
 
         :param mbr: The modbus response
-        :type mbr: modbus response"""
+        :type mbr: modbus response
+        """
         val = None
         if mbr.isError():
             myexception_code: ExceptionResponse = mbr
@@ -181,7 +177,7 @@ class ModbusObject:
             # THIS IS NOT A PYTHON EXCEPTION, but a valid modbus message
         if len(mbr.registers) > 0:
             val = self.check_valid_result(mbr.registers[0])
-            return val
+        return val
 
     @property
     async def value(self):
@@ -216,14 +212,15 @@ class ModbusObject:
                     str(exc),
                     str(self._modbus_item.name),
                 )
-                return None
+        return None
 
     # @value.setter
     async def setvalue(self, value) -> None:
         """Set the value of the modbus register, does nothing when not R/W.
 
         :param val: The value to write to the modbus
-        :type val: int"""
+        :type val: int
+        """
         if self._modbus_client is None:
             return
         try:

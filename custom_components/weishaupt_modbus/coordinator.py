@@ -10,7 +10,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
 from .configentry import MyConfigEntry
-from .const import CONST, TYPES, DEVICES, CONF
+from .const import CONF, CONST, DEVICES, TYPES
 from .items import ModbusItem
 from .modbusobject import ModbusAPI, ModbusObject
 from .webif_object import WebifConnection
@@ -79,7 +79,7 @@ class MyCoordinator(DataUpdateCoordinator):
         return modbus_item.state
 
     def get_value_from_item(self, translation_key: str) -> int:
-        """Read a value from another modbus item"""
+        """Read a value from another modbus item."""
         for _useless, item in enumerate(self._modbusitems):
             if item.translation_key == translation_key:
                 return item.state
@@ -100,13 +100,13 @@ class MyCoordinator(DataUpdateCoordinator):
         """Fetch all values from the modbus."""
         # if idx is not None:
         if idx is None:
-            # first run: Update all entitiies
+            # first run: Update all entities
             to_update = tuple(range(len(self._modbusitems)))
         elif len(idx) == 0:
-            # idx exists but is not yet filled up: Update all entitiys.
+            # idx exists but is not yet filled up: Update all entities.
             to_update = tuple(range(len(self._modbusitems)))
         else:
-            # idx exists and is filled up: Update only entitys requested by the coordinator.
+            # idx exists and is filled up: Update only entities requested by the coordinator.
             to_update = idx
 
         # await self._modbus_api.connect()
@@ -141,7 +141,7 @@ class MyCoordinator(DataUpdateCoordinator):
             # data retrieved from API.
             try:
                 # listening_idx = set(self.async_contexts())
-                return await self.fetch_data()  # !!!!!using listening_idx will result in some entities nevwer updated !!!!!
+                return await self.fetch_data()  # !!!!!using listening_idx will result in some entities never updated !!!!!
             except ModbusException:
                 log.warning("connection to the heatpump failed")
 

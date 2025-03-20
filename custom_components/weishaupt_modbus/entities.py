@@ -1,4 +1,4 @@
-"""Entity classes used in this integration"""
+"""Entity classes used in this integration."""
 
 import logging
 
@@ -106,7 +106,7 @@ class MyEntity(Entity):
                 self._attr_icon = icon
 
     def set_min_max(self, onlydynamic: bool = False):
-        """sets min max to fixed or dynamic values"""
+        """Set min max to fixed or dynamic values."""
         if self._api_item.params is None:
             return
 
@@ -137,7 +137,7 @@ class MyEntity(Entity):
             self._attr_native_max_value = self._api_item.params.get("max", 999999)
 
     def translate_val(self, val) -> float:
-        """Translate modbus value into sensful format."""
+        """Translate modbus value into senseful format."""
         if self._api_item.format == FORMATS.STATUS:
             return self._api_item.get_translation_key_from_number(val)
 
@@ -252,55 +252,55 @@ class MyCalcSensorEntity(MySensorEntity):
         if self._api_item.params is None:
             return None
         if "val_1" in self._calculation_source:
-            val_1 = self._config_entry.runtime_data.coordinator.get_value_from_item(  # noqa F841 pylint: disable=W0612
+            val_1 = self._config_entry.runtime_data.coordinator.get_value_from_item(  # noqa: F841 pylint: disable=unused-variable
                 self._api_item.params.get("val_1", 1)
             )
         if "val_2" in self._calculation_source:
-            val_2 = self._config_entry.runtime_data.coordinator.get_value_from_item(  # noqa F841 pylint: disable=W0612
+            val_2 = self._config_entry.runtime_data.coordinator.get_value_from_item(  # noqa: F841 pylint: disable=unused-variable
                 self._api_item.params.get("val_2", 1)
             )
         if "val_3" in self._calculation_source:
-            val_3 = self._config_entry.runtime_data.coordinator.get_value_from_item(  # noqa F841 pylint: disable=W0612
+            val_3 = self._config_entry.runtime_data.coordinator.get_value_from_item(  # noqa: F841 pylint: disable=unused-variable
                 self._api_item.params.get("val_3", 1)
             )
         if "val_4" in self._calculation_source:
-            val_4 = self._config_entry.runtime_data.coordinator.get_value_from_item(  # noqa F841 pylint: disable=W0612
+            val_4 = self._config_entry.runtime_data.coordinator.get_value_from_item(  # noqa: F841 pylint: disable=unused-variable
                 self._api_item.params.get("val_4", 1)
             )
         if "val_5" in self._calculation_source:
-            val_5 = self._config_entry.runtime_data.coordinator.get_value_from_item(  # noqa F841 pylint: disable=W0612
+            val_5 = self._config_entry.runtime_data.coordinator.get_value_from_item(  # noqa: F841 pylint: disable=unused-variable
                 self._api_item.params.get("val_5", 1)
             )
         if "val_6" in self._calculation_source:
-            val_6 = self._config_entry.runtime_data.coordinator.get_value_from_item(  # noqa F841 pylint: disable=W0612
+            val_6 = self._config_entry.runtime_data.coordinator.get_value_from_item(  # noqa: F841 pylint: disable=unused-variable
                 self._api_item.params.get("val_6", 1)
             )
         if "val_7" in self._calculation_source:
-            val_7 = self._config_entry.runtime_data.coordinator.get_value_from_item(  # noqa F841 pylint: disable=W0612
+            val_7 = self._config_entry.runtime_data.coordinator.get_value_from_item(  # noqa: F841 pylint: disable=unused-variable
                 self._api_item.params.get("val_7", 1)
             )
         if "val_8" in self._calculation_source:
-            val_8 = self._config_entry.runtime_data.coordinator.get_value_from_item(  # noqa F841 pylint: disable=W0612
+            val_8 = self._config_entry.runtime_data.coordinator.get_value_from_item(  # noqa: F841 pylint: disable=unused-variable
                 self._api_item.params.get("val_8", 1)
             )
         if "power" in self._calculation_source:
-            power = self._config_entry.runtime_data.powermap  # noqa F841 pylint: disable=W0612
+            power = self._config_entry.runtime_data.powermap  # noqa: F841 pylint: disable=unused-variable
 
         try:
-            val_0 = val / self._divider  # noqa F841 pylint: disable=W0612
-            y = eval(self._calculation)  # pylint: disable=W0123
+            val_0 = val / self._divider  # noqa: F841 pylint: disable=unused-variable
+            y = eval(self._calculation)  # pylint: disable=eval-used  # noqa: S307
         except ZeroDivisionError:
             return None
         except NameError:
             log.warning("Variable not defined %s", self._calculation_source)
             return None
         except TypeError:
-            log.warning("No valid calulation string")
+            log.warning("No valid calculation string")
             return None
         return round(y, self._attr_suggested_display_precision)
 
 
-class MyNumberEntity(CoordinatorEntity, NumberEntity, MyEntity):  # pylint: disable=W0223
+class MyNumberEntity(CoordinatorEntity, NumberEntity, MyEntity):  # pylint: disable=abstract-method
     """Represent a Number Entity.
 
     Class that represents a sensor entity derived from Sensorentity
@@ -337,7 +337,7 @@ class MyNumberEntity(CoordinatorEntity, NumberEntity, MyEntity):  # pylint: disa
         return MyEntity.my_device_info(self)
 
 
-class MySelectEntity(CoordinatorEntity, SelectEntity, MyEntity):  # pylint: disable=W0223
+class MySelectEntity(CoordinatorEntity, SelectEntity, MyEntity):  # pylint: disable=abstract-method
     """Class that represents a sensor entity.
 
     Class that represents a sensor entity derived from Sensorentity
@@ -351,7 +351,7 @@ class MySelectEntity(CoordinatorEntity, SelectEntity, MyEntity):  # pylint: disa
         coordinator: MyCoordinator,
         idx,
     ) -> None:
-        """Initialze MySelectEntity."""
+        """Initialize MySelectEntity."""
         super().__init__(coordinator, context=idx)
         self._idx = idx
         MyEntity.__init__(self, config_entry, modbus_item, coordinator.modbus_api)
@@ -360,7 +360,7 @@ class MySelectEntity(CoordinatorEntity, SelectEntity, MyEntity):  # pylint: disa
         ]
         # option list build from the status list of the ModbusItem
         self.options = []
-        for _useless, item in enumerate(self._api_item._resultlist):
+        for _useless, item in enumerate(self._api_item._resultlist):  # noqa: SLF001
             self.options.append(item.translation_key)
         self._attr_current_option = "FEHLER"
 
@@ -445,7 +445,7 @@ class MyWebifSensorEntity(CoordinatorEntity, SensorEntity, MyEntity):
         except KeyError:
             log.warning("Key Error: %s", self._api_item.name)
 
-    async def async_turn_on(self, **kwargs):  # pylint: disable=W0613
+    async def async_turn_on(self, **kwargs):  # pylint: disable=unused-argument
         """Turn the light on.
 
         Example method how to request data updates.
