@@ -5,8 +5,8 @@ from datetime import timedelta
 
 from homeassistant.const import (
     CONF_HOST,
-    CONF_PORT,
     CONF_PASSWORD,
+    CONF_PORT,
     CONF_PREFIX,
     CONF_USERNAME,
 )
@@ -14,7 +14,7 @@ from homeassistant.const import (
 
 @dataclass(frozen=True)
 class ConfConstants:
-    """Constants used for configurastion"""
+    """Constants used for configuration."""
 
     HOST = CONF_HOST
     PORT = CONF_PORT

@@ -1,14 +1,15 @@
 """Heatpump constants."""
 
 import copy
+
 from homeassistant.components.sensor import SensorDeviceClass, SensorStateClass
 from homeassistant.const import (
-    UnitOfTime,
+    PERCENTAGE,
     UnitOfEnergy,
     UnitOfPower,
     UnitOfTemperature,
+    UnitOfTime,
     UnitOfVolumeFlowRate,
-    PERCENTAGE,
 )
 
 from .const import DEVICES, FORMATS, TYPES
@@ -30,8 +31,8 @@ reverse_device_list: dict[str, str] = {
 }
 
 ################################################################################
-# Listen mit Fehlermeldungen, Warnmeldungen und Statustexte
-# Beschreibungstext ist ebenfalls möglich
+# Lists with error messages, warning messages, and status texts
+# Description text is also possible
 # class StatusItem(): def __init__(self, number, text, description = None):
 ################################################################################
 
@@ -171,7 +172,7 @@ SYS_FEHLER: list[StatusItem] = [
     StatusItem(number=182,text="Stromaufnahme zu hoch", translation_key="sys_fehler_182"),
     StatusItem(number=183,text="Stromaufnahme zu hoch", translation_key="sys_fehler_183"),
     StatusItem(number=184,text="Spannung zu hoch", translation_key="sys_fehler_184"),
-]  # noqa: E501
+]
 
 # fmt: on
 
@@ -930,14 +931,14 @@ IO_STATUS: list[StatusItem] = [
 ##############################################################################################################################
 # A parameter list that can contain the following elements:
 # all of the entries are optional on general
-# "min": The lowest allowed value of the entity that can be set by the user if read/write. 
+# "min": The lowest allowed value of the entity that can be set by the user if read/write.
 #        Not needed for SENSOR, SELECT, SENSOR_CALC
 # "dynamic_min": The translation key of another entity of this integration. The content of this entity will be used as min val
-# "max": The highest allowed value of the entity that can be set by the user if read/write. 
+# "max": The highest allowed value of the entity that can be set by the user if read/write.
 #        Not needed for SENSOR, SELECT, SENSOR_CALC
 # "dynamic_max": The translation key of another entity of this integration. The content of this entity will be used as max val
 # "step": the step when entity is r/w, values can only be set according this step
-# "divider": On modbus, values usually are coded as int. To get the real float number, 
+# "divider": On modbus, values usually are coded as int. To get the real float number,
 #            the modbus value has to be divided by this value
 # "deviceclass": one of the SensorDeviceClass entries of HomeAssistant definition
 # "precision": number of digits after the decimal point
@@ -1203,10 +1204,10 @@ PARAMS_TIME_H: dict = {"icon": "mdi:clock-time-eight", "unit": UnitOfTime.HOURS}
 #              SELECT: A select entity
 #              NUMBER: A number entity. The value of this entity can be changed by the user interface
 #              NUMBER_RO: In principle, this is also a number entity that ir writable. But to avoid damages at the heatpump
-#                         we decided to make this entity read only. 
+#                         we decided to make this entity read only.
 # device: The devise this entity is assigned to. Devices are used here to group the entities in a meaningful way
 # params: Parameters to control the behavior of the entity, see description of the params lists
-# translation_key: The identifier that points to the right translation key. Therefore, the files strings.json and the 
+# translation_key: The identifier that points to the right translation key. Therefore, the files strings.json and the
 #                  language specific files in the subfolder "translations" have to be up-to-date
 ##############################################################################################################################
 
@@ -1246,7 +1247,7 @@ MODBUS_WP_ITEMS: list[ModbusItem] = [
     ModbusItem( address=43108, name="Sollwert Volumenstrom Heizen", mformat=FORMATS.NUMBER, mtype=TYPES.NUMBER_RO, device=DEVICES.WP, params=PARAMS_FLOWRATE, translation_key="soll_volumenstrom_heizen"),
     ModbusItem( address=43109, name="Sollwert Volumenstrom Kühlen", mformat=FORMATS.NUMBER, mtype=TYPES.NUMBER_RO,  device=DEVICES.WP, params=PARAMS_FLOWRATE, translation_key="soll_volumenstrom_kuehlen"),
     ModbusItem( address=43110, name="Sollwert Volumenstrom Warmwasser", mformat=FORMATS.NUMBER, mtype=TYPES.NUMBER_RO, device=DEVICES.WP, params=PARAMS_FLOWRATE, translation_key="soll_volumenstrom_ww"),
-] # noqa: E501
+]
 
 MODBUS_HZ_ITEMS = [
     ModbusItem( address=31101, name="Raumsolltemperatur", mformat=FORMATS.TEMPERATUR, mtype=TYPES.SENSOR, device=DEVICES.HZ, params=PARAMS_ROOMTEMP, translation_key="raum_soll_temp"),
@@ -1267,7 +1268,7 @@ MODBUS_HZ_ITEMS = [
     ModbusItem( address=41110, name="Heizen Konstanttemperatur", mformat=FORMATS.TEMPERATUR, mtype=TYPES.NUMBER_RO, device=DEVICES.HZ, params=PARAMS_ROOMTEMP, translation_key="heiz_konstanttemp"),
     ModbusItem( address=41111, name="Heizen Konstanttemp Absenk", mformat=FORMATS.TEMPERATUR, mtype=TYPES.NUMBER_RO, device=DEVICES.HZ, params=PARAMS_ROOMTEMP, translation_key="heiz_konstanttemp_absenk"),
     ModbusItem( address=41112, name="Kühlen Konstanttemperatur", mformat=FORMATS.TEMPERATUR, mtype=TYPES.NUMBER_RO, device=DEVICES.HZ, params=PARAMS_ROOMTEMP, translation_key="kuehl_konstanttemp"),
-] # noqa: E501
+]
 
 # buils other Heizkreis Itemlists
 MODBUS_HZ2_ITEMS: list = []
@@ -1277,7 +1278,7 @@ for item in MODBUS_HZ_ITEMS:
     mbi.name = item.name + "2"
     mbi.translation_key = item.translation_key + "2"
     mbi.device = DEVICES.HZ2
-    MODBUS_HZ2_ITEMS.append(mbi)  # noqa: PERF401
+    MODBUS_HZ2_ITEMS.append(mbi)
 
 # buils other Heizkreis Itemlists
 MODBUS_HZ3_ITEMS: list = []
@@ -1287,7 +1288,7 @@ for item in MODBUS_HZ_ITEMS:
     mbi.name = item.name + "3"
     mbi.translation_key = item.translation_key + "3"
     mbi.device = DEVICES.HZ3
-    MODBUS_HZ3_ITEMS.append(mbi)  # noqa: PERF401
+    MODBUS_HZ3_ITEMS.append(mbi)
 
 # buils other Heizkreis Itemlists
 MODBUS_HZ4_ITEMS: list = []
@@ -1297,7 +1298,7 @@ for item in MODBUS_HZ_ITEMS:
     mbi.name = item.name + "4"
     mbi.translation_key = item.translation_key + "4"
     mbi.device = DEVICES.HZ4
-    MODBUS_HZ4_ITEMS.append(mbi)  # noqa: PERF401
+    MODBUS_HZ4_ITEMS.append(mbi)
 
 # buils other Heizkreis Itemlists
 MODBUS_HZ5_ITEMS: list = []
@@ -1307,7 +1308,7 @@ for item in MODBUS_HZ_ITEMS:
     mbi.name = item.name + "5"
     mbi.translation_key = item.translation_key + "5"
     mbi.device = DEVICES.HZ5
-    MODBUS_HZ5_ITEMS.append(mbi)  # noqa: PERF401
+    MODBUS_HZ5_ITEMS.append(mbi)
 
 MODBUS_WW_ITEMS: list[ModbusItem] = [
     ModbusItem( address=32101, name="Warmwassersolltemperatur", mformat=FORMATS.TEMPERATUR, mtype=TYPES.SENSOR, device=DEVICES.WW, params=PARAMS_WATERTEMP, translation_key="ww_soll_temp"),
@@ -1317,7 +1318,7 @@ MODBUS_WW_ITEMS: list[ModbusItem] = [
     ModbusItem( address=42103, name="Warmwasser Normal", mformat=FORMATS.TEMPERATUR, mtype=TYPES.NUMBER, device=DEVICES.WW, params=PARAMS_WATERTEMP_HIGH, translation_key="ww_normal"),
     ModbusItem( address=42104, name="Warmwasser Absenk", mformat=FORMATS.TEMPERATUR, mtype=TYPES.NUMBER, device=DEVICES.WW, params=PARAMS_WATERTEMP_LOW, translation_key="ww_absenk"),
     ModbusItem( address=42105, name="SG Ready Anhebung", mformat=FORMATS.TEMPERATUR, mtype=TYPES.NUMBER, device=DEVICES.WW, params=PARAMS_SGREADYTEMP, translation_key="sgr_anhebung"),
-] # noqa: E501
+]
 
 MODBUS_W2_ITEMS: list[ModbusItem] = [
     ModbusItem( address=34101, name="Status 2. WEZ", mformat=FORMATS.STATUS, mtype=TYPES.SENSOR, device=DEVICES.W2, resultlist=W2_STATUS, translation_key="status_2_wez"),
@@ -1337,7 +1338,7 @@ MODBUS_W2_ITEMS: list[ModbusItem] = [
     ModbusItem( address=44104, name="Grenztemperatur", mformat=FORMATS.TEMPERATUR, mtype=TYPES.NUMBER, device=DEVICES.W2, params=PARAMS_BIVALENZTEMP, translation_key="grenztemp"),
     ModbusItem( address=44105, name="Bivalenztemperatur", mformat=FORMATS.TEMPERATUR, mtype=TYPES.NUMBER, device=DEVICES.W2, params=PARAMS_BIVALENZTEMP, translation_key="bivalenztemp"),
     ModbusItem( address=44106, name="Bivalenztemperatur WW", mformat=FORMATS.TEMPERATUR, mtype=TYPES.NUMBER, device=DEVICES.W2, params=PARAMS_BIVALENZTEMP, translation_key="bivalenztemp_ww"),
-] # noqa: E501
+]
 
 MODBUS_ST_ITEMS: list[ModbusItem] = [
     ModbusItem( address=36101, name="Gesamt Energie heute", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="ges_energie_heute"),

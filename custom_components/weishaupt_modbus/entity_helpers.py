@@ -1,19 +1,20 @@
-"""Build entitiy List and Update Coordinator."""
+"""Build entity List and Update Coordinator."""
 
 import logging
+
 from .configentry import MyConfigEntry
-from .items import ModbusItem, WebItem
-from .modbusobject import ModbusObject
 from .const import TYPES
 from .coordinator import MyCoordinator, check_configured
-from .entities import MySensorEntity, MyCalcSensorEntity, MyNumberEntity, MySelectEntity
+from .entities import MyCalcSensorEntity, MyNumberEntity, MySelectEntity, MySensorEntity
+from .items import ModbusItem, WebItem
+from .modbusobject import ModbusObject
 
 logging.basicConfig()
 log = logging.getLogger(__name__)
 
 
 async def check_available(modbus_item: ModbusItem, config_entry: MyConfigEntry) -> bool:
-    """function checks if item is valid and available
+    """Check if item is valid and available.
 
     :param config_entry: HASS config entry
     :type config_entry: MyConfigEntry
@@ -26,9 +27,7 @@ async def check_available(modbus_item: ModbusItem, config_entry: MyConfigEntry) 
     _modbus_api = config_entry.runtime_data.modbus_api
     mbo = ModbusObject(_modbus_api, modbus_item)
     _useless = await mbo.value
-    if modbus_item.is_invalid is False:
-        return True
-    return False
+    return modbus_item.is_invalid is False
 
 
 async def build_entity_list(

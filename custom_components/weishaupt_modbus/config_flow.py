@@ -1,16 +1,19 @@
 """Config flow."""
 
 from typing import Any
+
 from aiofiles.os import scandir
 import voluptuous as vol
+
 from homeassistant import config_entries, exceptions
 from homeassistant.core import HomeAssistant
 import homeassistant.helpers.config_validation as cv
+
 from .const import CONF, CONST
 
 
 async def build_kennfeld_list(hass: HomeAssistant):
-    """Browse integration directory for kennfeld files."""
+    """Browse integration directory for heat pump operation map ("kennfeld") files."""
     kennfelder = []
     filelist = []
 
@@ -64,7 +67,7 @@ async def validate_input(data: dict) -> dict[str, Any]:
     return {"title": data["host"]}
 
 
-class ConfigFlow(config_entries.ConfigFlow, domain=CONST.DOMAIN):  # pylint: disable=W0223
+class ConfigFlow(config_entries.ConfigFlow, domain=CONST.DOMAIN):  # pylint: disable=abstract-method
     """Class config flow."""
 
     VERSION = 5
