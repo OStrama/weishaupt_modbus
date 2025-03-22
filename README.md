@@ -1,3 +1,6 @@
+# 1.0.8
+- improved English translation and some code enhancements (Thanks to Bert :-))
+  
 # 1.0.7
 - Removed matplotlib as a requirement due to failing installations on Raspi/ARM
 
