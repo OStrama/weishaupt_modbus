@@ -94,10 +94,20 @@ class MyCoordinator(DataUpdateCoordinator):
         This method will be called automatically during
         coordinator.async_config_entry_first_refresh.
         """
-        await self._modbus_api.connect()
+        if self._modbus_api._modbus_client is None:
+            log.warning(
+                "coordinator: async_setup: Modbus client is None. Returning None"
+            )
+            return None
+        status = await self._modbus_api.connect(startup=True)
+        if self._modbus_api._modbus_client.connected is False:
+            log.warning("Connection retry in asyunc_update_data failed. Returning None")
+            return None
+        # await self.fetch_data()
 
     async def fetch_data(self, idx=None):
         """Fetch all values from the modbus."""
+
         # if idx is not None:
         if idx is None:
             # first run: Update all entities
@@ -133,6 +143,20 @@ class MyCoordinator(DataUpdateCoordinator):
         This is the place to pre-process the data to lookup tables
         so entities can quickly look up their data.
         """
+        if self._modbus_api._modbus_client is None:
+            log.warning(
+                "coordinator: async_update_data: Modbus client is None. Returning None"
+            )
+            return None
+        if self._modbus_api._modbus_client.connected is False:
+            # await self._modbus_api.connect()
+            status = await self._modbus_api.connect(startup=False)
+            if status is False:
+                # log.warning(
+                #    "Connection retry in asyunc_update_data failed. Returning None"
+                # )
+                return None
+        await self.fetch_data()
         # Note: asyncio.TimeoutError and aiohttp.ClientError are already
         # handled by the data update coordinator.
         async with asyncio.timeout(10):
