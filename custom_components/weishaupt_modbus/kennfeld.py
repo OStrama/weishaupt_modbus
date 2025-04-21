@@ -1,15 +1,13 @@
 """Kennfeld."""
 
-import logging
 import json
-import aiofiles
+import logging
 
+import aiofiles
 import numpy as np
 from numpy.polynomial import Chebyshev
 
-
 from .configentry import MyConfigEntry
-
 from .const import CONF, CONST
 
 logging.basicConfig()
@@ -17,7 +15,7 @@ log = logging.getLogger(__name__)
 
 SPLINE_AVAILABLE = True
 try:
-    import scipy  # noqa F401 pylint: disable=W0611
+    import scipy  # noqa: F401 pylint: disable=unused-import
 except ModuleNotFoundError:
     log.warning(
         "Scipy not available, use less precise Chebyshef interpolation for heating power"
@@ -29,7 +27,7 @@ if SPLINE_AVAILABLE is True:
     log.info(
         "Scipy available, use precise cubic spline interpolation for heating power"
     )
-    from scipy.interpolate import CubicSpline  # pylint: disable=E0401
+    from scipy.interpolate import CubicSpline  # pylint: disable=unused-import
 
 MATPLOTLIB_AVAILABLE = True
 try:
@@ -92,7 +90,7 @@ class PowerMap:
 
     # the aim is generating a 2D power map that gives back the actual power for a certain flow temperature and a given outside temperature
     # the map should have values on every integer temperature point
-    # at first, all flow temoperatures are lineary interpolated
+    # at first, all flow temperatures are linearly interpolated
 
     _config_entry = None
     _steps = None
@@ -149,7 +147,7 @@ class PowerMap:
         self._interp_y = []
 
         # build the matrix with linear interpolated samples
-        # 1st and last row are populated by known values from diagrem, the rest is zero
+        # 1st and last row are populated by known values from diagram, the rest is zero
         self._interp_y.append(self.known_y[0])
         v = np.linspace(0, self._steps - 3, self._steps - 2)
         for _idx in v:
@@ -198,7 +196,7 @@ class PowerMap:
         return self._max_power[int(y)][int(x)]
 
     def plot_kennfeld_to_file(self):
-        """plots the kennfeld file into png image for display"""
+        """Plot the kennfeld file into png image for display."""
         plt.plot(self._all_t, np.transpose(self._max_power))
         plt.ylabel("Max Power")
         plt.xlabel("°C")

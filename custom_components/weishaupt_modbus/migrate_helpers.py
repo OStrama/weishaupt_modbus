@@ -1,19 +1,15 @@
-"""Helpers for entity migration"""
+"""Helpers for entity migration."""
 
 import logging
 
-from homeassistant.util import slugify
-from homeassistant.helpers import entity_registry as er
 from homeassistant.core import callback
+from homeassistant.helpers import entity_registry as er
+from homeassistant.util import slugify
 
-from .const import (
-    CONF,
-    CONST,
-    TYPES,
-)
+from .configentry import MyConfigEntry
+from .const import CONF, CONST, TYPES
 from .hpconst import reverse_device_list
 from .items import ModbusItem
-from .configentry import MyConfigEntry
 
 logging.basicConfig()
 log = logging.getLogger(__name__)
@@ -22,7 +18,7 @@ log = logging.getLogger(__name__)
 def create_new_entity_id(
     config_entry: MyConfigEntry, modbus_item: ModbusItem, platform: str, device: str
 ):
-    """created an entity ID according to new style"""
+    """Create an entity ID according to new style."""
     dev_postfix = "_" + config_entry.data[CONF.DEVICE_POSTFIX]
     if dev_postfix == "_":
         dev_postfix = ""
@@ -45,7 +41,7 @@ def create_new_entity_id(
 
 
 def create_unique_id(config_entry: MyConfigEntry, modbus_item: ModbusItem):
-    """created an UID according to old style"""
+    """Create an UID according to old style."""
     dev_postfix = "_" + config_entry.data[CONF.DEVICE_POSTFIX]
 
     if dev_postfix == "_":

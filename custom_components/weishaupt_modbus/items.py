@@ -1,6 +1,6 @@
 """Item classes."""
 
-from .const import TYPES, FORMATS, DeviceConstants, FormatConstants, TypeConstants
+from .const import FORMATS, TYPES, DeviceConstants, FormatConstants, TypeConstants
 
 
 class StatusItem:
@@ -92,7 +92,7 @@ class ApiItem:
         device: DeviceConstants,
         translation_key: str | None = None,
         resultlist=None,
-        params: dict = None,
+        params: dict = None,  # noqa: RUF013
     ) -> None:
         """Initialise ModbusItem."""
         self._name: str = name
@@ -189,7 +189,7 @@ class ApiItem:
         return self._resultlist
 
     def get_text_from_number(self, val: int) -> str:
-        """Get errortext from coresponding number."""
+        """Get errortext from corresponding number."""
         if val is None:
             return None
         if self._resultlist is None:
@@ -200,7 +200,7 @@ class ApiItem:
         return "unbekannt <" + str(val) + ">"
 
     def get_number_from_text(self, val: str) -> int:
-        """Get number of coresponding errortext."""
+        """Get number of corresponding errortext."""
         if self._resultlist is None:
             return None
         for _useless, item in enumerate(self._resultlist):
@@ -209,7 +209,7 @@ class ApiItem:
         return -1
 
     def get_translation_key_from_number(self, val: int) -> str:
-        """Get errortext from coresponding number."""
+        """Get errortext from corresponding number."""
         if val is None:
             return None
         if self._resultlist is None:
@@ -220,7 +220,7 @@ class ApiItem:
         return "unbekannt <" + str(val) + ">"
 
     def get_number_from_translation_key(self, val: str) -> int:
-        """Get number of coresponding errortext."""
+        """Get number of corresponding errortext."""
         if val is None:
             return None
         if self._resultlist is None:
@@ -234,7 +234,7 @@ class ApiItem:
 class WebItem(ApiItem):
     """Represents an ApiItem.
 
-    Used for generating entitys.
+    Used for generating entities.
     """
 
     _webif_group = None
@@ -248,18 +248,19 @@ class WebItem(ApiItem):
         webif_group: str,
         translation_key: str | None = None,
         resultlist=None,
-        params: dict = None,
+        params: dict = None,  # noqa: RUF013
     ) -> None:
-        """WebifItem is used to generate sensors for an Webinterface value.
+        """WebifItem is used to generate sensors for an Web interface value.
 
         Args:
-            name (str): Name of the entity
-            mformat (FormatConstants): Format of the entity
-            mtype (TypeConstants): Type of the entity
-            device (DeviceConstants): Device the entity belongs to
-            webif_group (str): Group of entitys this one should be fetched with.
-            translation_key (str, optional): Translation Key of the entity
-            resultlist (_type_, optional): Resultlist of the entity
+            name (str): Name of the entity.
+            mformat (FormatConstants): Format of the entity.
+            mtype (TypeConstants): Type of the entity.
+            device (DeviceConstants): Device the entity belongs to.
+            webif_group (str): Group of entities this one should be fetched with.
+            translation_key (str, optional): Translation key of the entity. Defaults to None.
+            resultlist (optional): Result list of the entity. Defaults to None.
+            params (dict, optional): Additional parameters for the entity. Defaults to None.
 
         """
         ApiItem.__init__(
@@ -285,6 +286,7 @@ class WebItem(ApiItem):
         self._webif_group: str = val
 
     def get_value(self, val):
+        """Get the value based on the format."""
         if self._format in [
             FORMATS.TEMPERATUR,
             FORMATS.PERCENTAGE,
@@ -307,18 +309,19 @@ class ModbusItem(ApiItem):
         device: DeviceConstants,
         translation_key: str,
         resultlist=None,
-        params: dict = None,
+        params: dict = None,  # noqa: RUF013
     ) -> None:
-        """ModbusItem is used to generate entitys.
+        """ModbusItem is used to generate entities.
 
         Args:
             address (int): Modbus Address of the item.
             name (str): Name of the entity.
-            mformat (FormatConstants): Format of the entity
+            mformat (FormatConstants): Format of the entity.
             mtype (TypeConstants): Type of the entity.
-            device (DeviceConstants): Device the entity belongs to
-            translation_key (str): Translation key of the entity
-            resultlist (_type_, optional): Resultlist of the entity_. Defaults to None.
+            device (DeviceConstants): Device the entity belongs to.
+            translation_key (str): Translation key of the entity.
+            resultlist (optional): Result list of the entity. Defaults to None.
+            params (dict, optional): Additional parameters for the entity. Defaults to None.
 
         """
         ApiItem.__init__(

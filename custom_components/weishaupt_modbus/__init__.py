@@ -2,7 +2,7 @@
 
 import json
 import logging
-# from pathlib import Path
+from pathlib import Path
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
@@ -61,7 +61,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
 
     for device in DEVICELISTS:
         for item in device:
-            itemlist.append(item)
+            itemlist.append(item)  # noqa: PERF402
 
     coordinator = MyCoordinator(
         hass=hass, my_api=mbapi, api_items=itemlist, p_config_entry=entry
@@ -244,9 +244,8 @@ def create_string_json() -> None:
 
     # load strings.json into string
     # replaced Path.open by open
-    with open(
-        file="config/custom_components/weishaupt_modbus/strings.json",
-        encoding="utf-8",
+    with Path("config/custom_components/weishaupt_modbus/strings.json").open(
+        encoding="utf-8"
     ) as file:
         data = file.read()
     # create dict from json
@@ -255,8 +254,7 @@ def create_string_json() -> None:
     data_dict["entity"] = myEntity
     # write whole json to file again
     # replaced Path.open by open
-    with open(
-        file="config/custom_components/weishaupt_modbus/strings.json",
+    with Path("config/custom_components/weishaupt_modbus/strings.json").open(
         mode="w",
         encoding="utf-8",
     ) as file:
