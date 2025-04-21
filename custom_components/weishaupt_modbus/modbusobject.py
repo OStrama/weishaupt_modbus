@@ -33,24 +33,47 @@ class ModbusAPI:
         self._ip = config_entry.data[CONF.HOST]
         self._port = config_entry.data[CONF.PORT]
         self._modbus_client = None
+        self._conneted = False
+        self._connect_pending = False
+        self._failed_reconnect_counter = 0
+        self._modbus_client = AsyncModbusTcpClient(
+            host=self._ip, port=self._port, name="Weishaupt_WBB"
+        )
 
-    async def connect(self):
+    async def connect(self, startup: bool = False):
         """Open modbus connection."""
+        if self._connect_pending:
+            log.debug("Connection to heatpump already pending")
+            return self._modbus_client.connected
         try:
-            self._modbus_client = AsyncModbusTcpClient(
-                host=self._ip, port=self._port, name="Weishaupt_WBB"
-            )
-            for _useless in range(3):
+            self._connect_pending = True
+
+            if self._failed_reconnect_counter >= 3 and not startup:
+                log.warning(
+                    "Connection to heatpump failed "
+                    + str(self._failed_reconnect_counter)
+                    + "times. Waiting 15 minutes"
+                )
+                await asyncio.sleep(120)
+            for _useless in range(2):
                 await self._modbus_client.connect()
                 if self._modbus_client.connected:
+                    log.info("Connection to heatpump succeeded")
+                    self.conneted = True
+                    self._failed_reconnect_counter = 0
+                    self._connect_pending = False
                     return self._modbus_client.connected
                 else:
-                    await asyncio.sleep(1)
-            log.info("Connection to heatpump succeeded")
-
+                    self.conneted = False
+                self._failed_reconnect_counter += 1
+                await asyncio.sleep(1)
+            self._connect_pending = False
         except ModbusException:
             log.warning("Connection to heatpump failed")
+            self._failed_reconnect_counter += 1
+            self._connect_pending = False
             return None
+        self._connect_pending = False
         return self._modbus_client.connected
 
     def close(self):
@@ -188,7 +211,6 @@ class ModbusObject:
         """Returns the value from the modbus register."""
         if self._modbus_client is None:
             return None
-
         if not self._modbus_item.is_invalid:
             try:
                 match self._modbus_item.type:
@@ -225,6 +247,8 @@ class ModbusObject:
         :param val: The value to write to the modbus
         :type val: int"""
         if self._modbus_client is None:
+            return
+        if self._modbus_client.connected is False:
             return
         try:
             match self._modbus_item.type:
