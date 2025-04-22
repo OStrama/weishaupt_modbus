@@ -99,7 +99,7 @@ class MyCoordinator(DataUpdateCoordinator):
                 "coordinator: async_setup: Modbus client is None. Returning None"
             )
             return None
-        status = await self._modbus_api.connect(startup=True)
+        await self._modbus_api.connect(startup=True)
         if self._modbus_api._modbus_client.connected is False:
             log.warning("Connection retry in asyunc_update_data failed. Returning None")
             return None
@@ -152,9 +152,9 @@ class MyCoordinator(DataUpdateCoordinator):
             # await self._modbus_api.connect()
             status = await self._modbus_api.connect(startup=False)
             if status is False:
-                # log.warning(
-                #    "Connection retry in asyunc_update_data failed. Returning None"
-                # )
+                log.warning(
+                    "Connection retry in asyunc_update_data failed. Returning None"
+                )
                 return None
         await self.fetch_data()
         # Note: asyncio.TimeoutError and aiohttp.ClientError are already

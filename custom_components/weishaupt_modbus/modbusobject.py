@@ -33,45 +33,42 @@ class ModbusAPI:
         self._conneted = False
         self._connect_pending = False
         self._failed_reconnect_counter = 0
+        self._last_connection_try = None
         self._modbus_client = AsyncModbusTcpClient(
-            host=self._ip, port=self._port, name="Weishaupt_WBB"
+            host=self._ip, port=self._port, name="Weishaupt_WBB", retries=1
         )
 
     async def connect(self, startup: bool = False):
         """Open modbus connection."""
         if self._connect_pending:
-            log.debug("Connection to heatpump already pending")
+            log.warning("Connection to heatpump already pending")
             return self._modbus_client.connected
         try:
             self._connect_pending = True
-
             if self._failed_reconnect_counter >= 3 and not startup:
                 log.warning(
-                    "Connection to heatpump failed "
-                    + str(self._failed_reconnect_counter)
-                    + "times. Waiting 15 minutes"
+                    "Connection to heatpump failed %s times. Waiting 15 minutes",
+                    str(self._failed_reconnect_counter),
                 )
-                await asyncio.sleep(120)
-            for _useless in range(2):
-                await self._modbus_client.connect()
-                if self._modbus_client.connected:
-                    log.info("Connection to heatpump succeeded")
-                    self.conneted = True
-                    self._failed_reconnect_counter = 0
-                    self._connect_pending = False
-                    return self._modbus_client.connected
-                else:
-                    self.conneted = False
+                await asyncio.sleep(300)
+            await self._modbus_client.connect()
+            if self._modbus_client.connected:
+                log.warning("Connection to heatpump succeeded")
+                self._failed_reconnect_counter = 0
+                self._connect_pending = False
+                return self._modbus_client.connected
+            else:
                 self._failed_reconnect_counter += 1
-                await asyncio.sleep(1)
-            self._connect_pending = False
+                self._connect_pending = False
+                self._modbus_client.close()
+                return self._modbus_client.connected
+
         except ModbusException:
             log.warning("Connection to heatpump failed")
             self._failed_reconnect_counter += 1
             self._connect_pending = False
-            return None
-        self._connect_pending = False
-        return self._modbus_client.connected
+            self._modbus_client.close()
+            return self._modbus_client.connected
 
     def close(self):
         """Close modbus connection."""
