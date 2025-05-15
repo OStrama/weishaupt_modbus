@@ -1,3 +1,6 @@
+# 1.0.9
+- weishaupt_modbus is now official part of HACS. It should be found in HACS without the need of adding an external repository.
+
 # 1.0.8
 - improved English translation and some code enhancements (Thanks to Bert :-))
   
