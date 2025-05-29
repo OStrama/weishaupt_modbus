@@ -50,11 +50,11 @@
    
 
 ## For users of OStrama's weishaupt_wbb integration:
- * Uninstall existing "weishaupt_wbb" installation, answer "integration and all entities of it will be deleted" with"yes"
+ * Uninstall existing "weishaupt_wbb" installation, answer "integration and all entities of it will be deleted" with "yes"
  * Restart home assistant
  * Install new weishaupt_wbb integration
  * You will get a new integration with the same name
- * the sensor entities will be the same than before
+ * the sensor entities will be the same as before
 
 All modbus parameters of this integration are concentrated in the file hpconst.py as a set of object lists.
 This allows generic setup of all entities and a more easy completion of messages and entity behavior
@@ -113,7 +113,7 @@ The "Kennfeld-File" can be choosen to read in the right power mapping according 
 
 The heat power "Wärmeleistung" is calculated from the "Leistungsanforderung" in dependency of outside temperature and water temperature. 
 This is type specific. The data stored in the integration fit to a WBB 12. If the file you've parameterized does not exist, the integration will create a file that fits for a WBB12. If you have another heat pump please update the Kennfeld-File file according to the graphs found in the documentation of your heat pump and change the name of the used file by reconfiguring the integration and change only the file name. It may be necessary to restart home assistant after changing the filename.
-When no file is available, a new file with the defined name will be created that contains the parameters read out from the graphs found in the documentation of WBB 12 in a manual way. Thsi file can be used as a template for another typer of heatpump.
+When no file is available, a new file with the defined name will be created that contains the parameters read out from the graphs found in the documentation of WBB 12 in a manual way. This file can be used as a template for another type of heatpump.
 (Note: It would be great if you could provide files from other types of heatpumps to us, so that we can integrate them in further versions ;-))
 
 
@@ -127,9 +127,9 @@ User -> Settings (second Page) -> Modbus TCP
 
 **Parameter: On**
 
-**Network**: Here you have 2 options. Either you place the IP of your HomeAssistent to exclusively allow this ip to connect to the heatpump via ModBus or you place your network to allow all the IPs in that range.
+**Network**: Here you have 2 options. Either you place the IP of your HomeAssistant to exclusively allow this ip to connect to the heatpump via ModBus or you place your network to allow all the IPs in that range.
 For example: **192.168.178.123** (Home Assistant IP) or 192.168.178.0 for all ips between 192.168.178.1 and 192.167.178.254.
-Option 1 is the savest but Option 2 enables you to connect to the heatpump from multiple devices(developing machine, or maybe my possibly upcomming dedicated android app?). I suggest to go for option 1 (HomeAssistant IP).
+Option 1 is the savest but Option 2 enables you to connect to the heatpump from multiple devices(developing machine, or maybe my possibly upcoming dedicated android app?). I suggest to go for option 1 (HomeAssistant IP).
 
 **Netmask**: Select the netmask of your network. This will be **255.255.255.000** for you otherwise you would know the correct one ;)
 
