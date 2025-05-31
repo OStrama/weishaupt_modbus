@@ -1,4 +1,4 @@
-#1.0.10
+# 1.0.10
 - connecting of modbus has been optimized (removing unneccesary warnings, fetch data using timeouts)
 - bugfixing for dynamic limits
 
