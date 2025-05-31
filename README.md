@@ -1,3 +1,7 @@
+#1.0.10
+- connecting of modbus has been optimized (removing unneccesary warnings, fetch data using timeouts)
+- bugfixing for dynamic limits
+
 # 1.0.9
 - weishaupt_modbus is now official part of HACS. It should be found in HACS without the need of adding an external repository.
 
