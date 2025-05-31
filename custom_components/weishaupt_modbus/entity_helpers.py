@@ -25,7 +25,7 @@ async def check_available(modbus_item: ModbusItem, config_entry: MyConfigEntry) 
         return False
 
     _modbus_api = config_entry.runtime_data.modbus_api
-    mbo = ModbusObject(_modbus_api, modbus_item)
+    mbo = ModbusObject(_modbus_api, modbus_item, no_connect_warn=True)
     _useless = await mbo.value
     return modbus_item.is_invalid is False
 

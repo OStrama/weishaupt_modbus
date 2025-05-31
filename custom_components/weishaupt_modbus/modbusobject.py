@@ -53,7 +53,7 @@ class ModbusAPI:
                 await asyncio.sleep(300)
             await self._modbus_client.connect()
             if self._modbus_client.connected:
-                log.warning("Connection to heatpump succeeded")
+                # log.warning("Connection to heatpump succeeded")
                 self._failed_reconnect_counter = 0
                 self._connect_pending = False
                 return self._modbus_client.connected
@@ -92,7 +92,9 @@ class ModbusObject:
     It contains a ModbusClient for setting and getting Modbus register values
     """
 
-    def __init__(self, modbus_api: ModbusAPI, modbus_item: ModbusItem) -> None:
+    def __init__(
+        self, modbus_api: ModbusAPI, modbus_item: ModbusItem, no_connect_warn=False
+    ) -> None:
         """Construct ModbusObject.
 
         :param modbus_api: The modbus API
@@ -102,6 +104,7 @@ class ModbusObject:
         """
         self._modbus_item = modbus_item
         self._modbus_client = modbus_api.get_device()
+        self._no_connect_warn = no_connect_warn
 
     def check_valid_result(self, val) -> int:
         """Check if item is available and valid."""
@@ -204,6 +207,15 @@ class ModbusObject:
     async def value(self):
         """Returns the value from the modbus register."""
         if self._modbus_client is None:
+            return None
+        if self._modbus_client.connected is False:
+            # on first check_availability call connection still not availöable, supress warning
+            if self._no_connect_warn is True:
+                return None
+            log.warning(
+                "Try to get value for %s without connection",
+                self._modbus_item.translation_key,
+            )
             return None
         if not self._modbus_item.is_invalid:
             try:

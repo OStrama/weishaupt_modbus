@@ -6,6 +6,9 @@ import logging
 import aiofiles
 import numpy as np
 from numpy.polynomial import Chebyshev
+from pathlib import Path
+
+from homeassistant.core import HomeAssistant
 
 from .configentry import MyConfigEntry
 from .const import CONF, CONST
@@ -98,9 +101,10 @@ class PowerMap:
     _interp_y = []
     _r_to_interpolate = 0
 
-    def __init__(self, config_entry: MyConfigEntry) -> None:
+    def __init__(self, config_entry: MyConfigEntry, hass: HomeAssistant) -> None:
         """Initialise the PowerMap class."""
         # try to load values from json file
+        self.hass = hass
         self._config_entry = config_entry
         self._steps = 21
         self._max_power = []
@@ -111,12 +115,8 @@ class PowerMap:
     async def initialize(self):
         """Initialize the power map."""
         try:
-            filepath = (
-                self._config_entry.runtime_data.config_dir
-                + "/custom_components/"
-                + CONST.DOMAIN
-                + "/"
-                + self._config_entry.data[CONF.KENNFELD_FILE]
+            filepath = Path(
+                get_filepath(self.hass) / self._config_entry.data[CONF.KENNFELD_FILE]
             )
             async with aiofiles.open(filepath, encoding="utf-8") as openfile:
                 raw_block = await openfile.read()
@@ -221,3 +221,16 @@ class PowerMap:
                 "Error writing power map image file %s",
                 filepath,
             )
+
+
+def get_filepath(hass: HomeAssistant) -> Path:
+    filepath = Path(hass.config.config_dir + "/custom_components/" + CONST.DOMAIN)
+
+    # on some installations custom_components resides in /core/
+    if not Path.exists(filepath):
+        filepath = Path(Path(__file__).resolve().parent)
+
+    # we do not find any path..
+    if not Path.exists(filepath):
+        return None
+    return filepath

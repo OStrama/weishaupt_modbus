@@ -39,6 +39,8 @@ class MyEntity(Entity):
     _attr_has_entity_name = True
     _dynamic_min = None
     _dynamic_max = None
+    _has_dynamic_min = False
+    _has_dynamic_max = False
 
     def __init__(
         self,
@@ -98,6 +100,12 @@ class MyEntity(Entity):
                 self._attr_suggested_display_precision = self._api_item.params.get(
                     "precision", 2
                 )
+                self._attr_native_min_value = self._api_item.params.get("min", -999999)
+                self._attr_native_max_value = self._api_item.params.get("max", 999999)
+                if self._api_item.params.get("dynamic_min", None) is not None:
+                    self._has_dynamic_min = True
+                if self._api_item.params.get("dynamic_max", None) is not None:
+                    self._has_dynamic_max = True
             self.set_min_max()
 
         if self._api_item.params is not None:
@@ -111,30 +119,26 @@ class MyEntity(Entity):
             return
 
         if onlydynamic is True:
-            if (self._dynamic_min is None) & (self._dynamic_max is None):
+            if (self._has_dynamic_min is False) & (self._has_dynamic_max is False):
                 return
 
-        self._dynamic_min = (
-            self._config_entry.runtime_data.coordinator.get_value_from_item(
-                self._api_item.params.get("dynamic_min", None)
+        if self._has_dynamic_min:
+            self._dynamic_min = (
+                self._config_entry.runtime_data.coordinator.get_value_from_item(
+                    self._api_item.params.get("dynamic_min", None)
+                )
             )
-        )
+            if self._dynamic_min is not None:
+                self._attr_native_min_value = self._dynamic_min / self._divider
 
-        self._dynamic_max = (
-            self._config_entry.runtime_data.coordinator.get_value_from_item(
-                self._api_item.params.get("dynamic_max", None)
+        if self._has_dynamic_max:
+            self._dynamic_max = (
+                self._config_entry.runtime_data.coordinator.get_value_from_item(
+                    self._api_item.params.get("dynamic_max", None)
+                )
             )
-        )
-
-        if self._dynamic_min is not None:
-            self._attr_native_min_value = self._dynamic_min / self._divider
-        else:
-            self._attr_native_min_value = self._api_item.params.get("min", -999999)
-
-        if self._dynamic_max is not None:
-            self._attr_native_max_value = self._dynamic_max / self._divider
-        else:
-            self._attr_native_max_value = self._api_item.params.get("max", 999999)
+            if self._dynamic_max is not None:
+                self._attr_native_max_value = self._dynamic_max / self._divider
 
     def translate_val(self, val) -> float:
         """Translate modbus value into senseful format."""

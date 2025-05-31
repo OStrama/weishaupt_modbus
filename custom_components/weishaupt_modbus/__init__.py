@@ -77,7 +77,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
         powermap=None,
     )
 
-    pwrmap = PowerMap(entry)
+    pwrmap = PowerMap(entry, hass)
     await pwrmap.initialize()
     entry.runtime_data.powermap = pwrmap
 

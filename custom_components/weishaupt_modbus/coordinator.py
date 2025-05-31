@@ -119,7 +119,13 @@ class MyCoordinator(DataUpdateCoordinator):
             # idx exists and is filled up: Update only entities requested by the coordinator.
             to_update = idx
 
-        # await self._modbus_api.connect()
+        ret = await self.save_connect()
+        if ret is False:
+            log.warning(
+                "coordinator: fetch_data: Could not establish modbus cconnection"
+            )
+            return
+
         for index in to_update:
             item = self._modbusitems[index]
             # At setup the coordinator has to be called before buildentitylist.
@@ -137,26 +143,35 @@ class MyCoordinator(DataUpdateCoordinator):
                     ):
                         await self.get_value(item)
 
+    async def save_connect(self) -> bool:
+        """Establish modbus connection."""
+        if self._modbus_api._modbus_client is None:
+            log.warning(
+                "coordinator: async_update_data: Modbus client is None. Returning None"
+            )
+            return False
+        if self._modbus_api._modbus_client.connected is False:
+            status = await self._modbus_api.connect(startup=False)
+            if status is False:
+                log.warning(
+                    "Connection retry in asyunc_update_data failed. Returning None"
+                )
+                return False
+        return True
+
     async def _async_update_data(self):
         """Fetch data from API endpoint.
 
         This is the place to pre-process the data to lookup tables
         so entities can quickly look up their data.
         """
-        if self._modbus_api._modbus_client is None:
+        ret = await self.save_connect()
+        if ret is False:
             log.warning(
-                "coordinator: async_update_data: Modbus client is None. Returning None"
+                "coordinator: async_update_data: Could not establish modbus cconnection"
             )
             return None
-        if self._modbus_api._modbus_client.connected is False:
-            # await self._modbus_api.connect()
-            status = await self._modbus_api.connect(startup=False)
-            if status is False:
-                log.warning(
-                    "Connection retry in asyunc_update_data failed. Returning None"
-                )
-                return None
-        await self.fetch_data()
+        # await self.fetch_data()
         # Note: asyncio.TimeoutError and aiohttp.ClientError are already
         # handled by the data update coordinator.
         async with asyncio.timeout(10):
