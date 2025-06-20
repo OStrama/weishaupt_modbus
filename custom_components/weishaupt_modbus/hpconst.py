@@ -329,12 +329,12 @@ SYS_BETRIEBSANZEIGE: list[StatusItem] = [
     ),
     StatusItem(
         number=37,
-        text="Heizbetrieb SGR2",
+        text="Heizbetrieb SGR",
         translation_key="system_operationmode_heating_sgr",
     ),
     StatusItem(
         number=39,
-        text="Warmwasserbetrieb SGR2",
+        text="Warmwasserbetrieb SGR",
         translation_key="system_operationmode_hotwater_sgr",
     ),
     StatusItem(
@@ -504,12 +504,12 @@ HP_BETRIEB: list[StatusItem] = [
     ),
     StatusItem(
         number=37,
-        text="Heizbetrieb SGR2",
+        text="Heizbetrieb SGR",
         translation_key="heatpump_operationmode_heating_sgr",
     ),
     StatusItem(
         number=39,
-        text="Warmwasserbetrieb SGR2",
+        text="Warmwasserbetrieb SGR",
         translation_key="heatpump_operationmode_hotwater_sgr",
     ),
     StatusItem(
