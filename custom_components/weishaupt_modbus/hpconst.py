@@ -328,6 +328,16 @@ SYS_BETRIEBSANZEIGE: list[StatusItem] = [
         translation_key="system_operationmode_regenerativeflow",
     ),
     StatusItem(
+        number=37,
+        text="Heizbetrieb SGR",
+        translation_key="system_operationmode_heating_sgr",
+    ),
+    StatusItem(
+        number=39,
+        text="Warmwasserbetrieb SGR",
+        translation_key="system_operationmode_hotwater_sgr",
+    ),
+    StatusItem(
         number=43,
         text="Ölrückführung",
         translation_key="system_operationmode_oilrecirculation",
@@ -491,6 +501,16 @@ HP_BETRIEB: list[StatusItem] = [
     ),
     StatusItem(
         number=35, text="Absenk", translation_key="heatpump_operationmode_lowering"
+    ),
+    StatusItem(
+        number=37,
+        text="Heizbetrieb SGR",
+        translation_key="heatpump_operationmode_heating_sgr",
+    ),
+    StatusItem(
+        number=39,
+        text="Warmwasserbetrieb SGR",
+        translation_key="heatpump_operationmode_hotwater_sgr",
     ),
     StatusItem(
         number=43,
