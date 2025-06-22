@@ -1,5 +1,5 @@
 # 1.0.11
-- Update dependencys [link](https://github.com/OStrama/weishaupt_modbus/issues/104)
+- Update dependencies [link](https://github.com/OStrama/weishaupt_modbus/issues/104)
 - Merge SGR Status [link](https://github.com/OStrama/weishaupt_modbus/pull/103)
 
 # 1.0.10
