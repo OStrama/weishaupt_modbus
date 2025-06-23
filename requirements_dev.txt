@@ -1,4 +1,6 @@
 -r requirements.txt
+homeassistant==2025.6.1
 colorlog==6.9.0
 ruff==0.12.0
 wheel
+pip>=25.1.1

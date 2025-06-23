@@ -27,19 +27,28 @@
         "github.vscode-github-actions",
         "GitHub.vscode-pull-request-github",
         "GitHub.copilot",
+        "mhutchie.git-graph",
         "donjayamanne.python-extension-pack",
         "njpwerner.autodocstring",
         "batisteo.vscode-django",
         "ryanluker.vscode-coverage-gutters"
       ],
       "settings": {
-        "python.experiments.optOutFrom": ["pythonTestAdapter"],
+        "python.experiments.optOutFrom": [
+          "pythonTestAdapter"
+        ],
         "python.defaultInterpreterPath": "/home/vscode/.local/ha-venv/bin/python",
+        "python.pythonPath": "/home/vscode/.local/ha-venv/bin/python",
         "python.terminal.activateEnvInCurrentTerminal": true,
-        "python.testing.pytestArgs": ["--no-cov"],
+        "python.terminal.activateEnvironment": true,
+        "python.testing.pytestArgs": [
+          "--no-cov"
+        ],
         "pylint.importStrategy": "fromEnvironment",
+        "ruff.nativeServer": "on",
+        "ruff.formatting": "on",
+        "ruff.linting": "on",
         "python.analysis.autoSearchPaths": false,
-        "python.pythonPath": "/usr/bin/python3",
         "python.terminal.shellIntegration.enabled": true,
         "python.analysis.supportAllPythonDocuments": true,
         "[python]": {
@@ -65,7 +74,9 @@
         "terminal.integrated.defaultProfile.linux": "bash",
         "json.schemas": [
           {
-            "fileMatch": ["${containerWorkspaceFolder}/custom_components/weishaupt_modbus/manifest.json"],
+            "fileMatch": [
+              "${containerWorkspaceFolder}/custom_components/weishaupt_modbus/manifest.json"
+            ],
             "url": "${containerWorkspaceFolder}/script/json_schemas/manifest_schema.json"
           }
         ]
