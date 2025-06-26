@@ -6,12 +6,8 @@ license-files = ["LICENSE", "LICENSE"]
 description = "HA integration lets you monitor and control your weishaupt heatpump through modbus"
 readme = "README.md"
 authors = [
-  { name = "OStrama", 
-    email = ""
-  }, 
-  { name = "MadOne",
-    email = "" 
-  },
+    {   name = "OStrama",  email = "none@none.com" },
+    {   name = "MadOne",   email = "none@none.com" }
 ]
 keywords = ["home", "automation"]
 classifiers = [
