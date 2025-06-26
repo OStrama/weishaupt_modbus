@@ -4,16 +4,15 @@ import asyncio
 from datetime import timedelta
 import logging
 
-from pymodbus import ModbusException
+from configentry import MyConfigEntry
+from const import CONF, CONST, DEVICES, TYPES
+from items import ModbusItem
+from modbusobject import ModbusAPI, ModbusObject
+from pymodbus.exceptions import ModbusException
+from webif_object import WebifConnection
 
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
-
-from .configentry import MyConfigEntry
-from .const import CONF, CONST, DEVICES, TYPES
-from .items import ModbusItem
-from .modbusobject import ModbusAPI, ModbusObject
-from .webif_object import WebifConnection
 
 logging.basicConfig()
 log = logging.getLogger(__name__)
@@ -47,7 +46,7 @@ class MyCoordinator(DataUpdateCoordinator):
         self,
         hass: HomeAssistant,
         my_api: ModbusAPI,
-        api_items: ModbusItem,
+        api_items: list[ModbusItem],
         p_config_entry: MyConfigEntry,
     ) -> None:
         """Initialize my coordinator."""
@@ -78,7 +77,7 @@ class MyCoordinator(DataUpdateCoordinator):
             modbus_item.state = await mbo.value
         return modbus_item.state
 
-    def get_value_from_item(self, translation_key: str) -> int:
+    def get_value_from_item(self, translation_key: str) -> int | None:
         """Read a value from another modbus item."""
         for _useless, item in enumerate(self._modbusitems):
             if item.translation_key == translation_key:
@@ -238,7 +237,8 @@ class MyWebIfCoordinator(DataUpdateCoordinator):
                 # return await self.my_api.return_test_data()
                 return await self.my_api.get_info()
         except TimeoutError:
-            logging.debug(msg="Timeout while fetching data")
+            logger = logging.getLogger(__name__)
+            logger.debug(msg="Timeout while fetching data")
         # except ApiAuthError as err:
         # Raising ConfigEntryAuthFailed will cancel future updates
         # and start a config flow with SOURCE_REAUTH (async_step_reauth)

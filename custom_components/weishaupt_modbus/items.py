@@ -1,6 +1,6 @@
 """Item classes."""
 
-from .const import FORMATS, TYPES, DeviceConstants, FormatConstants, TypeConstants
+from const import FORMATS, TYPES, DeviceConstants, FormatConstants, TypeConstants
 
 
 class StatusItem:
@@ -26,10 +26,10 @@ class StatusItem:
         self._number = number
         self._text = text
         self._description = description
-        self._translation_key = translation_key
+        self._translation_key = translation_key if translation_key is not None else ""
 
     @property
-    def number(self) -> int:
+    def number(self) -> int | None:
         """Return number."""
         return self._number
 
@@ -39,7 +39,7 @@ class StatusItem:
         self._number = value
 
     @property
-    def text(self) -> str:
+    def text(self) -> str | None:
         """Return text."""
         return self._text
 
@@ -48,7 +48,7 @@ class StatusItem:
         self._text = value
 
     @property
-    def description(self) -> str:
+    def description(self) -> str | None:
         """Return description."""
         return self._description
 
@@ -74,7 +74,7 @@ class ApiItem:
     """
 
     _name = "empty"
-    _format = None
+    _format = ["unknown"]
     _type = TYPES.SENSOR
     _resultlist = None
     _device = None
@@ -102,12 +102,12 @@ class ApiItem:
         self._resultlist = resultlist
         self._state = None
         self._is_invalid = False
-        self._translation_key = translation_key
+        self._translation_key = translation_key if translation_key is not None else ""
         self._params = params
         self._divider = 1
 
     @property
-    def params(self) -> dict:
+    def params(self) -> dict | None:
         """Return state."""
         return self._params
 
@@ -188,7 +188,7 @@ class ApiItem:
         """Return resultlist."""
         return self._resultlist
 
-    def get_text_from_number(self, val: int) -> str:
+    def get_text_from_number(self, val: int) -> str | None:
         """Get errortext from corresponding number."""
         if val is None:
             return None
@@ -199,7 +199,7 @@ class ApiItem:
                 return item.text
         return "unbekannt <" + str(val) + ">"
 
-    def get_number_from_text(self, val: str) -> int:
+    def get_number_from_text(self, val: str) -> int | None:
         """Get number of corresponding errortext."""
         if self._resultlist is None:
             return None
@@ -208,7 +208,7 @@ class ApiItem:
                 return item.number
         return -1
 
-    def get_translation_key_from_number(self, val: int) -> str:
+    def get_translation_key_from_number(self, val: int) -> str | None:
         """Get errortext from corresponding number."""
         if val is None:
             return None
@@ -219,7 +219,7 @@ class ApiItem:
                 return item.translation_key
         return "unbekannt <" + str(val) + ">"
 
-    def get_number_from_translation_key(self, val: str) -> int:
+    def get_number_from_translation_key(self, val: str) -> int | None:
         """Get number of corresponding errortext."""
         if val is None:
             return None
@@ -237,7 +237,7 @@ class WebItem(ApiItem):
     Used for generating entities.
     """
 
-    _webif_group = None
+    _webif_group = str(None)
 
     def __init__(
         self,
@@ -298,7 +298,7 @@ class WebItem(ApiItem):
 class ModbusItem(ApiItem):
     """Represents an Modbus item."""
 
-    _address = None
+    _address = ""
 
     def __init__(
         self,
@@ -334,14 +334,14 @@ class ModbusItem(ApiItem):
             resultlist=resultlist,
             params=params,
         )
-        self._address: str = address
+        self._address: str = str(address)
 
     @property
     def address(self) -> int:
         """Return address."""
-        return self._address
+        return int(self._address)
 
     @address.setter
     def address(self, val: int):
         """Set address."""
-        self._address = val
+        self._address = str(val)

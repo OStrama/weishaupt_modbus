@@ -7,12 +7,11 @@ It contains a ModbusClient for setting and getting Modbus register values
 import asyncio
 import logging
 
+from configentry import MyConfigEntry
+from const import CONF, FORMATS, TYPES
+from items import ModbusItem
 from pymodbus import ExceptionResponse, ModbusException
 from pymodbus.client import AsyncModbusTcpClient
-
-from .configentry import MyConfigEntry
-from .const import CONF, FORMATS, TYPES
-from .items import ModbusItem
 
 logging.basicConfig()
 log = logging.getLogger(__name__)
@@ -29,7 +28,6 @@ class ModbusAPI:
         """
         self._ip = config_entry.data[CONF.HOST]
         self._port = config_entry.data[CONF.PORT]
-        self._modbus_client = None
         self._conneted = False
         self._connect_pending = False
         self._failed_reconnect_counter = 0
@@ -106,7 +104,7 @@ class ModbusObject:
         self._modbus_client = modbus_api.get_device()
         self._no_connect_warn = no_connect_warn
 
-    def check_valid_result(self, val) -> int:
+    def check_valid_result(self, val) -> int | None:
         """Check if item is available and valid."""
         match self._modbus_item.format:
             case FORMATS.TEMPERATUR:
@@ -119,7 +117,7 @@ class ModbusObject:
                 self._modbus_item.is_invalid = False
                 return val
 
-    def check_temperature(self, val) -> int:
+    def check_temperature(self, val) -> int | None:
         """Check availability of temperature item and translate return value to valid int.
 
         :param val: The value from the modbus
@@ -145,7 +143,7 @@ class ModbusObject:
                 self._modbus_item.is_invalid = False
                 return val
 
-    def check_percentage(self, val) -> int:
+    def check_percentage(self, val) -> int | None:
         """Check availability of percentage item and translate.
 
         return value to valid int
@@ -173,7 +171,7 @@ class ModbusObject:
             case _:
                 return val
 
-    def validate_modbus_answer(self, mbr) -> int:
+    def validate_modbus_answer(self, mbr) -> int | None:
         """Check if there's a valid answer from modbus and translate it to a valid int depending from type.
 
         :param mbr: The modbus response
@@ -223,12 +221,12 @@ class ModbusObject:
                     case TYPES.SENSOR | TYPES.SENSOR_CALC:
                         # Sensor entities are read-only
                         mbr = await self._modbus_client.read_input_registers(
-                            self._modbus_item.address, slave=1
+                            address=self._modbus_item.address, slave=1
                         )
                         return self.validate_modbus_answer(mbr)
                     case TYPES.SELECT | TYPES.NUMBER | TYPES.NUMBER_RO:
                         mbr = await self._modbus_client.read_holding_registers(
-                            self._modbus_item.address, slave=1
+                            address=self._modbus_item.address, slave=1
                         )
                         return self.validate_modbus_answer(mbr)
                     case _:
@@ -264,8 +262,8 @@ class ModbusObject:
                     return
                 case _:
                     await self._modbus_client.write_register(
-                        self._modbus_item.address,
-                        self.check_valid_response(value),
+                        address=self._modbus_item.address,
+                        value=self.check_valid_response(value),
                         slave=1,
                     )
         except ModbusException:
