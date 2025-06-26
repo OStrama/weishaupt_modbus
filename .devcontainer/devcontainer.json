@@ -3,17 +3,6 @@
   "context": "..",
   "dockerFile": "../Dockerfile.dev",
   "postCreateCommand": "scripts/post-create.sh",
-  "appPort": ["9125:8123"],
-  "portsAttributes": {
-    "8123": {
-      "label": "Home Assistant internal",
-      "onAutoForward": "notify"
-    },
-    "9125": {
-      "label": "Home Assistant remote",
-      "onAutoForward": "notify"
-    }
-  },
   "customizations": {
     "vscode": {
       "extensions": [
@@ -22,6 +11,7 @@
         "ms-python.python",
         "ms-python.vscode-pylance",
         "visualstudioexptteam.vscodeintellicode",
+        "ms-python.mypy-type-checker",
         "redhat.vscode-yaml",
         "esbenp.prettier-vscode",
         "github.vscode-github-actions",

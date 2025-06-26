@@ -8,13 +8,11 @@
   "documentation": "https://github.com/OStrama/weishaupt_modbus/",
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/OStrama/weishaupt_modbus/issues",
-  "loggers": [
-    "weishaupt_modbus"
-  ],
+  "loggers": ["weishaupt_modbus"],
   "requirements": [
     "pymodbus>=3.9.2",
     "aiofiles>=24.1.0",
-    "beautifulsoup4>=4.13.3"
+    "beautifulsoup4>=4.13.4"
   ],
   "version": "1.0.11"
 }
