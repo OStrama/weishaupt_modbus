@@ -327,12 +327,6 @@ enable = [
   #"useless-suppression",  # temporarily every now and then to clean them up
   "use-symbolic-message-instead",
 ]
-per-file-ignores = [
-  # redefined-outer-name: Tests reference fixtures in the test function
-  # use-implicit-booleaness-not-comparison: Tests need to validate that a list
-  # or a dict is returned
-  "/tests/:redefined-outer-name,use-implicit-booleaness-not-comparison",
-]
 
 [tool.pylint.REPORTS]
 score = false
