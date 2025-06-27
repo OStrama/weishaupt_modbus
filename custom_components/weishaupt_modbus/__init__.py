@@ -8,7 +8,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
 from .configentry import MyConfigEntry, MyData
-from .const import CONF, CONST, DEVICENAMES, FORMATS, TYPES
+from .const import CONF, CONST, DEVICENAMES, FormatConstants, TypeConstants
 from .coordinator import MyCoordinator
 from .hpconst import (
     DEVICELISTS,
@@ -64,7 +64,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
             itemlist.append(item)  # noqa: PERF402
 
     coordinator = MyCoordinator(
-        hass=hass, my_api=mbapi, api_items=itemlist, p_config_entry=entry
+        hass=hass, my_api=mbapi, api_items=itemlist, config_entry=entry
     )
     # await coordinator.async_config_entry_first_refresh()
 
@@ -188,50 +188,71 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
 def create_string_json() -> None:
     """Create strings.json from hpconst.py."""
-    item: ModbusItem = None
-    myStatusItem: StatusItem = None
-    myEntity = {}
-    myJson = {}
-    mySensors = {}
-    myNumbers = {}
-    mySelects = {}
+    from typing import Any, Optional
+
+    item: Optional[ModbusItem] = None
+    myStatusItem: Optional[StatusItem] = None
+    myEntity: dict[str, Any] = {}
+    myJson: dict[str, Any] = {}
+    mySensors: dict[str, Any] = {}
+    myNumbers: dict[str, Any] = {}
+    mySelects: dict[str, Any] = {}
 
     # generate list of all mbitems
-    DEVICELIST = []
+    DEVICELIST: list[ModbusItem] = []
     for devicelist in DEVICELISTS:
         DEVICELIST = DEVICELIST + devicelist
 
     for item in DEVICELIST:
         match item.type:
-            case TYPES.SENSOR | TYPES.NUMBER_RO | TYPES.SENSOR_CALC:
-                mySensor = {}
+            case (
+                TypeConstants.SENSOR
+                | TypeConstants.NUMBER_RO
+                | TypeConstants.SENSOR_CALC
+            ):
+                mySensor: dict[str, Any] = {}
                 mySensor["name"] = "{prefix}" + item.name
                 if item.resultlist is not None:
-                    if item.format is FORMATS.STATUS:
-                        myValues = {}
+                    if item.format is FormatConstants.STATUS:
+                        myValues: dict[str, str] = {}
                         for myStatusItem in item.resultlist:
-                            myValues[myStatusItem.translation_key] = myStatusItem.text
+                            if myStatusItem is not None:
+                                myValues[myStatusItem.translation_key] = (
+                                    str(myStatusItem.text)
+                                    if myStatusItem.text is not None
+                                    else ""
+                                )
                         mySensor["state"] = myValues.copy()
                 mySensors[item.translation_key] = mySensor.copy()
-            case TYPES.NUMBER:
-                myNumber = {}
+            case TypeConstants.NUMBER:
+                myNumber: dict[str, Any] = {}
                 myNumber["name"] = "{prefix}" + item.name
                 if item.resultlist is not None:
-                    if item.format is FORMATS.STATUS:
-                        myValues = {}
+                    if item.format is FormatConstants.STATUS:
+                        myNValues: dict[str, str] = {}
                         for myStatusItem in item.resultlist:
-                            myValues[myStatusItem.translation_key] = myStatusItem.text
-                        myNumber["value"] = myValues.copy()
+                            if myStatusItem is not None:
+                                myNValues[myStatusItem.translation_key] = (
+                                    str(myStatusItem.text)
+                                    if myStatusItem.text is not None
+                                    else ""
+                                )
+                        myNumber["value"] = myNValues.copy()
                 myNumbers[item.translation_key] = myNumber.copy()
-            case TYPES.SELECT:
-                mySelect = {}
+            case TypeConstants.SELECT:
+                mySelect: dict[str, Any] = {}
                 mySelect["name"] = "{prefix}" + item.name
                 if item.resultlist is not None:
-                    if item.format is FORMATS.STATUS:
-                        myValues = {}
+                    if item.format is FormatConstants.STATUS:
+                        mySValues: dict[str, str] = {}
                         for myStatusItem in item.resultlist:
-                            myValues[myStatusItem.translation_key] = myStatusItem.text
-                        mySelect["state"] = myValues.copy()
+                            if myStatusItem is not None:
+                                mySValues[myStatusItem.translation_key] = (
+                                    str(myStatusItem.text)
+                                    if myStatusItem.text is not None
+                                    else ""
+                                )
+                        mySelect["state"] = mySValues.copy()
                 mySelects[item.translation_key] = mySelect.copy()
     myEntity["sensor"] = mySensors
     myEntity["number"] = myNumbers

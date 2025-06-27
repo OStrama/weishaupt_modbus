@@ -3,19 +3,21 @@
 import asyncio
 from datetime import timedelta
 import logging
+from typing import Any
 
-from configentry import MyConfigEntry
-from const import CONF, CONST, DEVICES, TYPES
-from items import ModbusItem
-from modbusobject import ModbusAPI, ModbusObject
 from pymodbus.exceptions import ModbusException
-from webif_object import WebifConnection
 
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
+from .configentry import MyConfigEntry
+from .const import CONF, CONST, DeviceConstants, TypeConstants
+from .items import ModbusItem
+from .modbusobject import ModbusAPI, ModbusObject
+from .webif_object import WebifConnection
+
 logging.basicConfig()
-log = logging.getLogger(__name__)
+_LOGGER = logging.getLogger(__name__)
 
 
 async def check_configured(
@@ -28,18 +30,18 @@ async def check_configured(
     :param config_entry: HASS config entry
     :type config_entry: MyConfigEntry
     """
-    if modbus_item.device is DEVICES.HZ2:
+    if modbus_item.device is DeviceConstants.HZ2:
         return config_entry.data[CONF.HK2]
-    if modbus_item.device is DEVICES.HZ3:
+    if modbus_item.device is DeviceConstants.HZ3:
         return config_entry.data[CONF.HK3]
-    if modbus_item.device is DEVICES.HZ4:
+    if modbus_item.device is DeviceConstants.HZ4:
         return config_entry.data[CONF.HK4]
-    if modbus_item.device is DEVICES.HZ5:
+    if modbus_item.device is DeviceConstants.HZ5:
         return config_entry.data[CONF.HK5]
     return True
 
 
-class MyCoordinator(DataUpdateCoordinator):
+class MyCoordinator(DataUpdateCoordinator[dict[str, Any]]):
     """My custom coordinator."""
 
     def __init__(
@@ -47,14 +49,14 @@ class MyCoordinator(DataUpdateCoordinator):
         hass: HomeAssistant,
         my_api: ModbusAPI,
         api_items: list[ModbusItem],
-        p_config_entry: MyConfigEntry,
+        config_entry: MyConfigEntry,
     ) -> None:
         """Initialize my coordinator."""
         super().__init__(
             hass,
-            log,
+            _LOGGER,
             # Name of the data. For logging purposes.
-            name="weishaupt-coordinator",
+            name=CONST.DOMAIN,
             # Polling interval. Will only be polled if there are subscribers.
             update_interval=CONST.SCAN_INTERVAL,
             # Set always_update to `False` if the data returned from the
@@ -66,7 +68,8 @@ class MyCoordinator(DataUpdateCoordinator):
         self._device = None
         self._modbusitems = api_items
         self._number_of_items = len(api_items)
-        self._config_entry = p_config_entry
+        self._config_entry = config_entry
+        self.hass = hass
 
     async def get_value(self, modbus_item: ModbusItem):
         """Read a value from the modbus."""
@@ -84,7 +87,7 @@ class MyCoordinator(DataUpdateCoordinator):
                 return item.state
         return None
 
-    async def _async_setup(self):
+    async def _async_setup(self) -> None:
         """Set up the coordinator.
 
         This is the place to set up your coordinator,
@@ -94,17 +97,19 @@ class MyCoordinator(DataUpdateCoordinator):
         coordinator.async_config_entry_first_refresh.
         """
         if self._modbus_api._modbus_client is None:
-            log.warning(
+            _LOGGER.warning(
                 "coordinator: async_setup: Modbus client is None. Returning None"
             )
-            return None
+            return
         await self._modbus_api.connect(startup=True)
         if self._modbus_api._modbus_client.connected is False:
-            log.warning("Connection retry in asyunc_update_data failed. Returning None")
-            return None
+            _LOGGER.warning(
+                "Connection retry in asyunc_update_data failed. Returning None"
+            )
+            return
         # await self.fetch_data()
 
-    async def fetch_data(self, idx=None):
+    async def fetch_data(self, idx=None) -> None:
         """Fetch all values from the modbus."""
 
         # if idx is not None:
@@ -120,7 +125,7 @@ class MyCoordinator(DataUpdateCoordinator):
 
         ret = await self.save_connect()
         if ret is False:
-            log.warning(
+            _LOGGER.warning(
                 "coordinator: fetch_data: Could not establish modbus cconnection"
             )
             return
@@ -134,31 +139,31 @@ class MyCoordinator(DataUpdateCoordinator):
                     # here the entities are created with the parameters provided
                     # by the ModbusItem object
                     case (
-                        TYPES.SENSOR
-                        | TYPES.NUMBER_RO
-                        | TYPES.NUMBER
-                        | TYPES.SELECT
-                        | TYPES.SENSOR_CALC
+                        TypeConstants.SENSOR
+                        | TypeConstants.NUMBER_RO
+                        | TypeConstants.NUMBER
+                        | TypeConstants.SELECT
+                        | TypeConstants.SENSOR_CALC
                     ):
                         await self.get_value(item)
 
     async def save_connect(self) -> bool:
         """Establish modbus connection."""
         if self._modbus_api._modbus_client is None:
-            log.warning(
+            _LOGGER.warning(
                 "coordinator: async_update_data: Modbus client is None. Returning None"
             )
             return False
         if self._modbus_api._modbus_client.connected is False:
             status = await self._modbus_api.connect(startup=False)
             if status is False:
-                log.warning(
+                _LOGGER.warning(
                     "Connection retry in asyunc_update_data failed. Returning None"
                 )
                 return False
         return True
 
-    async def _async_update_data(self):
+    async def _async_update_data(self) -> dict[str, Any]:
         """Fetch data from API endpoint.
 
         This is the place to pre-process the data to lookup tables
@@ -166,10 +171,10 @@ class MyCoordinator(DataUpdateCoordinator):
         """
         ret = await self.save_connect()
         if ret is False:
-            log.warning(
+            _LOGGER.warning(
                 "coordinator: async_update_data: Could not establish modbus cconnection"
             )
-            return None
+            return {}
         # await self.fetch_data()
         # Note: asyncio.TimeoutError and aiohttp.ClientError are already
         # handled by the data update coordinator.
@@ -179,24 +184,26 @@ class MyCoordinator(DataUpdateCoordinator):
             # data retrieved from API.
             try:
                 # listening_idx = set(self.async_contexts())
-                return await self.fetch_data()  # !!!!!using listening_idx will result in some entities never updated !!!!!
+                await self.fetch_data()  # !!!!!using listening_idx will result in some entities never updated !!!!!
+                return {"status": "success", "timestamp": self.hass.loop.time()}
             except ModbusException:
-                log.warning("connection to the heatpump failed")
+                _LOGGER.warning("connection to the heatpump failed")
+                return {}
 
     @property
-    def modbus_api(self) -> str:
+    def modbus_api(self) -> ModbusAPI:
         """Return modbus_api."""
         return self._modbus_api
 
 
-class MyWebIfCoordinator(DataUpdateCoordinator):
+class MyWebIfCoordinator(DataUpdateCoordinator[dict[str, Any]]):
     """My custom coordinator."""
 
     def __init__(self, hass: HomeAssistant, config_entry: MyConfigEntry) -> None:
         """Initialize my coordinator."""
         super().__init__(
             hass=hass,
-            logger=log,
+            logger=_LOGGER,
             # Name of the data. For logging purposes.
             name="My sensor",
             # Polling interval. Will only be polled if there are subscribers.
@@ -206,10 +213,15 @@ class MyWebIfCoordinator(DataUpdateCoordinator):
             # being dispatched to listeners
             always_update=True,
         )
-        self.my_api: WebifConnection = config_entry.runtime_data.webif_api
+        webif_api = config_entry.runtime_data.webif_api
+        if not isinstance(webif_api, WebifConnection):
+            raise TypeError(
+                "config_entry.runtime_data.webif_api must be a WebifConnection instance"
+            )
+        self.my_api: WebifConnection = webif_api
         # self._device: MyDevice | None = None
 
-    async def _async_setup(self):
+    async def _async_setup(self) -> None:
         """Set up the coordinator.
 
         This is the place to set up your coordinator,
@@ -220,7 +232,9 @@ class MyWebIfCoordinator(DataUpdateCoordinator):
         """
         # self._device = await self.my_api.get_device()
 
-    async def _async_update_data(self):
+    async def _async_update_data(
+        self,
+    ) -> dict[str, Any]:  # types: ignore[func-returns-value]
         """Fetch data from API endpoint.
 
         This is the place to pre-process the data to lookup tables
@@ -235,10 +249,14 @@ class MyWebIfCoordinator(DataUpdateCoordinator):
                 # data retrieved from API.
                 # listening_idx = set(self.async_contexts())
                 # return await self.my_api.return_test_data()
-                return await self.my_api.get_info()
+                result = await self.my_api.get_info()
+                if result is None:
+                    return {}  # type: ignore[func-returns-value]
+                return result  # type: ignore[func-returns-value]
         except TimeoutError:
             logger = logging.getLogger(__name__)
             logger.debug(msg="Timeout while fetching data")
+            return {}  # type: ignore[func-returns-value]
         # except ApiAuthError as err:
         # Raising ConfigEntryAuthFailed will cancel future updates
         # and start a config flow with SOURCE_REAUTH (async_step_reauth)

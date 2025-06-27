@@ -1,6 +1,8 @@
 """Item classes."""
 
-from const import FORMATS, TYPES, DeviceConstants, FormatConstants, TypeConstants
+from typing import Any, Optional
+
+from .const import DeviceConstants, FormatConstants, TypeConstants
 
 
 class StatusItem:
@@ -10,9 +12,9 @@ class StatusItem:
     especially when searching backwards. (At least I don't know how...)
     """
 
-    _number = None
-    _text = None
-    _description = None
+    _number: Optional[int] = None
+    _text: Optional[str] = None
+    _description: Optional[str] = None
     _translation_key: str = ""
 
     def __init__(
@@ -73,16 +75,16 @@ class ApiItem:
     This can either be a ModbusItem or a WebifItem
     """
 
-    _name = "empty"
-    _format = ["unknown"]
-    _type = TYPES.SENSOR
-    _resultlist = None
-    _device = None
-    _state = None
-    _is_invalid = False
+    _name: str = "empty"
+    _format: FormatConstants = FormatConstants.UNKNOWN
+    _type: TypeConstants = TypeConstants.SENSOR
+    _resultlist: Optional[Any] = None
+    _device: Optional[Any] = None
+    _state: Optional[Any] = None
+    _is_invalid: bool = False
     _translation_key: str = ""
-    _params = None
-    _divider = 1
+    _params: Optional[dict[str, Any]] = None
+    _divider: int = 1
 
     def __init__(
         self,
@@ -90,38 +92,39 @@ class ApiItem:
         mformat: FormatConstants,
         mtype: TypeConstants,
         device: DeviceConstants,
-        translation_key: str | None = None,
-        resultlist=None,
-        params: dict = None,  # noqa: RUF013
+        translation_key: Optional[str] = None,
+        resultlist: Optional[Any] = None,
+        params: Optional[dict[str, Any]] = None,
     ) -> None:
         """Initialise ModbusItem."""
-        self._name: str = name
-        self._format: FormatConstants = mformat
-        self._type: TypeConstants = mtype
-        self._device: DeviceConstants = device
+        self._name = name
+        self._format = mformat
+        self._type = mtype
+        self._device = device
         self._resultlist = resultlist
         self._state = None
         self._is_invalid = False
-        self._translation_key = translation_key if translation_key is not None else ""
+        self._translation_key = translation_key or ""
         self._params = params
         self._divider = 1
 
     @property
-    def params(self) -> dict | None:
+    def params(self) -> dict[str, Any]:
         """Return state."""
-        return self._params
+        return self._params if self._params is not None else {}
 
     @params.setter
-    def params(self, val: dict):
-        self._params = val
+    def params(self, value: dict[str, Any]) -> None:
+        """Set params."""
+        self._params = value
 
     @property
-    def divider(self) -> dict:
+    def divider(self) -> int:
         """Return state."""
         return self._divider
 
     @divider.setter
-    def divider(self, val: dict):
+    def divider(self, val: int):
         self._divider = val
 
     @property
@@ -159,12 +162,12 @@ class ApiItem:
         return self._format
 
     @property
-    def type(self):
+    def type(self) -> TypeConstants:
         """Return type."""
         return self._type
 
     @property
-    def device(self) -> DeviceConstants:
+    def device(self) -> Optional[DeviceConstants]:
         """Return device."""
         return self._device
 
@@ -175,7 +178,7 @@ class ApiItem:
 
     @property
     def translation_key(self) -> str:
-        """Return translation_key."""
+        """Return translation key."""
         return self._translation_key
 
     @translation_key.setter
@@ -184,7 +187,7 @@ class ApiItem:
         self._translation_key = val
 
     @property
-    def resultlist(self):
+    def resultlist(self) -> Optional[Any]:
         """Return resultlist."""
         return self._resultlist
 
@@ -237,7 +240,7 @@ class WebItem(ApiItem):
     Used for generating entities.
     """
 
-    _webif_group = str(None)
+    _webif_group: str = ""
 
     def __init__(
         self,
@@ -246,9 +249,9 @@ class WebItem(ApiItem):
         mtype: TypeConstants,
         device: DeviceConstants,
         webif_group: str,
-        translation_key: str | None = None,
-        resultlist=None,
-        params: dict = None,  # noqa: RUF013
+        translation_key: Optional[str] = None,
+        resultlist: Optional[Any] = None,
+        params: Optional[dict[str, Any]] = None,
     ) -> None:
         """WebifItem is used to generate sensors for an Web interface value.
 
@@ -263,17 +266,10 @@ class WebItem(ApiItem):
             params (dict, optional): Additional parameters for the entity. Defaults to None.
 
         """
-        ApiItem.__init__(
-            self=self,
-            name=name,
-            mformat=mformat,
-            mtype=mtype,
-            device=device,
-            translation_key=translation_key,
-            resultlist=resultlist,
-            params=params,
+        super().__init__(
+            name, mformat, mtype, device, translation_key, resultlist, params
         )
-        self._webif_group: str = webif_group
+        self._webif_group = webif_group
 
     @property
     def webif_group(self) -> str:
@@ -283,13 +279,13 @@ class WebItem(ApiItem):
     @webif_group.setter
     def webif_group(self, val: str) -> None:
         """Set webif_group."""
-        self._webif_group: str = val
+        self._webif_group = val
 
     def get_value(self, val):
         """Get the value based on the format."""
         if self._format in [
-            FORMATS.TEMPERATUR,
-            FORMATS.PERCENTAGE,
+            FormatConstants.TEMPERATUR,
+            FormatConstants.PERCENTAGE,
         ]:
             return val.split(" ")[0]
         return val
@@ -298,7 +294,7 @@ class WebItem(ApiItem):
 class ModbusItem(ApiItem):
     """Represents an Modbus item."""
 
-    _address = ""
+    _address: int = 0
 
     def __init__(
         self,
@@ -307,9 +303,9 @@ class ModbusItem(ApiItem):
         mformat: FormatConstants,
         mtype: TypeConstants,
         device: DeviceConstants,
-        translation_key: str,
-        resultlist=None,
-        params: dict = None,  # noqa: RUF013
+        translation_key: Optional[str] = None,
+        resultlist: Optional[Any] = None,
+        params: Optional[dict[str, Any]] = None,
     ) -> None:
         """ModbusItem is used to generate entities.
 
@@ -324,24 +320,17 @@ class ModbusItem(ApiItem):
             params (dict, optional): Additional parameters for the entity. Defaults to None.
 
         """
-        ApiItem.__init__(
-            self=self,
-            name=name,
-            mformat=mformat,
-            mtype=mtype,
-            device=device,
-            translation_key=translation_key,
-            resultlist=resultlist,
-            params=params,
+        super().__init__(
+            name, mformat, mtype, device, translation_key, resultlist, params
         )
-        self._address: str = str(address)
+        self._address = address
 
     @property
     def address(self) -> int:
         """Return address."""
-        return int(self._address)
+        return self._address
 
     @address.setter
-    def address(self, val: int):
+    def address(self, value: int) -> None:  # Fix: Accept int, not str
         """Set address."""
-        self._address = str(val)
+        self._address = value

@@ -1,16 +1,20 @@
-"""Scan all possible modbus registers for a value."""
+"""Module for testing Modbus communication with a remote device."""
 
 import asyncio
+from pathlib import Path
 
-from pymodbus import ExceptionResponse, ModbusException, pymodbus_apply_logging_config
-import pymodbus.client as AsyncModbusTcpClient
+from pymodbus import pymodbus_apply_logging_config
+from pymodbus.client import AsyncModbusTcpClient
+from pymodbus.exceptions import ModbusException
+from pymodbus.pdu import ExceptionResponse
+from pymodbus.pdu.pdu import ModbusPDU
 
 
 async def main():  # noqa: D103
     pymodbus_apply_logging_config("DEBUG")
     host = "192.168.42.144"  # 10.10.1.225"
     port = 502
-    client = AsyncModbusTcpClient.AsyncModbusTcpClient(
+    client = AsyncModbusTcpClient(
         host=host,
         port=port,
         timeout=10,
@@ -25,89 +29,129 @@ async def main():  # noqa: D103
     input_register = range(30001, 39999)
     holding_register = range(40001, 49999)
 
-    file = open(file="register.txt", mode="w", encoding="UTF-8")  # noqa: ASYNC230
+    with Path("register.txt").open(mode="w", encoding="UTF-8") as file:  # noqa: ASYNC230
+        file.write("Binary out\n\n")
 
-    file.write("Binary out\n\n")
+        # Process binary outputs
+        for register in binary_out:
+            val = await read_coil_register(client, register)
+            file.write(f"{register};{val}\n")
 
-    for register in binary_out:
-        try:
-            rr = await client.read_coils(address=register, count=1, slave=1)
-            if len(rr.registers) > 0:
-                val = rr.registers[0]
-                print(rr)  # noqa: T201
-        except ModbusException as exc:
-            val = exc
-            print(val)  # noqa: T201
-        if rr.isError():  # type: ignore
-            val = rr  # type: ignore
-        if isinstance(rr, ExceptionResponse):  # type: ignore
-            val = rr
+        file.write("Binary in: \n\n")
 
-        file.write(str(register) + ";" + str(val) + "\n")  # type: ignore
+        # Process binary inputs
+        for register in binary_in:
+            val = await read_coil_register(client, register)
+            if val is not None and not isinstance(val, (Exception, ExceptionResponse)):
+                file.write(f"{register};{val}\n")
 
-    file.write("Binary in: \n\n")
+        file.write("Input Register: \n\n")
 
-    for register in binary_in:
-        writeit = False
-        try:
-            rr = await client.read_coils(address=register, count=1, slave=1)
-            print(rr)  # noqa: T201
-        except ModbusException as exc:
-            val = exc
-            print(val)  # noqa: T201
-        if rr.isError() or isinstance(rr, ExceptionResponse):  # type: ignore
-            val = rr  # type: ignore
-            writeit = False
-        elif len(rr.registers) > 0:  # type: ignore
-            val = rr.registers[0]  # type: ignore
-            writeit = True
+        # Process input registers
+        for register in input_register:
+            val = await read_input_register(client, register)
+            if val is not None and not isinstance(val, (Exception, ExceptionResponse)):
+                file.write(f"{register};{val}\n")
 
-        if writeit is True:
-            file.write(str(register) + ";" + str(val) + "\n")  # type: ignore
+        file.write("Holding Register: \n\n")
 
-    file.write("Input Register: \n\n")
-
-    for register in input_register:
-        writeit = False
-        try:
-            rr = await client.read_input_registers(address=register, count=1, slave=1)
-            print(rr)  # noqa: T201
-        except ModbusException as exc:
-            val = exc
-            print(val)  # noqa: T201
-        if rr.isError() or isinstance(rr, ExceptionResponse):  # type: ignore
-            val = rr  # type: ignore
-            writeit = False
-        elif len(rr.registers) > 0:  # type: ignore
-            val = rr.registers[0]  # type: ignore
-            writeit = True
-
-        if writeit is True:
-            file.write(str(register) + ";" + str(val) + "\n")  # type: ignore
-
-    file.write("Holding Register: \n\n")
-
-    for register in holding_register:
-        writeit = False
-        try:
-            rr = await client.read_holding_registers(address=register, count=1, slave=1)
-            print(rr)  # noqa: T201
-        except ModbusException as exc:
-            val = exc
-            print(val)  # noqa: T201
-        if rr.isError() or isinstance(rr, ExceptionResponse):  # type: ignore
-            val = rr  # type: ignore
-            writeit = False
-        elif len(rr.registers) > 0:  # type: ignore
-            val = rr.registers[0]  # type: ignore
-            writeit = True
-
-        if writeit is True:
-            file.write(str(register) + ";" + str(val) + "\n")  # type: ignore
+        # Process holding registers
+        for register in holding_register:
+            val = await read_holding_register(client, register)
+            if val is not None and not isinstance(val, (Exception, ExceptionResponse)):
+                file.write(f"{register};{val}\n")
 
     client.close()
 
 
+async def read_coil_register(
+    client: AsyncModbusTcpClient, register: int
+) -> bool | Exception | ExceptionResponse | ModbusPDU | None:
+    """Read a single coil register and return the value or error."""
+    try:
+        response = await client.read_coils(address=register, count=1, slave=1)
+
+        if response is None:
+            return None
+
+        if hasattr(response, "isError") and response.isError():
+            return response
+
+        if isinstance(response, ExceptionResponse):
+            return response
+
+        if hasattr(response, "bits") and len(response.bits) > 0:
+            return response.bits[0]
+
+        return None
+
+    except ModbusException as exc:
+        print(f"Modbus error reading coil {register}: {exc}")
+        return exc
+    except Exception as exc:
+        print(f"General error reading coil {register}: {exc}")
+        return exc
+
+
+async def read_input_register(
+    client: AsyncModbusTcpClient, register: int
+) -> int | Exception | ExceptionResponse | ModbusPDU | None:
+    """Read a single input register and return the value or error."""
+    try:
+        response = await client.read_input_registers(address=register, count=1, slave=1)
+
+        if response is None:
+            return None
+
+        if hasattr(response, "isError") and response.isError():
+            return response
+
+        if isinstance(response, ExceptionResponse):
+            return response
+
+        if hasattr(response, "registers") and len(response.registers) > 0:
+            return response.registers[0]
+
+        return None
+
+    except ModbusException as exc:
+        print(f"Modbus error reading input register {register}: {exc}")
+        return exc
+    except Exception as exc:
+        print(f"General error reading input register {register}: {exc}")
+        return exc
+
+
+async def read_holding_register(
+    client: AsyncModbusTcpClient, register: int
+) -> int | Exception | ExceptionResponse | ModbusPDU | None:
+    """Read a single holding register and return the value or error."""
+    try:
+        response = await client.read_holding_registers(
+            address=register, count=1, slave=1
+        )
+
+        if response is None:
+            return None
+
+        if hasattr(response, "isError") and response.isError():
+            return response
+
+        if isinstance(response, ExceptionResponse):
+            return response
+
+        if hasattr(response, "registers") and len(response.registers) > 0:
+            return response.registers[0]
+
+        return None
+
+    except ModbusException as exc:
+        print(f"Modbus error reading holding register {register}: {exc}")
+        return exc
+    except Exception as exc:
+        print(f"General error reading holding register {register}: {exc}")
+        return exc
+
+
 if __name__ == "__main__":
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(main())
+    asyncio.run(main())

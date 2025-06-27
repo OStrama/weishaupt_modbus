@@ -7,9 +7,9 @@ from homeassistant.helpers import entity_registry as er
 from homeassistant.util import slugify
 
 from .configentry import MyConfigEntry
-from .const import CONF, CONST, TYPES
+from .const import CONF, CONST, TypeConstants
 from .hpconst import reverse_device_list
-from .items import ModbusItem
+from .items import ModbusItem, WebItem
 
 logging.basicConfig()
 log = logging.getLogger(__name__)
@@ -31,7 +31,7 @@ def create_new_entity_id(
         name_device_prefix = ""
 
     if config_entry.data[CONF.NAME_TOPIC_PREFIX]:
-        name_topic_prefix = reverse_device_list[modbus_item.device] + "_"
+        name_topic_prefix = reverse_device_list[str(modbus_item.device)] + "_"
     else:
         name_topic_prefix = ""
 
@@ -40,7 +40,7 @@ def create_new_entity_id(
     return str(platform + "." + slugify(device_name + "_" + entity_name))
 
 
-def create_unique_id(config_entry: MyConfigEntry, modbus_item: ModbusItem):
+def create_unique_id(config_entry: MyConfigEntry, modbus_item: ModbusItem | WebItem):
     """Create an UID according to old style."""
     dev_postfix = "_" + config_entry.data[CONF.DEVICE_POSTFIX]
 
@@ -53,7 +53,7 @@ def create_unique_id(config_entry: MyConfigEntry, modbus_item: ModbusItem):
 @callback
 def migrate_entities(
     config_entry: MyConfigEntry,
-    modbusitems: ModbusItem,
+    modbusitems: list[ModbusItem],
     device: str,
 ):
     """Build entity list.
@@ -65,16 +65,25 @@ def migrate_entities(
     """
     # return
 
-    entity_registry = er.async_get(config_entry.runtime_data.hass)
+    hass_instance = config_entry.runtime_data.hass
+    if hass_instance is None:
+        log.error("HomeAssistant instance is None in config_entry.runtime_data.hass")
+        return
+
+    entity_registry = er.async_get(hass_instance)
 
     for _useless, item in enumerate(modbusitems):
         platform = ""
         match item.type:
-            case TYPES.SENSOR | TYPES.NUMBER_RO | TYPES.SENSOR_CALC:
+            case (
+                TypeConstants.SENSOR
+                | TypeConstants.NUMBER_RO
+                | TypeConstants.SENSOR_CALC
+            ):
                 platform = "sensor"
-            case TYPES.SELECT:
+            case TypeConstants.SELECT:
                 platform = "select"
-            case TYPES.NUMBER:
+            case TypeConstants.NUMBER:
                 platform = "number"
 
         old_uid = create_unique_id(config_entry, item)
