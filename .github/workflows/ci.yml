@@ -1,0 +1,208 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      lint-only:
+        description: "Only run lint checks"
+        default: false
+        type: boolean
+      pylint-only:
+        description: "Only run pylint"
+        default: false
+        type: boolean
+      mypy-only:
+        description: "Only run mypy"
+        default: false
+        type: boolean
+
+env:
+  CACHE_VERSION: 3
+  UV_CACHE_VERSION: 1
+  MYPY_CACHE_VERSION: 1
+  HA_SHORT_VERSION: "2025.7"
+  DEFAULT_PYTHON: "3.13"
+  ALL_PYTHON_VERSIONS: "['3.13']"
+  PRE_COMMIT_CACHE: ~/.cache/pre-commit
+  UV_CACHE_DIR: /tmp/uv-cache
+  PYTHONASYNCIODEBUG: 1
+  HASS_CI: 1
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  info:
+    name: Collect information & changes data
+    outputs:
+      test_full_suite: ${{ steps.info.outputs.test_full_suite }}
+      changed_files: ${{ steps.changes.outputs.custom_components }}
+      # pre-commit_cache_key: ${{ steps.generate_pre-commit_cache_key.outputs.key }}
+      python_cache_key: ${{ steps.generate_python_cache_key.outputs.key }}
+      python_versions: ${{ steps.info.outputs.python_versions }}
+      lint_only: ${{ steps.info.outputs.lint_only }}
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out code from GitHub
+        uses: actions/checkout@v4.2.2
+
+      - name: Filter for custom component changes
+        uses: dorny/paths-filter@v3.0.2
+        id: changes
+        with:
+          filters: |
+            custom_components:
+              - 'custom_components/**'
+              - 'tests/**'
+              - 'requirements*.txt'
+              - 'pyproject.toml'
+              # - '.pre-commit-config.yaml'
+
+      - name: Set run info
+        id: info
+        run: |
+          if [[ "${{ github.event_name }}" == "schedule" ]]; then
+            echo "test_full_suite=true" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.event.inputs.lint-only }}" == "true" ]]; then
+            echo "lint_only=true" >> $GITHUB_OUTPUT
+          else
+            echo "test_full_suite=${{ steps.changes.outputs.custom_components }}" >> $GITHUB_OUTPUT
+          fi
+          echo "python_versions=${{ env.ALL_PYTHON_VERSIONS }}" >> $GITHUB_OUTPUT
+
+      # - name: Generate pre-commit cache key
+      #   id: generate_pre-commit_cache_key
+      #   run: |
+      #     echo "key=pre-commit-${{ env.CACHE_VERSION }}-${{ hashFiles('.pre-commit-config.yaml') }}" >> $GITHUB_OUTPUT
+
+      - name: Generate Python cache key
+        id: generate_python_cache_key
+        run: |
+          echo "key=python-${{ env.UV_CACHE_VERSION }}-${{ hashFiles('requirements*.txt', 'pyproject.toml') }}" >> $GITHUB_OUTPUT
+
+  lint:
+    name: Run linters
+    needs: info
+    if: needs.info.outputs.test_full_suite == 'true' || needs.info.outputs.lint_only == 'true'
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out code from GitHub
+        uses: actions/checkout@v4.2.2
+
+      - name: Set up Python ${{ env.DEFAULT_PYTHON }}
+        uses: actions/setup-python@v5.3.0
+        with:
+          python-version: ${{ env.DEFAULT_PYTHON }}
+
+      - name: Restore Python cache
+        uses: actions/cache@v4.1.2
+        with:
+          path: ${{ env.UV_CACHE_DIR }}
+          key: ${{ needs.info.outputs.python_cache_key }}
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Install dependencies
+        run: |
+          uv pip install --system -r requirements_dev.txt
+
+      # - name: Cache pre-commit environment
+      #   uses: actions/cache@v4.1.2
+      #   with:
+      #     path: ${{ env.PRE_COMMIT_CACHE }}
+      #     key: ${{ needs.info.outputs.pre-commit_cache_key }}
+
+      # - name: Run pre-commit
+      #   run: |
+      #     pre-commit run --all-files --show-diff-on-failure
+
+      - name: Run ruff format check
+        run: |
+          ruff format --check custom_components/
+
+      - name: Run ruff lint
+        run: |
+          ruff check custom_components/
+
+  mypy:
+    name: Check typing with mypy
+    needs: info
+    if: needs.info.outputs.test_full_suite == 'true' || github.event.inputs.mypy-only == 'true'
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out code from GitHub
+        uses: actions/checkout@v4.2.2
+
+      - name: Set up Python ${{ env.DEFAULT_PYTHON }}
+        uses: actions/setup-python@v5.3.0
+        with:
+          python-version: ${{ env.DEFAULT_PYTHON }}
+
+      - name: Restore Python cache
+        uses: actions/cache@v4.1.2
+        with:
+          path: ${{ env.UV_CACHE_DIR }}
+          key: ${{ needs.info.outputs.python_cache_key }}
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Install dependencies
+        run: |
+          uv pip install --system -r requirements_dev.txt
+
+      - name: Cache mypy
+        uses: actions/cache@v4.1.2
+        with:
+          path: .mypy_cache
+          key: mypy-${{ env.MYPY_CACHE_VERSION }}-${{ env.DEFAULT_PYTHON }}-${{ hashFiles('pyproject.toml') }}
+
+      - name: Run mypy
+        run: |
+          mypy custom_components/
+
+  # tests:
+  #   name: Run tests
+  #   needs: info
+  #   if: needs.info.outputs.test_full_suite == 'true'
+  #   runs-on: ubuntu-24.04
+  #   strategy:
+  #     matrix:
+  #       python-version: ${{ fromJSON(needs.info.outputs.python_versions) }}
+  #   steps:
+  #     - name: Check out code from GitHub
+  #       uses: actions/checkout@v4.2.2
+
+  #     - name: Set up Python ${{ matrix.python-version }}
+  #       uses: actions/setup-python@v5.3.0
+  #       with:
+  #         python-version: ${{ matrix.python-version }}
+
+  #     - name: Restore Python cache
+  #       uses: actions/cache@v4.1.2
+  #       with:
+  #         path: ${{ env.UV_CACHE_DIR }}
+  #         key: ${{ needs.info.outputs.python_cache_key }}
+
+  #     - name: Install uv
+  #       uses: astral-sh/setup-uv@v4
+
+  #     - name: Install dependencies
+  #       run: |
+  #         uv pip install --system -r requirements_dev.txt
+
+  #     - name: Run tests
+  #       run: |
+  #         pytest tests/ --cov=custom_components --cov-report=xml
+
+  #     - name: Upload coverage to Codecov
+  #       uses: codecov/codecov-action@v5.1.1
+  #       with:
+  #         token: ${{ secrets.CODECOV_TOKEN }}
+  #         file: ./coverage.xml
