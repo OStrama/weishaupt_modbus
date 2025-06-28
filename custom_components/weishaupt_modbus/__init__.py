@@ -1,11 +1,13 @@
-"""init."""
+"""Integration for Weishaupt modbus heat pumps."""
 
 import json
 import logging
 from pathlib import Path
+from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+from homeassistant.exceptions import ConfigEntryNotReady
 
 from .configentry import MyConfigEntry, MyData
 from .const import CONF, CONST, DEVICENAMES, FormatConstants, TypeConstants
@@ -24,259 +26,309 @@ from .hpconst import (
     MODBUS_WP_ITEMS,
     MODBUS_WW_ITEMS,
 )
-from .items import ModbusItem, StatusItem
+from .items import ModbusItem
 from .kennfeld import PowerMap
 from .migrate_helpers import migrate_entities
 from .modbusobject import ModbusAPI
 from .webif_object import WebifConnection
 
-logging.basicConfig()
-log = logging.getLogger(__name__)
+_LOGGER = logging.getLogger(__name__)
 
 PLATFORMS: list[str] = [
     "number",
     "select",
     "sensor",
-    #    "switch",
 ]
 
 
-# Return boolean to indicate that initialization was successful.
-# return True
 async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
     """Set up entry."""
-    # Store an instance of the "connecting" class that does the work of speaking
-    # with your actual devices.
-    # hass.data.setdefault(DOMAIN, {})[entry.entry_id] = hub.Hub(hass, entry.data["host"])
-    mbapi = ModbusAPI(config_entry=entry)
+    try:
+        # Initialize modbus API
+        mbapi = ModbusAPI(config_entry=entry)
 
-    if entry.data[CONF.CB_WEBIF]:
-        # print
-        webapi = WebifConnection(config_entry=entry)
-        await webapi.login()
-    else:
+        # Initialize WebIF API if enabled
         webapi = None
+        if entry.data[CONF.CB_WEBIF]:
+            webapi = WebifConnection(config_entry=entry)
+            await webapi.login()
 
-    itemlist = []
+        # Collect all items from device lists
+        itemlist = [item for device in DEVICELISTS for item in device]
 
-    for device in DEVICELISTS:
-        for item in device:
-            itemlist.append(item)  # noqa: PERF402
+        # Initialize coordinator
+        coordinator = MyCoordinator(
+            hass=hass, my_api=mbapi, api_items=itemlist, config_entry=entry
+        )
 
-    coordinator = MyCoordinator(
-        hass=hass, my_api=mbapi, api_items=itemlist, config_entry=entry
-    )
-    # await coordinator.async_config_entry_first_refresh()
+        # Initialize power map
+        pwrmap = PowerMap(entry, hass)
+        await pwrmap.initialize()
 
-    entry.runtime_data = MyData(
-        modbus_api=mbapi,
-        webif_api=webapi,
-        config_dir=hass.config.config_dir,
-        hass=hass,
-        coordinator=coordinator,
-        powermap=None,
-    )
+        # Store runtime data
+        entry.runtime_data = MyData(
+            modbus_api=mbapi,
+            webif_api=webapi,
+            config_dir=hass.config.config_dir,
+            hass=hass,
+            coordinator=coordinator,
+            powermap=pwrmap,
+        )
 
-    pwrmap = PowerMap(entry, hass)
-    await pwrmap.initialize()
-    entry.runtime_data.powermap = pwrmap
+        # Schedule entity migrations
+        _schedule_migrations(hass, entry)
 
-    # myWebifCon = WebifConnection()
-    # data = await myWebifCon.return_test_data()
-    # print(data)
-    # print(myWebifCon._session.closed)
-    # await myWebifCon.login()
-    # print(myWebifCon._session.closed)
-    # data = await myWebifCon.get_info()
-    # await myWebifCon.close()
-    # print(myWebifCon._session.closed)
+        # Set up update listener
+        entry.async_on_unload(entry.add_update_listener(update_listener))
 
-    hass.add_job(migrate_entities, entry, MODBUS_SYS_ITEMS, DEVICENAMES.SYS)
-    hass.add_job(migrate_entities, entry, MODBUS_HZ_ITEMS, DEVICENAMES.HZ)
-    hass.add_job(migrate_entities, entry, MODBUS_HZ2_ITEMS, DEVICENAMES.HZ2)
-    hass.add_job(migrate_entities, entry, MODBUS_HZ3_ITEMS, DEVICENAMES.HZ3)
-    hass.add_job(migrate_entities, entry, MODBUS_HZ4_ITEMS, DEVICENAMES.HZ4)
-    hass.add_job(migrate_entities, entry, MODBUS_HZ5_ITEMS, DEVICENAMES.HZ5)
-    hass.add_job(migrate_entities, entry, MODBUS_WP_ITEMS, DEVICENAMES.WP)
-    hass.add_job(migrate_entities, entry, MODBUS_WW_ITEMS, DEVICENAMES.WW)
-    hass.add_job(migrate_entities, entry, MODBUS_W2_ITEMS, DEVICENAMES.W2)
-    hass.add_job(migrate_entities, entry, MODBUS_IO_ITEMS, DEVICENAMES.IO)
-    hass.add_job(migrate_entities, entry, MODBUS_ST_ITEMS, DEVICENAMES.ST)
+        # Forward setup to platforms
+        await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
-    # see https://community.home-assistant.io/t/config-flow-how-to-update-an-existing-entity/522442/8
-    entry.async_on_unload(entry.add_update_listener(update_listener))
+        _LOGGER.info("Setup completed successfully")
+        return True
 
-    # This is used to generate a strings.json file from hpconst.py
-    # create_string_json()
+    except Exception as err:
+        _LOGGER.exception("Failed to set up integration: %s", err)
+        raise ConfigEntryNotReady from err
 
-    # This creates each HA object for each platform your device requires.
-    # It's done by calling the `async_setup_entry` function in each platform module.
-    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
-    log.info("Init done")
+def _schedule_migrations(hass: HomeAssistant, entry: MyConfigEntry) -> None:
+    """Schedule entity migrations for all device types."""
+    migrations = [
+        (MODBUS_SYS_ITEMS, DEVICENAMES.SYS),
+        (MODBUS_HZ_ITEMS, DEVICENAMES.HZ),
+        (MODBUS_HZ2_ITEMS, DEVICENAMES.HZ2),
+        (MODBUS_HZ3_ITEMS, DEVICENAMES.HZ3),
+        (MODBUS_HZ4_ITEMS, DEVICENAMES.HZ4),
+        (MODBUS_HZ5_ITEMS, DEVICENAMES.HZ5),
+        (MODBUS_WP_ITEMS, DEVICENAMES.WP),
+        (MODBUS_WW_ITEMS, DEVICENAMES.WW),
+        (MODBUS_W2_ITEMS, DEVICENAMES.W2),
+        (MODBUS_IO_ITEMS, DEVICENAMES.IO),
+        (MODBUS_ST_ITEMS, DEVICENAMES.ST),
+    ]
 
-    return True
+    for items, device_name in migrations:
+        hass.add_job(migrate_entities, entry, items, device_name)
 
 
 async def update_listener(hass: HomeAssistant, entry: ConfigEntry) -> None:
     """Update listener."""
-    await hass.config_entries.async_reload(
-        entry.entry_id
-    )  # list of entry_ids created for file
+    await hass.config_entries.async_reload(entry.entry_id)
 
 
-async def async_migrate_entry(hass: HomeAssistant, config_entry: MyConfigEntry):
+async def async_migrate_entry(hass: HomeAssistant, config_entry: MyConfigEntry) -> bool:
     """Migrate old entry."""
-
     new_data = {**config_entry.data}
 
-    if config_entry.version > 4:
-        # This means the user has downgraded from a future version
+    if config_entry.version > 6:
+        # User has downgraded from a future version
         return True
 
-    # to ensure all update paths we have to check every version to not overwrite existing entries
-    if config_entry.version < 4:
-        log.warning("Old Version detected")
-
+    # Migrate from version 1 to 2
     if config_entry.version < 2:
-        log.warning("Version <2 detected")
-        new_data[CONF.PREFIX] = CONST.DEF_PREFIX
-        new_data[CONF.DEVICE_POSTFIX] = ""
-        new_data[CONF.KENNFELD_FILE] = CONST.DEF_KENNFELDFILE
-    if config_entry.version < 3:
-        log.warning("Version <3 detected")
-        new_data[CONF.HK2] = False
-        new_data[CONF.HK3] = False
-        new_data[CONF.HK4] = False
-        new_data[CONF.HK5] = False
-    if config_entry.version < 4:
-        log.warning("Version <4 detected")
-        new_data[CONF.NAME_DEVICE_PREFIX] = False
-        new_data[CONF.NAME_TOPIC_PREFIX] = False
-
-    if config_entry.version < 5:
-        new_data[CONF.CB_WEBIF] = False
-        new_data[CONF.USERNAME] = ""
-        new_data[CONF.PASSWORD] = ""
-        new_data[CONF.WEBIF_TOKEN] = ""
-        hass.config_entries.async_update_entry(
-            config_entry, data=new_data, minor_version=1, version=5
+        _LOGGER.warning("Migrating from version %d", config_entry.version)
+        new_data.update(
+            {
+                CONF.PREFIX: CONST.DEF_PREFIX,
+                CONF.DEVICE_POSTFIX: "",
+                CONF.KENNFELD_FILE: CONST.DEF_KENNFELDFILE,
+            }
         )
-        log.warning("Config entries updated to version 5")
 
+    # Migrate from version 2 to 3
+    if config_entry.version < 3:
+        _LOGGER.warning("Migrating from version %d", config_entry.version)
+        new_data.update(
+            {
+                CONF.HK2: False,
+                CONF.HK3: False,
+                CONF.HK4: False,
+                CONF.HK5: False,
+            }
+        )
+
+    # Migrate from version 3 to 4
+    if config_entry.version < 4:
+        _LOGGER.warning("Migrating from version %d", config_entry.version)
+        new_data.update(
+            {
+                CONF.NAME_DEVICE_PREFIX: False,
+                CONF.NAME_TOPIC_PREFIX: False,
+            }
+        )
+
+    # Migrate from version 4 to 5
+    if config_entry.version < 5:
+        _LOGGER.warning("Migrating from version %d", config_entry.version)
+        new_data.update(
+            {
+                CONF.CB_WEBIF: False,
+                CONF.USERNAME: "",
+                CONF.PASSWORD: "",
+                CONF.WEBIF_TOKEN: "",
+            }
+        )
+
+    # Update to latest version
     hass.config_entries.async_update_entry(
         config_entry, data=new_data, minor_version=1, version=6
     )
+    _LOGGER.info("Migration completed to version 6")
     return True
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload entry."""
-    # This is called when an entry/configured device is to be removed. The class
-    # needs to unload itself, and remove callbacks. See the classes for further
-    # details
-    entry.runtime_data.modbus_api.close()
+    # Close modbus API connection
+    if hasattr(entry.runtime_data, "modbus_api"):
+        entry.runtime_data.modbus_api.close()
+
+    # Close WebIF connection if it exists
+    if hasattr(entry.runtime_data, "webif_api") and entry.runtime_data.webif_api:
+        await entry.runtime_data.webif_api.close()
+
+    # Unload platforms
     unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
+
     if unload_ok:
         try:
             hass.data[entry.data[CONF.PREFIX]].pop(entry.entry_id)
         except KeyError:
-            log.warning("KeyError: %s", str(entry.data[CONF.PREFIX]))
+            _LOGGER.debug("KeyError removing entry data: %s", entry.data[CONF.PREFIX])
 
     return unload_ok
 
 
 def create_string_json() -> None:
     """Create strings.json from hpconst.py."""
-    from typing import Any, Optional
+    # Collect all items from device lists
+    device_list = [item for device in DEVICELISTS for item in device]
 
-    item: Optional[ModbusItem] = None
-    myStatusItem: Optional[StatusItem] = None
-    myEntity: dict[str, Any] = {}
-    myJson: dict[str, Any] = {}
-    mySensors: dict[str, Any] = {}
-    myNumbers: dict[str, Any] = {}
-    mySelects: dict[str, Any] = {}
+    my_sensors: dict[str, Any] = {}
+    my_numbers: dict[str, Any] = {}
+    my_selects: dict[str, Any] = {}
 
-    # generate list of all mbitems
-    DEVICELIST: list[ModbusItem] = []
-    for devicelist in DEVICELISTS:
-        DEVICELIST = DEVICELIST + devicelist
-
-    for item in DEVICELIST:
+    for item in device_list:
         match item.type:
             case (
                 TypeConstants.SENSOR
                 | TypeConstants.NUMBER_RO
                 | TypeConstants.SENSOR_CALC
             ):
-                mySensor: dict[str, Any] = {}
-                mySensor["name"] = "{prefix}" + item.name
-                if item.resultlist is not None:
-                    if item.format is FormatConstants.STATUS:
-                        myValues: dict[str, str] = {}
-                        for myStatusItem in item.resultlist:
-                            if myStatusItem is not None:
-                                myValues[myStatusItem.translation_key] = (
-                                    str(myStatusItem.text)
-                                    if myStatusItem.text is not None
-                                    else ""
-                                )
-                        mySensor["state"] = myValues.copy()
-                mySensors[item.translation_key] = mySensor.copy()
+                sensor_data = _create_sensor_data(item)
+                my_sensors[item.translation_key] = sensor_data
             case TypeConstants.NUMBER:
-                myNumber: dict[str, Any] = {}
-                myNumber["name"] = "{prefix}" + item.name
-                if item.resultlist is not None:
-                    if item.format is FormatConstants.STATUS:
-                        myNValues: dict[str, str] = {}
-                        for myStatusItem in item.resultlist:
-                            if myStatusItem is not None:
-                                myNValues[myStatusItem.translation_key] = (
-                                    str(myStatusItem.text)
-                                    if myStatusItem.text is not None
-                                    else ""
-                                )
-                        myNumber["value"] = myNValues.copy()
-                myNumbers[item.translation_key] = myNumber.copy()
+                number_data = _create_number_data(item)
+                my_numbers[item.translation_key] = number_data
             case TypeConstants.SELECT:
-                mySelect: dict[str, Any] = {}
-                mySelect["name"] = "{prefix}" + item.name
-                if item.resultlist is not None:
-                    if item.format is FormatConstants.STATUS:
-                        mySValues: dict[str, str] = {}
-                        for myStatusItem in item.resultlist:
-                            if myStatusItem is not None:
-                                mySValues[myStatusItem.translation_key] = (
-                                    str(myStatusItem.text)
-                                    if myStatusItem.text is not None
-                                    else ""
-                                )
-                        mySelect["state"] = mySValues.copy()
-                mySelects[item.translation_key] = mySelect.copy()
-    myEntity["sensor"] = mySensors
-    myEntity["number"] = myNumbers
-    myEntity["select"] = mySelects
-    myJson["entity"] = myEntity
+                select_data = _create_select_data(item)
+                my_selects[item.translation_key] = select_data
 
-    # iterate over all devices in order to create a translation. TODO
-    # for key, value in asdict(DEVICES).items():
-    #    ...
+    # Create final JSON structure
+    my_json = {
+        "entity": {
+            "sensor": my_sensors,
+            "number": my_numbers,
+            "select": my_selects,
+        }
+    }
 
-    # load strings.json into string
-    # replaced Path.open by open
-    with Path("config/custom_components/weishaupt_modbus/strings.json").open(
-        encoding="utf-8"
-    ) as file:
-        data = file.read()
-    # create dict from json
-    data_dict = json.loads(data)
-    # overwrite entiy dict
-    data_dict["entity"] = myEntity
-    # write whole json to file again
-    # replaced Path.open by open
-    with Path("config/custom_components/weishaupt_modbus/strings.json").open(
-        mode="w",
-        encoding="utf-8",
-    ) as file:
-        file.write(json.dumps(data_dict, indent=4, sort_keys=True, ensure_ascii=False))
+    # Update strings.json file
+    _update_strings_json(my_json["entity"])
+
+
+def _create_sensor_data(item: ModbusItem) -> dict[str, Any]:
+    """Create sensor data for strings.json."""
+    sensor_data = {"name": f"{{prefix}}{item.name}"}
+
+    if item.resultlist and item.format is FormatConstants.STATUS:
+        values = {
+            status_item.translation_key: str(status_item.text)
+            if status_item.text
+            else ""
+            for status_item in item.resultlist
+            if status_item is not None
+        }
+        sensor_data["state"] = json.dumps(values)
+
+    return sensor_data
+
+
+def _create_number_data(item: ModbusItem) -> dict[str, Any]:
+    """Create number data for strings.json."""
+    number_data = {"name": f"{{prefix}}{item.name}"}
+
+    if item.resultlist and item.format is FormatConstants.STATUS:
+        # Create a flat dictionary of translation keys to display text
+        values = {}
+        for status_item in item.resultlist:
+            if status_item is not None and status_item.translation_key:
+                values[status_item.translation_key] = (
+                    str(status_item.text) if status_item.text else ""
+                )
+
+        # Only add values if we have any
+        if values:
+            number_data["value"] = json.dumps(values)
+
+    return number_data
+
+
+def _create_select_data(item: ModbusItem) -> dict[str, Any]:
+    """Create select data for strings.json."""
+    select_data = {"name": f"{{prefix}}{item.name}"}
+
+    if item.resultlist and item.format is FormatConstants.STATUS:
+        # Create a flat dictionary of translation keys to display text
+        options = {}
+        for status_item in item.resultlist:
+            if status_item is not None and status_item.translation_key:
+                options[status_item.translation_key] = (
+                    str(status_item.text) if status_item.text else ""
+                )
+
+        # Only add options if we have any
+        if options:
+            select_data["options"] = json.dumps(options)
+
+    return select_data
+
+
+def _update_strings_json(entity_data: dict[str, Any]) -> None:
+    """Update the strings.json file with new entity data."""
+    strings_path = Path("config/custom_components/weishaupt_modbus/strings.json")
+
+    try:
+        # Read existing strings.json or create empty structure
+        if strings_path.exists():
+            with strings_path.open(encoding="utf-8") as file:
+                data_dict = json.load(file)
+        else:
+            data_dict = {}
+
+        # Ensure entity section exists
+        if "entity" not in data_dict:
+            data_dict["entity"] = {}
+
+        # Update each platform's entity data
+        for platform, entities in entity_data.items():
+            if platform not in data_dict["entity"]:
+                data_dict["entity"][platform] = {}
+
+            # Merge new entities with existing ones
+            data_dict["entity"][platform].update(entities)
+
+        # Ensure parent directory exists
+        strings_path.parent.mkdir(parents=True, exist_ok=True)
+
+        # Write updated data back to file
+        with strings_path.open(mode="w", encoding="utf-8") as file:
+            json.dump(data_dict, file, indent=2, sort_keys=True, ensure_ascii=False)
+
+        _LOGGER.debug(
+            "Successfully updated strings.json with %d platforms", len(entity_data)
+        )
+
+    except (OSError, json.JSONDecodeError) as err:
+        _LOGGER.error("Failed to update strings.json: %s", err)

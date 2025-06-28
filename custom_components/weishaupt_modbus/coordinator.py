@@ -232,34 +232,20 @@ class MyWebIfCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         """
         # self._device = await self.my_api.get_device()
 
-    async def _async_update_data(
-        self,
-    ) -> dict[str, Any]:  # types: ignore[func-returns-value]
-        """Fetch data from API endpoint.
 
-        This is the place to pre-process the data to lookup tables
-        so entities can quickly look up their data.
-        """
-        try:
-            # Note: asyncio.TimeoutError and aiohttp.ClientError are already
-            # handled by the data update coordinator.
-            async with asyncio.timeout(30):
-                # Grab active context variables to limit data required to be fetched from API
-                # Note: using context is not required if there is no need or ability to limit
-                # data retrieved from API.
-                # listening_idx = set(self.async_contexts())
-                # return await self.my_api.return_test_data()
-                result = await self.my_api.get_info()
-                if result is None:
-                    return {}  # type: ignore[func-returns-value]
-                return result  # type: ignore[func-returns-value]
-        except TimeoutError:
-            logger = logging.getLogger(__name__)
-            logger.debug(msg="Timeout while fetching data")
-            return {}  # type: ignore[func-returns-value]
-        # except ApiAuthError as err:
-        # Raising ConfigEntryAuthFailed will cancel future updates
-        # and start a config flow with SOURCE_REAUTH (async_step_reauth)
-        #    raise ConfigEntryAuthFailed from err
-        # except ApiError as err:
-        #    raise UpdateFailed(f"Error communicating with API: {err}")
+async def _async_update_data(self) -> dict[str, Any]:
+    """Fetch data from API endpoint.
+
+    This is the place to pre-process the data to lookup tables
+    so entities can quickly look up their data.
+    """
+    try:
+        async with asyncio.timeout(30):
+            result = await self.my_api.get_info()
+            return result if result is not None else {}
+    except TimeoutError:
+        _LOGGER.debug("Timeout while fetching WebIF data")
+        return {}
+    except Exception as err:
+        _LOGGER.warning("Error communicating with WebIF API: %s", err)
+        return {}
