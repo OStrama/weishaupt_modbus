@@ -2,6 +2,8 @@
 
 from dataclasses import dataclass
 from datetime import timedelta
+from enum import Enum
+from typing import Final
 
 from homeassistant.const import (
     CONF_HOST,
@@ -40,7 +42,7 @@ CONF = ConfConstants()
 class MainConstants:
     """Main constants."""
 
-    DOMAIN = "weishaupt_modbus"
+    DOMAIN: Final = "weishaupt_modbus"
     SCAN_INTERVAL = timedelta(seconds=30)
     UNIQUE_ID = "unique_id"
     APPID = 100
@@ -51,8 +53,7 @@ class MainConstants:
 CONST = MainConstants()
 
 
-@dataclass(frozen=True)
-class FormatConstants:
+class FormatConstants(Enum):
     """Format constants."""
 
     TEMPERATUR = "temperature"
@@ -62,11 +63,7 @@ class FormatConstants:
     UNKNOWN = "unknown"
 
 
-FORMATS = FormatConstants()
-
-
-@dataclass(frozen=True)
-class TypeConstants:
+class TypeConstants(Enum):
     """Type constants."""
 
     SENSOR = "Sensor"
@@ -76,11 +73,7 @@ class TypeConstants:
     NUMBER_RO = "Number_RO"
 
 
-TYPES = TypeConstants()
-
-
-@dataclass(frozen=True)
-class DeviceConstants:
+class DeviceConstants(Enum):
     """Device constants."""
 
     SYS = "dev_system"
@@ -99,25 +92,22 @@ class DeviceConstants:
     WIH = "Webif Info Heizkreis"
 
 
-DEVICES = DeviceConstants()
-
-
 @dataclass(frozen=True)
 class DeviceNameConstants:
     """Device constants."""
 
-    SYS = "WH System"
-    WP = "WH Wärmepumpe"
-    WW = "WH Warmwasser"
-    HZ = "WH Heizkreis"
-    HZ2 = "WH Heizkreis2"
-    HZ3 = "WH Heizkreis3"
-    HZ4 = "WH Heizkreis4"
-    HZ5 = "WH Heizkreis5"
-    W2 = "WH 2. Wärmeerzeuger"
-    ST = "WH Statistik"
-    UK = "WH Unknown"
-    IO = "WH Eingänge/Ausgänge"
+    SYS: Final = "WH System"
+    WP: Final = "WH Wärmepumpe"
+    WW: Final = "WH Warmwasser"
+    HZ: Final = "WH Heizkreis"
+    HZ2: Final = "WH Heizkreis2"
+    HZ3: Final = "WH Heizkreis3"
+    HZ4: Final = "WH Heizkreis4"
+    HZ5: Final = "WH Heizkreis5"
+    W2: Final = "WH 2. Wärmeerzeuger"
+    ST: Final = "WH Statistik"
+    UK: Final = "WH Unknown"
+    IO: Final = "WH Eingänge/Ausgänge"
 
 
 DEVICENAMES = DeviceNameConstants()
