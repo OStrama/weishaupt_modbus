@@ -10,5 +10,3 @@ ruff==0.12.0
 wheel
 pip>=25.1.1
 pylint-per-file-ignores==1.4.0
-matplotlib==3.10.3
-types-matplotlib
