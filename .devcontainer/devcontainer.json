@@ -17,6 +17,8 @@
         "github.vscode-github-actions",
         "GitHub.vscode-pull-request-github",
         "GitHub.copilot",
+        "bierner.markdown-preview-github-styles",
+        "DavidAnson.vscode-markdownlint",
         "mhutchie.git-graph",
         "donjayamanne.python-extension-pack",
         "njpwerner.autodocstring",
