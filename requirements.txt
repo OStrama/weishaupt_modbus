@@ -1,5 +1,5 @@
 aiofiles>=24.1.0
 beautifulsoup4>=4.13.4
 pymodbus>=3.9.2
-types-aiofiles=>=24.1.0
+types-aiofiles>=24.1.0
 scipy-stubs>=1.16.0
