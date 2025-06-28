@@ -97,25 +97,25 @@ jobs:
         uses: actions/checkout@v4.2.2
 
       - name: Set up Python ${{ env.DEFAULT_PYTHON }}
-        uses: actions/setup-python@v5.3.0
+        uses: actions/setup-python@v5.6.0
         with:
           python-version: ${{ env.DEFAULT_PYTHON }}
 
       - name: Restore Python cache
-        uses: actions/cache@v4.1.2
+        uses: actions/cache@v4.2.3
         with:
           path: ${{ env.UV_CACHE_DIR }}
           key: ${{ needs.info.outputs.python_cache_key }}
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v4
+        uses: astral-sh/setup-uv@v6.3.1
 
       - name: Install dependencies
         run: |
           uv pip install --system -r requirements_dev.txt
 
       # - name: Cache pre-commit environment
-      #   uses: actions/cache@v4.1.2
+      #   uses: actions/cache@v4.2.3
       #   with:
       #     path: ${{ env.PRE_COMMIT_CACHE }}
       #     key: ${{ needs.info.outputs.pre-commit_cache_key }}
@@ -142,12 +142,12 @@ jobs:
         uses: actions/checkout@v4.2.2
 
       - name: Set up Python ${{ env.DEFAULT_PYTHON }}
-        uses: actions/setup-python@v5.3.0
+        uses: actions/setup-python@v5.6.0
         with:
           python-version: ${{ env.DEFAULT_PYTHON }}
 
       - name: Restore Python cache
-        uses: actions/cache@v4.1.2
+        uses: actions/cache@v4.2.3
         with:
           path: ${{ env.UV_CACHE_DIR }}
           key: ${{ needs.info.outputs.python_cache_key }}
@@ -160,7 +160,7 @@ jobs:
           uv pip install --system -r requirements_dev.txt
 
       - name: Cache mypy
-        uses: actions/cache@v4.1.2
+        uses: actions/cache@v4.2.3
         with:
           path: .mypy_cache
           key: mypy-${{ env.MYPY_CACHE_VERSION }}-${{ env.DEFAULT_PYTHON }}-${{ hashFiles('pyproject.toml') }}
@@ -182,18 +182,18 @@ jobs:
   #       uses: actions/checkout@v4.2.2
 
   #     - name: Set up Python ${{ matrix.python-version }}
-  #       uses: actions/setup-python@v5.3.0
+  #       uses: actions/setup-python@v5.6.0
   #       with:
   #         python-version: ${{ matrix.python-version }}
 
   #     - name: Restore Python cache
-  #       uses: actions/cache@v4.1.2
+  #       uses: actions/cache@v4.2.3
   #       with:
   #         path: ${{ env.UV_CACHE_DIR }}
   #         key: ${{ needs.info.outputs.python_cache_key }}
 
   #     - name: Install uv
-  #       uses: astral-sh/setup-uv@v4
+  #       uses: astral-sh/setup-uv@v6.3.1
 
   #     - name: Install dependencies
   #       run: |
@@ -204,7 +204,7 @@ jobs:
   #         pytest tests/ --cov=custom_components --cov-report=xml
 
   #     - name: Upload coverage to Codecov
-  #       uses: codecov/codecov-action@v5.1.1
+  #       uses: codecov/codecov-action@v5.4.3
   #       with:
   #         token: ${{ secrets.CODECOV_TOKEN }}
   #         file: ./coverage.xml
