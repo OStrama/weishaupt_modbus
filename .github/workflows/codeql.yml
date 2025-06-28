@@ -2,8 +2,11 @@ name: "CodeQL"
 
 # yamllint disable-line rule:truthy
 on:
-  schedule:
-    - cron: "30 18 * * 4"
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - update-types
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -32,4 +35,3 @@ jobs:
         uses: github/codeql-action/analyze@v3.29.0
         with:
           category: "/language:python"
-  
