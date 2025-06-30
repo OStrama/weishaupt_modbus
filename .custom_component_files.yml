@@ -1,6 +1,6 @@
 # Defines a list of files that are part of main custom_component of Home Assistant.
 # Changes to these files/filters define how our CI test suite is ran.
-core: &core
+weishaupt_modbus:
   - custom_components\weishaupt_modbus\**
   - pyproject.toml
   - requirements.txt
