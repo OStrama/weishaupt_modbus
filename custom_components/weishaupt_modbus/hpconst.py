@@ -1,6 +1,7 @@
 """Heatpump constants."""
 
 import copy
+from typing import Any
 
 from homeassistant.components.sensor import SensorDeviceClass, SensorStateClass
 from homeassistant.const import (
@@ -973,9 +974,14 @@ IO_STATUS: list[StatusItem] = [
 #                The value of the modbus address of the entity itself is available in val_0
 ##############################################################################################################################
 
-PARAMS_PERCENTAGE: dict = {"min": 0, "max": 100, "precision": 0, "unit": PERCENTAGE}
+PARAMS_PERCENTAGE: dict[str, Any] = {
+    "min": 0,
+    "max": 100,
+    "precision": 0,
+    "unit": PERCENTAGE,
+}
 
-PARAMS_ROOMTEMP: dict = {
+PARAMS_ROOMTEMP: dict[str, Any] = {
     "min": 16,
     "max": 28,
     "step": 0.5,
@@ -1118,7 +1124,7 @@ PARAMS_FLOWRATE: dict = {
     "stateclass": SensorStateClass.MEASUREMENT,
 }
 
-PARAMS_ENERGY: dict = {
+PARAMS_ENERGY: dict[str, Any] = {
     "min": 0,
     "max": 999999999999,
     "deviceclass": SensorDeviceClass.ENERGY,
@@ -1192,7 +1198,7 @@ PARAMS_CALCJAZ: dict = {
     "calculation": "val_0 / val_1",
 }
 
-PARAMS_ALERT: dict = {"icon": "mdi:alert"}
+PARAMS_ALERT: dict[str, Any] = {"icon": "mdi:alert"}
 
 PARAMS_OPMODE: dict = {"icon": "mdi:heat-pump"}
 

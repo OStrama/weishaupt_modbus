@@ -140,7 +140,7 @@ class MyEntity(Entity):
             if self._dynamic_max is not None:
                 self._attr_native_max_value = self._dynamic_max / self._divider
 
-    def translate_val(self, val) -> float:
+    def translate_val(self, val) -> float | str | None:
         """Translate modbus value into senseful format."""
         if self._api_item.format == FORMATS.STATUS:
             return self._api_item.get_translation_key_from_number(val)

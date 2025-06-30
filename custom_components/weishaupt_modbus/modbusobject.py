@@ -106,7 +106,7 @@ class ModbusObject:
         self._modbus_client = modbus_api.get_device()
         self._no_connect_warn = no_connect_warn
 
-    def check_valid_result(self, val) -> int:
+    def check_valid_result(self, val) -> int | None:
         """Check if item is available and valid."""
         match self._modbus_item.format:
             case FORMATS.TEMPERATUR:
@@ -119,7 +119,7 @@ class ModbusObject:
                 self._modbus_item.is_invalid = False
                 return val
 
-    def check_temperature(self, val) -> int:
+    def check_temperature(self, val) -> int | None:
         """Check availability of temperature item and translate return value to valid int.
 
         :param val: The value from the modbus
@@ -145,7 +145,7 @@ class ModbusObject:
                 self._modbus_item.is_invalid = False
                 return val
 
-    def check_percentage(self, val) -> int:
+    def check_percentage(self, val) -> int | None:
         """Check availability of percentage item and translate.
 
         return value to valid int
@@ -173,7 +173,7 @@ class ModbusObject:
             case _:
                 return val
 
-    def validate_modbus_answer(self, mbr) -> int:
+    def validate_modbus_answer(self, mbr) -> int | None:
         """Check if there's a valid answer from modbus and translate it to a valid int depending from type.
 
         :param mbr: The modbus response
@@ -204,7 +204,7 @@ class ModbusObject:
         return val
 
     @property
-    async def value(self):
+    async def value(self) -> int | None:
         """Returns the value from the modbus register."""
         if self._modbus_client is None:
             return None

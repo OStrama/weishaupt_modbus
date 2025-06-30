@@ -1,5 +1,9 @@
 """Item classes."""
 
+from __future__ import annotations
+
+from typing import Any
+
 from .const import FORMATS, TYPES, DeviceConstants, FormatConstants, TypeConstants
 
 
@@ -10,9 +14,9 @@ class StatusItem:
     especially when searching backwards. (At least I don't know how...)
     """
 
-    _number = None
-    _text = None
-    _description = None
+    _number: int | None = None
+    _text: str | None = None
+    _description: str | None = None
     _translation_key: str = ""
 
     def __init__(
@@ -26,12 +30,12 @@ class StatusItem:
         self._number = number
         self._text = text
         self._description = description
-        self._translation_key = translation_key
+        self._translation_key = translation_key or ""
 
     @property
     def number(self) -> int:
         """Return number."""
-        return self._number
+        return self._number or 0
 
     @number.setter
     def number(self, value: int) -> None:
@@ -41,7 +45,7 @@ class StatusItem:
     @property
     def text(self) -> str:
         """Return text."""
-        return self._text
+        return self._text or ""
 
     @text.setter
     def text(self, value: str) -> None:
@@ -50,7 +54,7 @@ class StatusItem:
     @property
     def description(self) -> str:
         """Return description."""
-        return self._description
+        return self._description or ""
 
     @description.setter
     def description(self, value: str) -> None:
@@ -73,16 +77,16 @@ class ApiItem:
     This can either be a ModbusItem or a WebifItem
     """
 
-    _name = "empty"
-    _format = None
-    _type = TYPES.SENSOR
-    _resultlist = None
-    _device = None
-    _state = None
-    _is_invalid = False
+    _name: str = "empty"
+    _format: FormatConstants | None = None
+    _type: TypeConstants = TYPES.SENSOR
+    _resultlist: Any = None
+    _device: DeviceConstants | None = None
+    _state: Any = None
+    _is_invalid: bool = False
     _translation_key: str = ""
-    _params = None
-    _divider = 1
+    _params: dict[Any, Any] | None = None
+    _divider: int = 1
 
     def __init__(
         self,
@@ -91,8 +95,8 @@ class ApiItem:
         mtype: TypeConstants,
         device: DeviceConstants,
         translation_key: str | None = None,
-        resultlist=None,
-        params: dict = None,  # noqa: RUF013
+        resultlist: Any = None,
+        params: dict[Any, Any] | None = None,
     ) -> None:
         """Initialise ModbusItem."""
         self._name: str = name
@@ -102,26 +106,26 @@ class ApiItem:
         self._resultlist = resultlist
         self._state = None
         self._is_invalid = False
-        self._translation_key = translation_key
+        self._translation_key = translation_key or ""
         self._params = params
         self._divider = 1
 
     @property
-    def params(self) -> dict:
+    def params(self) -> dict[Any, Any]:
         """Return state."""
-        return self._params
+        return self._params or {}
 
     @params.setter
-    def params(self, val: dict):
+    def params(self, val: dict[Any, Any] | None) -> None:
         self._params = val
 
     @property
-    def divider(self) -> dict:
+    def divider(self) -> int:
         """Return state."""
         return self._divider
 
     @divider.setter
-    def divider(self, val: dict):
+    def divider(self, val: int) -> None:
         self._divider = val
 
     @property

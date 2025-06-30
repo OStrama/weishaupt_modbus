@@ -47,7 +47,7 @@ class MyCoordinator(DataUpdateCoordinator):
         self,
         hass: HomeAssistant,
         my_api: ModbusAPI,
-        api_items: ModbusItem,
+        api_items: list[ModbusItem],
         p_config_entry: MyConfigEntry,
     ) -> None:
         """Initialize my coordinator."""
@@ -78,7 +78,7 @@ class MyCoordinator(DataUpdateCoordinator):
             modbus_item.state = await mbo.value
         return modbus_item.state
 
-    def get_value_from_item(self, translation_key: str) -> int:
+    def get_value_from_item(self, translation_key: str) -> int | None:
         """Read a value from another modbus item."""
         for _useless, item in enumerate(self._modbusitems):
             if item.translation_key == translation_key:
@@ -185,7 +185,7 @@ class MyCoordinator(DataUpdateCoordinator):
                 log.warning("connection to the heatpump failed")
 
     @property
-    def modbus_api(self) -> str:
+    def modbus_api(self) -> ModbusAPI:
         """Return modbus_api."""
         return self._modbus_api
 
@@ -238,7 +238,7 @@ class MyWebIfCoordinator(DataUpdateCoordinator):
                 # return await self.my_api.return_test_data()
                 return await self.my_api.get_info()
         except TimeoutError:
-            logging.debug(msg="Timeout while fetching data")
+            log.debug("Timeout while fetching data")
         # except ApiAuthError as err:
         # Raising ConfigEntryAuthFailed will cancel future updates
         # and start a config flow with SOURCE_REAUTH (async_step_reauth)

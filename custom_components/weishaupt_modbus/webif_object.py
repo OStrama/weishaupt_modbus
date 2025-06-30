@@ -5,6 +5,7 @@ It contains a webif client for setting and getting webif values
 """
 
 import logging
+from typing import Any
 
 import aiohttp
 from bs4 import BeautifulSoup
@@ -96,7 +97,7 @@ class WebifConnection:
                 + "020003000401"
             ) as response:
                 if response.status != 200:
-                    logging.debug(msg="Error: " & str(response.status))
+                    logging.debug("Error: %s", response.status)
                     return None
                 # logging.debug(msg=await response.text())
                 # print(await response.text())
@@ -132,7 +133,7 @@ class WebifConnection:
         #    url="/settings_export.html?stack=0C00000100000000008000F9AF010002000301,0C000C1900000000000000F9AF020003000401"
         # ) as response:
         #    if response.status != 200:
-        #        logging.debug(msg="Error: " & str(response.status))
+        #        logging.debug("Error: %s", response.status)
         #        return None
         # logging.debug(msg=await response.text())
         # print(await response.text())
@@ -195,7 +196,7 @@ class WebifConnection:
 
     def get_link_values(self, soup: BeautifulSoup) -> dict:
         """Return values from given nav container witch are inside a link."""
-        soup_links: ResultSet[logging.Any] = soup.find_all(
+        soup_links: ResultSet[Any] = soup.find_all(
             name="a", class_="nav-link browseobj"
         )
         # print(soup_links)
