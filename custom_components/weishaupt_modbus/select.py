@@ -1,5 +1,9 @@
 """Select."""
 
+from __future__ import annotations
+
+from typing import Any
+
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
@@ -17,7 +21,7 @@ async def async_setup_entry(
     """Select entry setup."""
     _useless = hass
     # start with an empty list of entries
-    entries = []
+    entries: list[Any] = []
 
     # we create one communicator per integration only for better performance and to allow dynamic parameters
     coordinator = config_entry.runtime_data.coordinator

@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import logging
 from pathlib import Path
+from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
@@ -26,7 +27,7 @@ from .hpconst import (
     MODBUS_WP_ITEMS,
     MODBUS_WW_ITEMS,
 )
-from .items import ModbusItem, StatusItem
+from .items import ModbusItem
 from .kennfeld import PowerMap
 from .migrate_helpers import migrate_entities
 from .modbusobject import ModbusAPI
@@ -73,9 +74,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
         powermap=None,
     )
 
-    pwrmap = PowerMap(entry, hass)
-    await pwrmap.initialize()
-    entry.runtime_data.powermap = pwrmap
+    powermap = PowerMap(entry, hass)
+    await powermap.initialize()
+    entry.runtime_data.powermap = powermap
 
     # myWebifCon = WebifConnection()
     # data = await myWebifCon.return_test_data()
@@ -184,16 +185,14 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
 def create_string_json() -> None:
     """Create strings.json from hpconst.py."""
-    item: ModbusItem = None
-    myStatusItem: StatusItem = None
-    myEntity = {}
-    myJson = {}
-    mySensors = {}
-    myNumbers = {}
-    mySelects = {}
+    myEntity: dict[str, dict[str, dict[str, Any]]] = {}
+    myJson: dict[str, Any] = {}
+    mySensors: dict[str, dict[str, Any]] = {}
+    myNumbers: dict[str, dict[str, Any]] = {}
+    mySelects: dict[str, dict[str, Any]] = {}
 
     # generate list of all mbitems
-    DEVICELIST = []
+    DEVICELIST: list[ModbusItem] = []
     for devicelist in DEVICELISTS:
         DEVICELIST = DEVICELIST + devicelist
 
@@ -204,34 +203,38 @@ def create_string_json() -> None:
                 | TypeConstants.NUMBER_RO
                 | TypeConstants.SENSOR_CALC
             ):
-                mySensor = {}
+                mySensor: dict[str, Any] = {}
                 mySensor["name"] = "{prefix}" + item.name
                 if item.resultlist is not None:
                     if item.format is FormatConstants.STATUS:
-                        myValues = {}
+                        myValues: dict[str, str] = {}
                         for myStatusItem in item.resultlist:
                             myValues[myStatusItem.translation_key] = myStatusItem.text
-                        mySensor["state"] = myValues.copy()
+                        mySensor["state"] = myValues
                 mySensors[item.translation_key] = mySensor.copy()
             case TypeConstants.NUMBER:
-                myNumber = {}
+                myNumber: dict[str, Any] = {}
                 myNumber["name"] = "{prefix}" + item.name
                 if item.resultlist is not None:
                     if item.format is FormatConstants.STATUS:
-                        myValues = {}
+                        myNumberValues: dict[str, str] = {}
                         for myStatusItem in item.resultlist:
-                            myValues[myStatusItem.translation_key] = myStatusItem.text
-                        myNumber["value"] = myValues.copy()
+                            myNumberValues[myStatusItem.translation_key] = (
+                                myStatusItem.text
+                            )
+                        myNumber["value"] = myNumberValues
                 myNumbers[item.translation_key] = myNumber.copy()
             case TypeConstants.SELECT:
-                mySelect = {}
+                mySelect: dict[str, Any] = {}
                 mySelect["name"] = "{prefix}" + item.name
                 if item.resultlist is not None:
                     if item.format is FormatConstants.STATUS:
-                        myValues = {}
+                        mySelectValues: dict[str, str] = {}
                         for myStatusItem in item.resultlist:
-                            myValues[myStatusItem.translation_key] = myStatusItem.text
-                        mySelect["state"] = myValues.copy()
+                            mySelectValues[myStatusItem.translation_key] = (
+                                myStatusItem.text
+                            )
+                        mySelect["state"] = mySelectValues
                 mySelects[item.translation_key] = mySelect.copy()
     myEntity["sensor"] = mySensors
     myEntity["number"] = myNumbers
@@ -250,7 +253,7 @@ def create_string_json() -> None:
         data = file.read()
     # create dict from json
     data_dict = json.loads(data)
-    # overwrite entiy dict
+    # overwrite entity dict
     data_dict["entity"] = myEntity
     # write whole json to file again
     # replaced Path.open by open

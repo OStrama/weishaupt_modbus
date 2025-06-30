@@ -1,11 +1,13 @@
 """Heat pump characteristic curves (Kennfeld)."""
 
+from __future__ import annotations
+
 import json
 import logging
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-import aiofiles
+import aiofiles  # type: ignore[import-untyped]
 import numpy as np
 from numpy.polynomial import Chebyshev
 
@@ -14,27 +16,32 @@ from homeassistant.core import HomeAssistant
 from .configentry import MyConfigEntry
 from .const import CONF, CONST
 
+if TYPE_CHECKING:
+    try:
+        from scipy.interpolate import CubicSpline
+    except ImportError:
+        CubicSpline = None  # type: ignore[misc]
+
 _LOGGER = logging.getLogger(__name__)
 
 SPLINE_AVAILABLE = True
+CubicSpline = None  # type: ignore[assignment]
 try:
-    import scipy  # noqa: F401 pylint: disable=unused-import
+    import scipy  # type: ignore[import-untyped] # noqa: F401 pylint: disable=unused-import
+    from scipy.interpolate import CubicSpline  # type: ignore[import-untyped]
+    _LOGGER.info(
+        "Scipy available, use precise cubic spline interpolation for heating power"
+    )
 except ModuleNotFoundError:
     _LOGGER.warning(
         "Scipy not available, use less precise Chebyshef interpolation for heating power"
     )
     SPLINE_AVAILABLE = False
 
-
-if SPLINE_AVAILABLE is True:
-    _LOGGER.info(
-        "Scipy available, use precise cubic spline interpolation for heating power"
-    )
-    from scipy.interpolate import CubicSpline  # pylint: disable=unused-import
-
 MATPLOTLIB_AVAILABLE = True
+plt = None  # type: ignore[assignment]
 try:
-    import matplotlib.pyplot as plt
+    import matplotlib.pyplot as plt  # type: ignore[import-not-found,import-untyped,no-redef]
 except ModuleNotFoundError:
     _LOGGER.warning("Matplotlib not available. Can't create power map image file")
     MATPLOTLIB_AVAILABLE = False
@@ -107,10 +114,11 @@ class PowerMap:
 
     async def initialize(self) -> None:
         """Initialize the power map."""
+        filepath = Path(
+            get_filepath(self.hass) / self._config_entry.data[CONF.KENNFELD_FILE]
+        )
+        
         try:
-            filepath = Path(
-                get_filepath(self.hass) / self._config_entry.data[CONF.KENNFELD_FILE]
-            )
             async with aiofiles.open(filepath, encoding="utf-8") as openfile:
                 raw_block = await openfile.read()
                 json_object = json.loads(raw_block)
@@ -163,8 +171,10 @@ class PowerMap:
         self._all_t = np.linspace(-30, 40, 71)
         # cubic spline interpolation of power curves
         for idx in range(len(self._r_to_interpolate)):
-            if SPLINE_AVAILABLE is True:
-                f = CubicSpline(self.known_x, self._interp_y[idx], bc_type="natural")
+            if SPLINE_AVAILABLE is True and CubicSpline is not None:
+                f: Any = CubicSpline(
+                    self.known_x, self._interp_y[idx], bc_type="natural"
+                )
             else:
                 f = Chebyshev.fit(self.known_x, self._interp_y[idx], deg=8)
             self._max_power.append(f(self._all_t))
@@ -190,6 +200,10 @@ class PowerMap:
 
     def plot_kennfeld_to_file(self) -> None:
         """Plot the kennfeld file into png image for display."""
+        if not MATPLOTLIB_AVAILABLE or plt is None:
+            _LOGGER.warning("Matplotlib not available, cannot plot kennfeld")
+            return
+            
         plt.plot(self._all_t, np.transpose(self._max_power))
         plt.ylabel("Max Power")
         plt.xlabel("°C")
@@ -197,13 +211,14 @@ class PowerMap:
         plt.xlim(-25, 40)
         plt.ylim(2000, 12000)
 
+        filepath = (
+            self._config_entry.runtime_data.config_dir
+            + "/www/local/"
+            + CONST.DOMAIN
+            + "_powermap.png"
+        )
+        
         try:
-            filepath = (
-                self._config_entry.runtime_data.config_dir
-                + "/www/local/"
-                + CONST.DOMAIN
-                + "_powermap.png"
-            )
             plt.savefig(filepath)
             _LOGGER.info(
                 "Write power map image file %s",

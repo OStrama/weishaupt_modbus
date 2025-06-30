@@ -1301,42 +1301,42 @@ MODBUS_HZ_ITEMS = [
 # buils other Heizkreis Itemlists
 MODBUS_HZ2_ITEMS: list = []
 for item in MODBUS_HZ_ITEMS:
-    mbi = copy.deepcopy(x=item)
-    mbi.address = item.address+100
-    mbi.name = item.name + "2"
-    mbi.translation_key = item.translation_key + "2"
-    mbi.device = DeviceConstants.HZ2
-    MODBUS_HZ2_ITEMS.append(mbi)
+    mbi2 = copy.deepcopy(x=item)
+    mbi2.address = item.address+100
+    mbi2.name = item.name + "2"
+    mbi2.translation_key = item.translation_key + "2"
+    mbi2.device = DeviceConstants.HZ2
+    MODBUS_HZ2_ITEMS.append(mbi2)
 
 # buils other Heizkreis Itemlists
 MODBUS_HZ3_ITEMS: list = []
 for item in MODBUS_HZ_ITEMS:
-    mbi = copy.deepcopy(x=item)
-    mbi.address = item.address+200
-    mbi.name = item.name + "3"
-    mbi.translation_key = item.translation_key + "3"
-    mbi.device = DeviceConstants.HZ3
-    MODBUS_HZ3_ITEMS.append(mbi)
+    mbi3 = copy.deepcopy(x=item)
+    mbi3.address = item.address+200
+    mbi3.name = item.name + "3"
+    mbi3.translation_key = item.translation_key + "3"
+    mbi3.device = DeviceConstants.HZ3
+    MODBUS_HZ3_ITEMS.append(mbi3)
 
 # buils other Heizkreis Itemlists
 MODBUS_HZ4_ITEMS: list = []
 for item in MODBUS_HZ_ITEMS:
-    mbi = copy.deepcopy(x=item)
-    mbi.address = item.address+300
-    mbi.name = item.name + "4"
-    mbi.translation_key = item.translation_key + "4"
-    mbi.device = DeviceConstants.HZ4
-    MODBUS_HZ4_ITEMS.append(mbi)
+    mbi4 = copy.deepcopy(x=item)
+    mbi4.address = item.address+300
+    mbi4.name = item.name + "4"
+    mbi4.translation_key = item.translation_key + "4"
+    mbi4.device = DeviceConstants.HZ4
+    MODBUS_HZ4_ITEMS.append(mbi4)
 
 # buils other Heizkreis Itemlists
 MODBUS_HZ5_ITEMS: list = []
 for item in MODBUS_HZ_ITEMS:
-    mbi: ModbusItem = copy.deepcopy(x=item)
-    mbi.address = item.address+400
-    mbi.name = item.name + "5"
-    mbi.translation_key = item.translation_key + "5"
-    mbi.device = DeviceConstants.HZ5
-    MODBUS_HZ5_ITEMS.append(mbi)
+    mbi5: ModbusItem = copy.deepcopy(x=item)
+    mbi5.address = item.address+400
+    mbi5.name = item.name + "5"
+    mbi5.translation_key = item.translation_key + "5"
+    mbi5.device = DeviceConstants.HZ5
+    MODBUS_HZ5_ITEMS.append(mbi5)
 
 MODBUS_WW_ITEMS: list[ModbusItem] = [
     ModbusItem( address=32101, name="Warmwassersolltemperatur", mformat=FormatConstants.TEMPERATURE, mtype=TypeConstants.SENSOR, device=DeviceConstants.WW, params=PARAMS_WATERTEMP, translation_key="ww_soll_temp"),

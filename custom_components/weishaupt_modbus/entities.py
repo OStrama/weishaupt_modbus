@@ -1,6 +1,8 @@
 """Entity classes used in this integration."""
 
-import logging
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 from homeassistant.components.number import NumberEntity
 from homeassistant.components.select import SelectEntity
@@ -18,8 +20,10 @@ from .items import ModbusItem, WebItem
 from .migrate_helpers import create_unique_id
 from .modbusobject import ModbusAPI, ModbusObject
 
-logging.basicConfig()
-log = logging.getLogger(__name__)
+if TYPE_CHECKING:
+    import logging
+
+_LOGGER: logging.Logger = __import__("logging").getLogger(__name__)
 
 
 class MyEntity(Entity):
@@ -65,19 +69,30 @@ class MyEntity(Entity):
             name_device_prefix = ""
 
         if self._config_entry.data[CONF.NAME_TOPIC_PREFIX]:
-            name_topic_prefix = reverse_device_list[self._api_item.device] + "_"
+            device_key = str(self._api_item.device.value)
+            name_topic_prefix = f"{reverse_device_list.get(device_key, 'UK')}_"
         else:
             name_topic_prefix = ""
 
         name_prefix = name_topic_prefix + name_device_prefix
 
-        self._dev_device = self._api_item.device + dev_postfix
+        self._dev_device = str(self._api_item.device.value) + dev_postfix
 
         self._attr_translation_key = self._api_item.translation_key
         self._attr_translation_placeholders = {"prefix": name_prefix}
         self._dev_translation_placeholders = {"postfix": dev_postfix}
 
-        self._attr_unique_id = create_unique_id(self._config_entry, self._api_item)
+        if isinstance(self._api_item, ModbusItem):
+            self._attr_unique_id = create_unique_id(self._config_entry, self._api_item)
+        else:
+            # For WebItem, create a simple unique ID
+            dev_postfix = "_" + self._config_entry.data[CONF.DEVICE_POSTFIX]
+            if dev_postfix == "_":
+                dev_postfix = ""
+            dev_prefix = self._config_entry.data[CONF.PREFIX]
+            self._attr_unique_id = (
+                f"{dev_prefix}_{self._api_item.name}{dev_postfix}_webif"
+            )
         self._dev_device = self._api_item.device
 
         self._modbus_api = modbus_api
@@ -85,12 +100,8 @@ class MyEntity(Entity):
         if self._api_item.format == FormatConstants.STATUS:
             self._divider = 1
         else:
-            # default state class to record all entities by default
-            self._attr_state_class = SensorStateClass.MEASUREMENT
+            # Set attributes for non-status items
             if self._api_item.params is not None:
-                self._attr_state_class = self._api_item.params.get(
-                    "stateclass", SensorStateClass.MEASUREMENT
-                )
                 self._attr_native_unit_of_measurement = self._api_item.params.get(
                     "unit", ""
                 )
@@ -140,7 +151,7 @@ class MyEntity(Entity):
             if self._dynamic_max is not None:
                 self._attr_native_max_value = self._dynamic_max / self._divider
 
-    def translate_val(self, val) -> float | str | None:
+    def translate_val(self, val: Any) -> float | str | None:
         """Translate modbus value into senseful format."""
         if self._api_item.format == FormatConstants.STATUS:
             return self._api_item.get_translation_key_from_number(val)
@@ -148,15 +159,18 @@ class MyEntity(Entity):
         if val is None:
             return None
         self.set_min_max(True)
-        return val / self._divider
+        return float(val) / self._divider
 
-    async def set_translate_val(self, value) -> int:
+    async def set_translate_val(self, value: str | float) -> int | None:
         """Translate and writes a value to the modbus."""
+        if not isinstance(self._api_item, ModbusItem):
+            return None
+
         if self._api_item.format == FormatConstants.STATUS:
-            val = self._api_item.get_number_from_translation_key(value)
+            val = self._api_item.get_number_from_translation_key(str(value))
         else:
             self.set_min_max(True)
-            val = int(value * self._divider)
+            val = int(float(value) * self._divider)
 
         await self._modbus_api.connect()
         mbo = ModbusObject(self._modbus_api, self._api_item)
@@ -165,19 +179,19 @@ class MyEntity(Entity):
 
     def my_device_info(self) -> DeviceInfo:
         """Build the device info."""
-        return {
-            "identifiers": {(CONST.DOMAIN, self._dev_device)},
-            "translation_key": self._dev_device,
-            "translation_placeholders": self._dev_translation_placeholders,
-            "sw_version": "Device_SW_Version",
-            "model": "Device_model",
-            "manufacturer": "Weishaupt",
-        }
+        return DeviceInfo(
+            identifiers={(CONST.DOMAIN, str(self._dev_device))},
+            translation_key=str(self._dev_device),
+            translation_placeholders=self._dev_translation_placeholders,
+            sw_version="Device_SW_Version",
+            model="Device_model",
+            manufacturer="Weishaupt",
+        )
 
     @property
-    def device_info(self) -> DeviceInfo:
+    def device_info(self) -> DeviceInfo | None:
         """Return device info."""
-        return MySensorEntity.my_device_info(self)
+        return self.my_device_info()
 
 
 class MySensorEntity(CoordinatorEntity, SensorEntity, MyEntity):
@@ -198,6 +212,15 @@ class MySensorEntity(CoordinatorEntity, SensorEntity, MyEntity):
         super().__init__(coordinator, context=idx)
         self.idx = idx
         MyEntity.__init__(self, config_entry, modbus_item, coordinator.modbus_api)
+
+        # Set sensor-specific state class
+        if modbus_item.format != FormatConstants.STATUS:
+            # default state class to record all entities by default
+            self._attr_state_class = SensorStateClass.MEASUREMENT
+            if modbus_item.params is not None:
+                self._attr_state_class = modbus_item.params.get(
+                    "stateclass", SensorStateClass.MEASUREMENT
+                )
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -238,10 +261,10 @@ class MyCalcSensorEntity(MySensorEntity):
         if self._calculation_source is not None:
             try:
                 self._calculation = compile(
-                    self._calculation_source, "calulation", "eval"
+                    self._calculation_source, "calculation", "eval"
                 )
             except SyntaxError:
-                log.warning("Syntax error %s", self._calculation_source)
+                _LOGGER.warning("Syntax error %s", self._calculation_source)
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -292,14 +315,17 @@ class MyCalcSensorEntity(MySensorEntity):
 
         try:
             val_0 = val / self._divider  # noqa: F841 pylint: disable=unused-variable
-            y = eval(self._calculation)  # pylint: disable=eval-used  # noqa: S307
+            if self._calculation is not None:
+                y = eval(self._calculation)  # pylint: disable=eval-used  # noqa: S307
+            else:
+                return None
         except ZeroDivisionError:
             return None
         except NameError:
-            log.warning("Variable not defined %s", self._calculation_source)
+            _LOGGER.warning("Variable not defined %s", self._calculation_source)
             return None
         except TypeError:
-            log.warning("No valid calculation string")
+            _LOGGER.warning("No valid calculation string")
             return None
         return round(y, self._attr_suggested_display_precision)
 
@@ -316,29 +342,38 @@ class MyNumberEntity(CoordinatorEntity, NumberEntity, MyEntity):  # pylint: disa
         config_entry: MyConfigEntry,
         modbus_item: ModbusItem,
         coordinator: MyCoordinator,
-        idx,
+        idx: Any,
     ) -> None:
         """Initialize NyNumberEntity."""
         super().__init__(coordinator, context=idx)
         self._idx = idx
         MyEntity.__init__(self, config_entry, modbus_item, coordinator.modbus_api)
 
+    def translate_val_number(self, val: Any) -> float | None:
+        """Translate modbus value for number entity."""
+        if val is None:
+            return None
+        self.set_min_max(True)
+        return float(val) / self._divider
+
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-        self._attr_native_value = self.translate_val(self._api_item.state)
+        self._attr_native_value = self.translate_val_number(self._api_item.state)
         self.async_write_ha_state()
 
     async def async_set_native_value(self, value: float) -> None:
         """Send value over modbus and refresh HA."""
-        self._api_item.state = await self.set_translate_val(value)
-        self._attr_native_value = self.translate_val(self._api_item.state)
-        self.async_write_ha_state()
+        result = await self.set_translate_val(value)
+        if result is not None:
+            self._api_item.state = result
+            self._attr_native_value = self.translate_val_number(self._api_item.state)
+            self.async_write_ha_state()
 
     @property
-    def device_info(self) -> DeviceInfo:
+    def device_info(self) -> DeviceInfo | None:
         """Return device info."""
-        return MyEntity.my_device_info(self)
+        return self.my_device_info()
 
 
 class MySelectEntity(CoordinatorEntity, SelectEntity, MyEntity):  # pylint: disable=abstract-method
@@ -353,7 +388,7 @@ class MySelectEntity(CoordinatorEntity, SelectEntity, MyEntity):  # pylint: disa
         config_entry: MyConfigEntry,
         modbus_item: ModbusItem,
         coordinator: MyCoordinator,
-        idx,
+        idx: Any,
     ) -> None:
         """Initialize MySelectEntity."""
         super().__init__(coordinator, context=idx)
@@ -363,27 +398,36 @@ class MySelectEntity(CoordinatorEntity, SelectEntity, MyEntity):  # pylint: disa
             CONF.PORT
         ]
         # option list build from the status list of the ModbusItem
-        self.options = []
+        self._attr_options: list[str] = []
         for _useless, item in enumerate(self._api_item._resultlist):  # noqa: SLF001
-            self.options.append(item.translation_key)
+            self._attr_options.append(item.translation_key)
         self._attr_current_option = "FEHLER"
+
+    def translate_val_select(self, val: Any) -> str | None:
+        """Translate modbus value for select entity."""
+        if self._api_item.format == FormatConstants.STATUS:
+            result = self._api_item.get_translation_key_from_number(val)
+            return str(result) if result is not None else None
+        return None
 
     async def async_select_option(self, option: str) -> None:
         """Write the selected option to modbus and refresh HA."""
-        self._api_item.state = await self.set_translate_val(option)
-        self._attr_current_option = self.translate_val(self._api_item.state)
-        self.async_write_ha_state()
+        result = await self.set_translate_val(option)
+        if result is not None:
+            self._api_item.state = result
+            self._attr_current_option = self.translate_val_select(self._api_item.state)
+            self.async_write_ha_state()
 
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-        self._attr_current_option = self.translate_val(self._api_item.state)
+        self._attr_current_option = self.translate_val_select(self._api_item.state)
         self.async_write_ha_state()
 
     @property
-    def device_info(self) -> DeviceInfo:
+    def device_info(self) -> DeviceInfo | None:
         """Return device info."""
-        return MyEntity.my_device_info(self)
+        return self.my_device_info()
 
 
 class MyWebifSensorEntity(CoordinatorEntity, SensorEntity, MyEntity):
@@ -397,38 +441,35 @@ class MyWebifSensorEntity(CoordinatorEntity, SensorEntity, MyEntity):
 
     """
 
-    _api_item = None
-    _attr_name = None
-
-    _attr_native_unit_of_measurement = None
-    _attr_device_class = None
-    _attr_state_class = None
+    _api_item: WebItem
 
     def __init__(
         self,
         config_entry: MyConfigEntry,
         api_item: WebItem,
         coordinator: MyWebIfCoordinator,
-        idx,
+        idx: Any,
     ) -> None:
         """Initialize of MySensorEntity."""
         super().__init__(coordinator, context=idx)
         self.idx = idx
-        MyEntity.__init__(
-            self=self, config_entry=config_entry, api_item=api_item, modbus_api=None
-        )
-        self.idx = idx
-        self._api_item = api_item
-        self._attr_name = api_item.name
 
-        dev_prefix = CONST.DEF_PREFIX
+        # Initialize MyEntity with minimal parameters
+        self._config_entry = config_entry
+        self._api_item = api_item
+
+        # Set basic attributes without calling MyEntity.__init__
         dev_prefix = self._config_entry.data[CONF.PREFIX]
         if self._config_entry.data[CONF.DEVICE_POSTFIX] == "_":
             dev_postfix = ""
         else:
             dev_postfix = self._config_entry.data[CONF.DEVICE_POSTFIX]
 
-        self._attr_unique_id = dev_prefix + self._api_item.name + dev_postfix + "webif"
+        self._attr_unique_id = f"{dev_prefix}_{self._api_item.name}{dev_postfix}_webif"
+        self._attr_name = api_item.name
+
+        # Set sensor-specific attributes
+        self._attr_state_class = SensorStateClass.MEASUREMENT
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -442,12 +483,12 @@ class MyWebifSensorEntity(CoordinatorEntity, SensorEntity, MyEntity):
                 self._attr_native_value = val
                 self.async_write_ha_state()
             else:
-                log.warning(
+                _LOGGER.warning(
                     "Update of %s failed. None response from server",
                     self._api_item.name,
                 )
         except KeyError:
-            log.warning("Key Error: %s", self._api_item.name)
+            _LOGGER.warning("Key Error: %s", self._api_item.name)
 
     async def async_turn_on(self, **kwargs):  # pylint: disable=unused-argument
         """Turn the light on.

@@ -23,7 +23,8 @@
         "donjayamanne.python-extension-pack",
         "njpwerner.autodocstring",
         "batisteo.vscode-django",
-        "ryanluker.vscode-coverage-gutters"
+        "ryanluker.vscode-coverage-gutters",
+        "streetsidesoftware.code-spell-checker"
       ],
       "settings": {
         "python.experiments.optOutFrom": [
@@ -52,7 +53,6 @@
         "editor.tabSize": 4,
         "files.eol": "\n",
         "files.trimTrailingWhitespace": true,
-
         "[markdown]": {
           "files.trimTrailingWhitespace": false
         },
@@ -76,5 +76,4 @@
     }
   },
   "remoteUser": "vscode"
-
 }
