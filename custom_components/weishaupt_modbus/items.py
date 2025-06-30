@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from .const import FormatConstants, TypeConstants, DeviceConstants, FormatConstants, TypeConstants
+from .const import DeviceConstants, FormatConstants, TypeConstants
 
 
 class StatusItem:
@@ -78,10 +78,10 @@ class ApiItem:
     """
 
     _name: str = "empty"
-    _format: FormatConstants | None = None
+    _format: FormatConstants = FormatConstants.UNKNOWN
     _type: TypeConstants = TypeConstants.SENSOR
     _resultlist: Any = None
-    _device: DeviceConstants | None = None
+    _device: DeviceConstants = DeviceConstants.UK
     _state: Any = None
     _is_invalid: bool = False
     _translation_key: str = ""
@@ -134,16 +134,16 @@ class ApiItem:
         return self._is_invalid
 
     @is_invalid.setter
-    def is_invalid(self, val: bool):
+    def is_invalid(self, val: bool) -> None:
         self._is_invalid = val
 
     @property
-    def state(self):
+    def state(self) -> Any:
         """Return the state of the item set by modbusobject."""
         return self._state
 
     @state.setter
-    def state(self, val):
+    def state(self, val: Any) -> None:
         """Set the state of the item from modbus."""
         self._state = val
 
@@ -153,8 +153,8 @@ class ApiItem:
         return self._name
 
     @name.setter
-    def name(self, val: str):
-        """Return name."""
+    def name(self, val: str) -> None:
+        """Set name."""
         self._name = val
 
     @property
@@ -163,7 +163,7 @@ class ApiItem:
         return self._format
 
     @property
-    def type(self):
+    def type(self) -> TypeConstants:
         """Return type."""
         return self._type
 
@@ -173,8 +173,8 @@ class ApiItem:
         return self._device
 
     @device.setter
-    def device(self, val: DeviceConstants):
-        """Return device."""
+    def device(self, val: DeviceConstants) -> None:
+        """Set device."""
         self._device = val
 
     @property
@@ -188,11 +188,11 @@ class ApiItem:
         self._translation_key = val
 
     @property
-    def resultlist(self):
+    def resultlist(self) -> Any:
         """Return resultlist."""
         return self._resultlist
 
-    def get_text_from_number(self, val: int) -> str:
+    def get_text_from_number(self, val: int) -> str | None:
         """Get errortext from corresponding number."""
         if val is None:
             return None
@@ -201,9 +201,9 @@ class ApiItem:
         for _useless, item in enumerate(self._resultlist):
             if val == item.number:
                 return item.text
-        return "unbekannt <" + str(val) + ">"
+        return f"unbekannt <{val}>"
 
-    def get_number_from_text(self, val: str) -> int:
+    def get_number_from_text(self, val: str) -> int | None:
         """Get number of corresponding errortext."""
         if self._resultlist is None:
             return None
@@ -212,7 +212,7 @@ class ApiItem:
                 return item.number
         return -1
 
-    def get_translation_key_from_number(self, val: int) -> str:
+    def get_translation_key_from_number(self, val: int) -> str | None:
         """Get errortext from corresponding number."""
         if val is None:
             return None
@@ -221,9 +221,9 @@ class ApiItem:
         for _useless, item in enumerate(self._resultlist):
             if val == item.number:
                 return item.translation_key
-        return "unbekannt <" + str(val) + ">"
+        return f"unbekannt <{val}>"
 
-    def get_number_from_translation_key(self, val: str) -> int:
+    def get_number_from_translation_key(self, val: str) -> int | None:
         """Get number of corresponding errortext."""
         if val is None:
             return None
@@ -241,8 +241,6 @@ class WebItem(ApiItem):
     Used for generating entities.
     """
 
-    _webif_group = None
-
     def __init__(
         self,
         name: str,
@@ -251,24 +249,23 @@ class WebItem(ApiItem):
         device: DeviceConstants,
         webif_group: str,
         translation_key: str | None = None,
-        resultlist=None,
-        params: dict = None,  # noqa: RUF013
+        resultlist: Any = None,
+        params: dict[Any, Any] | None = None,
     ) -> None:
         """WebifItem is used to generate sensors for an Web interface value.
 
         Args:
-            name (str): Name of the entity.
-            mformat (FormatConstants): Format of the entity.
-            mtype (TypeConstants): Type of the entity.
-            device (DeviceConstants): Device the entity belongs to.
-            webif_group (str): Group of entities this one should be fetched with.
-            translation_key (str, optional): Translation key of the entity. Defaults to None.
-            resultlist (optional): Result list of the entity. Defaults to None.
-            params (dict, optional): Additional parameters for the entity. Defaults to None.
+            name: Name of the entity.
+            mformat: Format of the entity.
+            mtype: Type of the entity.
+            device: Device the entity belongs to.
+            webif_group: Group of entities this one should be fetched with.
+            translation_key: Translation key of the entity. Defaults to None.
+            resultlist: Result list of the entity. Defaults to None.
+            params: Additional parameters for the entity. Defaults to None.
 
         """
-        ApiItem.__init__(
-            self=self,
+        super().__init__(
             name=name,
             mformat=mformat,
             mtype=mtype,
@@ -282,17 +279,17 @@ class WebItem(ApiItem):
     @property
     def webif_group(self) -> str:
         """Return webif_group."""
-        return self.webif_group
+        return self._webif_group
 
     @webif_group.setter
     def webif_group(self, val: str) -> None:
         """Set webif_group."""
-        self._webif_group: str = val
+        self._webif_group = val
 
-    def get_value(self, val):
+    def get_value(self, val: str) -> str:
         """Get the value based on the format."""
         if self._format in [
-            FormatConstants.TEMPERATUR,
+            FormatConstants.TEMPERATURE,
             FormatConstants.PERCENTAGE,
         ]:
             return val.split(" ")[0]
@@ -302,7 +299,7 @@ class WebItem(ApiItem):
 class ModbusItem(ApiItem):
     """Represents an Modbus item."""
 
-    _address = None
+    _address: int
 
     def __init__(
         self,
@@ -312,24 +309,23 @@ class ModbusItem(ApiItem):
         mtype: TypeConstants,
         device: DeviceConstants,
         translation_key: str,
-        resultlist=None,
-        params: dict = None,  # noqa: RUF013
+        resultlist: Any = None,
+        params: dict[Any, Any] | None = None,
     ) -> None:
         """ModbusItem is used to generate entities.
 
         Args:
-            address (int): Modbus Address of the item.
-            name (str): Name of the entity.
-            mformat (FormatConstants): Format of the entity.
-            mtype (TypeConstants): Type of the entity.
-            device (DeviceConstants): Device the entity belongs to.
-            translation_key (str): Translation key of the entity.
-            resultlist (optional): Result list of the entity. Defaults to None.
-            params (dict, optional): Additional parameters for the entity. Defaults to None.
+            address: Modbus Address of the item.
+            name: Name of the entity.
+            mformat: Format of the entity.
+            mtype: Type of the entity.
+            device: Device the entity belongs to.
+            translation_key: Translation key of the entity.
+            resultlist: Result list of the entity. Defaults to None.
+            params: Additional parameters for the entity. Defaults to None.
 
         """
-        ApiItem.__init__(
-            self=self,
+        super().__init__(
             name=name,
             mformat=mformat,
             mtype=mtype,
@@ -338,7 +334,7 @@ class ModbusItem(ApiItem):
             resultlist=resultlist,
             params=params,
         )
-        self._address: str = address
+        self._address = address
 
     @property
     def address(self) -> int:
@@ -346,6 +342,6 @@ class ModbusItem(ApiItem):
         return self._address
 
     @address.setter
-    def address(self, val: int):
+    def address(self, val: int) -> None:
         """Set address."""
         self._address = val
