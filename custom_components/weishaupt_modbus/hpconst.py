@@ -1,4 +1,6 @@
-"""Heatpump constants."""
+"""Heat pump constants and definitions."""
+
+from __future__ import annotations
 
 import copy
 from typing import Any

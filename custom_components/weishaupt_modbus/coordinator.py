@@ -170,7 +170,6 @@ class MyWebIfCoordinator(DataUpdateCoordinator[dict[str, Any]]):
 
     async def _async_setup(self) -> None:
         """Set up the coordinator."""
-        pass
 
     async def _async_update_data(self) -> dict[str, Any]:
         """Fetch data from WebIF endpoint."""

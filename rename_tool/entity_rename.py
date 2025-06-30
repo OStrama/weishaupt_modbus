@@ -12,20 +12,21 @@ import aiofiles
 tabulate.PRESERVE_WHITESPACE = True
 
 # Determine the protocol based on TLS configuration
-TLS_S = 's' if config.TLS else ''
+TLS_S = "s" if config.TLS else ""
 
 # Header containing the access token
 headers = {
-    'Authorization': f'Bearer {config.ACCESS_TOKEN}',
-    'Content-Type': 'application/json'
+    "Authorization": f"Bearer {config.ACCESS_TOKEN}",
+    "Content-Type": "application/json",
 }
+
 
 def align_strings(table):
     alignment_char = "."
 
     if len(table) == 0:
         return
-    
+
     for column in range(len(table[0])):
         # Get the column data from the table
         column_data = [row[column] for row in table]
@@ -34,7 +35,7 @@ def align_strings(table):
         strings_to_align = [s for s in column_data if alignment_char in s]
         if len(strings_to_align) == 0:
             continue
-        
+
         max_length = max([len(s.split(alignment_char)[0]) for s in strings_to_align])
 
         def align_string(s):
@@ -46,15 +47,19 @@ def align_strings(table):
 
         # Create the modified table by replacing the column with aligned strings
         table = [
-            tuple(align_string(value) if i == column else value for i, value in enumerate(row))
+            tuple(
+                align_string(value) if i == column else value
+                for i, value in enumerate(row)
+            )
             for row in table
         ]
 
     return table
 
+
 def list_entities(regex=None):
     # API endpoint for retrieving all entities
-    api_endpoint = f'http{TLS_S}://{config.HOST}/api/states'
+    api_endpoint = f"http{TLS_S}://{config.HOST}/api/states"
 
     # Send GET request to the API endpoint
     response = requests.get(api_endpoint, headers=headers, verify=config.SSL_VERIFY)
@@ -65,12 +70,18 @@ def list_entities(regex=None):
         data = json.loads(response.text)
 
         # Extract entity IDs and friendly names
-        entity_data = [(entity['attributes'].get('friendly_name', ''), entity['entity_id']) for entity in data]
+        entity_data = [
+            (entity["attributes"].get("friendly_name", ""), entity["entity_id"])
+            for entity in data
+        ]
 
         # Filter the entity data if regex argument is provided
         if regex:
-            filtered_entity_data = [(friendly_name, entity_id) for friendly_name, entity_id in entity_data if
-                                    re.search(regex, entity_id)]
+            filtered_entity_data = [
+                (friendly_name, entity_id)
+                for friendly_name, entity_id in entity_data
+                if re.search(regex, entity_id)
+            ]
             entity_data = filtered_entity_data
 
         # Sort the entity data by friendly name
@@ -80,7 +91,7 @@ def list_entities(regex=None):
         return entity_data
 
     else:
-        print(f'Error: {response.status_code} - {response.text}')
+        print(f"Error: {response.status_code} - {response.text}")
         return []
 
 
@@ -91,16 +102,20 @@ def process_entities(entity_data, search_regex, replace_regex=None, output_csv=N
             new_entity_id = re.sub(search_regex, replace_regex, entity_id)
             rename_data.append((friendly_name, entity_id, new_entity_id))
     else:
-        rename_data = [(friendly_name, entity_id, "") for friendly_name, entity_id in entity_data]
+        rename_data = [
+            (friendly_name, entity_id, "") for friendly_name, entity_id in entity_data
+        ]
 
     # Print the table with friendly name and entity ID
-    table = [("Friendly Name", "Current Entity ID", "New Entity ID")] + align_strings(rename_data)
+    table = [("Friendly Name", "Current Entity ID", "New Entity ID")] + align_strings(
+        rename_data
+    )
     print(tabulate.tabulate(table, headers="firstrow", tablefmt="github"))
 
     # Same table, but without whitespace for alignment
     table = [("Friendly Name", "Current Entity ID", "New Entity ID")] + rename_data
     if output_csv:
-        with open(output_csv, 'w', newline='') as csvfile:
+        with open(output_csv, "w", newline="") as csvfile:
             csv_writer = csv.writer(csvfile)
             csv_writer.writerows(table)
             print(f"(Table written to {output_csv})")
@@ -108,17 +123,18 @@ def process_entities(entity_data, search_regex, replace_regex=None, output_csv=N
     # Ask user for confirmation if replace_regex is provided
     if replace_regex is None:
         return
-    
+
     answer = input("\nDo you want to proceed with renaming the entities? (y/N): ")
     if answer.lower() not in ["y", "yes"]:
         print("Renaming process aborted.")
         return
 
     rename_entities(rename_data)
-    
+
+
 def rename_entities(rename_data):
     print("connect...")
-    websocket_url = f'ws{TLS_S}://{config.HOST}/api/websocket'
+    websocket_url = f"ws{TLS_S}://{config.HOST}/api/websocket"
     sslopt = {"cert_reqs": ssl.CERT_NONE} if not config.SSL_VERIFY else {}
     ws = websocket.WebSocket(sslopt=sslopt)
     ws.connect(websocket_url)
@@ -136,52 +152,68 @@ def rename_entities(rename_data):
 
     # Rename the entities
     for index, (_, entity_id, new_entity_id) in enumerate(rename_data, start=1):
-        entity_registry_update_msg = json.dumps({
-            "id": index,
-            "type": "config/entity_registry/update",
-            "entity_id": entity_id,
-            "new_entity_id": new_entity_id
-        })
+        entity_registry_update_msg = json.dumps(
+            {
+                "id": index,
+                "type": "config/entity_registry/update",
+                "entity_id": entity_id,
+                "new_entity_id": new_entity_id,
+            }
+        )
         ws.send(entity_registry_update_msg)
         update_result = ws.recv()
         update_result = json.loads(update_result)
         if update_result["success"]:
             print(f"Entity '{entity_id}' renamed to '{new_entity_id}' successfully!")
         else:
-            print(f"Failed to rename entity '{entity_id}': {update_result['error']['message']}")
+            print(
+                f"Failed to rename entity '{entity_id}': {update_result['error']['message']}"
+            )
 
     ws.close()
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="HomeAssistant Entity Renamer")
-    parser.add_argument('--search', dest='search_regex', help='Regular expression for search. Note: Only searches entity IDs.')
-    parser.add_argument('--replace', dest='replace_regex', help='Regular expression for replace')
-    parser.add_argument('--output-csv', dest='output_csv', help='Output preview table to CSV.')
-    parser.add_argument('--file', dest='read_namefile', help='convert entities from name_list.json')
+    parser.add_argument(
+        "--search",
+        dest="search_regex",
+        help="Regular expression for search. Note: Only searches entity IDs.",
+    )
+    parser.add_argument(
+        "--replace", dest="replace_regex", help="Regular expression for replace"
+    )
+    parser.add_argument(
+        "--output-csv", dest="output_csv", help="Output preview table to CSV."
+    )
+    parser.add_argument(
+        "--file", dest="read_namefile", help="convert entities from name_list.json"
+    )
     args = parser.parse_args()
 
     if args.search_regex:
         entity_data = list_entities(args.search_regex)
 
         if entity_data:
-            process_entities(entity_data, args.search_regex, args.replace_regex, args.output_csv)
+            process_entities(
+                entity_data, args.search_regex, args.replace_regex, args.output_csv
+            )
         else:
             print("No entities found matching the search regex.")
     elif args.read_namefile:
         rename_data = []
-          
+
         with open(args.read_namefile, "r", encoding="utf-8") as openfile:
             raw_block = openfile.read()
             json_object = json.loads(raw_block)
             n_list = json_object
-    
+
         for _useless, item in enumerate(n_list):
             entity_id = item["old_id"]
             new_entity_id = item["new_id"]
             print(f"Read Entity '{entity_id}' renamed to '{new_entity_id}' from file!")
             rename_data.append((item["uid"], entity_id, new_entity_id))
-        
+
         rename_entities(rename_data)
     else:
         parser.print_help()

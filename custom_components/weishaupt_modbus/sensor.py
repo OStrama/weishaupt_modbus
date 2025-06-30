@@ -1,4 +1,4 @@
-"""Setting uop my sensor entities."""
+"""Setting up sensor entities."""
 
 from __future__ import annotations
 
@@ -14,8 +14,7 @@ from .entities import MyWebifSensorEntity
 from .entity_helpers import build_entity_list
 from .hpconst import DEVICELISTS, WEBIF_INFO_HEIZKREIS1
 
-logging.basicConfig()
-log: logging.Logger = logging.getLogger(name=__name__)
+_LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup_entry(
