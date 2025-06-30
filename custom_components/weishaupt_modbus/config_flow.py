@@ -1,4 +1,4 @@
-git status"""Config flow."""
+"""Config flow."""
 
 from typing import Any
 
