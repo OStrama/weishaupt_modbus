@@ -1,10 +1,37 @@
-/*
-/*/
-!/custom_components/
-/custom_components/weishaupt_modbus/__pycache__/
-!.github/workflows/
-!.gitignore
-!README.md
-!LICENSE
-!hacs.json
-!info.md
+# artifacts
+__pycache__
+.pytest*
+*.egg-info
+*/build/*
+*/dist/*
+
+
+# misc
+.coverage
+coverage.xml
+.ruff_cache
+
+# VS Code
+.vscode
+.vs
+.venv
+
+# Home Assistant configuration
+config/*
+!config/configuration.yaml
+custom_components/hacs/*
+configuration.yaml
+automations.yaml
+.HA_VERSION
+scenes.yaml
+scripts.yaml
+secrets.yaml
+.storage/*
+blueprints/*
+home-assistant.log
+home-assistant_v2.db
+home-assistant.log.1
+
+.devcontainer/
+Dockerfile.dev
+scripts/
