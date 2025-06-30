@@ -7,7 +7,7 @@ from homeassistant.helpers import entity_registry as er
 from homeassistant.util import slugify
 
 from .configentry import MyConfigEntry
-from .const import CONF, CONST, TYPES
+from .const import CONF, CONST, TypeConstants
 from .hpconst import reverse_device_list
 from .items import ModbusItem
 
@@ -70,11 +70,11 @@ def migrate_entities(
     for _useless, item in enumerate(modbusitems):
         platform = ""
         match item.type:
-            case TYPES.SENSOR | TYPES.NUMBER_RO | TYPES.SENSOR_CALC:
+            case TypeConstants.SENSOR | TypeConstants.NUMBER_RO | TypeConstants.SENSOR_CALC:
                 platform = "sensor"
-            case TYPES.SELECT:
+            case TypeConstants.SELECT:
                 platform = "select"
-            case TYPES.NUMBER:
+            case TypeConstants.NUMBER:
                 platform = "number"
 
         old_uid = create_unique_id(config_entry, item)

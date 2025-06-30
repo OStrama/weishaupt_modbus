@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from .const import FORMATS, TYPES, DeviceConstants, FormatConstants, TypeConstants
+from .const import FormatConstants, TypeConstants, DeviceConstants, FormatConstants, TypeConstants
 
 
 class StatusItem:
@@ -79,7 +79,7 @@ class ApiItem:
 
     _name: str = "empty"
     _format: FormatConstants | None = None
-    _type: TypeConstants = TYPES.SENSOR
+    _type: TypeConstants = TypeConstants.SENSOR
     _resultlist: Any = None
     _device: DeviceConstants | None = None
     _state: Any = None
@@ -292,8 +292,8 @@ class WebItem(ApiItem):
     def get_value(self, val):
         """Get the value based on the format."""
         if self._format in [
-            FORMATS.TEMPERATUR,
-            FORMATS.PERCENTAGE,
+            FormatConstants.TEMPERATUR,
+            FormatConstants.PERCENTAGE,
         ]:
             return val.split(" ")[0]
         return val

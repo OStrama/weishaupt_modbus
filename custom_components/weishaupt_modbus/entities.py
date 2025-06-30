@@ -11,7 +11,7 @@ from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .configentry import MyConfigEntry
-from .const import CONF, CONST, FORMATS
+from .const import CONF, CONST, FormatConstants
 from .coordinator import MyCoordinator, MyWebIfCoordinator
 from .hpconst import reverse_device_list
 from .items import ModbusItem, WebItem
@@ -82,7 +82,7 @@ class MyEntity(Entity):
 
         self._modbus_api = modbus_api
 
-        if self._api_item.format == FORMATS.STATUS:
+        if self._api_item.format == FormatConstants.STATUS:
             self._divider = 1
         else:
             # default state class to record all entities by default
@@ -142,7 +142,7 @@ class MyEntity(Entity):
 
     def translate_val(self, val) -> float | str | None:
         """Translate modbus value into senseful format."""
-        if self._api_item.format == FORMATS.STATUS:
+        if self._api_item.format == FormatConstants.STATUS:
             return self._api_item.get_translation_key_from_number(val)
 
         if val is None:
@@ -152,7 +152,7 @@ class MyEntity(Entity):
 
     async def set_translate_val(self, value) -> int:
         """Translate and writes a value to the modbus."""
-        if self._api_item.format == FORMATS.STATUS:
+        if self._api_item.format == FormatConstants.STATUS:
             val = self._api_item.get_number_from_translation_key(value)
         else:
             self.set_min_max(True)

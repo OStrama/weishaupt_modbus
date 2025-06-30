@@ -574,6 +574,7 @@ combine-as-imports = true
 split-on-trailing-comma = false
 
 [tool.ruff.lint.per-file-ignores]
+"tests/*" = ["SLF001"]  # Allow private member access in tests
 
 # Temporary
 "tests/**" = ["PTH"]
@@ -583,6 +584,3 @@ max-complexity = 25
 
 [tool.ruff.lint.pydocstyle]
 property-decorators = ["propcache.api.cached_property"]
-
-[tool.ruff.per-file-ignores]
-"tests/*" = ["SLF001"]  # Allow private member access in tests

@@ -8,7 +8,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .configentry import MyConfigEntry
-from .const import CONF, TYPES
+from .const import CONF, TypeConstants
 from .coordinator import MyWebIfCoordinator
 from .entities import MyWebifSensorEntity
 from .entity_helpers import build_entity_list
@@ -36,14 +36,14 @@ async def async_setup_entry(
             entries=entries,
             config_entry=config_entry,
             api_items=device,
-            item_type=TYPES.NUMBER_RO,
+            item_type=TypeConstants.NUMBER_RO,
             coordinator=coordinator,
         )
         entries = await build_entity_list(
             entries=entries,
             config_entry=config_entry,
             api_items=device,
-            item_type=TYPES.SENSOR_CALC,
+            item_type=TypeConstants.SENSOR_CALC,
             coordinator=coordinator,
         )
 
@@ -52,7 +52,7 @@ async def async_setup_entry(
             entries=entries,
             config_entry=config_entry,
             api_items=device,
-            item_type=TYPES.SENSOR,
+            item_type=TypeConstants.SENSOR,
             coordinator=coordinator,
         )
 

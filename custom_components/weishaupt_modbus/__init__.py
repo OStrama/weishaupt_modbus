@@ -8,7 +8,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
 from .configentry import MyConfigEntry, MyData
-from .const import CONF, CONST, DEVICENAMES, FORMATS, TYPES
+from .const import CONF, CONST, DEVICENAMES, FormatConstants, TypeConstants
 from .coordinator import MyCoordinator
 from .hpconst import (
     DEVICELISTS,
@@ -203,31 +203,31 @@ def create_string_json() -> None:
 
     for item in DEVICELIST:
         match item.type:
-            case TYPES.SENSOR | TYPES.NUMBER_RO | TYPES.SENSOR_CALC:
+            case TypeConstants.SENSOR | TypeConstants.NUMBER_RO | TypeConstants.SENSOR_CALC:
                 mySensor = {}
                 mySensor["name"] = "{prefix}" + item.name
                 if item.resultlist is not None:
-                    if item.format is FORMATS.STATUS:
+                    if item.format is FormatConstants.STATUS:
                         myValues = {}
                         for myStatusItem in item.resultlist:
                             myValues[myStatusItem.translation_key] = myStatusItem.text
                         mySensor["state"] = myValues.copy()
                 mySensors[item.translation_key] = mySensor.copy()
-            case TYPES.NUMBER:
+            case TypeConstants.NUMBER:
                 myNumber = {}
                 myNumber["name"] = "{prefix}" + item.name
                 if item.resultlist is not None:
-                    if item.format is FORMATS.STATUS:
+                    if item.format is FormatConstants.STATUS:
                         myValues = {}
                         for myStatusItem in item.resultlist:
                             myValues[myStatusItem.translation_key] = myStatusItem.text
                         myNumber["value"] = myValues.copy()
                 myNumbers[item.translation_key] = myNumber.copy()
-            case TYPES.SELECT:
+            case TypeConstants.SELECT:
                 mySelect = {}
                 mySelect["name"] = "{prefix}" + item.name
                 if item.resultlist is not None:
-                    if item.format is FORMATS.STATUS:
+                    if item.format is FormatConstants.STATUS:
                         myValues = {}
                         for myStatusItem in item.resultlist:
                             myValues[myStatusItem.translation_key] = myStatusItem.text
@@ -239,7 +239,7 @@ def create_string_json() -> None:
     myJson["entity"] = myEntity
 
     # iterate over all devices in order to create a translation. TODO
-    # for key, value in asdict(DEVICES).items():
+    # for key, value in asdict(DeviceConstants).items():
     #    ...
 
     # load strings.json into string

@@ -4,7 +4,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .configentry import MyConfigEntry
-from .const import TYPES
+from .const import TypeConstants
 from .entity_helpers import build_entity_list
 from .hpconst import DEVICELISTS
 
@@ -27,7 +27,7 @@ async def async_setup_entry(
             entries=entries,
             config_entry=config_entry,
             api_items=device,
-            item_type=TYPES.SELECT,
+            item_type=TypeConstants.SELECT,
             coordinator=coordinator,
         )
 
