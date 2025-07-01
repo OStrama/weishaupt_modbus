@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 import logging
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 import aiofiles  # type: ignore[import-untyped]
 import numpy as np
@@ -16,19 +16,14 @@ from homeassistant.core import HomeAssistant
 from .configentry import MyConfigEntry
 from .const import CONF, CONST
 
-if TYPE_CHECKING:
-    try:
-        from scipy.interpolate import CubicSpline
-    except ImportError:
-        CubicSpline = None  # type: ignore[misc]
-
 _LOGGER = logging.getLogger(__name__)
 
 SPLINE_AVAILABLE = True
-CubicSpline = None  # type: ignore[assignment]
+CubicSpline: Any = None
 try:
     import scipy  # type: ignore[import-untyped] # noqa: F401 pylint: disable=unused-import
     from scipy.interpolate import CubicSpline  # type: ignore[import-untyped]
+
     _LOGGER.info(
         "Scipy available, use precise cubic spline interpolation for heating power"
     )
@@ -39,9 +34,9 @@ except ModuleNotFoundError:
     SPLINE_AVAILABLE = False
 
 MATPLOTLIB_AVAILABLE = True
-plt = None  # type: ignore[assignment]
+plt: Any = None
 try:
-    import matplotlib.pyplot as plt  # type: ignore[import-not-found,import-untyped,no-redef]
+    import matplotlib.pyplot as plt  # type: ignore[import-not-found,import-untyped]
 except ModuleNotFoundError:
     _LOGGER.warning("Matplotlib not available. Can't create power map image file")
     MATPLOTLIB_AVAILABLE = False
@@ -117,7 +112,7 @@ class PowerMap:
         filepath = Path(
             get_filepath(self.hass) / self._config_entry.data[CONF.KENNFELD_FILE]
         )
-        
+
         try:
             async with aiofiles.open(filepath, encoding="utf-8") as openfile:
                 raw_block = await openfile.read()
@@ -203,7 +198,7 @@ class PowerMap:
         if not MATPLOTLIB_AVAILABLE or plt is None:
             _LOGGER.warning("Matplotlib not available, cannot plot kennfeld")
             return
-            
+
         plt.plot(self._all_t, np.transpose(self._max_power))
         plt.ylabel("Max Power")
         plt.xlabel("°C")
@@ -217,7 +212,7 @@ class PowerMap:
             + CONST.DOMAIN
             + "_powermap.png"
         )
-        
+
         try:
             plt.savefig(filepath)
             _LOGGER.info(
