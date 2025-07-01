@@ -79,12 +79,12 @@ class MyCoordinator(DataUpdateCoordinator[dict[str, Any]]):
 
     async def _async_setup(self) -> None:
         """Set up the coordinator."""
-        if self._modbus_api._modbus_client is None:
+        if self._modbus_api._modbus_client is None:  # noqa: SLF001
             _LOGGER.warning("Modbus client is None")
             raise ConfigEntryNotReady("Modbus client not initialized")
 
         await self._modbus_api.connect(startup=True)
-        if not self._modbus_api._modbus_client.connected:
+        if not self._modbus_api._modbus_client.connected:  # noqa: SLF001
             _LOGGER.warning("Connection failed during setup")
             raise ConfigEntryNotReady("Could not connect to modbus")
 
@@ -124,11 +124,11 @@ class MyCoordinator(DataUpdateCoordinator[dict[str, Any]]):
 
     async def _ensure_connection(self) -> bool:
         """Establish modbus connection."""
-        if self._modbus_api._modbus_client is None:
+        if self._modbus_api._modbus_client is None:  # noqa: SLF001
             _LOGGER.debug("Modbus client is None")
             return False
 
-        if not self._modbus_api._modbus_client.connected:
+        if not self._modbus_api._modbus_client.connected:  # noqa: SLF001
             status = await self._modbus_api.connect(startup=False)
             if not status:
                 _LOGGER.debug("Connection retry failed")
@@ -180,6 +180,6 @@ class MyWebIfCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         except TimeoutError:
             _LOGGER.debug("Timeout while fetching WebIF data")
             return {}
-        except Exception as err:
+        except Exception as err:  # noqa: BLE001
             _LOGGER.debug("Error fetching WebIF data: %s", err)
             return {}

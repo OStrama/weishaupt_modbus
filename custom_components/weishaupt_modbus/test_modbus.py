@@ -49,10 +49,10 @@ async def main():  # noqa: D103
         writeit = False
         try:
             rr = await client.read_coils(register, 1, slave=1)
-            print(rr)
+            print(rr)  # noqa: T201
         except ModbusException as exc:
             val = exc
-            print(val)
+            print(val)  # noqa: T201
         if rr.isError() or isinstance(rr, ExceptionResponse):
             val = rr
             writeit = False
@@ -69,10 +69,10 @@ async def main():  # noqa: D103
         writeit = False
         try:
             rr = await client.read_input_registers(register, slave=1)
-            print(rr)
+            print(rr)  # noqa: T201
         except ModbusException as exc:
             val = exc
-            print(val)
+            print(val)  # noqa: T201
         if rr.isError() or isinstance(rr, ExceptionResponse):
             val = rr
             writeit = False
@@ -89,10 +89,10 @@ async def main():  # noqa: D103
         writeit = False
         try:
             rr = await client.read_holding_registers(register, slave=1)
-            print(rr)
+            print(rr)  # noqa: T201
         except ModbusException as exc:
             val = exc
-            print(val)
+            print(val)  # noqa: T201
         if rr.isError() or isinstance(rr, ExceptionResponse):
             val = rr
             writeit = False

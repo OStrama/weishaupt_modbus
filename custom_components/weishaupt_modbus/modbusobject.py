@@ -62,7 +62,7 @@ class ModbusAPI:
             self._failed_reconnect_counter += 1
             self._connect_pending = False
             self._modbus_client.close()
-            return self._modbus_client.connected
+            return self._modbus_client.connected  # noqa: TRY300
 
         except ModbusException:
             _LOGGER.warning("Connection to heatpump failed")

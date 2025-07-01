@@ -575,6 +575,7 @@ split-on-trailing-comma = false
 
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["SLF001"]  # Allow private member access in tests
+"custom_components/weishaupt_modbus/test_modbus.py" = ["ALL"]  # Ignore all rules for test_modbus.py
 
 # Temporary
 "tests/**" = ["PTH"]
@@ -584,3 +585,9 @@ max-complexity = 25
 
 [tool.ruff.lint.pydocstyle]
 property-decorators = ["propcache.api.cached_property"]
+
+[tool.mypy]
+python_version = "3.13"
+exclude = [
+  "custom_components/weishaupt_modbus/test_modbus.py",
+]
