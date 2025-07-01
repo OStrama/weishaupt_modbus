@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - update-types
+      - dev
   pull_request:
     branches: [main]
   workflow_dispatch:
