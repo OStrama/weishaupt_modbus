@@ -32,7 +32,7 @@ class ModbusAPI:
         """
         self._ip: str = config_entry.data[CONF.HOST]
         self._port: int = config_entry.data[CONF.PORT]
-        self._conneted: bool = False
+        self._connected: bool = False
         self._connect_pending: bool = False
         self._failed_reconnect_counter: int = 0
         self._last_connection_try: Any = None
@@ -218,7 +218,7 @@ class ModbusObject:
         if self._modbus_client is None:
             return None
         if self._modbus_client.connected is False:
-            # on first check_availability call connection still not availöable, supress warning
+            # on first check_availability call connection still not available, suppress warning
             if self._no_connect_warn is True:
                 return None
             _LOGGER.warning(
