@@ -140,7 +140,7 @@ class MyCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         try:
             async with asyncio.timeout(10):
                 listening_idx = set(self.async_contexts())
-                return await self.fetch_data(listening_idx)
+                return await self.fetch_data()  # listening_idx)
         except ModbusException as err:
             _LOGGER.debug("Modbus connection failed: %s", err)
             return {}

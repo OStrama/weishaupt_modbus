@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from .const import DEVICES, Formats, TYPES
+from .const import DEVICES, FORMATS, TYPES
 
 
 class StatusItem:
@@ -78,10 +78,10 @@ class ApiItem:
     """
 
     _name: str = "empty"
-    _format: Formats = Formats.UNKNOWN
-    _type: TYPES = TYPES.SENSOR
+    _format: str = FORMATS.UNKNOWN
+    _type: str = TYPES.SENSOR
     _resultlist: Any = None
-    _device: DEVICES = DEVICES.UK
+    _device: str = DEVICES.UK
     _state: Any = None
     _is_invalid: bool = False
     _translation_key: str = ""
@@ -91,18 +91,18 @@ class ApiItem:
     def __init__(
         self,
         name: str,
-        mformat: Formats,
-        mtype: TYPES,
-        device: DEVICES,
+        mformat: str,
+        mtype: str,
+        device: str,
         translation_key: str | None = None,
         resultlist: Any = None,
         params: dict[Any, Any] | None = None,
     ) -> None:
         """Initialise ModbusItem."""
         self._name: str = name
-        self._format: Formats = mformat
-        self._type: TYPES = mtype
-        self._device: DEVICES = device
+        self._format: str = mformat
+        self._type: str = mtype
+        self._device: str = device
         self._resultlist = resultlist
         self._state = None
         self._is_invalid = False
@@ -158,22 +158,22 @@ class ApiItem:
         self._name = val
 
     @property
-    def format(self) -> Formats:
+    def format(self) -> str:
         """Return format."""
         return self._format
 
     @property
-    def type(self) -> TYPES:
+    def type(self) -> str:
         """Return type."""
         return self._type
 
     @property
-    def device(self) -> DEVICES:
+    def device(self) -> str:
         """Return device."""
         return self._device
 
     @device.setter
-    def device(self, val: DEVICES) -> None:
+    def device(self, val: str) -> None:
         """Set device."""
         self._device = val
 
@@ -244,9 +244,9 @@ class WebItem(ApiItem):
     def __init__(
         self,
         name: str,
-        mformat: Formats,
-        mtype: TYPES,
-        device: DEVICES,
+        mformat: str,
+        mtype: str,
+        device: str,
         webif_group: str,
         translation_key: str | None = None,
         resultlist: Any = None,
@@ -289,8 +289,8 @@ class WebItem(ApiItem):
     def get_value(self, val: str) -> str:
         """Get the value based on the format."""
         if self._format in [
-            Formats.TEMPERATURE,
-            Formats.PERCENTAGE,
+            FORMATS.TEMPERATURE,
+            FORMATS.PERCENTAGE,
         ]:
             return val.split(" ")[0]
         return val
@@ -305,9 +305,9 @@ class ModbusItem(ApiItem):
         self,
         address: int,
         name: str,
-        mformat: Formats,
-        mtype: TYPES,
-        device: DEVICES,
+        mformat: str,
+        mtype: str,
+        device: str,
         translation_key: str,
         resultlist: Any = None,
         params: dict[Any, Any] | None = None,

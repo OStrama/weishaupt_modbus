@@ -2,7 +2,6 @@
 
 from dataclasses import dataclass
 from datetime import timedelta
-from enum import Enum
 
 from homeassistant.const import (
     CONF_HOST,
@@ -53,7 +52,7 @@ CONST = MainConstants()
 
 
 @dataclass(frozen=True)
-class FormatConstants(Enum):
+class FormatConstants:
     """Format constants."""
 
     TEMPERATURE = "temperature"
@@ -62,11 +61,12 @@ class FormatConstants(Enum):
     STATUS = "status"
     UNKNOWN = "unknown"
 
+
 FORMATS = FormatConstants()
 
 
 @dataclass(frozen=True)
-class TypeConstants(Enum):
+class TypeConstants:
     """Type constants."""
 
     SENSOR = "Sensor"
@@ -74,6 +74,7 @@ class TypeConstants(Enum):
     SELECT = "Select"
     NUMBER = "Number"
     NUMBER_RO = "Number_RO"
+
 
 TYPES = TypeConstants()
 

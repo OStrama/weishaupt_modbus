@@ -97,7 +97,7 @@ class MyEntity(Entity):
 
         self._modbus_api = modbus_api
 
-        if self._api_item.format == Formats.STATUS:
+        if self._api_item.format == FORMATS.STATUS:
             self._divider = 1
         else:
             # Set attributes for non-status items
@@ -153,7 +153,7 @@ class MyEntity(Entity):
 
     def translate_val(self, val: Any) -> float | str | None:
         """Translate modbus value into senseful format."""
-        if self._api_item.format == Formats.STATUS:
+        if self._api_item.format == FORMATS.STATUS:
             return self._api_item.get_translation_key_from_number(val)
 
         if val is None:
@@ -166,7 +166,7 @@ class MyEntity(Entity):
         if not isinstance(self._api_item, ModbusItem):
             return None
 
-        if self._api_item.format == Formats.STATUS:
+        if self._api_item.format == FORMATS.STATUS:
             val = self._api_item.get_number_from_translation_key(str(value))
         else:
             self.set_min_max(True)
@@ -214,7 +214,7 @@ class MySensorEntity(CoordinatorEntity, SensorEntity, MyEntity):
         MyEntity.__init__(self, config_entry, modbus_item, coordinator.modbus_api)
 
         # Set sensor-specific state class
-        if modbus_item.format != Formats.STATUS:
+        if modbus_item.format != FORMATS.STATUS:
             # default state class to record all entities by default
             self._attr_state_class = SensorStateClass.MEASUREMENT
             if modbus_item.params is not None:
@@ -405,7 +405,7 @@ class MySelectEntity(CoordinatorEntity, SelectEntity, MyEntity):  # pylint: disa
 
     def translate_val_select(self, val: Any) -> str | None:
         """Translate modbus value for select entity."""
-        if self._api_item.format == Formats.STATUS:
+        if self._api_item.format == FORMATS.STATUS:
             result = self._api_item.get_translation_key_from_number(val)
             return str(result) if result is not None else None
         return None
