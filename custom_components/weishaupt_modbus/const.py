@@ -1,7 +1,8 @@
-"""Constants."""
+"""Constants for Weishaupt modbus integration."""
 
 from dataclasses import dataclass
 from datetime import timedelta
+from enum import Enum
 
 from homeassistant.const import (
     CONF_HOST,
@@ -16,21 +17,21 @@ from homeassistant.const import (
 class ConfConstants:
     """Constants used for configuration."""
 
-    HOST = CONF_HOST
-    PORT = CONF_PORT
-    PREFIX = CONF_PREFIX
-    DEVICE_POSTFIX = "Device-Postfix"
-    KENNFELD_FILE = "Kennfeld-File"
-    HK2 = "Heizkreis 2"
-    HK3 = "Heizkreis 3"
-    HK4 = "Heizkreis 4"
-    HK5 = "Heizkreis 5"
-    NAME_DEVICE_PREFIX = "Name-Device-Prefix"
-    NAME_TOPIC_PREFIX = "Name-Topic-Prefix"
-    CB_WEBIF = "enable-webif"
-    PASSWORD = CONF_PASSWORD
-    USERNAME = CONF_USERNAME
-    WEBIF_TOKEN = "Web-IF-Token"
+    HOST: str = CONF_HOST
+    PORT: str = CONF_PORT
+    PREFIX: str = CONF_PREFIX
+    DEVICE_POSTFIX: str = "Device-Postfix"
+    KENNFELD_FILE: str = "Kennfeld-File"
+    HK2: str = "Heizkreis 2"
+    HK3: str = "Heizkreis 3"
+    HK4: str = "Heizkreis 4"
+    HK5: str = "Heizkreis 5"
+    NAME_DEVICE_PREFIX: str = "Name-Device-Prefix"
+    NAME_TOPIC_PREFIX: str = "Name-Topic-Prefix"
+    CB_WEBIF: str = "enable-webif"
+    PASSWORD: str = CONF_PASSWORD
+    USERNAME: str = CONF_USERNAME
+    WEBIF_TOKEN: str = "Web-IF-Token"
 
 
 CONF = ConfConstants()
@@ -40,33 +41,28 @@ CONF = ConfConstants()
 class MainConstants:
     """Main constants."""
 
-    DOMAIN = "weishaupt_modbus"
-    SCAN_INTERVAL = timedelta(seconds=30)
-    UNIQUE_ID = "unique_id"
-    APPID = 100
-    DEF_KENNFELDFILE = "weishaupt_wbb_kennfeld.json"
-    DEF_PREFIX = "weishaupt_wbb"
+    DOMAIN: str = "weishaupt_modbus"
+    SCAN_INTERVAL: timedelta = timedelta(seconds=30)
+    UNIQUE_ID: str = "unique_id"
+    APPID: int = 100
+    DEF_KENNFELDFILE: str = "weishaupt_wbb_kennfeld.json"
+    DEF_PREFIX: str = "weishaupt_wbb"
 
 
 CONST = MainConstants()
 
 
-@dataclass(frozen=True)
-class FormatConstants:
+class FormatConstants(Enum):
     """Format constants."""
 
-    TEMPERATUR = "temperature"
+    TEMPERATURE = "temperature"
     PERCENTAGE = "percentage"
     NUMBER = "number"
     STATUS = "status"
     UNKNOWN = "unknown"
 
 
-FORMATS = FormatConstants()
-
-
-@dataclass(frozen=True)
-class TypeConstants:
+class TypeConstants(Enum):
     """Type constants."""
 
     SENSOR = "Sensor"
@@ -76,11 +72,7 @@ class TypeConstants:
     NUMBER_RO = "Number_RO"
 
 
-TYPES = TypeConstants()
-
-
-@dataclass(frozen=True)
-class DeviceConstants:
+class DeviceConstants(Enum):
     """Device constants."""
 
     SYS = "dev_system"
@@ -95,29 +87,25 @@ class DeviceConstants:
     ST = "dev_statistik"
     UK = "dev_unknown"
     IO = "dev_ein_aus"
-
     WIH = "Webif Info Heizkreis"
-
-
-DEVICES = DeviceConstants()
 
 
 @dataclass(frozen=True)
 class DeviceNameConstants:
-    """Device constants."""
+    """Device name constants."""
 
-    SYS = "WH System"
-    WP = "WH Wärmepumpe"
-    WW = "WH Warmwasser"
-    HZ = "WH Heizkreis"
-    HZ2 = "WH Heizkreis2"
-    HZ3 = "WH Heizkreis3"
-    HZ4 = "WH Heizkreis4"
-    HZ5 = "WH Heizkreis5"
-    W2 = "WH 2. Wärmeerzeuger"
-    ST = "WH Statistik"
-    UK = "WH Unknown"
-    IO = "WH Eingänge/Ausgänge"
+    SYS: str = "WH System"
+    WP: str = "WH Wärmepumpe"
+    WW: str = "WH Warmwasser"
+    HZ: str = "WH Heizkreis"
+    HZ2: str = "WH Heizkreis2"
+    HZ3: str = "WH Heizkreis3"
+    HZ4: str = "WH Heizkreis4"
+    HZ5: str = "WH Heizkreis5"
+    W2: str = "WH 2. Wärmeerzeuger"
+    ST: str = "WH Statistik"
+    UK: str = "WH Unknown"
+    IO: str = "WH Eingänge/Ausgänge"
 
 
 DEVICENAMES = DeviceNameConstants()

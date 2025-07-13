@@ -1,0 +1,79 @@
+{
+  "name": "weishaupt_modbus Dev",
+  "context": "..",
+  "dockerFile": "../Dockerfile.dev",
+  "postCreateCommand": "scripts/post-create.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "charliermarsh.ruff",
+        "ms-python.pylint",
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "visualstudioexptteam.vscodeintellicode",
+        "ms-python.mypy-type-checker",
+        "redhat.vscode-yaml",
+        "esbenp.prettier-vscode",
+        "github.vscode-github-actions",
+        "GitHub.vscode-pull-request-github",
+        "GitHub.copilot",
+        "bierner.markdown-preview-github-styles",
+        "DavidAnson.vscode-markdownlint",
+        "mhutchie.git-graph",
+        "donjayamanne.python-extension-pack",
+        "njpwerner.autodocstring",
+        "batisteo.vscode-django",
+        "ryanluker.vscode-coverage-gutters",
+        "streetsidesoftware.code-spell-checker"
+      ],
+      "settings": {
+        "python.experiments.optOutFrom": [
+          "pythonTestAdapter"
+        ],
+        "python.defaultInterpreterPath": "/home/vscode/.local/ha-venv/bin/python",
+        "python.pythonPath": "/home/vscode/.local/ha-venv/bin/python",
+        "python.terminal.activateEnvInCurrentTerminal": true,
+        "python.terminal.activateEnvironment": true,
+        "python.testing.pytestArgs": [
+          "--no-cov"
+        ],
+        "pylint.importStrategy": "fromEnvironment",
+        "ruff.nativeServer": "on",
+        "ruff.formatting": "on",
+        "ruff.linting": "on",
+        "python.analysis.autoSearchPaths": false,
+        "python.terminal.shellIntegration.enabled": true,
+        "python.analysis.supportAllPythonDocuments": true,
+        "[python]": {
+          "editor.defaultFormatter": "charliermarsh.ruff"
+        },
+        "editor.formatOnPaste": true,
+        "editor.formatOnSave": true,
+        "editor.formatOnType": false,
+        "editor.tabSize": 4,
+        "files.eol": "\n",
+        "files.trimTrailingWhitespace": true,
+        "[markdown]": {
+          "files.trimTrailingWhitespace": false
+        },
+        "terminal.integrated.shellIntegration.enabled": false,
+        "terminal.integrated.suggest.enabled": true,
+        "terminal.integrated.profiles.linux": {
+          "bash": {
+            "path": "/usr/bin/bash"
+          }
+        },
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "json.schemas": [
+          {
+            "fileMatch": [
+              "${containerWorkspaceFolder}/custom_components/weishaupt_modbus/manifest.json"
+            ],
+            "url": "${containerWorkspaceFolder}/script/json_schemas/manifest_schema.json"
+          }
+        ]
+      }
+    }
+  },
+  "remoteUser": "vscode"
+}
