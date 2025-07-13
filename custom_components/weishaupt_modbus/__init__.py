@@ -11,7 +11,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
 from .configentry import MyConfigEntry, MyData
-from .const import CONF, CONST, DEVICENAMES, FormatConstants, TypeConstants
+from .const import CONF, CONST, DEVICENAMES, FORMATS, TYPES
 from .coordinator import MyCoordinator
 from .hpconst import (
     DEVICELISTS,
@@ -199,24 +199,24 @@ def create_string_json() -> None:
     for item in DEVICELIST:
         match item.type:
             case (
-                TypeConstants.SENSOR
-                | TypeConstants.NUMBER_RO
-                | TypeConstants.SENSOR_CALC
+                TYPES.SENSOR
+                | TYPES.NUMBER_RO
+                | TYPES.SENSOR_CALC
             ):
                 mySensor: dict[str, Any] = {}
                 mySensor["name"] = "{prefix}" + item.name
                 if item.resultlist is not None:
-                    if item.format is FormatConstants.STATUS:
+                    if item.format is FORMATS.STATUS:
                         myValues: dict[str, str] = {}
                         for myStatusItem in item.resultlist:
                             myValues[myStatusItem.translation_key] = myStatusItem.text
                         mySensor["state"] = myValues
                 mySensors[item.translation_key] = mySensor.copy()
-            case TypeConstants.NUMBER:
+            case TYPES.NUMBER:
                 myNumber: dict[str, Any] = {}
                 myNumber["name"] = "{prefix}" + item.name
                 if item.resultlist is not None:
-                    if item.format is FormatConstants.STATUS:
+                    if item.format is FORMATS.STATUS:
                         myNumberValues: dict[str, str] = {}
                         for myStatusItem in item.resultlist:
                             myNumberValues[myStatusItem.translation_key] = (
@@ -224,11 +224,11 @@ def create_string_json() -> None:
                             )
                         myNumber["value"] = myNumberValues
                 myNumbers[item.translation_key] = myNumber.copy()
-            case TypeConstants.SELECT:
+            case TYPES.SELECT:
                 mySelect: dict[str, Any] = {}
                 mySelect["name"] = "{prefix}" + item.name
                 if item.resultlist is not None:
-                    if item.format is FormatConstants.STATUS:
+                    if item.format is FORMATS.STATUS:
                         mySelectValues: dict[str, str] = {}
                         for myStatusItem in item.resultlist:
                             mySelectValues[myStatusItem.translation_key] = (

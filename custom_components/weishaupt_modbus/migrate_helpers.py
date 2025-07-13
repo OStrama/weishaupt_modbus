@@ -9,7 +9,7 @@ from homeassistant.core import callback
 from homeassistant.helpers import entity_registry as er
 from homeassistant.util import slugify
 
-from .const import CONF, CONST, TypeConstants
+from .const import CONF, CONST, TYPES
 from .hpconst import reverse_device_list
 
 if TYPE_CHECKING:
@@ -74,14 +74,14 @@ def migrate_entities(
         platform = ""
         match item.type:
             case (
-                TypeConstants.SENSOR
-                | TypeConstants.NUMBER_RO
-                | TypeConstants.SENSOR_CALC
+                TYPES.SENSOR
+                | TYPES.NUMBER_RO
+                | TYPES.SENSOR_CALC
             ):
                 platform = "sensor"
-            case TypeConstants.SELECT:
+            case TYPES.SELECT:
                 platform = "select"
-            case TypeConstants.NUMBER:
+            case TYPES.NUMBER:
                 platform = "number"
 
         old_uid = create_unique_id(config_entry, item)

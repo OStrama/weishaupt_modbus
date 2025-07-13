@@ -5,7 +5,7 @@ from __future__ import annotations
 import logging
 
 from .configentry import MyConfigEntry
-from .const import TypeConstants
+from .const import TYPES
 from .coordinator import MyCoordinator, MyWebIfCoordinator, check_configured
 from .entities import (
     MyCalcSensorEntity,
@@ -60,7 +60,7 @@ async def build_entity_list(
     entries: list[EntityType],
     config_entry: MyConfigEntry,
     api_items: list[ModbusItem | WebItem],
-    item_type: TypeConstants,
+    item_type: TYPES,
     coordinator: MyCoordinator,
 ) -> list[EntityType]:
     """Build entity list.
@@ -90,11 +90,11 @@ async def build_entity_list(
                     match item_type:
                         # here the entities are created with the parameters provided
                         # by the ModbusItem object
-                        case TypeConstants.SENSOR | TypeConstants.NUMBER_RO:
+                        case TYPES.SENSOR | TYPES.NUMBER_RO:
                             entries.append(
                                 MySensorEntity(config_entry, item, coordinator, index)
                             )
-                        case TypeConstants.SENSOR_CALC:
+                        case TYPES.SENSOR_CALC:
                             entries.append(
                                 MyCalcSensorEntity(
                                     config_entry,
@@ -103,11 +103,11 @@ async def build_entity_list(
                                     index,
                                 )
                             )
-                        case TypeConstants.SELECT:
+                        case TYPES.SELECT:
                             entries.append(
                                 MySelectEntity(config_entry, item, coordinator, index)
                             )
-                        case TypeConstants.NUMBER:
+                        case TYPES.NUMBER:
                             entries.append(
                                 MyNumberEntity(config_entry, item, coordinator, index)
                             )
@@ -119,7 +119,7 @@ async def build_webif_entity_list(
     entries: list[MyWebifSensorEntity],
     config_entry: MyConfigEntry,
     api_items: list[WebItem],
-    item_type: TypeConstants,
+    item_type: TYPES,
     coordinator: MyWebIfCoordinator,
 ) -> list[MyWebifSensorEntity]:
     """Build WebIF entity list.
@@ -142,7 +142,7 @@ async def build_webif_entity_list(
         if item.type == item_type:
             if await check_available(item, config_entry=config_entry) is True:
                 match item_type:
-                    case TypeConstants.SENSOR | TypeConstants.NUMBER_RO:
+                    case TYPES.SENSOR | TYPES.NUMBER_RO:
                         entries.append(
                             MyWebifSensorEntity(config_entry, item, coordinator, index)
                         )

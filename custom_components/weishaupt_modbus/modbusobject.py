@@ -14,7 +14,7 @@ from pymodbus import ExceptionResponse, ModbusException
 from pymodbus.client import AsyncModbusTcpClient
 
 from .configentry import MyConfigEntry
-from .const import CONF, FormatConstants, TypeConstants
+from .const import CONF, FORMATS, TYPES
 from .items import ModbusItem
 
 _LOGGER = logging.getLogger(__name__)
@@ -114,11 +114,11 @@ class ModbusObject:
     def check_valid_result(self, val: int) -> int | None:
         """Check if item is available and valid."""
         match self._modbus_item.format:
-            case FormatConstants.TEMPERATURE:
+            case FORMATS.TEMPERATURE:
                 return self.check_temperature(val)
-            case FormatConstants.PERCENTAGE:
+            case FORMATS.PERCENTAGE:
                 return self.check_percentage(val)
-            case FormatConstants.STATUS:
+            case FORMATS.STATUS:
                 return self.check_status(val)
             case _:
                 self._modbus_item.is_invalid = False
@@ -175,7 +175,7 @@ class ModbusObject:
     def check_valid_response(self, val) -> int:
         """Check if item is valid to write."""
         match self._modbus_item.format:
-            case FormatConstants.TEMPERATURE:
+            case FORMATS.TEMPERATURE:
                 if val < 0:
                     val = val + 65536
                 return val
@@ -229,16 +229,16 @@ class ModbusObject:
         if not self._modbus_item.is_invalid:
             try:
                 match self._modbus_item.type:
-                    case TypeConstants.SENSOR | TypeConstants.SENSOR_CALC:
+                    case TYPES.SENSOR | TYPES.SENSOR_CALC:
                         # Sensor entities are read-only
                         mbr = await self._modbus_client.read_input_registers(
                             self._modbus_item.address, slave=1
                         )
                         return self.validate_modbus_answer(mbr)
                     case (
-                        TypeConstants.SELECT
-                        | TypeConstants.NUMBER
-                        | TypeConstants.NUMBER_RO
+                        TYPES.SELECT
+                        | TYPES.NUMBER
+                        | TYPES.NUMBER_RO
                     ):
                         mbr = await self._modbus_client.read_holding_registers(
                             self._modbus_item.address, slave=1
@@ -273,9 +273,9 @@ class ModbusObject:
         try:
             match self._modbus_item.type:
                 case (
-                    TypeConstants.SENSOR
-                    | TypeConstants.NUMBER_RO
-                    | TypeConstants.SENSOR_CALC
+                    TYPES.SENSOR
+                    | TYPES.NUMBER_RO
+                    | TYPES.SENSOR_CALC
                 ):
                     # Sensor entities are read-only
                     return

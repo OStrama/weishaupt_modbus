@@ -52,6 +52,7 @@ class MainConstants:
 CONST = MainConstants()
 
 
+@dataclass(frozen=True)
 class FormatConstants(Enum):
     """Format constants."""
 
@@ -61,7 +62,10 @@ class FormatConstants(Enum):
     STATUS = "status"
     UNKNOWN = "unknown"
 
+FORMATS = FormatConstants()
 
+
+@dataclass(frozen=True)
 class TypeConstants(Enum):
     """Type constants."""
 
@@ -71,23 +75,29 @@ class TypeConstants(Enum):
     NUMBER = "Number"
     NUMBER_RO = "Number_RO"
 
+TYPES = TypeConstants()
 
-class DeviceConstants(Enum):
+
+@dataclass(frozen=True)
+class DeviceConstants:
     """Device constants."""
 
-    SYS = "dev_system"
-    WP = "dev_waermepumpe"
-    WW = "dev_warmwasser"
-    HZ = "dev_heizkreis"
-    HZ2 = "dev_heizkreis2"
-    HZ3 = "dev_heizkreis3"
-    HZ4 = "dev_heizkreis4"
-    HZ5 = "dev_heizkreis5"
-    W2 = "dev_waermeerzeuger2"
-    ST = "dev_statistik"
-    UK = "dev_unknown"
-    IO = "dev_ein_aus"
-    WIH = "Webif Info Heizkreis"
+    SYS: str = "dev_system"
+    WP: str = "dev_waermepumpe"
+    WW: str = "dev_warmwasser"
+    HZ: str = "dev_heizkreis"
+    HZ2: str = "dev_heizkreis2"
+    HZ3: str = "dev_heizkreis3"
+    HZ4: str = "dev_heizkreis4"
+    HZ5: str = "dev_heizkreis5"
+    W2: str = "dev_waermeerzeuger2"
+    ST: str = "dev_statistik"
+    UK: str = "dev_unknown"
+    IO: str = "dev_ein_aus"
+    WIH: str = "Webif Info Heizkreis"
+
+
+DEVICES = DeviceConstants()
 
 
 @dataclass(frozen=True)

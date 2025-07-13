@@ -12,7 +12,7 @@ from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
 from .configentry import MyConfigEntry
-from .const import CONF, CONST, DeviceConstants, TypeConstants
+from .const import CONF, CONST, DeviceConstants, TYPES
 from .items import ModbusItem
 from .modbusobject import ModbusAPI, ModbusObject
 from .webif_object import WebifConnection
@@ -111,11 +111,11 @@ class MyCoordinator(DataUpdateCoordinator[dict[str, Any]]):
 
             match item.type:
                 case (
-                    TypeConstants.SENSOR
-                    | TypeConstants.NUMBER_RO
-                    | TypeConstants.NUMBER
-                    | TypeConstants.SELECT
-                    | TypeConstants.SENSOR_CALC
+                    TYPES.SENSOR
+                    | TYPES.NUMBER_RO
+                    | TYPES.NUMBER
+                    | TYPES.SELECT
+                    | TYPES.SENSOR_CALC
                 ):
                     value = await self.get_value(item)
                     results[item.translation_key] = value

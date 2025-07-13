@@ -13,7 +13,7 @@ from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .configentry import MyConfigEntry
-from .const import CONF, CONST, FormatConstants
+from .const import CONF, CONST, Formats
 from .coordinator import MyCoordinator, MyWebIfCoordinator
 from .hpconst import reverse_device_list
 from .items import ModbusItem, WebItem
@@ -76,7 +76,7 @@ class MyEntity(Entity):
 
         name_prefix = name_topic_prefix + name_device_prefix
 
-        self._dev_device = str(self._api_item.device.value) + dev_postfix
+        self._dev_device = self._api_item.device + dev_postfix
 
         self._attr_translation_key = self._api_item.translation_key
         self._attr_translation_placeholders = {"prefix": name_prefix}
@@ -97,7 +97,7 @@ class MyEntity(Entity):
 
         self._modbus_api = modbus_api
 
-        if self._api_item.format == FormatConstants.STATUS:
+        if self._api_item.format == Formats.STATUS:
             self._divider = 1
         else:
             # Set attributes for non-status items
@@ -153,7 +153,7 @@ class MyEntity(Entity):
 
     def translate_val(self, val: Any) -> float | str | None:
         """Translate modbus value into senseful format."""
-        if self._api_item.format == FormatConstants.STATUS:
+        if self._api_item.format == Formats.STATUS:
             return self._api_item.get_translation_key_from_number(val)
 
         if val is None:
@@ -166,7 +166,7 @@ class MyEntity(Entity):
         if not isinstance(self._api_item, ModbusItem):
             return None
 
-        if self._api_item.format == FormatConstants.STATUS:
+        if self._api_item.format == Formats.STATUS:
             val = self._api_item.get_number_from_translation_key(str(value))
         else:
             self.set_min_max(True)
@@ -214,7 +214,7 @@ class MySensorEntity(CoordinatorEntity, SensorEntity, MyEntity):
         MyEntity.__init__(self, config_entry, modbus_item, coordinator.modbus_api)
 
         # Set sensor-specific state class
-        if modbus_item.format != FormatConstants.STATUS:
+        if modbus_item.format != Formats.STATUS:
             # default state class to record all entities by default
             self._attr_state_class = SensorStateClass.MEASUREMENT
             if modbus_item.params is not None:
@@ -405,7 +405,7 @@ class MySelectEntity(CoordinatorEntity, SelectEntity, MyEntity):  # pylint: disa
 
     def translate_val_select(self, val: Any) -> str | None:
         """Translate modbus value for select entity."""
-        if self._api_item.format == FormatConstants.STATUS:
+        if self._api_item.format == Formats.STATUS:
             result = self._api_item.get_translation_key_from_number(val)
             return str(result) if result is not None else None
         return None
@@ -453,6 +453,7 @@ class MyWebifSensorEntity(CoordinatorEntity, SensorEntity, MyEntity):
         """Initialize of MySensorEntity."""
         super().__init__(coordinator, context=idx)
         self.idx = idx
+        MyEntity.__init__(self, config_entry, api_item, coordinator.my_api)
 
         # Initialize MyEntity with minimal parameters
         self._config_entry = config_entry
