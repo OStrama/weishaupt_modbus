@@ -1,17 +1,14 @@
-"""Home Assistant integration initialization."""
-
-from __future__ import annotations
+"""init."""
 
 import json
 import logging
 from pathlib import Path
-from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
 from .configentry import MyConfigEntry, MyData
-from .const import CONF, CONST, DEVICENAMES, FormatConstants, TypeConstants
+from .const import CONF, CONST, DEVICENAMES, FORMATS, TYPES
 from .coordinator import MyCoordinator
 from .hpconst import (
     DEVICELISTS,
@@ -27,13 +24,14 @@ from .hpconst import (
     MODBUS_WP_ITEMS,
     MODBUS_WW_ITEMS,
 )
-from .items import ModbusItem
+from .items import ModbusItem, StatusItem
 from .kennfeld import PowerMap
 from .migrate_helpers import migrate_entities
 from .modbusobject import ModbusAPI
 from .webif_object import WebifConnection
 
-_LOGGER = logging.getLogger(__name__)
+logging.basicConfig()
+log = logging.getLogger(__name__)
 
 PLATFORMS: list[str] = [
     "number",
@@ -43,8 +41,13 @@ PLATFORMS: list[str] = [
 ]
 
 
+# Return boolean to indicate that initialization was successful.
+# return True
 async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
     """Set up entry."""
+    # Store an instance of the "connecting" class that does the work of speaking
+    # with your actual devices.
+    # hass.data.setdefault(DOMAIN, {})[entry.entry_id] = hub.Hub(hass, entry.data["host"])
     mbapi = ModbusAPI(config_entry=entry)
 
     if entry.data[CONF.CB_WEBIF]:
@@ -74,9 +77,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
         powermap=None,
     )
 
-    powermap = PowerMap(entry, hass)
-    await powermap.initialize()
-    entry.runtime_data.powermap = powermap
+    pwrmap = PowerMap(entry, hass)
+    await pwrmap.initialize()
+    entry.runtime_data.powermap = pwrmap
 
     # myWebifCon = WebifConnection()
     # data = await myWebifCon.return_test_data()
@@ -110,7 +113,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
     # It's done by calling the `async_setup_entry` function in each platform module.
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
-    _LOGGER.info("Init done")
+    log.info("Init done")
 
     return True
 
@@ -133,21 +136,21 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: MyConfigEntry):
 
     # to ensure all update paths we have to check every version to not overwrite existing entries
     if config_entry.version < 4:
-        _LOGGER.warning("Old Version detected")
+        log.warning("Old Version detected")
 
     if config_entry.version < 2:
-        _LOGGER.warning("Version <2 detected")
+        log.warning("Version <2 detected")
         new_data[CONF.PREFIX] = CONST.DEF_PREFIX
         new_data[CONF.DEVICE_POSTFIX] = ""
         new_data[CONF.KENNFELD_FILE] = CONST.DEF_KENNFELDFILE
     if config_entry.version < 3:
-        _LOGGER.warning("Version <3 detected")
+        log.warning("Version <3 detected")
         new_data[CONF.HK2] = False
         new_data[CONF.HK3] = False
         new_data[CONF.HK4] = False
         new_data[CONF.HK5] = False
     if config_entry.version < 4:
-        _LOGGER.warning("Version <4 detected")
+        log.warning("Version <4 detected")
         new_data[CONF.NAME_DEVICE_PREFIX] = False
         new_data[CONF.NAME_TOPIC_PREFIX] = False
 
@@ -159,7 +162,7 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: MyConfigEntry):
         hass.config_entries.async_update_entry(
             config_entry, data=new_data, minor_version=1, version=5
         )
-        _LOGGER.warning("Config entries updated to version 5")
+        log.warning("Config entries updated to version 5")
 
     hass.config_entries.async_update_entry(
         config_entry, data=new_data, minor_version=1, version=6
@@ -178,63 +181,57 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         try:
             hass.data[entry.data[CONF.PREFIX]].pop(entry.entry_id)
         except KeyError:
-            _LOGGER.warning("KeyError: %s", str(entry.data[CONF.PREFIX]))
+            log.warning("KeyError: %s", str(entry.data[CONF.PREFIX]))
 
     return unload_ok
 
 
 def create_string_json() -> None:
     """Create strings.json from hpconst.py."""
-    myEntity: dict[str, dict[str, dict[str, Any]]] = {}
-    myJson: dict[str, Any] = {}
-    mySensors: dict[str, dict[str, Any]] = {}
-    myNumbers: dict[str, dict[str, Any]] = {}
-    mySelects: dict[str, dict[str, Any]] = {}
+    item: ModbusItem = None
+    myStatusItem: StatusItem = None
+    myEntity = {}
+    myJson = {}
+    mySensors = {}
+    myNumbers = {}
+    mySelects = {}
 
     # generate list of all mbitems
-    DEVICELIST: list[ModbusItem] = []
+    DEVICELIST = []
     for devicelist in DEVICELISTS:
         DEVICELIST = DEVICELIST + devicelist
 
     for item in DEVICELIST:
         match item.type:
-            case (
-                TypeConstants.SENSOR
-                | TypeConstants.NUMBER_RO
-                | TypeConstants.SENSOR_CALC
-            ):
-                mySensor: dict[str, Any] = {}
+            case TYPES.SENSOR | TYPES.NUMBER_RO | TYPES.SENSOR_CALC:
+                mySensor = {}
                 mySensor["name"] = "{prefix}" + item.name
                 if item.resultlist is not None:
-                    if item.format is FormatConstants.STATUS:
-                        myValues: dict[str, str] = {}
+                    if item.format is FORMATS.STATUS:
+                        myValues = {}
                         for myStatusItem in item.resultlist:
                             myValues[myStatusItem.translation_key] = myStatusItem.text
-                        mySensor["state"] = myValues
+                        mySensor["state"] = myValues.copy()
                 mySensors[item.translation_key] = mySensor.copy()
-            case TypeConstants.NUMBER:
-                myNumber: dict[str, Any] = {}
+            case TYPES.NUMBER:
+                myNumber = {}
                 myNumber["name"] = "{prefix}" + item.name
                 if item.resultlist is not None:
-                    if item.format is FormatConstants.STATUS:
-                        myNumberValues: dict[str, str] = {}
+                    if item.format is FORMATS.STATUS:
+                        myValues = {}
                         for myStatusItem in item.resultlist:
-                            myNumberValues[myStatusItem.translation_key] = (
-                                myStatusItem.text
-                            )
-                        myNumber["value"] = myNumberValues
+                            myValues[myStatusItem.translation_key] = myStatusItem.text
+                        myNumber["value"] = myValues.copy()
                 myNumbers[item.translation_key] = myNumber.copy()
-            case TypeConstants.SELECT:
-                mySelect: dict[str, Any] = {}
+            case TYPES.SELECT:
+                mySelect = {}
                 mySelect["name"] = "{prefix}" + item.name
                 if item.resultlist is not None:
-                    if item.format is FormatConstants.STATUS:
-                        mySelectValues: dict[str, str] = {}
+                    if item.format is FORMATS.STATUS:
+                        myValues = {}
                         for myStatusItem in item.resultlist:
-                            mySelectValues[myStatusItem.translation_key] = (
-                                myStatusItem.text
-                            )
-                        mySelect["state"] = mySelectValues
+                            myValues[myStatusItem.translation_key] = myStatusItem.text
+                        mySelect["state"] = myValues.copy()
                 mySelects[item.translation_key] = mySelect.copy()
     myEntity["sensor"] = mySensors
     myEntity["number"] = myNumbers
@@ -242,7 +239,7 @@ def create_string_json() -> None:
     myJson["entity"] = myEntity
 
     # iterate over all devices in order to create a translation. TODO
-    # for key, value in asdict(DeviceConstants).items():
+    # for key, value in asdict(DEVICES).items():
     #    ...
 
     # load strings.json into string
@@ -253,7 +250,7 @@ def create_string_json() -> None:
         data = file.read()
     # create dict from json
     data_dict = json.loads(data)
-    # overwrite entity dict
+    # overwrite entiy dict
     data_dict["entity"] = myEntity
     # write whole json to file again
     # replaced Path.open by open

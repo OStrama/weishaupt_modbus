@@ -1,54 +1,72 @@
-"""Integration for Weishaupt WebIF connection."""
+"""webif Object.
+
+A webif object that contains a webif item and communicates with the webif.
+It contains a webif client for setting and getting webif values
+"""
 
 import logging
-from typing import Any
 
 import aiohttp
 from bs4 import BeautifulSoup
-from bs4.element import Tag
+from bs4.element import NavigableString, ResultSet, Tag
 
 from .configentry import MyConfigEntry
 from .const import CONF
 
-_LOGGER = logging.getLogger(__name__)
+logging.basicConfig()
+log: logging.Logger = logging.getLogger(name=__name__)
 
 
 class WebifConnection:
     """Connect to the local Weishaupt Webif."""
 
+    _config_entry: MyConfigEntry = None
+    _ip: str = ""
+    _username: str = ""
+    _password: str = ""
+    _session = None
+    _payload: dict[str, str] = {"user": _username, "pass": _password}
+    _base_url: str = "http://" + _ip
+    _login_url: str = "/login.html"
+    _connected: bool = False
+    _values = {}
+
     def __init__(self, config_entry: MyConfigEntry) -> None:
-        """Initialize the WebIf connection."""
+        """Initialize the WebIf connection.
+
+        Todo: Get info from config.
+
+        """
+        self._ip = config_entry.data[CONF.HOST]
+        self._username = config_entry.data[CONF.USERNAME]
+        self._password = config_entry.data[CONF.PASSWORD]
+        self._base_url = "http://" + self._ip
         self._config_entry = config_entry
-        self._ip: str = config_entry.data[CONF.HOST]
-        self._username: str = config_entry.data[CONF.USERNAME]
-        self._password: str = config_entry.data[CONF.PASSWORD]
-        self._session: aiohttp.ClientSession | None = None
-        self._payload: dict[str, str] = {"user": self._username, "pass": self._password}
-        self._base_url: str = f"http://{self._ip}"
-        self._login_url: str = "/login.html"
-        self._connected: bool = False
-        self._values: dict[str, Any] = {}
 
     async def login(self) -> None:
         """Log into the portal. Create cookie to stay logged in for the session."""
         jar = aiohttp.CookieJar(unsafe=True)
         self._session = aiohttp.ClientSession(base_url=self._base_url, cookie_jar=jar)
-        if self._username and self._password:
+        if self._username != "" and self._password != "":
             try:
                 async with self._session.post(
                     "/login.html",
                     data={"user": self._username, "pass": self._password},
                 ) as response:
-                    self._connected = response.status == 200
+                    if response.status == 200:
+                        self._connected = True
+                    else:
+                        self._connected = False
             except TimeoutError:
                 self._connected = False
-                _LOGGER.debug("Timeout while logging in")
+                logging.debug(msg="Timeout while logging in")
         else:
-            _LOGGER.warning("No user / password specified for webif")
+            log.warning("No user / password specified for webif")
             self._connected = False
 
-    async def return_test_data(self) -> dict[str, Any]:
+    async def return_test_data(self) -> dict[str, str]:
         """Return some values for testing."""
+
         return {
             "Webifsensor": "TESTWERT",
             "Außentemperatur": 2,
@@ -61,75 +79,85 @@ class WebifConnection:
 
     async def close(self) -> None:
         """Close connection to WebIf."""
-        if self._session:
-            await self._session.close()
+        await self._session.close()
 
-    async def get_info(self) -> dict[str, Any] | None:
+    async def get_info(self) -> None:
         """Return Info -> Heizkreis1."""
-        if not self._connected or not self._session:
+        if self._connected is False:
             return None
         try:
             async with self._session.get(
                 # token = F9AF
                 # token = 0F4C
-                url=f"/settings_export.html?stack=0C00000100000000008000"
-                f"{self._config_entry.data[CONF.WEBIF_TOKEN]}"
-                f"010002000301,0C000C1900000000000000"
-                f"{self._config_entry.data[CONF.WEBIF_TOKEN]}"
-                f"020003000401"
+                url="/settings_export.html?stack=0C00000100000000008000"
+                + self._config_entry.data[CONF.WEBIF_TOKEN]
+                + "010002000301,0C000C1900000000000000"
+                + self._config_entry.data[CONF.WEBIF_TOKEN]
+                + "020003000401"
             ) as response:
                 if response.status != 200:
-                    _LOGGER.debug("Error: %s", response.status)
+                    logging.debug(msg="Error: " & str(response.status))
                     return None
-
+                # logging.debug(msg=await response.text())
+                # print(await response.text())
                 main_page = BeautifulSoup(
                     markup=await response.text(), features="html.parser"
                 )
-                navs = main_page.find_all("div", class_="col-3")
+                navs: Tag | NavigableString | None = main_page.findAll(
+                    "div", class_="col-3"
+                )
+                # print(navs)
 
                 if len(navs) == 3:
                     values_nav = navs[2]
-                    if isinstance(values_nav, Tag):
-                        self._values["Info"] = {
-                            "Heizkreis": self.get_values(soup=values_nav)
-                        }
-                        _LOGGER.debug("Values: %s", self._values)
-                        return self._values["Info"]["Heizkreis"]
-
-                _LOGGER.debug("Update failed. return None")
-                return None
+                    self._values["Info"] = {
+                        "Heizkreis": self.get_values(soup=values_nav)
+                    }
+                    logging.debug(msg=self._values)
+                    return self._values["Info"]["Heizkreis"]
+                else:
+                    logging.debug("Update failed. return None")
+                    print(await response.text())
+                    print(navs)
+                    return None
         except TimeoutError:
-            _LOGGER.debug("Timeout while getting info")
+            logging.debug(msg="Timeout while getting info")
             return None
 
-    async def get_info_wp(self) -> dict[str, Any] | None:
-        """Return Info -> Wärmepumpe."""
-        main_page = BeautifulSoup(markup=INFO_WP, features="html.parser")
-        navs = main_page.find_all("div", class_="col-3")
+    async def get_info_wp(self) -> None:
+        """Return Info -> Heizkreis1."""
+        # if self._connected == False:
+        #    return None
+        # async with self._session.get(
+        #    url="/settings_export.html?stack=0C00000100000000008000F9AF010002000301,0C000C1900000000000000F9AF020003000401"
+        # ) as response:
+        #    if response.status != 200:
+        #        logging.debug(msg="Error: " & str(response.status))
+        #        return None
+        # logging.debug(msg=await response.text())
+        # print(await response.text())
+        if True:
+            main_page = BeautifulSoup(markup=INFO_WP, features="html.parser")
+            navs: Tag | NavigableString | None = main_page.findAll(
+                "div", class_="col-3"
+            )
+            # print(navs)
 
-        if len(navs) == 3:
-            values_nav = navs[2]
-            if isinstance(values_nav, Tag):
+            if len(navs) == 3:
+                values_nav = navs[2]
                 self._values["Info"] = {"Wärmepumpe": self.get_values(soup=values_nav)}
-            _LOGGER.debug("Values: %s", self._values)
-            return self._values["Info"]["Wärmepumpe"]
+                logging.debug(msg=self._values)
+                print(self._values["Info"]["Wärmepumpe"])
+                return self._values["Info"]["Wärmepumpe"]
+            else:
+                logging.debug("Update failed. return None")
+                print(await INFO_WP())
+                print(navs)
+                return None
+        else:
+            return None
 
-        _LOGGER.debug("Update failed. return None")
-        return None
-
-    def get_links(self, soup: Tag) -> dict[str, str]:
-        """Return links from given nav container."""
-        soup_links = soup.find_all(name="a")
-        links: dict[str, str] = {}
-        for link in soup_links:
-            if not isinstance(link, Tag):
-                continue
-            h5_tag = link.find("h5")
-            if h5_tag and h5_tag.text and link.get("href"):
-                name = h5_tag.text.strip()
-                url = str(link["href"])
-                links[name] = url
-        return links
+    def get_links(self, soup: BeautifulSoup) -> dict:
         """Return links from given nav container."""
         soup_links = soup.find_all(name="a")
         links = {}
@@ -144,37 +172,43 @@ class WebifConnection:
             # print(name + ":" + link)
         return links
 
-    def get_values(self, soup: Tag) -> dict[str, Any]:
+    def get_values(self, soup: BeautifulSoup) -> dict:
         """Return values from given nav container."""
         soup_links = soup.find_all(name="div", class_="nav-link browseobj")
-        values: dict[str, Any] = {}
+        # print(soup_links)
+        values = {}
         for item in soup_links:
-            if not isinstance(item, Tag):
-                continue
-            h5_tag = item.find("h5")
-            if h5_tag and h5_tag.text:
-                name = h5_tag.text.strip()
-                value = item.find_all(string=True, recursive=False)
-                if len(value) > 1:
-                    string_value = str(value[1]) if value[1] else ""
-                    my_value = string_value.strip()
-                    values[name] = my_value
+            # print(link)
+            # print(item.name)
+            name = item.find("h5").text.strip()
+            value = item.findAll(string=True, recursive=False)
+            myValue = value[1].strip()
+            # if len(myValue.split(" ")) > 1:
+            #    myNumber = myValue.split(" ")[0]
+            #    values[name] = myNumber
+            # else:
+            values[name] = myValue
+            # print(name + ": " + url)
+            # link = link.find("a")
+            # print(name + ":" + link)
         return values
 
-    def get_link_values(self, soup: Tag) -> dict[str, str]:
-        """Return values from given nav container which are inside a link."""
-        soup_links = soup.find_all(name="a", class_="nav-link browseobj")
-        values: dict[str, str] = {}
+    def get_link_values(self, soup: BeautifulSoup) -> dict:
+        """Return values from given nav container witch are inside a link."""
+        soup_links: ResultSet[logging.Any] = soup.find_all(
+            name="a", class_="nav-link browseobj"
+        )
+        # print(soup_links)
+        values = {}
         for item in soup_links:
-            if not isinstance(item, Tag):
-                continue
-            h5_tag = item.find("h5")
-            if h5_tag and h5_tag.text:
-                name = h5_tag.text.strip()
-                value = item.find_all(string=True, recursive=False)
-                if len(value) > 1:
-                    string_value = str(value[1]) if value[1] else ""
-                    values[name] = string_value.strip()
+            # print(link)
+            # print(item.name)
+            name = item.find("h5").text.strip()
+            value = item.findAll(string=True, recursive=False)
+            values[name] = value[1].strip()
+            # print(name + ": " + url)
+            # link = link.find("a")
+            # print(name + ":" + link)
         return values
 
 

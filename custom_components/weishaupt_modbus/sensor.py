@@ -1,21 +1,21 @@
-"""Setting up sensor entities."""
+"""Setting uop my sensor entities."""
 
 from __future__ import annotations
 
 import logging
-from typing import Any
 
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .configentry import MyConfigEntry
-from .const import CONF, TypeConstants
+from .const import CONF, TYPES
 from .coordinator import MyWebIfCoordinator
 from .entities import MyWebifSensorEntity
 from .entity_helpers import build_entity_list
 from .hpconst import DEVICELISTS, WEBIF_INFO_HEIZKREIS1
 
-_LOGGER = logging.getLogger(__name__)
+logging.basicConfig()
+log: logging.Logger = logging.getLogger(name=__name__)
 
 
 async def async_setup_entry(
@@ -26,7 +26,7 @@ async def async_setup_entry(
     """Set up the sensor platform."""
 
     # start with an empty list of entries
-    entries: list[Any] = []
+    entries = []
 
     # we create one communicator per integration only for better performance and to allow dynamic parameters
     coordinator = config_entry.runtime_data.coordinator
@@ -36,14 +36,14 @@ async def async_setup_entry(
             entries=entries,
             config_entry=config_entry,
             api_items=device,
-            item_type=TypeConstants.NUMBER_RO,
+            item_type=TYPES.NUMBER_RO,
             coordinator=coordinator,
         )
         entries = await build_entity_list(
             entries=entries,
             config_entry=config_entry,
             api_items=device,
-            item_type=TypeConstants.SENSOR_CALC,
+            item_type=TYPES.SENSOR_CALC,
             coordinator=coordinator,
         )
 
@@ -52,7 +52,7 @@ async def async_setup_entry(
             entries=entries,
             config_entry=config_entry,
             api_items=device,
-            item_type=TypeConstants.SENSOR,
+            item_type=TYPES.SENSOR,
             coordinator=coordinator,
         )
 
@@ -69,7 +69,7 @@ async def async_setup_entry(
                     idx=1,
                 )
             )
-        entries.extend(webifentries)
+        entries = entries + webifentries
 
     async_add_entities(
         entries,

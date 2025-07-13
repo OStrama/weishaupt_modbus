@@ -3,6 +3,7 @@
 from typing import Any
 
 from aiofiles.os import scandir
+from pathlib import Path
 import voluptuous as vol
 
 from homeassistant import config_entries, exceptions
@@ -18,6 +19,7 @@ async def build_kennfeld_list(hass: HomeAssistant):
     kennfelder = []
     filelist = []
 
+    filepath = get_filepath(hass)
     dir_iterator = await scandir(get_filepath(hass))
 
     # for filename in dir_iterator:
@@ -38,7 +40,7 @@ async def build_kennfeld_list(hass: HomeAssistant):
     return kennfelder
 
 
-async def validate_input(data: dict[str, Any]) -> dict[str, Any]:
+async def validate_input(data: dict) -> dict[str, Any]:
     """Validate the input."""
     # Validate the data can be used to set up a connection.
 

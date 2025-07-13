@@ -1,44 +1,42 @@
-"""Heat pump characteristic curves (Kennfeld)."""
-
-from __future__ import annotations
+"""Kennfeld."""
 
 import json
 import logging
-from pathlib import Path
-from typing import Any
 
-import aiofiles  # type: ignore[import-untyped]
+import aiofiles
 import numpy as np
 from numpy.polynomial import Chebyshev
+from pathlib import Path
 
 from homeassistant.core import HomeAssistant
 
 from .configentry import MyConfigEntry
 from .const import CONF, CONST
 
-_LOGGER = logging.getLogger(__name__)
+logging.basicConfig()
+log = logging.getLogger(__name__)
 
 SPLINE_AVAILABLE = True
-CubicSpline: Any = None
 try:
-    import scipy  # type: ignore[import-untyped] # noqa: F401 pylint: disable=unused-import
-    from scipy.interpolate import CubicSpline  # type: ignore[import-untyped]
-
-    _LOGGER.info(
-        "Scipy available, use precise cubic spline interpolation for heating power"
-    )
+    import scipy  # noqa: F401 pylint: disable=unused-import
 except ModuleNotFoundError:
-    _LOGGER.warning(
+    log.warning(
         "Scipy not available, use less precise Chebyshef interpolation for heating power"
     )
     SPLINE_AVAILABLE = False
 
+
+if SPLINE_AVAILABLE is True:
+    log.info(
+        "Scipy available, use precise cubic spline interpolation for heating power"
+    )
+    from scipy.interpolate import CubicSpline  # pylint: disable=unused-import
+
 MATPLOTLIB_AVAILABLE = True
-plt: Any = None
 try:
-    import matplotlib.pyplot as plt  # type: ignore[import-not-found,import-untyped]
+    import matplotlib.pyplot as plt
 except ModuleNotFoundError:
-    _LOGGER.warning("Matplotlib not available. Can't create power map image file")
+    log.warning("Matplotlib not available. Can't create power map image file")
     MATPLOTLIB_AVAILABLE = False
 
 
@@ -97,30 +95,36 @@ class PowerMap:
     # the map should have values on every integer temperature point
     # at first, all flow temperatures are linearly interpolated
 
+    _config_entry = None
+    _steps = None
+    _max_power = []
+    _interp_y = []
+    _r_to_interpolate = 0
+
     def __init__(self, config_entry: MyConfigEntry, hass: HomeAssistant) -> None:
-        """Initialize the PowerMap class."""
+        """Initialise the PowerMap class."""
+        # try to load values from json file
         self.hass = hass
         self._config_entry = config_entry
         self._steps = 21
-        self._max_power: list[Any] = []
-        self._interp_y: list[Any] = []
-        self._r_to_interpolate: Any = None
-        self._all_t: Any = None
+        self._max_power = []
+        self._interp_y = []
+        self._r_to_interpolate = 0
+        self._all_t = None
 
-    async def initialize(self) -> None:
+    async def initialize(self):
         """Initialize the power map."""
-        filepath = Path(
-            get_filepath(self.hass) / self._config_entry.data[CONF.KENNFELD_FILE]
-        )
-
         try:
+            filepath = Path(
+                get_filepath(self.hass) / self._config_entry.data[CONF.KENNFELD_FILE]
+            )
             async with aiofiles.open(filepath, encoding="utf-8") as openfile:
                 raw_block = await openfile.read()
                 json_object = json.loads(raw_block)
                 self.known_x = json_object["known_x"]
                 self.known_y = json_object["known_y"]
                 self.known_t = json_object["known_t"]
-                _LOGGER.info("Reading power map file %s successful", filepath)
+                log.info("Reading power map file %s successful", filepath)
         except OSError:
             kennfeld = {
                 "known_x": self.known_x,
@@ -130,7 +134,7 @@ class PowerMap:
             async with aiofiles.open(filepath, "w", encoding="utf-8") as outfile:
                 raw_block = json.dumps(kennfeld)
                 await outfile.write(raw_block)
-                _LOGGER.info(
+                log.info(
                     "Writing power map file %s with generic content successful",
                     filepath,
                 )
@@ -166,10 +170,8 @@ class PowerMap:
         self._all_t = np.linspace(-30, 40, 71)
         # cubic spline interpolation of power curves
         for idx in range(len(self._r_to_interpolate)):
-            if SPLINE_AVAILABLE is True and CubicSpline is not None:
-                f: Any = CubicSpline(
-                    self.known_x, self._interp_y[idx], bc_type="natural"
-                )
+            if SPLINE_AVAILABLE is True:
+                f = CubicSpline(self.known_x, self._interp_y[idx], bc_type="natural")
             else:
                 f = Chebyshev.fit(self.known_x, self._interp_y[idx], deg=8)
             self._max_power.append(f(self._all_t))
@@ -180,10 +182,10 @@ class PowerMap:
                     self.plot_kennfeld_to_file
                 )
         except RuntimeError:
-            _LOGGER.warning("Reconfigure powermap")
+            log.warning("Reconfigure powermap")
 
-    def map(self, x: float, y: float) -> float:
-        """Map temperature values to power."""
+    def map(self, x, y):
+        """Map."""
         x = x / 10 - self.known_x[0]
         x = max(x, 0)
         x = min(x, 70)
@@ -193,12 +195,8 @@ class PowerMap:
 
         return self._max_power[int(y)][int(x)]
 
-    def plot_kennfeld_to_file(self) -> None:
+    def plot_kennfeld_to_file(self):
         """Plot the kennfeld file into png image for display."""
-        if not MATPLOTLIB_AVAILABLE or plt is None:
-            _LOGGER.warning("Matplotlib not available, cannot plot kennfeld")
-            return
-
         plt.plot(self._all_t, np.transpose(self._max_power))
         plt.ylabel("Max Power")
         plt.xlabel("°C")
@@ -206,35 +204,34 @@ class PowerMap:
         plt.xlim(-25, 40)
         plt.ylim(2000, 12000)
 
-        filepath = (
-            self._config_entry.runtime_data.config_dir
-            + "/www/local/"
-            + CONST.DOMAIN
-            + "_powermap.png"
-        )
-
         try:
+            filepath = (
+                self._config_entry.runtime_data.config_dir
+                + "/www/local/"
+                + CONST.DOMAIN
+                + "_powermap.png"
+            )
             plt.savefig(filepath)
-            _LOGGER.info(
+            log.info(
                 "Write power map image file %s",
                 filepath,
             )
         except OSError:
-            _LOGGER.warning(
+            log.warning(
                 "Error writing power map image file %s",
                 filepath,
             )
 
 
-def get_filepath(hass: HomeAssistant) -> Path | None:
-    """Get the filepath to the custom component directory."""
-    filepath = Path(f"{hass.config.config_dir}/custom_components/{CONST.DOMAIN}")
+def get_filepath(hass: HomeAssistant) -> Path:
+    """Return file path where power map files can be found."""
+    filepath = Path(hass.config.config_dir + "/custom_components/" + CONST.DOMAIN)
 
     # on some installations custom_components resides in /core/
-    if not filepath.exists():
+    if not Path.exists(filepath):
         filepath = Path(Path(__file__).resolve().parent)
 
     # we do not find any path..
-    if not filepath.exists():
+    if not Path.exists(filepath):
         return None
     return filepath

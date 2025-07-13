@@ -4,20 +4,18 @@ A Modbus object that contains a Modbus item and communicates with the Modbus.
 It contains a ModbusClient for setting and getting Modbus register values
 """
 
-from __future__ import annotations
-
 import asyncio
 import logging
-from typing import Any
 
 from pymodbus import ExceptionResponse, ModbusException
 from pymodbus.client import AsyncModbusTcpClient
 
 from .configentry import MyConfigEntry
-from .const import CONF, FormatConstants, TypeConstants
+from .const import CONF, FORMATS, TYPES
 from .items import ModbusItem
 
-_LOGGER = logging.getLogger(__name__)
+logging.basicConfig()
+log = logging.getLogger(__name__)
 
 
 class ModbusAPI:
@@ -26,62 +24,63 @@ class ModbusAPI:
     def __init__(self, config_entry: MyConfigEntry) -> None:
         """Construct ModbusAPI.
 
-        Args:
-            config_entry: HASS config entry
-
+        :param config_entry: HASS config entry
+        :type config_entry: MyConfigEntry
         """
-        self._ip: str = config_entry.data[CONF.HOST]
-        self._port: int = config_entry.data[CONF.PORT]
-        self._connected: bool = False
-        self._connect_pending: bool = False
-        self._failed_reconnect_counter: int = 0
-        self._last_connection_try: Any = None
-        self._modbus_client: AsyncModbusTcpClient = AsyncModbusTcpClient(
+        self._ip = config_entry.data[CONF.HOST]
+        self._port = config_entry.data[CONF.PORT]
+        self._modbus_client = None
+        self._conneted = False
+        self._connect_pending = False
+        self._failed_reconnect_counter = 0
+        self._last_connection_try = None
+        self._modbus_client = AsyncModbusTcpClient(
             host=self._ip, port=self._port, name="Weishaupt_WBB", retries=1
         )
 
-    async def connect(self, startup: bool = False) -> bool:
+    async def connect(self, startup: bool = False):
         """Open modbus connection."""
         if self._connect_pending:
-            _LOGGER.warning("Connection to heatpump already pending")
+            log.warning("Connection to heatpump already pending")
             return self._modbus_client.connected
         try:
             self._connect_pending = True
             if self._failed_reconnect_counter >= 3 and not startup:
-                _LOGGER.warning(
+                log.warning(
                     "Connection to heatpump failed %s times. Waiting 15 minutes",
                     str(self._failed_reconnect_counter),
                 )
                 await asyncio.sleep(300)
             await self._modbus_client.connect()
             if self._modbus_client.connected:
-                # _LOGGER.warning("Connection to heatpump succeeded")
+                # log.warning("Connection to heatpump succeeded")
                 self._failed_reconnect_counter = 0
                 self._connect_pending = False
                 return self._modbus_client.connected
-            self._failed_reconnect_counter += 1
-            self._connect_pending = False
-            self._modbus_client.close()
-            return self._modbus_client.connected  # noqa: TRY300
+            else:
+                self._failed_reconnect_counter += 1
+                self._connect_pending = False
+                self._modbus_client.close()
+                return self._modbus_client.connected
 
         except ModbusException:
-            _LOGGER.warning("Connection to heatpump failed")
+            log.warning("Connection to heatpump failed")
             self._failed_reconnect_counter += 1
             self._connect_pending = False
             self._modbus_client.close()
             return self._modbus_client.connected
 
-    def close(self) -> bool:
+    def close(self):
         """Close modbus connection."""
         try:
             self._modbus_client.close()
         except ModbusException:
-            _LOGGER.warning("Closing connection to heat pump failed")
+            log.warning("Closing connection to heat pump failed")
             return False
-        _LOGGER.info("Connection to heat pump closed")
+        log.info("Connection to heat pump closed")
         return True
 
-    def get_device(self) -> AsyncModbusTcpClient:
+    def get_device(self):
         """Return modbus connection."""
         return self._modbus_client
 
@@ -94,45 +93,37 @@ class ModbusObject:
     """
 
     def __init__(
-        self,
-        modbus_api: ModbusAPI,
-        modbus_item: ModbusItem,
-        no_connect_warn: bool = False,
+        self, modbus_api: ModbusAPI, modbus_item: ModbusItem, no_connect_warn=False
     ) -> None:
         """Construct ModbusObject.
 
-        Args:
-            modbus_api: The modbus API
-            modbus_item: definition of modbus item
-            no_connect_warn: suppress connection warnings
-
+        :param modbus_api: The modbus API
+        :type modbus_api: ModbusAPI
+        :param modbus_item: definition of modbus item
+        :type modbus_item: ModbusItem
         """
-        self._modbus_item: ModbusItem = modbus_item
-        self._modbus_client: AsyncModbusTcpClient = modbus_api.get_device()
-        self._no_connect_warn: bool = no_connect_warn
+        self._modbus_item = modbus_item
+        self._modbus_client = modbus_api.get_device()
+        self._no_connect_warn = no_connect_warn
 
-    def check_valid_result(self, val: int) -> int | None:
+    def check_valid_result(self, val) -> int:
         """Check if item is available and valid."""
         match self._modbus_item.format:
-            case FormatConstants.TEMPERATURE:
+            case FORMATS.TEMPERATUR:
                 return self.check_temperature(val)
-            case FormatConstants.PERCENTAGE:
+            case FORMATS.PERCENTAGE:
                 return self.check_percentage(val)
-            case FormatConstants.STATUS:
+            case FORMATS.STATUS:
                 return self.check_status(val)
             case _:
                 self._modbus_item.is_invalid = False
                 return val
 
-    def check_temperature(self, val: int) -> int | None:
+    def check_temperature(self, val) -> int:
         """Check availability of temperature item and translate return value to valid int.
 
-        Args:
-            val: The value from the modbus
-
-        Returns:
-            Processed temperature value or None if invalid
-
+        :param val: The value from the modbus
+        :type val: int
         """
         match val:
             case -32768:
@@ -154,7 +145,7 @@ class ModbusObject:
                 self._modbus_item.is_invalid = False
                 return val
 
-    def check_percentage(self, val) -> int | None:
+    def check_percentage(self, val) -> int:
         """Check availability of percentage item and translate.
 
         return value to valid int
@@ -175,14 +166,14 @@ class ModbusObject:
     def check_valid_response(self, val) -> int:
         """Check if item is valid to write."""
         match self._modbus_item.format:
-            case FormatConstants.TEMPERATURE:
+            case FORMATS.TEMPERATUR:
                 if val < 0:
                     val = val + 65536
                 return val
             case _:
                 return val
 
-    def validate_modbus_answer(self, mbr) -> int | None:
+    def validate_modbus_answer(self, mbr) -> int:
         """Check if there's a valid answer from modbus and translate it to a valid int depending from type.
 
         :param mbr: The modbus response
@@ -194,14 +185,14 @@ class ModbusObject:
             if myexception_code.exception_code == 2:
                 self._modbus_item.is_invalid = True
             else:
-                _LOGGER.warning(
+                log.warning(
                     "Received Modbus library error: %s in item: %s",
                     str(mbr),
                     str(self._modbus_item.name),
                 )
             return None
         if isinstance(mbr, ExceptionResponse):
-            _LOGGER.warning(
+            log.warning(
                 "Received ModbusException: %s from library in item: %s",
                 str(mbr),
                 str(self._modbus_item.name),
@@ -213,15 +204,15 @@ class ModbusObject:
         return val
 
     @property
-    async def value(self) -> int | None:
+    async def value(self):
         """Returns the value from the modbus register."""
         if self._modbus_client is None:
             return None
         if self._modbus_client.connected is False:
-            # on first check_availability call connection still not available, suppress warning
+            # on first check_availability call connection still not availöable, supress warning
             if self._no_connect_warn is True:
                 return None
-            _LOGGER.warning(
+            log.warning(
                 "Try to get value for %s without connection",
                 self._modbus_item.translation_key,
             )
@@ -229,30 +220,26 @@ class ModbusObject:
         if not self._modbus_item.is_invalid:
             try:
                 match self._modbus_item.type:
-                    case TypeConstants.SENSOR | TypeConstants.SENSOR_CALC:
+                    case TYPES.SENSOR | TYPES.SENSOR_CALC:
                         # Sensor entities are read-only
                         mbr = await self._modbus_client.read_input_registers(
                             self._modbus_item.address, slave=1
                         )
                         return self.validate_modbus_answer(mbr)
-                    case (
-                        TypeConstants.SELECT
-                        | TypeConstants.NUMBER
-                        | TypeConstants.NUMBER_RO
-                    ):
+                    case TYPES.SELECT | TYPES.NUMBER | TYPES.NUMBER_RO:
                         mbr = await self._modbus_client.read_holding_registers(
                             self._modbus_item.address, slave=1
                         )
                         return self.validate_modbus_answer(mbr)
                     case _:
-                        _LOGGER.warning(
+                        log.warning(
                             "Unknown Sensor type: %s in %s",
                             str(self._modbus_item.type),
                             str(self._modbus_item.name),
                         )
                         return None
             except ModbusException as exc:
-                _LOGGER.warning(
+                log.warning(
                     "ModbusException: Reading %s in item: %s failed",
                     str(exc),
                     str(self._modbus_item.name),
@@ -272,11 +259,7 @@ class ModbusObject:
             return
         try:
             match self._modbus_item.type:
-                case (
-                    TypeConstants.SENSOR
-                    | TypeConstants.NUMBER_RO
-                    | TypeConstants.SENSOR_CALC
-                ):
+                case TYPES.SENSOR | TYPES.NUMBER_RO | TYPES.SENSOR_CALC:
                     # Sensor entities are read-only
                     return
                 case _:
@@ -286,7 +269,7 @@ class ModbusObject:
                         slave=1,
                     )
         except ModbusException:
-            _LOGGER.warning(
+            log.warning(
                 "ModbusException: Writing %s to %s (%s) failed",
                 str(value),
                 str(self._modbus_item.name),

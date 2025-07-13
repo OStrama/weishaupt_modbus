@@ -2,7 +2,7 @@
   "domain": "weishaupt_modbus",
   "name": "Weishaupt WBB",
   "codeowners": [
-    "@OStrama, @MadOne"
+    "@OStrama"
   ],
   "config_flow": true,
   "documentation": "https://github.com/OStrama/weishaupt_modbus/",
@@ -12,9 +12,9 @@
     "weishaupt_modbus"
   ],
   "requirements": [
-    "pymodbus>=3.9.2",
+    "pymodbus>=3.6.8",
     "aiofiles>=24.1.0",
-    "beautifulsoup4>=4.13.3"
+    "beautifulsoup4>=4.12.3"
   ],
-  "version": "1.0.11"
+  "version": "1.0.10"
 }
