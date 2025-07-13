@@ -1,6 +1,9 @@
 """my config entry."""
 
+from __future__ import annotations
+
 from dataclasses import dataclass
+from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
@@ -12,12 +15,12 @@ from homeassistant.core import HomeAssistant
 class MyData:
     """My config data."""
 
-    modbus_api: any
-    webif_api: any
+    modbus_api: Any
+    webif_api: Any
     config_dir: str
     hass: HomeAssistant
-    coordinator: any  # MyCoordinator
-    powermap: any
+    coordinator: Any  # MyCoordinator
+    powermap: Any
 
 
 type MyConfigEntry = ConfigEntry[MyData]
