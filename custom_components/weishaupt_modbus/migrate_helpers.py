@@ -35,7 +35,7 @@ def create_new_entity_id(
         name_device_prefix = ""
 
     if config_entry.data[CONF.NAME_TOPIC_PREFIX]:
-        device_key = str(modbus_item.device.value)
+        device_key = modbus_item.device
         name_topic_prefix = f"{reverse_device_list.get(device_key, 'UK')}_"
     else:
         name_topic_prefix = ""
@@ -73,11 +73,7 @@ def migrate_entities(
     for _useless, item in enumerate(modbusitems):
         platform = ""
         match item.type:
-            case (
-                TYPES.SENSOR
-                | TYPES.NUMBER_RO
-                | TYPES.SENSOR_CALC
-            ):
+            case TYPES.SENSOR | TYPES.NUMBER_RO | TYPES.SENSOR_CALC:
                 platform = "sensor"
             case TYPES.SELECT:
                 platform = "select"

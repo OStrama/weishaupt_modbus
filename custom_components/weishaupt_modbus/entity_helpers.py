@@ -60,7 +60,7 @@ async def build_entity_list(
     entries: list[EntityType],
     config_entry: MyConfigEntry,
     api_items: list[ModbusItem | WebItem],
-    item_type: TYPES,
+    item_type: str,
     coordinator: MyCoordinator,
 ) -> list[EntityType]:
     """Build entity list.
@@ -119,7 +119,7 @@ async def build_webif_entity_list(
     entries: list[MyWebifSensorEntity],
     config_entry: MyConfigEntry,
     api_items: list[WebItem],
-    item_type: TYPES,
+    item_type: str,
     coordinator: MyWebIfCoordinator,
 ) -> list[MyWebifSensorEntity]:
     """Build WebIF entity list.

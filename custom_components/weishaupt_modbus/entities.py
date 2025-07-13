@@ -69,7 +69,7 @@ class MyEntity(Entity):
             name_device_prefix = ""
 
         if self._config_entry.data[CONF.NAME_TOPIC_PREFIX]:
-            device_key = str(self._api_item.device.value)
+            device_key = self._api_item.device
             name_topic_prefix = f"{reverse_device_list.get(device_key, 'UK')}_"
         else:
             name_topic_prefix = ""
@@ -453,7 +453,7 @@ class MyWebifSensorEntity(CoordinatorEntity, SensorEntity, MyEntity):
         """Initialize of MySensorEntity."""
         super().__init__(coordinator, context=idx)
         self.idx = idx
-        MyEntity.__init__(self, config_entry, api_item, coordinator.my_api)
+        MyEntity.__init__(self, config_entry, api_item, coordinator)
 
         # Initialize MyEntity with minimal parameters
         self._config_entry = config_entry
