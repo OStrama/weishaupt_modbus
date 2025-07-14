@@ -235,11 +235,7 @@ class ModbusObject:
                             self._modbus_item.address, slave=1
                         )
                         return self.validate_modbus_answer(mbr)
-                    case (
-                        TYPES.SELECT
-                        | TYPES.NUMBER
-                        | TYPES.NUMBER_RO
-                    ):
+                    case TYPES.SELECT | TYPES.NUMBER | TYPES.NUMBER_RO:
                         mbr = await self._modbus_client.read_holding_registers(
                             self._modbus_item.address, slave=1
                         )
@@ -272,11 +268,7 @@ class ModbusObject:
             return
         try:
             match self._modbus_item.type:
-                case (
-                    TYPES.SENSOR
-                    | TYPES.NUMBER_RO
-                    | TYPES.SENSOR_CALC
-                ):
+                case TYPES.SENSOR | TYPES.NUMBER_RO | TYPES.SENSOR_CALC:
                     # Sensor entities are read-only
                     return
                 case _:

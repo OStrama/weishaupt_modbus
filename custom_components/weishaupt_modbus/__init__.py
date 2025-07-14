@@ -198,11 +198,7 @@ def create_string_json() -> None:
 
     for item in DEVICELIST:
         match item.type:
-            case (
-                TYPES.SENSOR
-                | TYPES.NUMBER_RO
-                | TYPES.SENSOR_CALC
-            ):
+            case TYPES.SENSOR | TYPES.NUMBER_RO | TYPES.SENSOR_CALC:
                 mySensor: dict[str, Any] = {}
                 mySensor["name"] = "{prefix}" + item.name
                 if item.resultlist is not None:
