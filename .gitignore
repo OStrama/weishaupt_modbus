@@ -34,4 +34,3 @@ home-assistant.log.1
 
 .devcontainer/
 Dockerfile.dev
-scripts/

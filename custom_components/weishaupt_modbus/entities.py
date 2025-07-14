@@ -452,21 +452,41 @@ class MyWebifSensorEntity(CoordinatorEntity, SensorEntity, MyEntity):
         """Initialize of MySensorEntity."""
         super().__init__(coordinator, context=idx)
         self.idx = idx
-        MyEntity.__init__(self, config_entry, api_item, coordinator)
 
-        # Initialize MyEntity with minimal parameters
+        # Initialize MyEntity properties manually since WebIF entities don't use ModbusAPI
         self._config_entry = config_entry
         self._api_item = api_item
 
-        # Set basic attributes without calling MyEntity.__init__
-        dev_prefix = self._config_entry.data[CONF.PREFIX]
-        if self._config_entry.data[CONF.DEVICE_POSTFIX] == "_":
+        # Calculate device postfix
+        dev_postfix = "_" + self._config_entry.data[CONF.DEVICE_POSTFIX]
+        if dev_postfix == "_":
             dev_postfix = ""
-        else:
-            dev_postfix = self._config_entry.data[CONF.DEVICE_POSTFIX]
 
+        # Calculate device and name prefixes
+        dev_prefix = self._config_entry.data[CONF.PREFIX]
+        if self._config_entry.data[CONF.NAME_DEVICE_PREFIX]:
+            name_device_prefix = dev_prefix + "_"
+        else:
+            name_device_prefix = ""
+
+        if self._config_entry.data[CONF.NAME_TOPIC_PREFIX]:
+            device_key = self._api_item.device
+            name_topic_prefix = f"{reverse_device_list.get(device_key, 'UK')}_"
+        else:
+            name_topic_prefix = ""
+
+        name_prefix = name_topic_prefix + name_device_prefix
+
+        # Set device identifier
+        self._dev_device = self._api_item.device + dev_postfix
+
+        # Set translation attributes
+        self._attr_translation_key = self._api_item.translation_key
+        self._attr_translation_placeholders = {"prefix": name_prefix}
+        self._dev_translation_placeholders = {"postfix": dev_postfix}
+
+        # Create unique ID for WebItem
         self._attr_unique_id = f"{dev_prefix}_{self._api_item.name}{dev_postfix}_webif"
-        self._attr_name = api_item.name
 
         # Set sensor-specific attributes
         self._attr_state_class = SensorStateClass.MEASUREMENT
