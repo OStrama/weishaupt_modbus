@@ -12,7 +12,7 @@ from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
 from .configentry import MyConfigEntry
-from .const import CONF, CONST, DeviceConstants, TYPES
+from .const import CONF, CONST, TYPES, DeviceConstants
 from .items import ModbusItem
 from .modbusobject import ModbusAPI, ModbusObject
 from .webif_object import WebifConnection
@@ -139,7 +139,7 @@ class MyCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         """Fetch data from API endpoint."""
         try:
             async with asyncio.timeout(10):
-                listening_idx = set(self.async_contexts())
+                listening_idx = set(self.async_contexts())  # noqa: F841
                 return await self.fetch_data()  # listening_idx)
         except ModbusException as err:
             _LOGGER.debug("Modbus connection failed: %s", err)
