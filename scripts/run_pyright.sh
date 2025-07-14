@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# filepath: /workspaces/sax_battery_ha/scripts/run_pyright.sh
+# filepath: /workspaces/weishaupt_modbus/scripts/run_pyright.sh
 
 set -e
 

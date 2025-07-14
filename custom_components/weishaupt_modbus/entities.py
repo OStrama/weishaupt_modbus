@@ -26,6 +26,19 @@ if TYPE_CHECKING:
 _LOGGER: logging.Logger = __import__("logging").getLogger(__name__)
 
 
+def get_device_postfix(config_entry: MyConfigEntry) -> str:
+    """Return the device postfix string for the given config entry.
+
+    Args:
+        config_entry: HASS config entry
+
+    Returns:
+        Device postfix string
+
+    """
+    return "_" + config_entry.data[CONF.DEVICE_POSTFIX]
+
+
 class MyEntity(Entity):
     """An entity using CoordinatorEntity.
 
@@ -56,7 +69,7 @@ class MyEntity(Entity):
         self._config_entry = config_entry
         self._api_item: ModbusItem | WebItem = api_item
 
-        dev_postfix = "_" + self._config_entry.data[CONF.DEVICE_POSTFIX]
+        dev_postfix = get_device_postfix(self._config_entry)
 
         if dev_postfix == "_":
             dev_postfix = ""
@@ -86,7 +99,7 @@ class MyEntity(Entity):
             self._attr_unique_id = create_unique_id(self._config_entry, self._api_item)
         else:
             # For WebItem, create a simple unique ID
-            dev_postfix = "_" + self._config_entry.data[CONF.DEVICE_POSTFIX]
+            dev_postfix = get_device_postfix(self._config_entry)
             if dev_postfix == "_":
                 dev_postfix = ""
             dev_prefix = self._config_entry.data[CONF.PREFIX]
@@ -458,7 +471,7 @@ class MyWebifSensorEntity(CoordinatorEntity, SensorEntity, MyEntity):
         self._api_item = api_item
 
         # Calculate device postfix
-        dev_postfix = "_" + self._config_entry.data[CONF.DEVICE_POSTFIX]
+        dev_postfix = get_device_postfix(self._config_entry)
         if dev_postfix == "_":
             dev_postfix = ""
 
