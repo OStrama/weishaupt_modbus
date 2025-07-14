@@ -93,7 +93,6 @@ class MyEntity(Entity):
             self._attr_unique_id = (
                 f"{dev_prefix}_{self._api_item.name}{dev_postfix}_webif"
             )
-        self._dev_device = self._api_item.device
 
         self._modbus_api = modbus_api
 
