@@ -12,7 +12,7 @@
     "weishaupt_modbus"
   ],
   "requirements": [
-    "pymodbus>=3.9.2",
+    "pymodbus>=3.10.0",
     "aiofiles>=24.1.0",
     "beautifulsoup4>=4.13.3"
   ],
