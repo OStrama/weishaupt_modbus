@@ -29,7 +29,7 @@ async def main():  # noqa: D103
 
     for register in binary_out:
         try:
-            rr = await client.read_coils(register, 1, slave=1)
+            rr = await client.read_coils(register, 1, device_id=1)
             if len(rr.registers) > 0:
                 val = rr.registers[0]
                 print(rr)
@@ -48,7 +48,7 @@ async def main():  # noqa: D103
     for register in binary_in:
         writeit = False
         try:
-            rr = await client.read_coils(register, 1, slave=1)
+            rr = await client.read_coils(register, 1, device_id=1)
             print(rr)  # noqa: T201
         except ModbusException as exc:
             val = exc
@@ -68,7 +68,7 @@ async def main():  # noqa: D103
     for register in input_register:
         writeit = False
         try:
-            rr = await client.read_input_registers(register, slave=1)
+            rr = await client.read_input_registers(register, device_id=1)
             print(rr)  # noqa: T201
         except ModbusException as exc:
             val = exc
@@ -88,7 +88,7 @@ async def main():  # noqa: D103
     for register in holding_register:
         writeit = False
         try:
-            rr = await client.read_holding_registers(register, slave=1)
+            rr = await client.read_holding_registers(register, device_id=1)
             print(rr)  # noqa: T201
         except ModbusException as exc:
             val = exc
