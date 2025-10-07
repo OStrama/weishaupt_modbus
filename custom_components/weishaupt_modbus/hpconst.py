@@ -994,6 +994,17 @@ PARAMS_ROOMTEMP: dict[str, Any] = {
     "stateclass": SensorStateClass.MEASUREMENT,
 }
 
+PARAMS_SUMMER_WINTER_SWITCH_TEMP: dict[str, Any] = {
+    "min": 3,
+    "max": 30,
+    "step": 0.5,
+    "divider": 10,
+    "deviceclass": SensorDeviceClass.TEMPERATURE,
+    "precision": 1,
+    "unit": UnitOfTemperature.CELSIUS,
+    "stateclass": SensorStateClass.MEASUREMENT,
+}
+
 PARAMS_ROOMTEMP_LOW: dict = {
     "min": 16,
     "max": 28,
@@ -1292,7 +1303,7 @@ MODBUS_HZ_ITEMS = [
     ModbusItem( address=41106, name="Raumsolltemperatur Normal", mformat=FORMATS.TEMPERATURE, mtype=TYPES.NUMBER, device=DEVICES.HZ, params=PARAMS_ROOMTEMP_MID, translation_key="raum_soll_temp_normal"),
     ModbusItem( address=41107, name="Raumsolltemperatur Absenk", mformat=FORMATS.TEMPERATURE, mtype=TYPES.NUMBER, device=DEVICES.HZ, params=PARAMS_ROOMTEMP_LOW, translation_key="raum_soll_temp_absenk"),
     ModbusItem( address=41108, name="Heizkennlinie", mformat=FORMATS.NUMBER, mtype=TYPES.NUMBER, device=DEVICES.HZ, params=PARAMS_HZKENNLINIE, translation_key="heizkennlinie"),
-    ModbusItem( address=41109, name="Sommer Winter Umschaltung", mformat=FORMATS.TEMPERATURE, mtype=TYPES.NUMBER, device=DEVICES.HZ, params=PARAMS_ROOMTEMP, translation_key="so_wi_umschalt"),
+    ModbusItem( address=41109, name="Sommer Winter Umschaltung", mformat=FORMATS.TEMPERATURE, mtype=TYPES.NUMBER, device=DEVICES.HZ, params=PARAMS_SUMMER_WINTER_SWITCH_TEMP, translation_key="so_wi_umschalt"),
     ModbusItem( address=41110, name="Heizen Konstanttemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.NUMBER_RO, device=DEVICES.HZ, params=PARAMS_ROOMTEMP, translation_key="heiz_konstanttemp"),
     ModbusItem( address=41111, name="Heizen Konstanttemp Absenk", mformat=FORMATS.TEMPERATURE, mtype=TYPES.NUMBER_RO, device=DEVICES.HZ, params=PARAMS_ROOMTEMP, translation_key="heiz_konstanttemp_absenk"),
     ModbusItem( address=41112, name="Kühlen Konstanttemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.NUMBER_RO, device=DEVICES.HZ, params=PARAMS_ROOMTEMP, translation_key="kuehl_konstanttemp"),
