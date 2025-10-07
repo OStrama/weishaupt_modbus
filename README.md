@@ -1,3 +1,6 @@
+# 1.0.12
+- Fixed temp range for summer/winter switch ([issue](https://github.com/OStrama/weishaupt_modbus/issues/117))
+
 # 1.0.11
 - Update dependencies [link](https://github.com/OStrama/weishaupt_modbus/issues/104)
 - Merge SGR Status [link](https://github.com/OStrama/weishaupt_modbus/pull/103)
