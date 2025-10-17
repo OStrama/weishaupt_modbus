@@ -2,21 +2,27 @@
   "name": "weishaupt_modbus Dev",
   "context": "..",
   "dockerFile": "../Dockerfile.dev",
+  "containerEnv": {
+    "PYTHONASYNCIODEBUG": "1",
+    "BASH_DEFAULT_TIMEOUT_MS": "300000",
+    "BASH_MAX_TIMEOUT_MS": "300000"
+  },
   "postCreateCommand": "scripts/post-create.sh",
   "customizations": {
     "vscode": {
       "extensions": [
         "charliermarsh.ruff",
-        "ms-python.pylint",
         "ms-python.python",
+        "ms-python.pylint",
         "ms-python.vscode-pylance",
         "visualstudioexptteam.vscodeintellicode",
         "ms-python.mypy-type-checker",
+        "tamasfe.even-better-toml",
         "redhat.vscode-yaml",
-        "esbenp.prettier-vscode",
         "github.vscode-github-actions",
         "GitHub.vscode-pull-request-github",
         "GitHub.copilot",
+        "GitHub.copilot-chat",
         "bierner.markdown-preview-github-styles",
         "DavidAnson.vscode-markdownlint",
         "mhutchie.git-graph",
@@ -24,7 +30,8 @@
         "njpwerner.autodocstring",
         "batisteo.vscode-django",
         "ryanluker.vscode-coverage-gutters",
-        "streetsidesoftware.code-spell-checker"
+        "streetsidesoftware.code-spell-checker",
+        "keesschollaart.vscode-home-assistant"
       ],
       "settings": {
         "python.experiments.optOutFrom": [
@@ -71,7 +78,11 @@
             ],
             "url": "${containerWorkspaceFolder}/script/json_schemas/manifest_schema.json"
           }
-        ]
+        ],
+        "yaml.schemas": {
+          "https://json.schemastore.org/github-workflow.json": ".github/workflows/*.{yml,yaml}",
+          "https://json.schemastore.org/dependabot-2.0.json": ".github/dependabot.yml"
+        },
       }
     }
   },

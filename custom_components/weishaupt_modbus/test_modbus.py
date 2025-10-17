@@ -32,10 +32,10 @@ async def main():  # noqa: D103
             rr = await client.read_coils(register, 1, slave=1)
             if len(rr.registers) > 0:
                 val = rr.registers[0]
-                print(rr)
+                print(rr)  # noqa: T201
         except ModbusException as exc:
             val = exc
-            print(val)
+            print(val)  # noqa: T201
         if rr.isError():
             val = rr
         if isinstance(rr, ExceptionResponse):

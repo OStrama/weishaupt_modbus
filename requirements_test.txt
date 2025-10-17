@@ -1,5 +1,2 @@
 -r requirements_dev.txt
-pytest-homeassistant-custom-component==0.13.254
-#pytest>=8.3.5
-#pytest-cov>=6.0.0
-#pytest-asyncio>=0.26.0
+pytest-homeassistant-custom-component==0.13.287
