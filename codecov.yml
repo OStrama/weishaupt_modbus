@@ -1,0 +1,51 @@
+codecov:
+  branch: dev
+coverage:
+  status:
+    project:
+      default:
+        informational: true
+      required:
+        target: auto
+        threshold: "1"
+        paths:
+          - custom_components/weishaupt_modbus/__init__.py
+          - custom_components/weishaupt_modbus/items.py
+          - custom_components/weishaupt_modbus/kennfeld.py
+          - custom_components/weishaupt_modbus/migrate_helpers.py
+          - custom_components/weishaupt_modbus/modbusobject.py
+          - custom_components/weishaupt_modbus/number.py
+          - custom_components/weishaupt_modbus/select.py
+          - custom_components/weishaupt_modbus/sensor.py
+          - custom_components/weishaupt_modbus/webif_object.py
+    patch:
+      default:
+        informational: true
+      required:
+        target: 100
+        threshold: 0
+        paths:
+          - homeassistant/components/*/config_flow.py
+          - homeassistant/components/*/device_action.py
+          - homeassistant/components/*/device_condition.py
+          - homeassistant/components/*/device_trigger.py
+          - homeassistant/components/*/diagnostics.py
+          - homeassistant/components/*/group.py
+          - homeassistant/components/*/intent.py
+          - homeassistant/components/*/logbook.py
+          - homeassistant/components/*/media_source.py
+          - homeassistant/components/*/recorder.py
+          - homeassistant/components/*/scene.py
+  gcov:
+    enable: no
+#comment: false
+# To make partial tests possible,
+# we need to carry forward.
+#flag_management:
+#  default_rules:
+#    carryforward: false
+#  individual_flags:
+#    - name: full-suite
+#      paths:
+#        - ".*"
+#      carryforward: true

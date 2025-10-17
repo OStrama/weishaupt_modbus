@@ -51,10 +51,10 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Check out code from GitHub
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v5
 
       - name: Filter for custom component changes
-        uses: dorny/paths-filter@v3.0.2
+        uses: dorny/paths-filter@v3
         id: changes
         with:
           filters: |
@@ -94,28 +94,28 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Check out code from GitHub
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v5
 
       - name: Set up Python ${{ env.DEFAULT_PYTHON }}
-        uses: actions/setup-python@v5.6.0
+        uses: actions/setup-python@v6.0.0
         with:
           python-version: ${{ env.DEFAULT_PYTHON }}
 
       - name: Restore Python cache
-        uses: actions/cache@v4.2.3
+        uses: actions/cache@v4.3.0
         with:
           path: ${{ env.UV_CACHE_DIR }}
           key: ${{ needs.info.outputs.python_cache_key }}
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v6.3.1
+        uses: astral-sh/setup-uv@v7
 
       - name: Install dependencies
         run: |
           uv pip install --system -r requirements_dev.txt
 
       # - name: Cache pre-commit environment
-      #   uses: actions/cache@v4.2.3
+      #   uses: actions/cache@v4.3.0
       #   with:
       #     path: ${{ env.PRE_COMMIT_CACHE }}
       #     key: ${{ needs.info.outputs.pre-commit_cache_key }}
@@ -139,28 +139,28 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Check out code from GitHub
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v5
 
       - name: Set up Python ${{ env.DEFAULT_PYTHON }}
-        uses: actions/setup-python@v5.6.0
+        uses: actions/setup-python@v6.0.0
         with:
           python-version: ${{ env.DEFAULT_PYTHON }}
 
       - name: Restore Python cache
-        uses: actions/cache@v4.2.3
+        uses: actions/cache@v4.3.0
         with:
           path: ${{ env.UV_CACHE_DIR }}
           key: ${{ needs.info.outputs.python_cache_key }}
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v4
+        uses: astral-sh/setup-uv@v7
 
       - name: Install dependencies
         run: |
           uv pip install --system -r requirements_dev.txt
 
       - name: Cache mypy
-        uses: actions/cache@v4.2.3
+        uses: actions/cache@v4.3.0
         with:
           path: .mypy_cache
           key: mypy-${{ env.MYPY_CACHE_VERSION }}-${{ env.DEFAULT_PYTHON }}-${{ hashFiles('pyproject.toml') }}
@@ -179,32 +179,30 @@ jobs:
   #       python-version: ${{ fromJSON(needs.info.outputs.python_versions) }}
   #   steps:
   #     - name: Check out code from GitHub
-  #       uses: actions/checkout@v4.2.2
-
-  #     - name: Set up Python ${{ matrix.python-version }}
-  #       uses: actions/setup-python@v5.6.0
-  #       with:
-  #         python-version: ${{ matrix.python-version }}
+  #       uses: actions/checkout@v5
 
   #     - name: Restore Python cache
-  #       uses: actions/cache@v4.2.3
+  #       uses: actions/cache@v4.3.0
   #       with:
   #         path: ${{ env.UV_CACHE_DIR }}
   #         key: ${{ needs.info.outputs.python_cache_key }}
 
   #     - name: Install uv
-  #       uses: astral-sh/setup-uv@v6.3.1
+  #       uses: astral-sh/setup-uv@v7
+  #       with:
+  #         python-version: ${{ matrix.python-version }}
 
-  #     - name: Install dependencies
+  #     - name: Create virtual environment and install dependencies
   #       run: |
-  #         uv pip install --system -r requirements_dev.txt
+  #         uv venv
+  #         uv pip install -r requirements_test.txt
 
   #     - name: Run tests
   #       run: |
-  #         pytest tests/ --cov=custom_components --cov-report=xml
+  #         uv run pytest tests/ --cov=custom_components --cov-report=xml
 
-  #     - name: Upload coverage to Codecov
-  #       uses: codecov/codecov-action@v5.4.3
-  #       with:
-  #         token: ${{ secrets.CODECOV_TOKEN }}
-  #         file: ./coverage.xml
+  # - name: Upload coverage to Codecov
+  #   uses: codecov/codecov-action@v5
+  #   with:
+  #     token: ${{ secrets.CODECOV_TOKEN }}
+  #     files: ./coverage.xml
