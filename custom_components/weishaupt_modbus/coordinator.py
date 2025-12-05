@@ -67,7 +67,7 @@ class MyCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         if mbo is None:
             modbus_item.state = None
         else:
-            modbus_item.state = await mbo.value
+            modbus_item.state = await mbo.get_value()
         return modbus_item.state
 
     def get_value_from_item(self, translation_key: str) -> Any:
