@@ -52,7 +52,7 @@ async def check_available(
 
     modbus_api = config_entry.runtime_data.modbus_api
     mbo = ModbusObject(modbus_api, api_item, no_connect_warn=True)
-    _ = await mbo.value
+    _ = await mbo.get_value()
     return api_item.is_invalid is False
 
 

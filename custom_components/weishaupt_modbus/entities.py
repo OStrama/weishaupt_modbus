@@ -174,7 +174,7 @@ class MyEntity(Entity):
 
         await self._modbus_api.connect()
         mbo = ModbusObject(self._modbus_api, self._api_item)
-        await mbo.setvalue(val)
+        await mbo.set_value(val)
         return val
 
     def my_device_info(self) -> DeviceInfo:

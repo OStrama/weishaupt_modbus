@@ -19,6 +19,11 @@ from .items import ModbusItem
 
 _LOGGER = logging.getLogger(__name__)
 
+# Connection backoff constants
+BACKOFF_BASE_SECONDS = 5 * 60  # 5 minutes
+BACKOFF_MAX_SECONDS = 60 * 60  # 60 minutes
+BACKOFF_THRESHOLD_FAILURES = 3
+
 
 class ModbusAPI:
     """ModbusAPI class provides a connection to the modbus, which is used by the ModbusItems."""
@@ -32,7 +37,6 @@ class ModbusAPI:
         """
         self._ip: str = config_entry.data[CONF.HOST]
         self._port: int = config_entry.data[CONF.PORT]
-        self._connected: bool = False
         self._connect_pending: bool = False
         self._failed_reconnect_counter: int = 0
         self._last_connection_try: Any = None
@@ -40,46 +44,146 @@ class ModbusAPI:
             host=self._ip, port=self._port, name="Weishaupt_WBB", retries=1
         )
 
+    def _log_backoff_start(self) -> None:
+        """Log when exponential backoff starts."""
+        _LOGGER.warning(
+            "Connection to heatpump failed %s times. "
+            "Starting exponential backoff (min %s seconds).",
+            self._failed_reconnect_counter,
+            BACKOFF_BASE_SECONDS,
+        )
+
     async def connect(self, startup: bool = False) -> bool:
         """Open modbus connection."""
         if self._connect_pending:
             _LOGGER.warning("Connection to heatpump already pending")
             return self._modbus_client.connected
+
+        self._connect_pending = True
         try:
-            self._connect_pending = True
-            if self._failed_reconnect_counter >= 3 and not startup:
-                _LOGGER.warning(
-                    "Connection to heatpump failed %s times. Waiting 15 minutes",
-                    str(self._failed_reconnect_counter),
-                )
-                await asyncio.sleep(300)
+            loop = asyncio.get_running_loop()
+            now = loop.time()
+
+            # ----- Exponential backoff calculation -----
+            # We only back off after BACKOFF_THRESHOLD_FAILURES failed attempts (and not during startup).
+            backoff = 0.0
+            if (
+                self._failed_reconnect_counter >= BACKOFF_THRESHOLD_FAILURES
+                and not startup
+            ):
+                # fail_count = 3 → 1x base
+                # fail_count = 4 → 2x base
+                # fail_count = 5 → 4x base
+                # etc, capped at max_backoff
+                exp = self._failed_reconnect_counter - BACKOFF_THRESHOLD_FAILURES
+                backoff = BACKOFF_BASE_SECONDS * (2 ** exp)
+                if backoff > BACKOFF_MAX_SECONDS:
+                    backoff = BACKOFF_MAX_SECONDS
+
+            if (
+                backoff > 0
+                and self._last_connection_try is not None
+                and not startup
+            ):
+                elapsed = now - self._last_connection_try
+                if elapsed < backoff:
+                    remaining = backoff - elapsed
+                    _LOGGER.debug(
+                        "Skipping connect attempt: still in backoff window "
+                        "(%.0f s remaining, backoff %.0f s for %s failures)",
+                        remaining,
+                        backoff,
+                        self._failed_reconnect_counter,
+                    )
+                    return False
+                else:
+                    # We've waited long enough, log that we are trying again
+                    _LOGGER.info(
+                        "Backoff period (%.0f s) expired after %s failures. "
+                        "Retrying connection to heatpump now...",
+                        backoff,
+                        self._failed_reconnect_counter,
+                    )
+
+            # Record this attempt time
+            self._last_connection_try = now
+
+            # ----- Actual connect attempt -----
             await self._modbus_client.connect()
+
             if self._modbus_client.connected:
-                # _LOGGER.warning("Connection to heatpump succeeded")
+                # SUCCESS
+                if self._failed_reconnect_counter > 0:
+                    _LOGGER.info(
+                        "Successfully reconnected to heatpump after %s failed "
+                        "attempts.",
+                        self._failed_reconnect_counter,
+                    )
+                else:
+                    _LOGGER.info("Successfully connected to heatpump.")
                 self._failed_reconnect_counter = 0
-                self._connect_pending = False
-                return self._modbus_client.connected
-            self._failed_reconnect_counter += 1
-            self._connect_pending = False
-            self._modbus_client.close()
-            return self._modbus_client.connected  # noqa: TRY300
+                return True
 
-        except ModbusException:
-            _LOGGER.warning("Connection to heatpump failed")
+            # Connect() returned but not connected → count as failure
             self._failed_reconnect_counter += 1
-            self._connect_pending = False
+            if self._failed_reconnect_counter == BACKOFF_THRESHOLD_FAILURES and not startup:
+                self._log_backoff_start()
             self._modbus_client.close()
-            return self._modbus_client.connected
+            return False
 
-    def close(self) -> bool:
+        except ModbusException as exc:
+            _LOGGER.warning(
+                "Connection to heatpump failed (modbus): %s",
+                str(exc),
+            )
+            self._failed_reconnect_counter += 1
+            if self._failed_reconnect_counter == BACKOFF_THRESHOLD_FAILURES and not startup:
+                self._log_backoff_start()
+            self._modbus_client.close()
+            return False
+
+        except (TimeoutError, OSError, ConnectionError) as exc:
+            # Catch expected connection errors so state stays clean
+            _LOGGER.warning(
+                "Connection to heatpump failed (network): %s",
+                str(exc),
+            )
+            self._failed_reconnect_counter += 1
+            if self._failed_reconnect_counter == BACKOFF_THRESHOLD_FAILURES and not startup:
+                self._log_backoff_start()
+            try:
+                self._modbus_client.close()
+            except Exception:  # noqa: BLE001
+                pass
+            return False
+
+        except Exception as exc:  # noqa: BLE001
+            # Catch any other unexpected errors as last resort
+            _LOGGER.warning(
+                "Connection to heatpump failed (unexpected): %s",
+                str(exc),
+            )
+            self._failed_reconnect_counter += 1
+            if self._failed_reconnect_counter == BACKOFF_THRESHOLD_FAILURES and not startup:
+                self._log_backoff_start()
+            try:
+                self._modbus_client.close()
+            except Exception:  # noqa: BLE001
+                pass
+            return False
+
+        finally:
+            # Always clear pending flag, even if we were cancelled
+            self._connect_pending = False
+
+
+    def close(self) -> None:
         """Close modbus connection."""
         try:
             self._modbus_client.close()
-        except ModbusException:
-            _LOGGER.warning("Closing connection to heat pump failed")
-            return False
-        _LOGGER.info("Connection to heat pump closed")
-        return True
+            _LOGGER.info("Connection to heatpump closed")
+        except ModbusException as exc:
+            _LOGGER.warning("Closing connection to heatpump failed: %s", str(exc))
 
     def get_device(self) -> AsyncModbusTcpClient:
         """Return modbus connection."""
@@ -154,12 +258,15 @@ class ModbusObject:
                 self._modbus_item.is_invalid = False
                 return val
 
-    def check_percentage(self, val) -> int | None:
-        """Check availability of percentage item and translate.
+    def check_percentage(self, val: int) -> int | None:
+        """Check availability of percentage item and translate return value to valid int.
 
-        return value to valid int
-        :param val: The value from the modbus
-        :type val: int
+        Args:
+            val: The value from the modbus
+
+        Returns:
+            Processed percentage value or None if invalid
+
         """
         if val == 65535:
             self._modbus_item.is_invalid = True
@@ -167,13 +274,29 @@ class ModbusObject:
         self._modbus_item.is_invalid = False
         return val
 
-    def check_status(self, val) -> int:
-        """Check general availability of item."""
+    def check_status(self, val: int) -> int:
+        """Check general availability of item.
+
+        Args:
+            val: The value from the modbus
+
+        Returns:
+            The status value
+
+        """
         self._modbus_item.is_invalid = False
         return val
 
-    def check_valid_response(self, val) -> int:
-        """Check if item is valid to write."""
+    def check_valid_response(self, val: int) -> int:
+        """Check if item is valid to write.
+
+        Args:
+            val: The value to validate
+
+        Returns:
+            Validated value ready for writing to modbus
+
+        """
         match self._modbus_item.format:
             case FORMATS.TEMPERATURE:
                 if val < 0:
@@ -182,11 +305,15 @@ class ModbusObject:
             case _:
                 return val
 
-    def validate_modbus_answer(self, mbr) -> int | None:
+    def validate_modbus_answer(self, mbr: Any) -> int | None:
         """Check if there's a valid answer from modbus and translate it to a valid int depending from type.
 
-        :param mbr: The modbus response
-        :type mbr: modbus response
+        Args:
+            mbr: The modbus response
+
+        Returns:
+            Validated integer value or None if invalid
+
         """
         val = None
         if mbr.isError():
@@ -212,8 +339,7 @@ class ModbusObject:
             val = self.check_valid_result(mbr.registers[0])
         return val
 
-    @property
-    async def value(self) -> int | None:
+    async def get_value(self) -> int | None:
         """Returns the value from the modbus register."""
         if self._modbus_client is None:
             return None
@@ -255,12 +381,12 @@ class ModbusObject:
                 )
         return None
 
-    # @value.setter
-    async def setvalue(self, value) -> None:
+    async def set_value(self, value: int) -> None:
         """Set the value of the modbus register, does nothing when not R/W.
 
-        :param val: The value to write to the modbus
-        :type val: int
+        Args:
+            value: The value to write to the modbus
+
         """
         if self._modbus_client is None:
             return
