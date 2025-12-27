@@ -45,6 +45,7 @@ class MyEntity(Entity):
     _dynamic_max = None
     _has_dynamic_min = False
     _has_dynamic_max = False
+    _dev_device_base: str = ""
 
     def __init__(
         self,
@@ -77,6 +78,7 @@ class MyEntity(Entity):
         name_prefix = name_topic_prefix + name_device_prefix
 
         self._dev_device = self._api_item.device + dev_postfix
+        self._dev_device_base = self._api_item.device
 
         self._attr_translation_key = self._api_item.translation_key
         self._attr_translation_placeholders = {"prefix": name_prefix}
@@ -93,7 +95,6 @@ class MyEntity(Entity):
             self._attr_unique_id = (
                 f"{dev_prefix}_{self._api_item.name}{dev_postfix}_webif"
             )
-        self._dev_device = self._api_item.device
 
         self._modbus_api = modbus_api
 
@@ -181,7 +182,7 @@ class MyEntity(Entity):
         """Build the device info."""
         return DeviceInfo(
             identifiers={(CONST.DOMAIN, str(self._dev_device))},
-            translation_key=str(self._dev_device),
+            translation_key=str(self._dev_device_base),
             translation_placeholders=self._dev_translation_placeholders,
             sw_version="Device_SW_Version",
             model="Device_model",
