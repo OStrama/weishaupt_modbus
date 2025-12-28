@@ -1,3 +1,9 @@
+# 1.0.14
+- Fix device naming with multiple heatpumps [issue](https://github.com/OStrama/weishaupt_modbus/pull/132))
+
+# 1.0.13
+- Fix HP reconnect ([issue](https://github.com/OStrama/weishaupt_modbus/pull/130))
+
 # 1.0.12
 - Fixed temp range for summer/winter switch ([issue](https://github.com/OStrama/weishaupt_modbus/issues/117))
 
