@@ -76,15 +76,11 @@ class ModbusAPI:
                 # fail_count = 5 → 4x base
                 # etc, capped at max_backoff
                 exp = self._failed_reconnect_counter - BACKOFF_THRESHOLD_FAILURES
-                backoff = BACKOFF_BASE_SECONDS * (2 ** exp)
+                backoff = BACKOFF_BASE_SECONDS * (2**exp)
                 if backoff > BACKOFF_MAX_SECONDS:
                     backoff = BACKOFF_MAX_SECONDS
 
-            if (
-                backoff > 0
-                and self._last_connection_try is not None
-                and not startup
-            ):
+            if backoff > 0 and self._last_connection_try is not None and not startup:
                 elapsed = now - self._last_connection_try
                 if elapsed < backoff:
                     remaining = backoff - elapsed
@@ -126,7 +122,10 @@ class ModbusAPI:
 
             # Connect() returned but not connected → count as failure
             self._failed_reconnect_counter += 1
-            if self._failed_reconnect_counter == BACKOFF_THRESHOLD_FAILURES and not startup:
+            if (
+                self._failed_reconnect_counter == BACKOFF_THRESHOLD_FAILURES
+                and not startup
+            ):
                 self._log_backoff_start()
             self._modbus_client.close()
             return False
@@ -137,7 +136,10 @@ class ModbusAPI:
                 str(exc),
             )
             self._failed_reconnect_counter += 1
-            if self._failed_reconnect_counter == BACKOFF_THRESHOLD_FAILURES and not startup:
+            if (
+                self._failed_reconnect_counter == BACKOFF_THRESHOLD_FAILURES
+                and not startup
+            ):
                 self._log_backoff_start()
             self._modbus_client.close()
             return False
@@ -149,7 +151,10 @@ class ModbusAPI:
                 str(exc),
             )
             self._failed_reconnect_counter += 1
-            if self._failed_reconnect_counter == BACKOFF_THRESHOLD_FAILURES and not startup:
+            if (
+                self._failed_reconnect_counter == BACKOFF_THRESHOLD_FAILURES
+                and not startup
+            ):
                 self._log_backoff_start()
             try:
                 self._modbus_client.close()
@@ -164,7 +169,10 @@ class ModbusAPI:
                 str(exc),
             )
             self._failed_reconnect_counter += 1
-            if self._failed_reconnect_counter == BACKOFF_THRESHOLD_FAILURES and not startup:
+            if (
+                self._failed_reconnect_counter == BACKOFF_THRESHOLD_FAILURES
+                and not startup
+            ):
                 self._log_backoff_start()
             try:
                 self._modbus_client.close()
@@ -175,7 +183,6 @@ class ModbusAPI:
         finally:
             # Always clear pending flag, even if we were cancelled
             self._connect_pending = False
-
 
     def close(self) -> None:
         """Close modbus connection."""

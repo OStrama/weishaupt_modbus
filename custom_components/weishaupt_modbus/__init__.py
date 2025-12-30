@@ -56,7 +56,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
         webapi = None
 
     # Create independent copies of ModbusItems for each config entry
-    itemlist = []
+    itemlist: list[ModbusItem] = []
 
     for device in DEVICELISTS:
         itemlist.extend(copy.deepcopy(item) for item in device)
@@ -199,11 +199,7 @@ def create_string_json() -> None:
 
     for item in DEVICELIST:
         match item.type:
-            case (
-                TYPES.SENSOR
-                | TYPES.NUMBER_RO
-                | TYPES.SENSOR_CALC
-            ):
+            case TYPES.SENSOR | TYPES.NUMBER_RO | TYPES.SENSOR_CALC:
                 mySensor: dict[str, Any] = {}
                 mySensor["name"] = "{prefix}" + item.name
                 if item.resultlist is not None:

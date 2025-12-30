@@ -51,7 +51,7 @@ class MyEntity(Entity):
         self,
         config_entry: MyConfigEntry,
         api_item: ModbusItem | WebItem,
-        modbus_api: ModbusAPI,
+        modbus_api: ModbusAPI | MyWebIfCoordinator,
     ) -> None:
         """Initialize the entity."""
         self._config_entry = config_entry
@@ -172,6 +172,12 @@ class MyEntity(Entity):
         else:
             self.set_min_max(True)
             val = int(float(value) * self._divider)
+
+        if val is None:
+            return None
+
+        if not isinstance(self._modbus_api, ModbusAPI):
+            return None
 
         await self._modbus_api.connect()
         mbo = ModbusObject(self._modbus_api, self._api_item)
