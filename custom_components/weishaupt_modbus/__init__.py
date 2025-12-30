@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import copy
 import json
 import logging
 from pathlib import Path
@@ -54,11 +55,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
     else:
         webapi = None
 
+    # Create independent copies of ModbusItems for each config entry
     itemlist = []
 
     for device in DEVICELISTS:
-        for item in device:
-            itemlist.append(item)  # noqa: PERF402
+        itemlist.extend(copy.deepcopy(item) for item in device)
 
     coordinator = MyCoordinator(
         hass=hass, my_api=mbapi, api_items=itemlist, p_config_entry=entry

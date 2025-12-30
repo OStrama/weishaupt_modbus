@@ -61,6 +61,11 @@ class MyCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         self._number_of_items = len(api_items)
         self._config_entry = p_config_entry
 
+    @property
+    def modbus_items(self) -> list[ModbusItem]:
+        """Return the list of modbus items for this coordinator."""
+        return self._modbusitems
+
     async def get_value(self, modbus_item: ModbusItem) -> Any:
         """Read a value from the modbus."""
         mbo = ModbusObject(self._modbus_api, modbus_item)
