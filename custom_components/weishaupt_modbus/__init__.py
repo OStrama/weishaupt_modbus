@@ -56,7 +56,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
         webapi = None
 
     # Create independent copies of ModbusItems for each config entry
-    itemlist = []
+    itemlist: list[ModbusItem] = []
 
     for device in DEVICELISTS:
         itemlist.extend(copy.deepcopy(item) for item in device)
