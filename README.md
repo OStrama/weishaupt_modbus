@@ -1,3 +1,6 @@
+# 1.0.15
+- Fix values for multiple heatpumps
+
 # 1.0.14
 - Fix device naming with multiple heatpumps [issue](https://github.com/OStrama/weishaupt_modbus/pull/132))
 
