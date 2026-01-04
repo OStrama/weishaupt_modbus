@@ -288,7 +288,7 @@ SYS_BETRIEBSANZEIGE: list[StatusItem] = [
     StatusItem(
         number=26,
         text="Schwimmbadbetrieb",
-        translation_key="system_operationmode_swimingpool",
+        translation_key="system_operationmode_swimmingpool",
     ),
     StatusItem(
         number=27, text="Urlaub", translation_key="system_operationmode_vacation"
@@ -468,7 +468,7 @@ HP_BETRIEB: list[StatusItem] = [
     StatusItem(
         number=26,
         text="Schwimmbad",
-        translation_key="heatpump_operationmode_swimingpool",
+        translation_key="heatpump_operationmode_swimmingpool",
     ),
     StatusItem(
         number=27, text="Urlaub", translation_key="heatpump_operationmode_vacation"
@@ -1532,3 +1532,4 @@ DEVICELISTS: list = [
 ]
 
 # fmt: on
+
