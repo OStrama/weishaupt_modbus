@@ -1,3 +1,6 @@
+# 1.0.16
+- Fix dynamic upper and lower bounds for multiple heating circuits
+
 # 1.0.15
 - Fix values for multiple heatpumps
 
@@ -23,7 +26,7 @@
 
 # 1.0.8
 - improved English translation and some code enhancements (Thanks to Bert :-))
-  
+
 # 1.0.7
 - Removed matplotlib as a requirement due to failing installations on Raspi/ARM
 
@@ -38,7 +41,7 @@
 - Experimental Web-Interface: WHen available, some data are fetched from the local web-IF of the device. Therefore username and password are required as well as an individual token. The token can be obtained as follows:
    1. open the web interface in browser and navigate to "info".
    2. In the address-bar of the browser you will see a link like this: http://192.168.xxx.xxx/settings_export.html?stack=0C00000100000000008000TTTT010002000301. The characters on the position of the "TTTT" show your individual token.
-    
+
 # 1.0.4
 - Translation is enabled now.
 - Enabling translations required change to new entity name style. We try to migrate the existing entities, so that the statistics remain. Due to issues in HAs recorder service this is not always stable. In case of lost statistics and if you want to manually migrate them, please have a look at the renaming tool in the subfolder entity_rename
@@ -48,11 +51,11 @@
 
 # New in Version 1.0.2:
 - Translations (not yet enabled due to naming issue..): Currently German and English is supported. Please contact us if you want to contribute further languages.
-- Power Map files are now moved into the integration's folder "<config-dir>/custom_components/weishaupt_modbus". 
+- Power Map files are now moved into the integration's folder "<config-dir>/custom_components/weishaupt_modbus".
   At setup or at configuration one of the existing files or a generic file called "weishaupt_wbb_kennfeld.json" can be choosen
 - Several bugfixes etc.
-  
-# With version 1.0.0 we consolidate both versions. 
+
+# With version 1.0.0 we consolidate both versions.
 # In this version this will have the following impact:
 (For updates from 1.0.0 to newer versions, this procedure is not longer needed.)
 
@@ -67,7 +70,7 @@
      weishaupt_wbb
    to
      weishaupt_modbus
-   
+
 
 ## For users of OStrama's weishaupt_wbb integration:
  * Uninstall existing "weishaupt_wbb" installation, answer "integration and all entities of it will be deleted" with "yes"
@@ -116,7 +119,7 @@ custom_components
 │   ├── ...
 │   ├── ...
 │   ├── ...
-│   └── wp.py  
+│   └── wp.py
 ```
 ## Configuration
 
@@ -131,13 +134,13 @@ The "Device Postfix" has a default value of "". It can be used to add multiple h
 ### The power mapping file
 The "Kennfeld-File" can be choosen to read in the right power mapping according to your type of heat pump:
 
-The heat power "Wärmeleistung" is calculated from the "Leistungsanforderung" in dependency of outside temperature and water temperature. 
+The heat power "Wärmeleistung" is calculated from the "Leistungsanforderung" in dependency of outside temperature and water temperature.
 This is type specific. The data stored in the integration fit to a WBB 12. If the file you've parameterized does not exist, the integration will create a file that fits for a WBB12. If you have another heat pump please update the Kennfeld-File file according to the graphs found in the documentation of your heat pump and change the name of the used file by reconfiguring the integration and change only the file name. It may be necessary to restart home assistant after changing the filename.
 When no file is available, a new file with the defined name will be created that contains the parameters read out from the graphs found in the documentation of WBB 12 in a manual way. This file can be used as a template for another type of heatpump.
 (Note: It would be great if you could provide files from other types of heatpumps to us, so that we can integrate them in further versions ;-))
 
 
-You have to enable modbus in your heatpump settings. 
+You have to enable modbus in your heatpump settings.
 
 ## Setting up the HeatPump
 
@@ -154,6 +157,6 @@ Option 1 is the savest but Option 2 enables you to connect to the heatpump from 
 **Netmask**: Select the netmask of your network. This will be **255.255.255.000** for you otherwise you would know the correct one ;)
 
 # Disclaimer
-The developers of this integration are not affiliated with Weishaupt. They have created the integration as open source in their spare time on the basis of publicly accessible information. 
+The developers of this integration are not affiliated with Weishaupt. They have created the integration as open source in their spare time on the basis of publicly accessible information.
 The use of the integration is at the user's own risk and responsibility. The developers are not liable for any damages arising from the use of the integration.
 

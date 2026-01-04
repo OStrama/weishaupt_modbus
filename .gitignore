@@ -31,7 +31,11 @@ blueprints/*
 home-assistant.log
 home-assistant_v2.db
 home-assistant.log.1
+home-assistant.log.fault
+home-assistant_v2.db-shm
+home-assistant_v2.db-wal
 
 .devcontainer/
 Dockerfile.dev
 scripts/
+.ha_run.lock
