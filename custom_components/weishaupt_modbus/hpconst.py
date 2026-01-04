@@ -288,7 +288,7 @@ SYS_BETRIEBSANZEIGE: list[StatusItem] = [
     StatusItem(
         number=26,
         text="Schwimmbadbetrieb",
-        translation_key="system_operationmode_swimmingpool",
+        translation_key="system_operationmode_swimingpool",
     ),
     StatusItem(
         number=27, text="Urlaub", translation_key="system_operationmode_vacation"
@@ -468,7 +468,7 @@ HP_BETRIEB: list[StatusItem] = [
     StatusItem(
         number=26,
         text="Schwimmbad",
-        translation_key="heatpump_operationmode_swimmingpool",
+        translation_key="heatpump_operationmode_swimingpool",
     ),
     StatusItem(
         number=27, text="Urlaub", translation_key="heatpump_operationmode_vacation"
@@ -994,6 +994,7 @@ PARAMS_ROOMTEMP: dict[str, Any] = {
     "stateclass": SensorStateClass.MEASUREMENT,
 }
 
+
 PARAMS_SUMMER_WINTER_SWITCH_TEMP: dict[str, Any] = {
     "min": 3,
     "max": 30,
@@ -1017,6 +1018,18 @@ PARAMS_ROOMTEMP_LOW: dict = {
     "unit": UnitOfTemperature.CELSIUS,
     "stateclass": SensorStateClass.MEASUREMENT,
 }
+PARAMS_ROOMTEMP_LOW2: dict = copy.deepcopy(PARAMS_ROOMTEMP_LOW)
+PARAMS_ROOMTEMP_LOW2["dynamic_max"] = PARAMS_ROOMTEMP_LOW2["dynamic_max"] + "2"
+
+PARAMS_ROOMTEMP_LOW3: dict = copy.deepcopy(PARAMS_ROOMTEMP_LOW)
+PARAMS_ROOMTEMP_LOW3["dynamic_max"] = PARAMS_ROOMTEMP_LOW3["dynamic_max"] + "3"
+
+PARAMS_ROOMTEMP_LOW4: dict = copy.deepcopy(PARAMS_ROOMTEMP_LOW)
+PARAMS_ROOMTEMP_LOW4["dynamic_max"] = PARAMS_ROOMTEMP_LOW4["dynamic_max"] + "4"
+
+PARAMS_ROOMTEMP_LOW5: dict = copy.deepcopy(PARAMS_ROOMTEMP_LOW)
+PARAMS_ROOMTEMP_LOW5["dynamic_max"] = PARAMS_ROOMTEMP_LOW5["dynamic_max"] + "5"
+
 
 PARAMS_ROOMTEMP_MID: dict = {
     "min": 16,
@@ -1031,6 +1044,23 @@ PARAMS_ROOMTEMP_MID: dict = {
     "stateclass": SensorStateClass.MEASUREMENT,
 }
 
+PARAMS_ROOMTEMP_MID2: dict = copy.deepcopy(PARAMS_ROOMTEMP_MID)
+PARAMS_ROOMTEMP_MID2["dynamic_max"] = PARAMS_ROOMTEMP_MID2["dynamic_max"] + "2"
+PARAMS_ROOMTEMP_MID2["dynamic_min"] = PARAMS_ROOMTEMP_MID2["dynamic_min"] + "2"
+
+PARAMS_ROOMTEMP_MID3: dict = copy.deepcopy(PARAMS_ROOMTEMP_MID)
+PARAMS_ROOMTEMP_MID3["dynamic_max"] = PARAMS_ROOMTEMP_MID3["dynamic_max"] + "3"
+PARAMS_ROOMTEMP_MID3["dynamic_min"] = PARAMS_ROOMTEMP_MID3["dynamic_min"] + "3"
+
+PARAMS_ROOMTEMP_MID4: dict = copy.deepcopy(PARAMS_ROOMTEMP_MID)
+PARAMS_ROOMTEMP_MID4["dynamic_max"] = PARAMS_ROOMTEMP_MID4["dynamic_max"] + "4"
+PARAMS_ROOMTEMP_MID4["dynamic_min"] = PARAMS_ROOMTEMP_MID4["dynamic_min"] + "4"
+
+PARAMS_ROOMTEMP_MID5: dict = copy.deepcopy(PARAMS_ROOMTEMP_MID)
+PARAMS_ROOMTEMP_MID5["dynamic_max"] = PARAMS_ROOMTEMP_MID5["dynamic_max"] + "5"
+PARAMS_ROOMTEMP_MID5["dynamic_min"] = PARAMS_ROOMTEMP_MID5["dynamic_min"] + "5"
+
+
 PARAMS_ROOMTEMP_HIGH: dict = {
     "min": 16,
     "max": 28,
@@ -1043,6 +1073,18 @@ PARAMS_ROOMTEMP_HIGH: dict = {
     "unit": UnitOfTemperature.CELSIUS,
     "stateclass": SensorStateClass.MEASUREMENT,
 }
+
+PARAMS_ROOMTEMP_HIGH2: dict = copy.deepcopy(PARAMS_ROOMTEMP_HIGH)
+PARAMS_ROOMTEMP_HIGH2["dynamic_min"] = PARAMS_ROOMTEMP_HIGH2["dynamic_min"] + "2"
+
+PARAMS_ROOMTEMP_HIGH3: dict = copy.deepcopy(PARAMS_ROOMTEMP_HIGH)
+PARAMS_ROOMTEMP_HIGH3["dynamic_min"] = PARAMS_ROOMTEMP_HIGH3["dynamic_min"] + "3"
+
+PARAMS_ROOMTEMP_HIGH4: dict = copy.deepcopy(PARAMS_ROOMTEMP_HIGH)
+PARAMS_ROOMTEMP_HIGH4["dynamic_min"] = PARAMS_ROOMTEMP_HIGH4["dynamic_min"] + "4"
+
+PARAMS_ROOMTEMP_HIGH5: dict = copy.deepcopy(PARAMS_ROOMTEMP_HIGH)
+PARAMS_ROOMTEMP_HIGH5["dynamic_min"] = PARAMS_ROOMTEMP_HIGH5["dynamic_min"] + "5"
 
 PARAMS_WATERTEMP: dict = {
     "min": 5.5,
@@ -1310,19 +1352,36 @@ MODBUS_HZ_ITEMS = [
 ]
 
 # buils other Heizkreis Itemlists
+PARAMS_ROOMTEMP_LOW2: dict = copy.deepcopy(PARAMS_ROOMTEMP_LOW)
+PARAMS_ROOMTEMP_LOW2["dynamic_max"] = PARAMS_ROOMTEMP_LOW2["dynamic_max"] + "2"
+
+
 MODBUS_HZ2_ITEMS: list = []
 for item in MODBUS_HZ_ITEMS:
     mbi2 = copy.deepcopy(x=item)
+    if mbi2.address == 41105:
+        mbi2.params = PARAMS_ROOMTEMP_HIGH2
+    if mbi2.address == 41106:
+        mbi2.params = PARAMS_ROOMTEMP_MID2
+    if mbi2.address == 41107:
+        mbi2.params = PARAMS_ROOMTEMP_LOW2
     mbi2.address = item.address+100
     mbi2.name = item.name + "2"
     mbi2.translation_key = item.translation_key + "2"
     mbi2.device = DEVICES.HZ2
     MODBUS_HZ2_ITEMS.append(mbi2)
 
+
 # buils other Heizkreis Itemlists
 MODBUS_HZ3_ITEMS: list = []
 for item in MODBUS_HZ_ITEMS:
     mbi3 = copy.deepcopy(x=item)
+    if mbi3.address == 41105:
+        mbi3.params = PARAMS_ROOMTEMP_HIGH3
+    if mbi3.address == 41106:
+        mbi3.params = PARAMS_ROOMTEMP_MID3
+    if mbi3.address == 41107:
+        mbi3.params = PARAMS_ROOMTEMP_LOW3
     mbi3.address = item.address+200
     mbi3.name = item.name + "3"
     mbi3.translation_key = item.translation_key + "3"
@@ -1333,6 +1392,12 @@ for item in MODBUS_HZ_ITEMS:
 MODBUS_HZ4_ITEMS: list = []
 for item in MODBUS_HZ_ITEMS:
     mbi4 = copy.deepcopy(x=item)
+    if mbi4.address == 41105:
+        mbi4.params = PARAMS_ROOMTEMP_HIGH4
+    if mbi4.address == 41106:
+        mbi4.params = PARAMS_ROOMTEMP_MID4
+    if mbi4.address == 41107:
+        mbi4.params = PARAMS_ROOMTEMP_LOW4
     mbi4.address = item.address+300
     mbi4.name = item.name + "4"
     mbi4.translation_key = item.translation_key + "4"
@@ -1343,6 +1408,12 @@ for item in MODBUS_HZ_ITEMS:
 MODBUS_HZ5_ITEMS: list = []
 for item in MODBUS_HZ_ITEMS:
     mbi5: ModbusItem = copy.deepcopy(x=item)
+    if mbi5.address == 41105:
+        mbi5.params = PARAMS_ROOMTEMP_HIGH5
+    if mbi5.address == 41106:
+        mbi5.params = PARAMS_ROOMTEMP_MID5
+    if mbi5.address == 41107:
+        mbi5.params = PARAMS_ROOMTEMP_LOW5
     mbi5.address = item.address+400
     mbi5.name = item.name + "5"
     mbi5.translation_key = item.translation_key + "5"
