@@ -124,9 +124,9 @@ class ModbusAPI:
                 and not startup
             ):
                 self._log_backoff_start()
-            else:
-                self._modbus_client.close()
                 return False
+            self._modbus_client.close()
+            return False  # noqa: TRY300
 
         except ModbusException as exc:
             _LOGGER.warning(

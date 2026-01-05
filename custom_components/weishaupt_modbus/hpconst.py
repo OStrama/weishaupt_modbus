@@ -1352,9 +1352,6 @@ MODBUS_HZ_ITEMS = [
 ]
 
 # buils other Heizkreis Itemlists
-PARAMS_ROOMTEMP_LOW2: dict = copy.deepcopy(PARAMS_ROOMTEMP_LOW)
-PARAMS_ROOMTEMP_LOW2["dynamic_max"] = PARAMS_ROOMTEMP_LOW2["dynamic_max"] + "2"
-
 
 MODBUS_HZ2_ITEMS: list = []
 for item in MODBUS_HZ_ITEMS:
