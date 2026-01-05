@@ -87,7 +87,7 @@ def migrate_entities(
         )
 
         if new_entity_id == old_entity_id:
-            _LOGGER.info("already migrated %s", old_entity_id)
+            _LOGGER.info("Already migrated %s", old_entity_id)
             return
 
         if old_entity_id is not None:

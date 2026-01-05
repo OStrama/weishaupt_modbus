@@ -48,7 +48,7 @@ class ModbusAPI:
         """Log when exponential backoff starts."""
         _LOGGER.warning(
             "Connection to heatpump failed %s times. "
-            "Starting exponential backoff (min %s seconds).",
+            "Starting exponential backoff (min %s seconds)",
             self._failed_reconnect_counter,
             BACKOFF_BASE_SECONDS,
         )
@@ -77,8 +77,7 @@ class ModbusAPI:
                 # etc, capped at max_backoff
                 exp = self._failed_reconnect_counter - BACKOFF_THRESHOLD_FAILURES
                 backoff = BACKOFF_BASE_SECONDS * (2**exp)
-                if backoff > BACKOFF_MAX_SECONDS:
-                    backoff = BACKOFF_MAX_SECONDS
+                backoff = min(backoff, BACKOFF_MAX_SECONDS)
 
             if backoff > 0 and self._last_connection_try is not None and not startup:
                 elapsed = now - self._last_connection_try
@@ -92,14 +91,13 @@ class ModbusAPI:
                         self._failed_reconnect_counter,
                     )
                     return False
-                else:
-                    # We've waited long enough, log that we are trying again
-                    _LOGGER.info(
-                        "Backoff period (%.0f s) expired after %s failures. "
-                        "Retrying connection to heatpump now...",
-                        backoff,
-                        self._failed_reconnect_counter,
-                    )
+                # We've waited long enough, log that we are trying again
+                _LOGGER.info(
+                    "Backoff period (%.0f s) expired after %s failures. "
+                    "Retrying connection to heatpump now",
+                    backoff,
+                    self._failed_reconnect_counter,
+                )
 
             # Record this attempt time
             self._last_connection_try = now
@@ -111,12 +109,11 @@ class ModbusAPI:
                 # SUCCESS
                 if self._failed_reconnect_counter > 0:
                     _LOGGER.info(
-                        "Successfully reconnected to heatpump after %s failed "
-                        "attempts.",
+                        "Successfully reconnected to heatpump after %s failed attempts",
                         self._failed_reconnect_counter,
                     )
                 else:
-                    _LOGGER.info("Successfully connected to heatpump.")
+                    _LOGGER.info("Successfully connected to heatpump")
                 self._failed_reconnect_counter = 0
                 return True
 
@@ -127,8 +124,9 @@ class ModbusAPI:
                 and not startup
             ):
                 self._log_backoff_start()
-            self._modbus_client.close()
-            return False
+            else:
+                self._modbus_client.close()
+                return False
 
         except ModbusException as exc:
             _LOGGER.warning(
@@ -156,7 +154,7 @@ class ModbusAPI:
                 and not startup
             ):
                 self._log_backoff_start()
-            try:
+            try:  # noqa: SIM105
                 self._modbus_client.close()
             except Exception:  # noqa: BLE001
                 pass
@@ -174,7 +172,7 @@ class ModbusAPI:
                 and not startup
             ):
                 self._log_backoff_start()
-            try:
+            try:  # noqa: SIM105
                 self._modbus_client.close()
             except Exception:  # noqa: BLE001
                 pass

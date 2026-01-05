@@ -130,19 +130,19 @@ class WebifConnection:
                 url = str(link["href"])
                 links[name] = url
         return links
-        """Return links from given nav container."""
-        soup_links = soup.find_all(name="a")
-        links = {}
-        for link in soup_links:
-            # print(link)
-            # print(link.name)
-            name = link.find("h5").text.strip()
-            url = link["href"]
-            links[name] = url
-            # print(name + ": " + url)
-            # link = link.find("a")
-            # print(name + ":" + link)
-        return links
+        # """Return links from given nav container."""
+        # soup_links = soup.find_all(name="a")
+        # links = {}
+        # for link in soup_links:
+        # print(link)
+        # print(link.name)
+        #    name = link.find("h5").text.strip()
+        #    url = link["href"]
+        #    links[name] = url
+        # print(name + ": " + url)
+        # link = link.find("a")
+        # print(name + ":" + link)
+        # return links
 
     def get_values(self, soup: Tag) -> dict[str, Any]:
         """Return values from given nav container."""
