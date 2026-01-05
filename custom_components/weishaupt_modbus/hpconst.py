@@ -1532,4 +1532,3 @@ DEVICELISTS: list = [
 ]
 
 # fmt: on
-
