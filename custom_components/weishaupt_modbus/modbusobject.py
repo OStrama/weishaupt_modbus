@@ -345,7 +345,7 @@ class ModbusObject:
         return val
 
     async def get_value(self) -> int | None:
-        """Returns the value from the modbus register."""
+        """Return the value from the modbus register."""
         if self._modbus_client is None:
             return None
         if self._modbus_client.connected is False:
