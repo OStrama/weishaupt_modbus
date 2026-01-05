@@ -32,6 +32,8 @@ RUN \
         libxml2 \
         git \
         cmake \
+        autoconf \
+        graphviz \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -58,9 +60,10 @@ WORKDIR /tmp
 # Install Python dependencies from requirements
 COPY requirements.txt ./
 COPY requirements_dev.txt ./
-RUN uv pip install -r requirements_dev.txt
+COPY requirements_test.txt ./
+# RUN uv pip install -r requirements_dev.txt
 # COPY requirements_test.txt requirements_test_pre_commit.txt ./
-# RUN uv pip install -r requirements_test.txt
+RUN uv pip install -r requirements_test.txt
 
 WORKDIR /workspaces
 

@@ -2,12 +2,12 @@
 name = "Weishaupt WBB"
 version = "1.0.11"
 license = "MIT"
-license-files = ["LICENSE", "LICENSE"]
+license-files = ["LICENSE"]
 description = "HA integration lets you monitor and control your weishaupt heatpump through modbus"
 readme = "README.md"
 authors = [
-    {   name = "OStrama",  email = "none@none.com" },
-    {   name = "MadOne",   email = "none@none.com" }
+  { name = "OStrama", email = "none@none.com" },
+  { name = "MadOne", email = "none@none.com" },
 ]
 keywords = ["home", "automation"]
 classifiers = [
@@ -20,9 +20,9 @@ classifiers = [
 ]
 requires-python = ">=3.13.2"
 dependencies = [
-  "pymodbus==3.8.3",
+  "pymodbus==3.11.0",
   "voluptuous==0.15.2",
-  "beautifulsoup4==4.13.4"
+  "beautifulsoup4==4.13.4",
 ]
 
 [project.urls]
@@ -47,15 +47,13 @@ init-hook = """\
     ) \
     """
 load-plugins = [
-    "pylint.extensions.code_style",
-    "pylint.extensions.typing",
-    "pylint_per_file_ignores",
+  "pylint.extensions.code_style",
+  "pylint.extensions.typing",
+  "pylint_per_file_ignores",
 ]
 persistent = false
 
-fail-on = [
-    "I",
-]
+fail-on = ["I"]
 
 [tool.pylint.BASIC]
 class-const-naming-style = "any"
@@ -341,10 +339,7 @@ mixin-class-rgx = ".*[Mm]ix[Ii]n"
 [tool.pylint.FORMAT]
 expected-line-ending-format = "LF"
 [tool.pylint.EXCEPTIONS]
-overgeneral-exceptions = [
-  "builtins.BaseException",
-  "builtins.Exception",
-]
+overgeneral-exceptions = ["builtins.BaseException", "builtins.Exception"]
 
 [tool.pylint.TYPING]
 runtime-typing = false
@@ -375,7 +370,7 @@ exclude_lines = [
 ]
 
 [tool.ruff]
-required-version = ">=0.11.0"
+required-version = ">=0.13.0"
 
 [tool.ruff.lint]
 select = [
@@ -518,7 +513,6 @@ ignore = [
   "TRY003", # Avoid specifying long messages outside the exception class
   "TRY400", # Use `logging.exception` instead of `logging.error`
   # Ignored due to performance: https://github.com/charliermarsh/ruff/issues/2923
-  "UP038", # Use `X | Y` in `isinstance` call instead of `(X, Y)`
   "UP046", # Non PEP 695 generic class
   "UP047", # Non PEP 696 generic function
   "UP049", # Avoid private type parameter names
@@ -574,20 +568,63 @@ combine-as-imports = true
 split-on-trailing-comma = false
 
 [tool.ruff.lint.per-file-ignores]
-"tests/*" = ["SLF001"]  # Allow private member access in tests
-"custom_components/weishaupt_modbus/test_modbus.py" = ["ALL"]  # Ignore all rules for test_modbus.py
-
-# Temporary
+"tests/*" = [
+  "S101",    # Use of assert detected
+  "PLR2004", # Magic value used in comparison
+  "SLF001",  # Private member accessed
+  "ARG001",  # Unused function argument (common in fixtures)
+]
 "tests/**" = ["PTH"]
 
 [tool.ruff.lint.mccabe]
 max-complexity = 25
 
 [tool.ruff.lint.pydocstyle]
+convention = "google"
 property-decorators = ["propcache.api.cached_property"]
 
 [tool.mypy]
 python_version = "3.13"
-exclude = [
-  "custom_components/weishaupt_modbus/test_modbus.py",
-]
+platform = "linux"
+files = ["custom_components/**/*.py", "tests/**/*.py"]
+warn_return_any = true
+warn_unused_configs = true
+
+[[tool.mypy.overrides]]
+module = "custom_components.weishaupt_modbus.*"
+check_untyped_defs = true
+disallow_incomplete_defs = true
+disallow_subclassing_any = true
+disallow_untyped_calls = true
+disallow_untyped_decorators = true
+disallow_untyped_defs = true
+warn_return_any = true
+warn_unreachable = true
+
+# Allow more flexibility in tests
+[[tool.mypy.overrides]]
+module = "test.*"
+disable_error_code = ["misc", "attr-defined"]
+
+[tool.pyright]
+# Type checking configuration
+pythonVersion = "3.13"
+# typeCheckingMode = "strict"
+
+# # Disable specific checks that are common in Home Assistant integrations
+reportIncompatibleVariableOverride = false
+# reportGeneralTypeIssues = "warning"
+# reportOptionalMemberAccess = "warning"
+# reportOptionalSubscript = "warning"
+
+# # Keep important security-related checks enabled
+# reportUnknownMemberType = "error"
+# reportUnknownVariableType = "warning"
+# reportUntypedFunctionDecorator = "error"
+
+# # Exclude patterns
+# exclude = [
+#   "**/__pycache__",
+#   "**/node_modules",
+#   "tests/**/*",      # if you want less strict checking for tests
+# ]
