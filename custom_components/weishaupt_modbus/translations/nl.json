@@ -492,6 +492,9 @@
           "sys_operationmode_standby" : "Standby"
         }
       },
+      "sys_pv": {
+          "name": "{prefix}Instelpunt PV"
+      },
       "ww_push" : {
         "name" : "{prefix}Warmwater Push",
         "state" : {

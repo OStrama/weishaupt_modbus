@@ -1256,6 +1256,16 @@ PARAMS_CALCJAZ: dict = {
     "calculation": "val_0 / val_1",
 }
 
+PARAMS_PV: dict = {
+    "min": 0,
+    "max": 65535,
+    "precision": 0,
+    "deviceclass": SensorDeviceClass.POWER,
+    "unit": UnitOfPower.WATT,
+    "stateclass": SensorStateClass.MEASUREMENT,
+    # "icon": "mdi:sigma",
+}
+
 PARAMS_ALERT: dict[str, Any] = {"icon": "mdi:alert"}
 
 PARAMS_OPMODE: dict = {"icon": "mdi:heat-pump"}
@@ -1304,6 +1314,8 @@ MODBUS_SYS_ITEMS: list[ModbusItem] = [
     ModbusItem( address=30005, name="Fehlerfrei", mformat=FORMATS.STATUS, mtype=TYPES.SENSOR, device=DEVICES.SYS, resultlist=SYS_FEHLERFREI, params=PARAMS_ALERT, translation_key="fehlerfrei"),
     ModbusItem( address=30006, name="Betriebsanzeige", mformat=FORMATS.STATUS, mtype=TYPES.SENSOR, device=DEVICES.SYS, resultlist=SYS_BETRIEBSANZEIGE, params = PARAMS_OPMODE, translation_key="betriebsanzeige"),
     ModbusItem( address=40001,  name="Systembetriebsart", mformat=FORMATS.STATUS, mtype=TYPES.SELECT, device=DEVICES.SYS, resultlist=SYS_BETRIEBSART, params = PARAMS_OPMODE, translation_key="sys_operationmode"),
+    ModbusItem( address=40002,  name="SollwertPV", mformat=FORMATS.NUMBER, mtype=TYPES.NUMBER, device=DEVICES.SYS, params = PARAMS_PV, translation_key="sys_pv"),
+
 ]
 
 MODBUS_WP_ITEMS: list[ModbusItem] = [
@@ -1339,7 +1351,7 @@ MODBUS_HZ_ITEMS = [
     ModbusItem( address=31103, name="Raumfeuchte", mformat=FORMATS.PERCENTAGE, mtype=TYPES.SENSOR, device=DEVICES.HZ, params=PARAMS_PERCENTAGE, translation_key="raum_feuchte"),
     ModbusItem( address=31104, name="Vorlaufsolltemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.HZ, params=PARAMS_STDTEMP, translation_key="hz_vl_solltemp"),
     ModbusItem( address=31105, name="HZ_Vorlauftemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.HZ, params=PARAMS_STDTEMP, translation_key="hz_vl_temp"),
-    # This is somehow in corelation to: address=41102, name="Anforderung Typ"
+    # This is somehow in relation to: address=41102, name="Anforderung Typ"
     ModbusItem( address=31106, name="Adr. 31106", mformat=FORMATS.UNKNOWN, mtype=TYPES.SENSOR, device=DEVICES.HZ, translation_key="adr31106"),
     ModbusItem( address=41101, name="HZ_Konfiguration", mformat=FORMATS.STATUS, mtype=TYPES.NUMBER_RO, device=DEVICES.HZ, resultlist=HZ_KONFIGURATION, translation_key="hz_konf"),
     ModbusItem( address=41102, name="Anforderung Typ", mformat=FORMATS.STATUS, mtype=TYPES.NUMBER_RO, device=DEVICES.HZ, resultlist=HZ_ANFORDERUNG, translation_key="anf_typ"),
