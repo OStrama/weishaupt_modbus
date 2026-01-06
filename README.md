@@ -1,3 +1,6 @@
+# 1.0.17
+- Adjusted mapping for 41102 Anforderung Typ
+
 # 1.0.16
 - Fix dynamic upper and lower bounds for multiple heating circuits
 
