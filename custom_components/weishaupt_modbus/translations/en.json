@@ -598,7 +598,8 @@
         "state": {
           "hz_anforderung_aus": "off",
           "hz_anforderung_konstant": "constant",
-          "hz_anforderung_witterungsgefuehrt": "weather-guided"
+          "hz_anforderung_witterungsgefuehrt": "weather-guided",
+          "hz_anforderung_raumregelung": "Room control"
         }
       },
       "anf_typ2": {
@@ -606,7 +607,8 @@
         "state": {
           "hz_anforderung_aus": "off",
           "hz_anforderung_konstant": "constrant",
-          "hz_anforderung_witterungsgefuehrt": "weather-guided"
+          "hz_anforderung_witterungsgefuehrt": "weather-guided",
+          "hz_anforderung_raumregelung": "Room control"
         }
       },
       "anf_typ3": {
@@ -614,7 +616,8 @@
         "state": {
           "hz_anforderung_aus": "off",
           "hz_anforderung_konstant": "constrant",
-          "hz_anforderung_witterungsgefuehrt": "weather-guided"
+          "hz_anforderung_witterungsgefuehrt": "weather-guided",
+          "hz_anforderung_raumregelung": "Room control"
         }
       },
       "anf_typ4": {
@@ -622,7 +625,8 @@
         "state": {
           "hz_anforderung_aus": "off",
           "hz_anforderung_konstant": "constrant",
-          "hz_anforderung_witterungsgefuehrt": "weather-guided"
+          "hz_anforderung_witterungsgefuehrt": "weather-guided",
+          "hz_anforderung_raumregelung": "Room control"
         }
       },
       "anf_typ5": {
@@ -630,7 +634,8 @@
         "state": {
           "hz_anforderung_aus": "off",
           "hz_anforderung_konstant": "constrant",
-          "hz_anforderung_witterungsgefuehrt": "weather-guided"
+          "hz_anforderung_witterungsgefuehrt": "weather-guided",
+          "hz_anforderung_raumregelung": "Room control"
         }
       },
       "anforderung_vl_regenerativ": {

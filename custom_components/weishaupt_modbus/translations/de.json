@@ -598,7 +598,8 @@
                 "state": {
                     "hz_anforderung_aus": "aus",
                     "hz_anforderung_konstant": "konstant",
-                    "hz_anforderung_witterungsgefuehrt": "witterungsgeführt"
+                    "hz_anforderung_witterungsgefuehrt": "witterungsgeführt",
+                    "hz_anforderung_raumregelung": "Raumregelung"
                 }
             },
             "anf_typ2": {
@@ -606,7 +607,8 @@
                 "state": {
                     "hz_anforderung_aus": "aus",
                     "hz_anforderung_konstant": "konstant",
-                    "hz_anforderung_witterungsgefuehrt": "witterungsgeführt"
+                    "hz_anforderung_witterungsgefuehrt": "witterungsgeführt",
+                    "hz_anforderung_raumregelung": "Raumregelung"
                 }
             },
             "anf_typ3": {
@@ -614,7 +616,8 @@
                 "state": {
                     "hz_anforderung_aus": "aus",
                     "hz_anforderung_konstant": "konstant",
-                    "hz_anforderung_witterungsgefuehrt": "witterungsgeführt"
+                    "hz_anforderung_witterungsgefuehrt": "witterungsgeführt",
+                    "hz_anforderung_raumregelung": "Raumregelung"
                 }
             },
             "anf_typ4": {
@@ -622,7 +625,8 @@
                 "state": {
                     "hz_anforderung_aus": "aus",
                     "hz_anforderung_konstant": "konstant",
-                    "hz_anforderung_witterungsgefuehrt": "witterungsgeführt"
+                    "hz_anforderung_witterungsgefuehrt": "witterungsgeführt",
+                    "hz_anforderung_raumregelung": "Raumregelung"
                 }
             },
             "anf_typ5": {
@@ -630,7 +634,8 @@
                 "state": {
                     "hz_anforderung_aus": "aus",
                     "hz_anforderung_konstant": "konstant",
-                    "hz_anforderung_witterungsgefuehrt": "witterungsgeführt"
+                    "hz_anforderung_witterungsgefuehrt": "witterungsgeführt",
+                    "hz_anforderung_raumregelung": "Raumregelung"
                 }
             },
             "anforderung_vl_regenerativ": {

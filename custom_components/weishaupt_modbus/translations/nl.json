@@ -596,7 +596,8 @@
         "state" : {
           "hz_anforderung_aus" : "Uit",
           "hz_anforderung_konstant" : "Constant",
-          "hz_anforderung_witterungsgefuehrt" : "Weersafhankelijk"
+          "hz_anforderung_witterungsgefuehrt" : "Weersafhankelijk",
+          "hz_anforderung_raumregelung": "Ruimtegestuurd"
         }
       },
       "anf_typ2" : {
@@ -604,7 +605,8 @@
         "state" : {
           "hz_anforderung_aus" : "Uit",
           "hz_anforderung_konstant" : "Constant",
-          "hz_anforderung_witterungsgefuehrt" : "Weersafhankelijk"
+          "hz_anforderung_witterungsgefuehrt" : "Weersafhankelijk",
+          "hz_anforderung_raumregelung": "Ruimtegestuurd"
         }
       },
       "anf_typ3" : {
@@ -612,7 +614,8 @@
         "state" : {
           "hz_anforderung_aus" : "Uit",
           "hz_anforderung_konstant" : "Constant",
-          "hz_anforderung_witterungsgefuehrt" : "Weersafhankelijk"
+          "hz_anforderung_witterungsgefuehrt" : "Weersafhankelijk",
+          "hz_anforderung_raumregelung": "Ruimtegestuurd"
         }
       },
       "anf_typ4" : {
@@ -620,7 +623,8 @@
         "state" : {
           "hz_anforderung_aus" : "Uit",
           "hz_anforderung_konstant" : "Constant",
-          "hz_anforderung_witterungsgefuehrt" : "Weersafhankelijk"
+          "hz_anforderung_witterungsgefuehrt" : "Weersafhankelijk",
+          "hz_anforderung_raumregelung": "Ruimtegestuurd"
         }
       },
       "anf_typ5" : {
@@ -628,7 +632,8 @@
         "state" : {
           "hz_anforderung_aus" : "Uit",
           "hz_anforderung_konstant" : "Constant",
-          "hz_anforderung_witterungsgefuehrt" : "Weersafhankelijk"
+          "hz_anforderung_witterungsgefuehrt" : "Weersafhankelijk",
+          "hz_anforderung_raumregelung": "Ruimtegestuurd"
         }
       },
       "anforderung_vl_regenerativ" : {

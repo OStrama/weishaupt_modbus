@@ -552,7 +552,10 @@ HZ_ANFORDERUNG: list[StatusItem] = [
         text="witterungsgeführt",
         translation_key="hz_anforderung_witterungsgefuehrt",
     ),
-    StatusItem(number=2, text="konstant", translation_key="hz_anforderung_konstant"),
+    StatusItem(
+        number=2, text="Raumregelung", translation_key="hz_anforderung_raumregelung"
+    ),
+    StatusItem(number=3, text="konstant", translation_key="hz_anforderung_konstant"),
 ]
 
 HZ_BETRIEBSART: list[StatusItem] = [
@@ -1336,6 +1339,7 @@ MODBUS_HZ_ITEMS = [
     ModbusItem( address=31103, name="Raumfeuchte", mformat=FORMATS.PERCENTAGE, mtype=TYPES.SENSOR, device=DEVICES.HZ, params=PARAMS_PERCENTAGE, translation_key="raum_feuchte"),
     ModbusItem( address=31104, name="Vorlaufsolltemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.HZ, params=PARAMS_STDTEMP, translation_key="hz_vl_solltemp"),
     ModbusItem( address=31105, name="HZ_Vorlauftemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.HZ, params=PARAMS_STDTEMP, translation_key="hz_vl_temp"),
+    # This is somehow in corelation to: address=41102, name="Anforderung Typ"
     ModbusItem( address=31106, name="Adr. 31106", mformat=FORMATS.UNKNOWN, mtype=TYPES.SENSOR, device=DEVICES.HZ, translation_key="adr31106"),
     ModbusItem( address=41101, name="HZ_Konfiguration", mformat=FORMATS.STATUS, mtype=TYPES.NUMBER_RO, device=DEVICES.HZ, resultlist=HZ_KONFIGURATION, translation_key="hz_konf"),
     ModbusItem( address=41102, name="Anforderung Typ", mformat=FORMATS.STATUS, mtype=TYPES.NUMBER_RO, device=DEVICES.HZ, resultlist=HZ_ANFORDERUNG, translation_key="anf_typ"),
