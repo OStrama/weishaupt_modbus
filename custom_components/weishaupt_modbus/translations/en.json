@@ -1507,7 +1507,7 @@
       "wp_betrieb": {
         "name": "{prefix}Operation",
         "state": {
-          "heatpump_operationmode_undefined": "Undefined",
+          "heatpump_operationmode_pvmode": "PV Mode",
           "heatpump_operationmode_relaistest": "Relay test",
           "heatpump_operationmode_evu": "EVU_SPERRE",
           "heatpump_operationmode_sgtariff": "SG tariff",

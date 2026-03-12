@@ -362,7 +362,7 @@ SYS_BETRIEBSART: list[StatusItem] = [
 
 HP_BETRIEB: list[StatusItem] = [
     StatusItem(
-        number=0, text="Undefiniert", translation_key="heatpump_operationmode_undefined"
+        number=0, text="Undefiniert", translation_key="heatpump_operationmode_pvmode"
     ),
     StatusItem(
         number=1, text="Relaistest", translation_key="heatpump_operationmode_relaistest"
