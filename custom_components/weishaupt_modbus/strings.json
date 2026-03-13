@@ -663,7 +663,7 @@
             "betriebsanzeige": {
                 "name": "{prefix}Betriebsanzeige",
                 "state": {
-                    "system_operationmode_undefined": "undefiniert",
+                    "system_operationmode_pvmode": "PV Modus",
                     "system_operationmode_relaistest": "Relaistest",
                     "system_operationmode_sgtariff": "SG Tarif",
                     "system_operationmode_sgmax": "SG Maximal",

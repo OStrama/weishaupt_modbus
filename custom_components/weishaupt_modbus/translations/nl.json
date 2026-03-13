@@ -660,7 +660,7 @@
       "betriebsanzeige" : {
         "name" : "{prefix}Vermogensweergave",
         "state" : {
-          "system_operationmode_undefined" : "ongedefinieerd",
+          "system_operationmode_pvmode" : "PV-modus",
           "system_operationmode_relaistest" : "relais-test",
           "system_operationmode_sgtariff" : "SG-tarief",
           "system_operationmode_sgmax" : "SG-maximaal",

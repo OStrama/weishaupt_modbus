@@ -662,7 +662,7 @@
       "betriebsanzeige": {
         "name": "{prefix}Operation indicator",
         "state": {
-          "system_operationmode_undefined": "undefined",
+          "system_operationmode_pvmode": "PV Mode",
           "system_operationmode_relaistest": "Relais test",
           "system_operationmode_sgtariff": "SG tariff",
           "system_operationmode_sgmax": "SG maximum",
