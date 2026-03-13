@@ -190,7 +190,7 @@ SYS_FEHLERFREI: list[StatusItem] = [
 
 SYS_BETRIEBSANZEIGE: list[StatusItem] = [
     StatusItem(
-        number=0, text="undefiniert", translation_key="system_operationmode_undefined"
+        number=0, text="undefiniert", translation_key="system_operationmode_pvmode"
     ),
     StatusItem(
         number=1, text="Relaistest", translation_key="system_operationmode_relaistest"
