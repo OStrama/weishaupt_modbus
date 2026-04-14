@@ -1522,6 +1522,7 @@
           "heatpump_operationmode_applicationlimit" : "Toepassingsgrens",
           "heatpump_operationmode_lockedcv" : "CV-blokkade",
           "heatpump_operationmode_lowering" : "Verlaagde werking",
+          "heatpump_operationmode_regenerativ" : "Regeneratief",
           "heatpump_operationmode_manual" : "Manueel",
           "heatpump_operationmode_oilrecirculation" : "Olie-terugvoer",
           "heatpump_operationmode_manualheating" : "Manueel verwarmen",

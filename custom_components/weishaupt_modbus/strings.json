@@ -1536,6 +1536,7 @@
                     "heatpump_operationmode_applicationlimit": "Einsatzgrenze",
                     "heatpump_operationmode_lockedcv": "HK Sperre",
                     "heatpump_operationmode_lowering": "Absenk",
+                    "heatpump_operationmode_regenerativ": "REGENERATIV",
                     "heatpump_operationmode_manual": "Handbetrieb",
                     "heatpump_operationmode_oilrecirculation": "Ölrückführung",
                     "heatpump_operationmode_manualheating": "Handbetrieb Heizen",

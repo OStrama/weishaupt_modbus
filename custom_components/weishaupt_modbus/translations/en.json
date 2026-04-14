@@ -1539,6 +1539,7 @@
           "heatpump_operationmode_applicationlimit": "Application limit",
           "heatpump_operationmode_lockedcv": "HK lock",
           "heatpump_operationmode_lowering": "lowering",
+          "heatpump_operationmode_regenerativ": "Regenerative",
           "heatpump_operationmode_manual": "Manual mode",
           "heatpump_operationmode_oilrecirculation": "Oil return",
           "heatpump_operationmode_manualheating": "Manual mode heating",

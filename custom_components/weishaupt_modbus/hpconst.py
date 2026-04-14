@@ -506,6 +506,11 @@ HP_BETRIEB: list[StatusItem] = [
         number=35, text="Absenk", translation_key="heatpump_operationmode_lowering"
     ),
     StatusItem(
+        number=36,
+        text="BEREITSCHAFT",
+        translation_key="heatpump_operationmode_bereitschaft",
+    ),
+    StatusItem(
         number=37,
         text="Heizbetrieb SGR",
         translation_key="heatpump_operationmode_heating_sgr",
