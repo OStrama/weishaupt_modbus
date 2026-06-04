@@ -1533,7 +1533,7 @@ WEBIF_INFO_HEIZKREIS1: list[WebItem] = [
     WebItem(name="AT Mittelwert", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIH", translation_key="webif_info_heizkreis1_at_mittelwert"),
     WebItem(name="AT Langzeitwert", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIH", translation_key="webif_info_heizkreis1_at_langzeitwert"),
     WebItem(name="Raumsolltemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIH", translation_key="webif_info_heizkreis1_raumsolltemperatur"),
-    WebItem(name="Vorlaufsolltemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIH", translation_key="webif_info_heizkreis1_vorlaufsolltemperatur"),
+    #WebItem(name="Vorlaufsolltemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIH", translation_key="webif_info_heizkreis1_vorlaufsolltemperatur"),
     WebItem(name="Vorlauftemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIH", translation_key="webif_info_heizkreis1_vorlauftemperatur"),
 ]
 

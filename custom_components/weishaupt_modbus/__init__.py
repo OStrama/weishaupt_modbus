@@ -50,7 +50,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
 
     if entry.data[CONF.CB_WEBIF]:
         # print
-        webapi = WebifConnection(config_entry=entry)
+        webapi = WebifConnection(hass, entry)
         await webapi.login()
     else:
         webapi = None
@@ -174,6 +174,8 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     # needs to unload itself, and remove callbacks. See the classes for further
     # details
     entry.runtime_data.modbus_api.close()
+    if entry.runtime_data.webif_api is not None:
+        await entry.runtime_data.webif_api.close()
     unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
     if unload_ok:
         try:
