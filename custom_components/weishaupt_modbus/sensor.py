@@ -35,23 +35,7 @@ async def async_setup_entry(
         entries=entries,
         config_entry=config_entry,
         api_items=coordinator.modbus_items,
-        item_type=TYPES.NUMBER_RO,
-        coordinator=coordinator,
-    )
-    entries = await build_entity_list(
-        entries=entries,
-        config_entry=config_entry,
-        api_items=coordinator.modbus_items,
-        item_type=TYPES.SENSOR_CALC,
-        coordinator=coordinator,
-    )
-
-    # Webif Sensors here
-    entries = await build_entity_list(
-        entries=entries,
-        config_entry=config_entry,
-        api_items=coordinator.modbus_items,
-        item_type=TYPES.SENSOR,
+        item_types=(TYPES.NUMBER_RO, TYPES.SENSOR_CALC, TYPES.SENSOR),
         coordinator=coordinator,
     )
 

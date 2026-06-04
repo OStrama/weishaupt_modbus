@@ -29,7 +29,7 @@ async def async_setup_entry(
         entries=entries,
         config_entry=config_entry,
         api_items=coordinator.modbus_items,
-        item_type=TYPES.SELECT,
+        item_types=TYPES.SELECT,
         coordinator=coordinator,
     )
 
