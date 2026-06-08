@@ -178,13 +178,14 @@ class MyWebIfCoordinator(DataUpdateCoordinator[dict[str, Any]]):
 
     async def _async_update_data(self) -> dict[str, Any]:
         """Fetch data from WebIF endpoint."""
-        try:
-            async with asyncio.timeout(30):
-                result = await self.my_api.get_info()
-                return result if result is not None else {}
-        except TimeoutError:
-            _LOGGER.debug("Timeout while fetching WebIF data")
-            return {}
-        except Exception as err:  # noqa: BLE001
-            _LOGGER.debug("Error fetching WebIF data: %s", err)
-            return {}
+        # try:
+        async with asyncio.timeout(30):
+            print("Trying to fetch get_info_hk1")
+            result = await self.my_api.get_info_hk1()
+            return result if result is not None else {}
+        # except TimeoutError:
+        #    _LOGGER.debug("Timeout while fetching WebIF data")
+        #    return {}
+        # except Exception as err:  # noqa: BLE001
+        #    _LOGGER.debug("Error fetching WebIF data: %s", err)
+        #    return {}

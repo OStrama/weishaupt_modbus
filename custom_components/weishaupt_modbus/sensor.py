@@ -13,7 +13,7 @@ from .const import CONF, TYPES
 from .coordinator import MyWebIfCoordinator
 from .entities import MyWebifSensorEntity
 from .entity_helpers import build_entity_list
-from .hpconst import WEBIF_INFO_HEIZKREIS1
+from .hpconst import WEBIF_INFO_HEIZKREIS1, WEBIF_INFO_WAERMEPUMPE
 
 _LOGGER = logging.getLogger(__name__)
 

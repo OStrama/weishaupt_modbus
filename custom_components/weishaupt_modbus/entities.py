@@ -51,7 +51,7 @@ class MyEntity(Entity):
         self,
         config_entry: MyConfigEntry,
         api_item: ModbusItem | WebItem,
-        modbus_api: ModbusAPI | MyWebIfCoordinator,
+        api: ModbusAPI | MyWebIfCoordinator,
     ) -> None:
         """Initialize the entity."""
         self._config_entry = config_entry
@@ -96,7 +96,7 @@ class MyEntity(Entity):
                 f"{dev_prefix}_{self._api_item.name}{dev_postfix}_webif"
             )
 
-        self._modbus_api = modbus_api
+        self._api = api
 
         if self._api_item.format == FORMATS.STATUS:
             self._divider = 1
@@ -176,11 +176,11 @@ class MyEntity(Entity):
         if val is None:
             return None
 
-        if not isinstance(self._modbus_api, ModbusAPI):
+        if not isinstance(self._api, ModbusAPI):
             return None
 
-        await self._modbus_api.connect()
-        mbo = ModbusObject(self._modbus_api, self._api_item)
+        await self._api.connect()
+        mbo = ModbusObject(self._api, self._api_item)
         await mbo.set_value(val)
         return val
 
@@ -498,13 +498,7 @@ class MyWebifSensorEntity(CoordinatorEntity, SensorEntity, MyEntity):
         except KeyError:
             _LOGGER.warning("Key Error: %s", self._api_item.name)
 
-    async def async_turn_on(self, **kwargs):  # pylint: disable=unused-argument
-        """Turn the light on.
-
-        Example method how to request data updates.
-        """
-        # Do the turning on.
-        # ...
-
-        # Update the data
-        await self.coordinator.async_request_refresh()
+    @property
+    def device_info(self) -> DeviceInfo | None:
+        """Return device info."""
+        return self.my_device_info()

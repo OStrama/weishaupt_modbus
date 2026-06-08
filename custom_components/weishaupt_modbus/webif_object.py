@@ -3,19 +3,29 @@
 import asyncio
 import http.cookiejar
 import logging
-import time
 from pathlib import Path
+import time
 from typing import Any
 
-import httpx
+import aiofiles
 from bs4 import BeautifulSoup
 from bs4.element import Tag
+import httpx
+
 from homeassistant.core import HomeAssistant
 
 from .configentry import MyConfigEntry
-from .const import CONF
+from .const import CONF, CONST
 
 _LOGGER = logging.getLogger(__name__)
+
+UNITS = [" °C", " KW", " K", "m3/h", " BAR", " %", " h", " rpm"]
+Info = {
+    "Heizkreis": "http://10.10.1.225/settings_export.html?stack=0C00000100000000008000F9AF010002000301,0C000C1900000000000000F9AF020003000401",
+    "Waermepumpe": "http://10.10.1.225/settings_export.html?stack=0C00000100000000008000F9AF010002000301,0C000C2200000000000000F9AF020003000401",
+    "2WEZ": "http://10.10.1.225/settings_export.html?stack=0C00000100000000008000F9AF010002000301,0C000C2300000000000000F9AF020003000401",
+    "Statistik": "http://10.10.1.225/settings_export.html?stack=0C00000100000000008000F9AF010002000301,0C000C2700000000000000F9AF020003000401",
+}
 
 
 class WebifConnection:
@@ -49,6 +59,7 @@ class WebifConnection:
         self._login_url: str = "/login.html"
         self._connected: bool = False
         self._values: dict[str, Any] = {}
+        self._hass = hass
 
     async def _ensure_cookies_loaded(self) -> None:
         """Load cookies from disk once."""
@@ -56,25 +67,44 @@ class WebifConnection:
             return
 
         if self._cookie_file.exists():
-            await self._hass.async_add_executor_job(
-                self._cookie_jar.load,
-                ignore_discard=True,
-                ignore_expires=True,
-            )
-            _LOGGER.debug("Loaded WebIF cookies from %s", self._cookie_file)
+            try:
+                await self._hass.async_add_executor_job(
+                    self._cookie_jar.load,
+                    ignore_discard=True,
+                    ignore_expires=True,
+                )
+                _LOGGER.debug("Loaded WebIF cookies from %s", self._cookie_file)
+            except Exception as err:  # noqa: BLE001
+                _LOGGER.debug("Failed to load WebIF cookies: %s", err)
         self._cookies_loaded = True
+
+    async def _sync_cookies_from_response(self, response: httpx.Response) -> None:
+        """Extract cookies from httpx response and sync to jar."""
+        try:
+            for cookie in response.cookies.jar:
+                self._cookie_jar.set_cookie(cookie)
+            await self._save_cookies()
+        except Exception as err:  # noqa: BLE001
+            _LOGGER.debug("Failed to sync cookies from response: %s", err)
 
     async def _save_cookies(self) -> None:
         """Save cookies to disk after requests."""
         if not self._cookie_jar:
             return
 
-        await self._hass.async_add_executor_job(
-            self._cookie_jar.save,
-            ignore_discard=True,
-            ignore_expires=True,
-        )
-        _LOGGER.debug("Saved WebIF cookies to %s", self._cookie_file)
+        try:
+            await self._hass.async_add_executor_job(
+                self._cookie_jar.save,
+                ignore_discard=True,
+                ignore_expires=True,
+            )
+            _LOGGER.debug(
+                "Saved WebIF cookies to %s, count: %d",
+                self._cookie_file,
+                len(self._cookie_jar),
+            )
+        except Exception as err:  # noqa: BLE001
+            _LOGGER.debug("Failed to save WebIF cookies: %s", err)
 
     def _discover_pages(self, soup: BeautifulSoup) -> None:
         """Discover navigational links from the WebIF page."""
@@ -97,6 +127,7 @@ class WebifConnection:
     def _get_client(self) -> httpx.AsyncClient:
         """Get or create the HTTP client."""
         if self._client is None:
+            # ToDo: Check header!
             headers = {
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
                 "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
@@ -104,17 +135,26 @@ class WebifConnection:
                 "Content-Type": "application/x-www-form-urlencoded",
                 "Origin": self._base_url,
                 "Referer": f"{self._base_url}/login.html",  # Tell the MCU we came from the login page!
-                "Connection": "keep-alive",
+                # "Connection": "keep-alive",
+                "Connection": "close",  # do not keep alive. suggested by gemini & chatgpt due to embeded servers not good at handling long connections
             }
+
+            # ToDo: check the cookie part!
             cookies = httpx.Cookies()
-            cookies.jar = self._cookie_jar
+            for cookie in self._cookie_jar:
+                cookies.set(
+                    cookie.name, cookie.value, domain=cookie.domain, path=cookie.path
+                )
             self._client = httpx.AsyncClient(
                 base_url=self._base_url,
                 headers=headers,
+                # ToDo: Check if redirect is necesary
                 follow_redirects=True,
                 timeout=httpx.Timeout(60.0, connect=20.0),
                 verify=False,  # Local device on HTTP, no SSL verification needed
-                limits=httpx.Limits(max_connections=1, max_keepalive_connections=1),
+                limits=httpx.Limits(
+                    max_connections=1, max_keepalive_connections=0
+                ),  # do not keep alive. suggested by gemini & chatgpt due to embeded servers not good at handling long connections
                 cookies=cookies,
             )
         return self._client
@@ -129,13 +169,44 @@ class WebifConnection:
 
             await self._ensure_cookies_loaded()
             client = self._get_client()
-            response = await client.request(method, url, **kwargs)
-            self._last_request_time = time.monotonic()
-            await self._save_cookies()
-            return response
+
+            start = time.monotonic()
+
+            try:
+                response = await client.request(method, url, **kwargs)
+
+                duration = time.monotonic() - start
+
+                _LOGGER.warning(
+                    "WEBIF %s %s -> %s in %.3fs conn=%s set-cookie=%s",
+                    method,
+                    response.url,
+                    response.status_code,
+                    duration,
+                    response.headers.get("Connection"),
+                    response.headers.get("Set-Cookie"),
+                )
+
+                self._last_request_time = time.monotonic()
+                await self._save_cookies()
+                return response
+
+            except Exception as err:
+                duration = time.monotonic() - start
+
+                _LOGGER.warning(
+                    "WEBIF %s %s FAILED after %.3fs: %s",
+                    method,
+                    url,
+                    duration,
+                    err,
+                )
+
+                raise
 
     async def login(self) -> None:
         """Log into the portal. Create cookie to stay logged in for the session."""
+        _LOGGER.warning("Trying to log in")
         if not self._username or not self._password:
             _LOGGER.warning("No user / password specified for webif")
             self._connected = False
@@ -164,7 +235,7 @@ class WebifConnection:
                 data={"user": self._username, "pass": self._password},
             )
             main_page = BeautifulSoup(markup=response.text, features="html.parser")
-            print(main_page.prettify())
+            # print(main_page.prettify())
             welcome_string = f"Hello {self._username}"
             find_welcome = main_page.find(string=welcome_string)
             final_url = str(response.url)
@@ -179,7 +250,7 @@ class WebifConnection:
             elif "home.html" in final_url or welcome_string in response.text:
                 _LOGGER.info("✅ Successful Login!")
 
-            if response.status_code == 200 and find_welcome == welcome_string:
+            if find_welcome == welcome_string:
                 self._discover_pages(main_page)
                 self._connected = True
                 _LOGGER.warning("Successfully logged in to WEBIF")
@@ -211,8 +282,8 @@ class WebifConnection:
     async def get_info(self) -> dict[str, Any] | None:
         """Return Info -> Heizkreis1."""
         if not self._connected or not self._client:
-            print(self._connected)
-            print(self._client)
+            # print(self._connected)
+            # print(self._client)
             return None
         try:
             url = self._find_export_url()
@@ -225,7 +296,7 @@ class WebifConnection:
                 return None
             main_page = BeautifulSoup(markup=response.text, features="html.parser")
             navs = main_page.find_all("div", class_="col-3")
-            print(main_page.prettify())
+            # print(main_page.prettify())
             if len(navs) == 3:
                 values_nav = navs[2]
                 if isinstance(values_nav, Tag):
@@ -265,11 +336,16 @@ class WebifConnection:
             h5_tag = item.find("h5")
             if h5_tag and h5_tag.text:
                 name = h5_tag.text.strip()
-                value = item.find_all(string=True, recursive=False)
-                if len(value) > 1:
-                    string_value = str(value[1]) if value[1] else ""
-                    my_value = string_value.strip()
-                    values[name] = my_value
+                value_list = item.find_all(string=True, recursive=False)
+                value = "".join(value_list)
+                # Remove units,
+                for unit in UNITS:
+                    value = value.replace(unit, "").strip()
+                values[name] = value
+                # if len(value) > 1:
+                #    string_value = str(value[1]) if value[1] else ""
+                #    my_value = string_value.strip()
+                #    values[name] = my_value
         return values
 
     def get_link_values(self, soup: Tag) -> dict[str, str]:
@@ -287,3 +363,38 @@ class WebifConnection:
                     string_value = str(value[1]) if value[1] else ""
                     values[name] = string_value.strip()
         return values
+
+    async def get_info_hk1(self) -> dict[str, Any] | None:
+        """Return Info -> Heizkreis1."""
+        filepath = Path(get_filepath(self._hass) / "info_hk1.html")
+        async with aiofiles.open(filepath, encoding="utf-8") as openfile:
+            html = await openfile.read()
+        main_page = BeautifulSoup(markup=html, features="html.parser")
+        navs = main_page.find_all("div", class_="col-3")
+        # print(main_page.prettify())
+        if len(navs) == 3:
+            values_nav = navs[2]
+            if isinstance(values_nav, Tag):
+                self._values["Info"] = {"Heizkreis": self.get_values(soup=values_nav)}
+                _LOGGER.debug("Values: %s", self._values)
+                return self._values["Info"]["Heizkreis"]
+
+            _LOGGER.debug("Update failed. return None")
+
+        return None
+
+
+def get_filepath(hass: HomeAssistant) -> Path | None:
+    """Get the filepath to the custom component directory."""
+    filepath = Path(
+        f"{hass.config.config_dir}/custom_components/{CONST.DOMAIN}/webif_test_html"
+    )
+
+    # on some installations custom_components resides in /core/
+    if not filepath.exists():
+        filepath = Path(Path(__file__).resolve().parent)
+
+    # we do not find any path..
+    if not filepath.exists():
+        return None
+    return filepath
