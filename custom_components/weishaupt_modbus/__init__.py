@@ -8,6 +8,8 @@ import logging
 from pathlib import Path
 from typing import Any
 
+from weishaupt_webif_api import WebifConnection
+
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
@@ -32,7 +34,6 @@ from .items import ModbusItem
 from .kennfeld import PowerMap
 from .migrate_helpers import migrate_entities
 from .modbusobject import ModbusAPI
-from .webif_object import WebifConnection
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -49,9 +50,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
     mbapi = ModbusAPI(config_entry=entry)
 
     if entry.data[CONF.CB_WEBIF]:
-        # print
-        webapi = WebifConnection(hass, entry)
-        # await webapi.login()
+        webapi = WebifConnection(
+            ip=entry.data[CONF.HOST],
+            user=entry.data[CONF.USERNAME],
+            password=entry.data[CONF.PASSWORD],
+            storage_path="./data",
+        )
     else:
         webapi = None
 

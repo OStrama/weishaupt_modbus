@@ -1,13 +1,14 @@
 import argparse
-import config
 import csv
 import json
 import re
+import ssl
+
 import requests
 import tabulate
-import ssl
 import websocket
-import aiofiles
+
+import config
 
 tabulate.PRESERVE_WHITESPACE = True
 

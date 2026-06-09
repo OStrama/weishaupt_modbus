@@ -6,6 +6,7 @@ import logging
 from typing import Any
 
 from pymodbus import ModbusException
+from weishaupt_webif_api import WebifConnection
 
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
@@ -15,7 +16,6 @@ from .configentry import MyConfigEntry
 from .const import CONF, CONST, TYPES, DeviceConstants
 from .items import ModbusItem
 from .modbusobject import ModbusAPI, ModbusObject
-from .webif_object import WebifConnection
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -180,12 +180,13 @@ class MyWebIfCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         """Fetch data from WebIF endpoint."""
         # try:
         async with asyncio.timeout(30):
-            print("Trying to fetch get_info_hk1")
-            result = await self.my_api.get_info_hk1()
+            _LOGGER.debug("Trying to fetch complete mockup data")
+            result = await self.my_api.update_all_mock()
+            result = result.get("Heizkreis")
             return result if result is not None else {}
         # except TimeoutError:
         #    _LOGGER.debug("Timeout while fetching WebIF data")
         #    return {}
-        # except Exception as err:  # noqa: BLE001
+        # except Exception as err:
         #    _LOGGER.debug("Error fetching WebIF data: %s", err)
         #    return {}

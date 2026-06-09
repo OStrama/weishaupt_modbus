@@ -96,7 +96,7 @@ class DeviceConstants:
     UK: str = "dev_unknown"
     IO: str = "dev_ein_aus"
     WIH: str = "Webif Info Heizkreis"
-    WIH: str = "Webif Info Wärmepumpe"
+    WIW: str = "Webif Info Wärmepumpe"
 
 
 DEVICES = DeviceConstants()
