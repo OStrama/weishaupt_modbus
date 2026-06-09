@@ -5,11 +5,17 @@ from __future__ import annotations
 import copy
 from typing import Any
 
+from cronsim.explain import Hour
+
 from homeassistant.components.sensor import SensorDeviceClass, SensorStateClass
 from homeassistant.const import (
     PERCENTAGE,
+    REVOLUTIONS_PER_MINUTE,
+    UnitOfConductivity,
     UnitOfEnergy,
     UnitOfPower,
+    UnitOfPressure,
+    UnitOfSpeed,
     UnitOfTemperature,
     UnitOfTime,
     UnitOfVolumeFlowRate,
@@ -1196,6 +1202,53 @@ PARAMS_ENERGY: dict[str, Any] = {
     "stateclass": SensorStateClass.TOTAL_INCREASING,
 }
 
+
+PARAMS_POWER: dict = {
+    "min": 0,
+    "max": 50000,
+    "deviceclass": SensorDeviceClass.POWER,
+    "precision": 0,
+    "unit": UnitOfPower.WATT,
+    "stateclass": SensorStateClass.MEASUREMENT,
+}
+
+PARAMS_PRESSURE: dict = {
+    "min": 0,
+    "max": 100,
+    "deviceclass": SensorDeviceClass.PRESSURE,
+    "precision": 0,
+    "unit": UnitOfPressure.BAR,
+    "stateclass": SensorStateClass.MEASUREMENT,
+}
+
+PARAMS_HOUR: dict = {
+    "min": 0,
+    "max": 100,
+    "deviceclass": SensorDeviceClass.DURATION,
+    "precision": 0,
+    "unit": UnitOfTime.HOURS,
+    "stateclass": SensorStateClass.MEASUREMENT,
+}
+
+PARAMS_RPM: dict = {
+    "min": 0,
+    "max": 100,
+    "deviceclass": SensorDeviceClass.SPEED,
+    "precision": 0,
+    "unit": REVOLUTIONS_PER_MINUTE,
+    "stateclass": SensorStateClass.MEASUREMENT,
+}
+
+PARAMS_K: dict = {
+    "min": 0,
+    "max": 100,
+    "deviceclass": SensorDeviceClass.TEMPERATURE,
+    "precision": 0,
+    "unit": UnitOfTemperature.KELVIN,
+    "stateclass": SensorStateClass.MEASUREMENT,
+}
+
+
 PARAMS_CALCPOWER: dict = {
     "min": 0,
     "max": 50000,
@@ -1529,56 +1582,56 @@ MODBUS_IO_ITEMS: list[ModbusItem] = [
 
 
 WEBIF_INFO_HEIZKREIS1: list[WebItem] = [
-    WebItem(name="Außentemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIH", translation_key="webif_info_heizkreis1_aussentemperatur"),
-    WebItem(name="AT Mittelwert", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIH", translation_key="webif_info_heizkreis1_at_mittelwert"),
-    WebItem(name="AT Langzeitwert", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIH", translation_key="webif_info_heizkreis1_at_langzeitwert"),
-    WebItem(name="Raumsolltemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIH", translation_key="webif_info_heizkreis1_raumsolltemperatur"),
-    #WebItem(name="Vorlaufsolltemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIH", translation_key="webif_info_heizkreis1_vorlaufsolltemperatur"),
-    WebItem(name="Vorlauftemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIH, webif_group="WIH", translation_key="webif_info_heizkreis1_vorlauftemperatur"),
+    WebItem(name="Außentemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIH, params=PARAMS_STDTEMP, webif_group="WIH", translation_key="webif_info_heizkreis1_aussentemperatur"),
+    WebItem(name="AT Mittelwert", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIH, params=PARAMS_STDTEMP, webif_group="WIH", translation_key="webif_info_heizkreis1_at_mittelwert"),
+    WebItem(name="AT Langzeitwert", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIH, params=PARAMS_STDTEMP, webif_group="WIH", translation_key="webif_info_heizkreis1_at_langzeitwert"),
+    WebItem(name="Raumsolltemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIH, params=PARAMS_STDTEMP, webif_group="WIH", translation_key="webif_info_heizkreis1_raumsolltemperatur"),
+    #WebItem(name="Vorlaufsolltemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIH, params=PARAMS_STDTEMP, webif_group="WIH", translation_key="webif_info_heizkreis1_vorlaufsolltemperatur"),
+    WebItem(name="Vorlauftemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIH, params=PARAMS_STDTEMP, webif_group="WIH", translation_key="webif_info_heizkreis1_vorlauftemperatur"),
 ]
 
 WEBIF_INFO_WAERMEPUMPE: list[WebItem] = [
-    WebItem(name="Betrieb", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_aussentemperatur"),
-    WebItem(name="Störmeldung", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_at_mittelwert"),
-    WebItem(name="Warmwassertemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_at_langzeitwert"),
-    WebItem(name="Leistungsanforderung", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_raumsolltemperatur"),
-    WebItem(name="Solltemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_vorlaufsolltemperatur"),
-    WebItem(name="Anforderung", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_vorlauftemperatur"),
-    WebItem(name="Schaltdifferenz dynamisch", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_aussentemperatur"),
-    WebItem(name="Vorlauftemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_at_mittelwert"),
-    WebItem(name="Rücklauftemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_at_langzeitwert"),
-    WebItem(name="Drehzahl Pumpe M1", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_raumsolltemperatur"),
-    WebItem(name="Volumenstrom", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_vorlaufsolltemperatur"),
-    WebItem(name="Stellung Umschaltventil", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_vorlauftemperatur"),
-    WebItem(name="Version WWP-SG", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_aussentemperatur"),
-    WebItem(name="Version WWP-EC WBB", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_at_mittelwert"),
-    WebItem(name="Soll Leistung", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_at_langzeitwert"),
-    WebItem(name="Ist Leistung", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_raumsolltemperatur"),
-    WebItem(name="Expansionsventil AG Eintr", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_vorlaufsolltemperatur"),
-    WebItem(name="Luftansaugtemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_vorlauftemperatur"),
-    WebItem(name="Wärmetauscher AG Austrit", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_aussentemperatur"),
-    WebItem(name="Verdichtersauggastemp.", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_at_mittelwert"),
-    WebItem(name="EVI Sauggastemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_at_langzeitwert"),
-    WebItem(name="Kältemittel IG Austritt", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_raumsolltemperatur"),
-    WebItem(name="Ölsumpftemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_vorlaufsolltemperatur"),
-    WebItem(name="Druckgastemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_vorlauftemperatur"),
-    WebItem(name="Niederdruck", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_aussentemperatur"),
-    WebItem(name="Verdampfungstemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_at_mittelwert"),
-    WebItem(name="Hochdruck", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_at_langzeitwert"),
-    WebItem(name="Kondensationstemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_raumsolltemperatur"),
-    WebItem(name="Mitteldruck", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_vorlaufsolltemperatur"),
-    WebItem(name="Sättigungstemperatur EVI", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_vorlauftemperatur"),
-    WebItem(name="Überhitzung Heizen", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_aussentemperatur"),
-    WebItem(name="Öffnungsgrad EXV Heizen", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_at_mittelwert"),
-    WebItem(name="Überhitzung Verdichter", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_at_langzeitwert"),
-    WebItem(name="Öffnungsgrad EXV Kühlen", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_raumsolltemperatur"),
-    WebItem(name="Überhitzung EVI", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_vorlaufsolltemperatur"),
-    WebItem(name="Öffnungsgrad EVI EVI", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_vorlauftemperatur"),
-    WebItem(name="Betriebsstd. Verdichter", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_aussentemperatur"),
-    WebItem(name="Schaltspiele Verdichter", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_at_mittelwert"),
-    WebItem(name="Schaltspiele Abtauen", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_at_langzeitwert"),
-    WebItem(name="Verdichter", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_raumsolltemperatur"),
-    WebItem(name="Außengerät Variante", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_vorlaufsolltemperatur"),
+    WebItem(name="Betrieb", mformat=FORMATS.TEXT, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_aussentemperatur"),
+    WebItem(name="Störmeldung", mformat=FORMATS.TEXT, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_at_mittelwert"),
+    WebItem(name="Warmwassertemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_STDTEMP, webif_group="WIW", translation_key="webif_info_heizkreis1_at_langzeitwert"),
+    WebItem(name="Leistungsanforderung", mformat=FORMATS.PERCENTAGE, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_PERCENTAGE, webif_group="WIW", translation_key="webif_info_heizkreis1_raumsolltemperatur"),
+    WebItem(name="Solltemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_STDTEMP, webif_group="WIW", translation_key="webif_info_heizkreis1_vorlaufsolltemperatur"),
+    WebItem(name="Anforderung", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_ENERGY, webif_group="WIW", translation_key="webif_info_heizkreis1_vorlauftemperatur"),
+    WebItem(name="Schaltdifferenz dynamisch", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_K, webif_group="WIW", translation_key="webif_info_heizkreis1_aussentemperatur"),
+    WebItem(name="Vorlauftemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_STDTEMP, webif_group="WIW", translation_key="webif_info_heizkreis1_at_mittelwert"),
+    WebItem(name="Rücklauftemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_STDTEMP, webif_group="WIW", translation_key="webif_info_heizkreis1_at_langzeitwert"),
+    WebItem(name="Drehzahl Pumpe M1", mformat=FORMATS.PERCENTAGE, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_PERCENTAGE, webif_group="WIW", translation_key="webif_info_heizkreis1_raumsolltemperatur"),
+    WebItem(name="Volumenstrom", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIW,params=PARAMS_FLOWRATE, webif_group="WIW", translation_key="webif_info_heizkreis1_vorlaufsolltemperatur"),
+    WebItem(name="Stellung Umschaltventil", mformat=FORMATS.TEXT, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_vorlauftemperatur"),
+    WebItem(name="Version WWP-SG", mformat=FORMATS.TEXT, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_aussentemperatur"),
+    WebItem(name="Version WWP-EC WBB", mformat=FORMATS.TEXT, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_at_mittelwert"),
+    WebItem(name="Soll Leistung", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_POWER, webif_group="WIW", translation_key="webif_info_heizkreis1_at_langzeitwert"),
+    WebItem(name="Ist Leistung", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_POWER, webif_group="WIW", translation_key="webif_info_heizkreis1_raumsolltemperatur"),
+    WebItem(name="Expansionsventil AG Eintr", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_STDTEMP, webif_group="WIW", translation_key="webif_info_heizkreis1_vorlaufsolltemperatur"),
+    WebItem(name="Luftansaugtemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_STDTEMP, webif_group="WIW", translation_key="webif_info_heizkreis1_vorlauftemperatur"),
+    WebItem(name="Wärmetauscher AG Austrit", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_STDTEMP, webif_group="WIW", translation_key="webif_info_heizkreis1_aussentemperatur"),
+    WebItem(name="Verdichtersauggastemp.", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_STDTEMP, webif_group="WIW", translation_key="webif_info_heizkreis1_at_mittelwert"),
+    WebItem(name="EVI Sauggastemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_STDTEMP, webif_group="WIW", translation_key="webif_info_heizkreis1_at_langzeitwert"),
+    WebItem(name="Kältemittel IG Austritt", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_STDTEMP, webif_group="WIW", translation_key="webif_info_heizkreis1_raumsolltemperatur"),
+    WebItem(name="Ölsumpftemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_STDTEMP, webif_group="WIW", translation_key="webif_info_heizkreis1_vorlaufsolltemperatur"),
+    WebItem(name="Druckgastemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_STDTEMP, webif_group="WIW", translation_key="webif_info_heizkreis1_vorlauftemperatur"),
+    WebItem(name="Niederdruck", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_PRESSURE, webif_group="WIW", translation_key="webif_info_heizkreis1_aussentemperatur"),
+    WebItem(name="Verdampfungstemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_STDTEMP, webif_group="WIW", translation_key="webif_info_heizkreis1_at_mittelwert"),
+    WebItem(name="Hochdruck", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_PRESSURE, webif_group="WIW", translation_key="webif_info_heizkreis1_at_langzeitwert"),
+    WebItem(name="Kondensationstemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_STDTEMP, webif_group="WIW", translation_key="webif_info_heizkreis1_raumsolltemperatur"),
+    WebItem(name="Mitteldruck", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_PRESSURE, webif_group="WIW", translation_key="webif_info_heizkreis1_vorlaufsolltemperatur"),
+    WebItem(name="Sättigungstemperatur EVI", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_STDTEMP, webif_group="WIW", translation_key="webif_info_heizkreis1_vorlauftemperatur"),
+    WebItem(name="Überhitzung Heizen", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_K, webif_group="WIW", translation_key="webif_info_heizkreis1_aussentemperatur"),
+    WebItem(name="Öffnungsgrad EXV Heizen", mformat=FORMATS.PERCENTAGE, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_PERCENTAGE, webif_group="WIW", translation_key="webif_info_heizkreis1_at_mittelwert"),
+    WebItem(name="Überhitzung Verdichter", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_K, webif_group="WIW", translation_key="webif_info_heizkreis1_at_langzeitwert"),
+    WebItem(name="Öffnungsgrad EXV Kühlen", mformat=FORMATS.PERCENTAGE, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_PERCENTAGE, webif_group="WIW", translation_key="webif_info_heizkreis1_raumsolltemperatur"),
+    WebItem(name="Überhitzung EVI", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_K, webif_group="WIW", translation_key="webif_info_heizkreis1_vorlaufsolltemperatur"),
+    WebItem(name="Öffnungsgrad EVI", mformat=FORMATS.PERCENTAGE, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_PERCENTAGE, webif_group="WIW", translation_key="webif_info_heizkreis1_vorlauftemperatur"),
+    WebItem(name="Betriebsstd. Verdichter", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_HOUR, webif_group="WIW", translation_key="webif_info_heizkreis1_aussentemperatur"),
+    WebItem(name="Schaltspiele Verdichter", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_at_mittelwert"),
+    WebItem(name="Schaltspiele Abtauen", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_at_langzeitwert"),
+    WebItem(name="Verdichter", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_RPM, webif_group="WIW", translation_key="webif_info_heizkreis1_raumsolltemperatur"),
+    WebItem(name="Außengerät Variante", mformat=FORMATS.TEXT, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_vorlaufsolltemperatur"),
 
 ]
 
@@ -1596,4 +1649,5 @@ DEVICELISTS: list = [
     MODBUS_IO_ITEMS
 ]
 
+DEVICELISTS_WEBIF: list = [WEBIF_INFO_HEIZKREIS1, WEBIF_INFO_WAERMEPUMPE]
 # fmt: on

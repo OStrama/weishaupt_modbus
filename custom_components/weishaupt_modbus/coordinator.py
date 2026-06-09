@@ -3,7 +3,7 @@
 import asyncio
 from datetime import timedelta
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from pymodbus import ModbusException
 from weishaupt_webif_api import WebifConnection
@@ -14,7 +14,7 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
 from .configentry import MyConfigEntry
 from .const import CONF, CONST, TYPES, DeviceConstants
-from .items import ModbusItem
+from .items import ModbusItem, WebItem
 from .modbusobject import ModbusAPI, ModbusObject
 
 _LOGGER = logging.getLogger(__name__)
@@ -162,16 +162,23 @@ class MyCoordinator(DataUpdateCoordinator[dict[str, Any]]):
 class MyWebIfCoordinator(DataUpdateCoordinator[dict[str, Any]]):
     """WebIF coordinator for Weishaupt heat pump."""
 
-    def __init__(self, hass: HomeAssistant, config_entry: MyConfigEntry) -> None:
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        my_api: WebifConnection,
+        api_items: list[WebItem],
+        config_entry: MyConfigEntry,
+    ) -> None:
         """Initialize WebIF coordinator."""
         super().__init__(
             hass=hass,
             logger=_LOGGER,
             name="weishaupt-webif",
-            update_interval=timedelta(seconds=60),
+            update_interval=timedelta(seconds=30),
             always_update=True,
         )
-        self.my_api: WebifConnection = config_entry.runtime_data.webif_api
+        self.my_api: WebifConnection = my_api
+        self.api_items = api_items
 
     async def _async_setup(self) -> None:
         """Set up the coordinator."""
@@ -182,7 +189,9 @@ class MyWebIfCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         async with asyncio.timeout(30):
             _LOGGER.debug("Trying to fetch complete mockup data")
             result = await self.my_api.update_all_mock()
-            result = result.get("Heizkreis")
+            hk = result.get("Heizkreis")
+            wp = result.get("Waermepumpe")
+            result = hk | wp
             return result if result is not None else {}
         # except TimeoutError:
         #    _LOGGER.debug("Timeout while fetching WebIF data")

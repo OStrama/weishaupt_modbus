@@ -6,18 +6,23 @@ import copy
 import json
 import logging
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from weishaupt_webif_api import WebifConnection
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
-from .configentry import MyConfigEntry, MyData
+from .configentry import MyData
+
+if TYPE_CHECKING:
+    from .configentry import MyConfigEntry
+
 from .const import CONF, CONST, DEVICENAMES, FORMATS, TYPES
-from .coordinator import MyCoordinator
+from .coordinator import MyCoordinator, MyWebIfCoordinator
 from .hpconst import (
     DEVICELISTS,
+    DEVICELISTS_WEBIF,
     MODBUS_HZ2_ITEMS,
     MODBUS_HZ3_ITEMS,
     MODBUS_HZ4_ITEMS,
@@ -30,7 +35,7 @@ from .hpconst import (
     MODBUS_WP_ITEMS,
     MODBUS_WW_ITEMS,
 )
-from .items import ModbusItem
+from .items import ModbusItem, WebItem
 from .kennfeld import PowerMap
 from .migrate_helpers import migrate_entities
 from .modbusobject import ModbusAPI
@@ -61,21 +66,30 @@ async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
 
     # Create independent copies of ModbusItems for each config entry
     itemlist: list[ModbusItem] = []
+    webif_itemlist: list[WebItem] = []
 
     for device in DEVICELISTS:
         itemlist.extend(copy.deepcopy(item) for item in device)
 
-    coordinator = MyCoordinator(
+    for device in DEVICELISTS_WEBIF:
+        webif_itemlist.extend(copy.deepcopy(item) for item in device)
+
+    modbus_coordinator = MyCoordinator(
         hass=hass, my_api=mbapi, api_items=itemlist, p_config_entry=entry
     )
     # await coordinator.async_config_entry_first_refresh()
+
+    webif_coordinator = MyWebIfCoordinator(
+        hass=hass, my_api=webapi, api_items=webif_itemlist, config_entry=entry
+    )
 
     entry.runtime_data = MyData(
         modbus_api=mbapi,
         webif_api=webapi,
         config_dir=hass.config.config_dir,
         hass=hass,
-        coordinator=coordinator,
+        coordinator=modbus_coordinator,
+        webif_coordinator=webif_coordinator,
         powermap=None,
     )
 

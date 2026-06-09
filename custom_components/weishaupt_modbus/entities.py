@@ -100,6 +100,8 @@ class MyEntity(Entity):
 
         if self._api_item.format == FORMATS.STATUS:
             self._divider = 1
+        elif self._api_item.format == FORMATS.TEXT:
+            self._attr_suggested_display_precision = None
         else:
             # Set attributes for non-status items
             if self._api_item.params is not None:
@@ -221,13 +223,21 @@ class MySensorEntity(CoordinatorEntity, SensorEntity, MyEntity):
         MyEntity.__init__(self, config_entry, modbus_item, coordinator.modbus_api)
 
         # Set sensor-specific state class
-        if modbus_item.format != FORMATS.STATUS:
+        if modbus_item.format in [
+            FORMATS.TEMPERATURE,
+            FORMATS.PERCENTAGE,
+            FORMATS.NUMBER,
+            FORMATS.UNKNOWN,
+        ]:
             # default state class to record all entities by default
             self._attr_state_class = SensorStateClass.MEASUREMENT
             if modbus_item.params is not None:
                 self._attr_state_class = modbus_item.params.get(
                     "stateclass", SensorStateClass.MEASUREMENT
                 )
+        if modbus_item.format == FORMATS.TEXT:
+            # self._attr_state_class = SensorStateClass.NONE
+            self._attr_suggested_display_precision = None
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -476,8 +486,10 @@ class MyWebifSensorEntity(CoordinatorEntity, SensorEntity, MyEntity):
         self._attr_unique_id = f"{dev_prefix}_{self._api_item.name}{dev_postfix}_webif"
         self._attr_name = api_item.name
 
+        if self._api_item.format == FORMATS.TEXT:
+            self._attr_suggested_display_precision = None
         # Set sensor-specific attributes
-        self._attr_state_class = SensorStateClass.MEASUREMENT
+        # self._attr_state_class = SensorStateClass.MEASUREMENT
 
     @callback
     def _handle_coordinator_update(self) -> None:

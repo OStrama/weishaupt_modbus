@@ -8,12 +8,13 @@ from __future__ import annotations
 
 import asyncio
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from pymodbus import ExceptionResponse, ModbusException
 from pymodbus.client import AsyncModbusTcpClient
 
-from .configentry import MyConfigEntry
+if TYPE_CHECKING:
+    from .configentry import MyConfigEntry
 from .const import CONF, FORMATS, TYPES
 from .items import ModbusItem
 

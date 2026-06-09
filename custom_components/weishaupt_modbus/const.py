@@ -60,6 +60,7 @@ class FormatConstants:
     NUMBER = "number"
     STATUS = "status"
     UNKNOWN = "unknown"
+    TEXT = "text"
 
 
 FORMATS = FormatConstants()

@@ -1,9 +1,9 @@
 """Unit tests for modbusobject module."""
 
-from unittest.mock import AsyncMock, MagicMock, Mock, patch
+from unittest.mock import AsyncMock, MagicMock, patch
 
-import pytest
 from pymodbus import ModbusException
+import pytest
 
 from custom_components.weishaupt_modbus.const import CONF, FORMATS, TYPES
 from custom_components.weishaupt_modbus.items import ModbusItem

@@ -3,12 +3,13 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
-# from .coordinator import MyCoordinator
+if TYPE_CHECKING:
+    from .coordinator import MyCoordinator, MyWebIfCoordinator
 
 
 @dataclass
@@ -19,7 +20,8 @@ class MyData:
     webif_api: Any
     config_dir: str
     hass: HomeAssistant
-    coordinator: Any  # MyCoordinator
+    coordinator: MyCoordinator
+    webif_coordinator: MyWebIfCoordinator
     powermap: Any
 
 

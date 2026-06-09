@@ -143,7 +143,7 @@ async def build_webif_entity_list(
         if item.type == item_type:
             if await check_available(item, config_entry=config_entry) is True:
                 match item_type:
-                    case TYPES.SENSOR | TYPES.NUMBER_RO:
+                    case TYPES.SENSOR:
                         entries.append(
                             MyWebifSensorEntity(config_entry, item, coordinator, index)
                         )
