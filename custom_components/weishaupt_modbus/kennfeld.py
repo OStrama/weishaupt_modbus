@@ -228,7 +228,9 @@ class PowerMap:
 
 def get_filepath(hass: HomeAssistant) -> Path | None:
     """Get the filepath to the custom component directory."""
-    filepath = Path(f"{hass.config.config_dir}/custom_components/{CONST.DOMAIN}")
+    filepath = Path(
+        f"{hass.config.config_dir}/custom_components/{CONST.DOMAIN}/kennfeld"
+    )
 
     # on some installations custom_components resides in /core/
     if not filepath.exists():
