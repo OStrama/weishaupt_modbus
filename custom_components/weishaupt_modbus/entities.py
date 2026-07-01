@@ -55,7 +55,7 @@ class MyEntity(Entity):
     ) -> None:
         """Initialize the entity."""
         self._config_entry = config_entry
-        self._api_item: ModbusItem | WebItem = api_item
+        self._api_item: ModbusItem | WebItem | None = api_item
 
         dev_postfix = "_" + self._config_entry.data[CONF.DEVICE_POSTFIX]
 
@@ -129,6 +129,8 @@ class MyEntity(Entity):
 
     def set_min_max(self, onlydynamic: bool = False):
         """Set min max to fixed or dynamic values."""
+        if self._api_item is None:
+            return
         if self._api_item.params is None:
             return
 

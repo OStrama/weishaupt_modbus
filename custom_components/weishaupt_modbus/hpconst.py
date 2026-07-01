@@ -1233,7 +1233,7 @@ PARAMS_HOUR: dict = {
 PARAMS_RPM: dict = {
     "min": 0,
     "max": 100,
-    "deviceclass": SensorDeviceClass.SPEED,
+    # "deviceclass": SensorDeviceClass.SPEED,
     "precision": 0,
     "unit": REVOLUTIONS_PER_MINUTE,
     "stateclass": SensorStateClass.MEASUREMENT,
@@ -1414,7 +1414,7 @@ MODBUS_HZ_ITEMS = [
     # This is somehow in relation to: address=41102, name="Anforderung Typ"
     ModbusItem( address=31106, name="Adr. 31106", mformat=FORMATS.UNKNOWN, mtype=TYPES.SENSOR, device=DEVICES.HZ, translation_key="adr31106"),
     ModbusItem( address=41101, name="HZ_Konfiguration", mformat=FORMATS.STATUS, mtype=TYPES.NUMBER_RO, device=DEVICES.HZ, resultlist=HZ_KONFIGURATION, translation_key="hz_konf"),
-    ModbusItem( address=41102, name="Anforderung Typ", mformat=FORMATS.STATUS, mtype=TYPES.NUMBER_RO, device=DEVICES.HZ, resultlist=HZ_ANFORDERUNG, translation_key="anf_typ"),
+    ModbusItem( address=41102, name="Anforderung Typ", mformat=FORMATS.STATUS, mtype=TYPES.SELECT, device=DEVICES.HZ, resultlist=HZ_ANFORDERUNG, translation_key="anf_typ"),
     ModbusItem( address=41103, name="Betriebsart", mformat=FORMATS.STATUS, mtype=TYPES.SELECT, device=DEVICES.HZ, resultlist=HZ_BETRIEBSART, translation_key="hz_operationmode"),
     ModbusItem( address=41104, name="Pause / Party", mformat=FORMATS.STATUS, mtype=TYPES.SELECT, device=DEVICES.HZ, resultlist=HZ_PARTY_PAUSE, params = PARAMS_PARTY, translation_key="party_pause"),
     ModbusItem( address=41105, name="Raumsolltemperatur Komfort", mformat=FORMATS.TEMPERATURE, mtype=TYPES.NUMBER, device=DEVICES.HZ, params=PARAMS_ROOMTEMP_HIGH, translation_key="raum_soll_temp_komf"),
@@ -1632,7 +1632,31 @@ WEBIF_INFO_WAERMEPUMPE: list[WebItem] = [
     WebItem(name="Schaltspiele Abtauen", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_at_langzeitwert"),
     WebItem(name="Verdichter", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_RPM, webif_group="WIW", translation_key="webif_info_heizkreis1_raumsolltemperatur"),
     WebItem(name="Außengerät Variante", mformat=FORMATS.TEXT, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_heizkreis1_vorlaufsolltemperatur"),
+]
 
+WEBIF_INFO_2WEZ: list[WebItem] = [
+    WebItem(name="Status", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WI2W, webif_group="WI2W", translation_key="webif_info_heizkreis1_aussentemperatur"),
+    WebItem(name="Status E-Heizung 1", mformat=FORMATS.TEXT, mtype=TYPES.SENSOR, device=DEVICES.WI2W, webif_group="WI2W", translation_key="webif_info_heizkreis1_at_mittelwert"),
+    WebItem(name="Status E-Heizung 2", mformat=FORMATS.TEXT, mtype=TYPES.SENSOR, device=DEVICES.WI2W, webif_group="WI2W", translation_key="webif_info_heizkreis1_at_langzeitwert"),
+    WebItem(name="Betriebsstunden E1", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WI2W, params=PARAMS_HOUR, webif_group="WIH", translation_key="webif_info_heizkreis1_raumsolltemperatur"),
+    WebItem(name="Betriebsstunden E2", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WI2W, params=PARAMS_HOUR, webif_group="WIH", translation_key="webif_info_heizkreis1_vorlaufsolltemperatur"),
+    WebItem(name="Schaltspiele E1", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WI2W, webif_group="WIH", translation_key="webif_info_heizkreis1_vorlauftemperatur"),
+    WebItem(name="Schaltspiele E2", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WI2W, webif_group="WI2W", translation_key="webif_info_heizkreis1_vorlauftemperatur"),
+]
+
+WEBIF_INFO_STATISTIK: list[WebItem] = [
+    WebItem(name="th. Energie Heizen Tag", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIS, params=PARAMS_ENERGY, webif_group="WIS", translation_key="webif_info_heizkreis1_aussentemperatur"),
+    WebItem(name="th. Energie WW Tag", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIS, params=PARAMS_ENERGY, webif_group="WIS", translation_key="webif_info_heizkreis1_at_mittelwert"),
+    WebItem(name="th. Energie gesamt Tag", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIS, params=PARAMS_ENERGY, webif_group="WIS", translation_key="webif_info_heizkreis1_aussentemperatur"),
+    WebItem(name="elektrische Energie Tag", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIS, params=PARAMS_ENERGY, webif_group="WIS", translation_key="webif_info_heizkreis1_at_mittelwert"),
+    WebItem(name="th. Energie Heizen Monat", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIS, params=PARAMS_ENERGY, webif_group="WIS", translation_key="webif_info_heizkreis1_aussentemperatur"),
+    WebItem(name="th. Energie WW Monat", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIS, params=PARAMS_ENERGY, webif_group="WIS", translation_key="webif_info_heizkreis1_at_mittelwert"),
+    WebItem(name="th. Energie gesamt Monat", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIS, params=PARAMS_ENERGY, webif_group="WIS", translation_key="webif_info_heizkreis1_aussentemperatur"),
+    WebItem(name="elektrische Energie Monat", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIS, params=PARAMS_ENERGY, webif_group="WIS", translation_key="webif_info_heizkreis1_at_mittelwert"),
+    WebItem(name="th. Energie Heizen Jahr", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIS, params=PARAMS_ENERGY, webif_group="WIS", translation_key="webif_info_heizkreis1_aussentemperatur"),
+    WebItem(name="th. Energie WW Jahr", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIS, params=PARAMS_ENERGY, webif_group="WIS", translation_key="webif_info_heizkreis1_at_mittelwert"),
+    WebItem(name="th. Energie gesamt Jahr", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIS, params=PARAMS_ENERGY, webif_group="WIS", translation_key="webif_info_heizkreis1_aussentemperatur"),
+    WebItem(name="elektrische Energie Jahr", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIS, params=PARAMS_ENERGY, webif_group="WIS", translation_key="webif_info_heizkreis1_at_mittelwert"),
 ]
 
 DEVICELISTS: list = [
@@ -1649,5 +1673,5 @@ DEVICELISTS: list = [
     MODBUS_IO_ITEMS
 ]
 
-DEVICELISTS_WEBIF: list = [WEBIF_INFO_HEIZKREIS1, WEBIF_INFO_WAERMEPUMPE]
+DEVICELISTS_WEBIF: list = [WEBIF_INFO_HEIZKREIS1, WEBIF_INFO_WAERMEPUMPE, WEBIF_INFO_2WEZ, WEBIF_INFO_STATISTIK]
 # fmt: on

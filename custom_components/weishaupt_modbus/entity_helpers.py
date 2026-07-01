@@ -59,7 +59,7 @@ async def check_available(
 async def build_entity_list(
     entries: list[EntityType],
     config_entry: MyConfigEntry,
-    api_items: list[ModbusItem | WebItem],
+    api_items: list[ModbusItem] | list[WebItem],
     item_types: str | tuple[str, ...],
     coordinator: MyCoordinator,
 ) -> list[EntityType]:

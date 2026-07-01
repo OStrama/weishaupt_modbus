@@ -3,7 +3,7 @@
 import asyncio
 from datetime import timedelta
 import logging
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 from pymodbus import ModbusException
 from weishaupt_webif_api import WebifConnection
@@ -165,7 +165,7 @@ class MyWebIfCoordinator(DataUpdateCoordinator[dict[str, Any]]):
     def __init__(
         self,
         hass: HomeAssistant,
-        my_api: WebifConnection,
+        my_api: WebifConnection | None,
         api_items: list[WebItem],
         config_entry: MyConfigEntry,
     ) -> None:
@@ -177,7 +177,8 @@ class MyWebIfCoordinator(DataUpdateCoordinator[dict[str, Any]]):
             update_interval=timedelta(seconds=30),
             always_update=True,
         )
-        self.my_api: WebifConnection = my_api
+
+        self.my_api: WebifConnection | None = my_api
         self.api_items = api_items
 
     async def _async_setup(self) -> None:
@@ -188,10 +189,21 @@ class MyWebIfCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         # try:
         async with asyncio.timeout(30):
             _LOGGER.debug("Trying to fetch complete mockup data")
-            result = await self.my_api.update_all_mock()
-            hk = result.get("Heizkreis")
-            wp = result.get("Waermepumpe")
-            result = hk | wp
+            if self.my_api is not None:
+                result = await self.my_api.update_all_mock()
+                hk = result.get("Heizkreis")
+                wp = result.get("Waermepumpe")
+                wez2 = result.get("2WEZ")
+                wes = result.get("Statistik")
+                if hk is not None:
+                    result = result | hk
+                if wp is not None:
+                    result = result | wp
+                if wez2 is not None:
+                    result = result | wez2
+                if wes is not None:
+                    result = result | wes
+
             return result if result is not None else {}
         # except TimeoutError:
         #    _LOGGER.debug("Timeout while fetching WebIF data")
