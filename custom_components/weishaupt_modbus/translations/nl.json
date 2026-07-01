@@ -158,6 +158,50 @@
       },
       "ww_normal" : {
         "name" : "{prefix}Warmwater Normaal"
+      },      "heiz_konstanttemp" : {
+        "name" : "{prefix}Verwarming constante temperatuur"
+      },
+      "heiz_konstanttemp2" : {
+        "name" : "{prefix}Verwarming constante temperatuur2"
+      },
+      "heiz_konstanttemp3" : {
+        "name" : "{prefix}Verwarming constante temperatuur3"
+      },
+      "heiz_konstanttemp4" : {
+        "name" : "{prefix}Verwarming constante temperatuur4"
+      },
+      "heiz_konstanttemp5" : {
+        "name" : "{prefix}Verwarming constante temperatuur5"
+      },
+      "heiz_konstanttemp_absenk" : {
+        "name" : "{prefix}Verwarming constante temperatuur verlaging"
+      },
+      "heiz_konstanttemp_absenk2" : {
+        "name" : "{prefix}Verwarming constante temperatuur verlaging2"
+      },
+      "heiz_konstanttemp_absenk3" : {
+        "name" : "{prefix}Verwarming constante temperatuur verlaging3"
+      },
+      "heiz_konstanttemp_absenk4" : {
+        "name" : "{prefix}Verwarming constante temperatuur verlaging4"
+      },
+      "heiz_konstanttemp_absenk5" : {
+        "name" : "{prefix}Verwarming constante temperatuur verlaging5"
+      },
+            "kuehl_konstanttemp" : {
+        "name" : "{prefix}Koelconstante temperatuur"
+      },
+      "kuehl_konstanttemp2" : {
+        "name" : "{prefix}Koelconstante temperatuur 2"
+      },
+      "kuehl_konstanttemp3" : {
+        "name" : "{prefix}Koelconstante temperatuur 3"
+      },
+      "kuehl_konstanttemp4" : {
+        "name" : "{prefix}Koelconstante temperatuur 4"
+      },
+      "kuehl_konstanttemp5" : {
+        "name" : "{prefix}Koelconstante temperatuur 5"
       }
     },
     "select" : {
@@ -547,6 +591,51 @@
           "ww_push_95" : "95 min",
           "ww_push_aus" : "Uit"
         }
+      },
+       "anf_typ" : {
+        "name" : "{prefix}Aanvraagtype",
+        "state" : {
+          "hz_anforderung_aus" : "Uit",
+          "hz_anforderung_konstant" : "Constant",
+          "hz_anforderung_witterungsgefuehrt" : "Weersafhankelijk",
+          "hz_anforderung_raumregelung": "Ruimtegestuurd"
+        }
+      },
+      "anf_typ2" : {
+        "name" : "{prefix}Aanvraagtype2",
+        "state" : {
+          "hz_anforderung_aus" : "Uit",
+          "hz_anforderung_konstant" : "Constant",
+          "hz_anforderung_witterungsgefuehrt" : "Weersafhankelijk",
+          "hz_anforderung_raumregelung": "Ruimtegestuurd"
+        }
+      },
+      "anf_typ3" : {
+        "name" : "{prefix}Aanvraagtype3",
+        "state" : {
+          "hz_anforderung_aus" : "Uit",
+          "hz_anforderung_konstant" : "Constant",
+          "hz_anforderung_witterungsgefuehrt" : "Weersafhankelijk",
+          "hz_anforderung_raumregelung": "Ruimtegestuurd"
+        }
+      },
+      "anf_typ4" : {
+        "name" : "{prefix}Aanvraagtype4",
+        "state" : {
+          "hz_anforderung_aus" : "Uit",
+          "hz_anforderung_konstant" : "Constant",
+          "hz_anforderung_witterungsgefuehrt" : "Weersafhankelijk",
+          "hz_anforderung_raumregelung": "Ruimtegestuurd"
+        }
+      },
+      "anf_typ5" : {
+        "name" : "{prefix}Aanvraagtype5",
+        "state" : {
+          "hz_anforderung_aus" : "Uit",
+          "hz_anforderung_konstant" : "Constant",
+          "hz_anforderung_witterungsgefuehrt" : "Weersafhankelijk",
+          "hz_anforderung_raumregelung": "Ruimtegestuurd"
+        }
       }
     },
     "sensor" : {
@@ -594,51 +683,7 @@
           "w2_konf_1" : "Uit"
         }
       },
-      "anf_typ" : {
-        "name" : "{prefix}Aanvraagtype",
-        "state" : {
-          "hz_anforderung_aus" : "Uit",
-          "hz_anforderung_konstant" : "Constant",
-          "hz_anforderung_witterungsgefuehrt" : "Weersafhankelijk",
-          "hz_anforderung_raumregelung": "Ruimtegestuurd"
-        }
-      },
-      "anf_typ2" : {
-        "name" : "{prefix}Aanvraagtype2",
-        "state" : {
-          "hz_anforderung_aus" : "Uit",
-          "hz_anforderung_konstant" : "Constant",
-          "hz_anforderung_witterungsgefuehrt" : "Weersafhankelijk",
-          "hz_anforderung_raumregelung": "Ruimtegestuurd"
-        }
-      },
-      "anf_typ3" : {
-        "name" : "{prefix}Aanvraagtype3",
-        "state" : {
-          "hz_anforderung_aus" : "Uit",
-          "hz_anforderung_konstant" : "Constant",
-          "hz_anforderung_witterungsgefuehrt" : "Weersafhankelijk",
-          "hz_anforderung_raumregelung": "Ruimtegestuurd"
-        }
-      },
-      "anf_typ4" : {
-        "name" : "{prefix}Aanvraagtype4",
-        "state" : {
-          "hz_anforderung_aus" : "Uit",
-          "hz_anforderung_konstant" : "Constant",
-          "hz_anforderung_witterungsgefuehrt" : "Weersafhankelijk",
-          "hz_anforderung_raumregelung": "Ruimtegestuurd"
-        }
-      },
-      "anf_typ5" : {
-        "name" : "{prefix}Aanvraagtype5",
-        "state" : {
-          "hz_anforderung_aus" : "Uit",
-          "hz_anforderung_konstant" : "Constant",
-          "hz_anforderung_witterungsgefuehrt" : "Weersafhankelijk",
-          "hz_anforderung_raumregelung": "Ruimtegestuurd"
-        }
-      },
+
       "anforderung_vl_regenerativ" : {
         "name" : "{prefix}Vraag (regeneratieve stroom)"
       },
@@ -915,36 +960,7 @@
       "heiz_energie_monat" : {
         "name" : "{prefix}Verwarmingsenergie maand"
       },
-      "heiz_konstanttemp" : {
-        "name" : "{prefix}Verwarming constante temperatuur"
-      },
-      "heiz_konstanttemp2" : {
-        "name" : "{prefix}Verwarming constante temperatuur2"
-      },
-      "heiz_konstanttemp3" : {
-        "name" : "{prefix}Verwarming constante temperatuur3"
-      },
-      "heiz_konstanttemp4" : {
-        "name" : "{prefix}Verwarming constante temperatuur4"
-      },
-      "heiz_konstanttemp5" : {
-        "name" : "{prefix}Verwarming constante temperatuur5"
-      },
-      "heiz_konstanttemp_absenk" : {
-        "name" : "{prefix}Verwarming constante temperatuur verlaging"
-      },
-      "heiz_konstanttemp_absenk2" : {
-        "name" : "{prefix}Verwarming constante temperatuur verlaging2"
-      },
-      "heiz_konstanttemp_absenk3" : {
-        "name" : "{prefix}Verwarming constante temperatuur verlaging3"
-      },
-      "heiz_konstanttemp_absenk4" : {
-        "name" : "{prefix}Verwarming constante temperatuur verlaging4"
-      },
-      "heiz_konstanttemp_absenk5" : {
-        "name" : "{prefix}Verwarming constante temperatuur verlaging5"
-      },
+
       "hz_konf" : {
         "name" : "{prefix}Verwarmingscircuitconfiguratie",
         "state" : {
@@ -1185,21 +1201,7 @@
       "kuehl_energie_monat" : {
         "name" : "{prefix}Koelenergie maand"
       },
-      "kuehl_konstanttemp" : {
-        "name" : "{prefix}Koelconstante temperatuur"
-      },
-      "kuehl_konstanttemp2" : {
-        "name" : "{prefix}Koelconstante temperatuur 2"
-      },
-      "kuehl_konstanttemp3" : {
-        "name" : "{prefix}Koelconstante temperatuur 3"
-      },
-      "kuehl_konstanttemp4" : {
-        "name" : "{prefix}Koelconstante temperatuur 4"
-      },
-      "kuehl_konstanttemp5" : {
-        "name" : "{prefix}Koelconstante temperatuur 5"
-      },
+
       "leistungsanforderung" : {
         "name" : "{prefix}Vermogensaanvraag"
       },

@@ -160,6 +160,50 @@
             },
             "ww_normal": {
                 "name": "{prefix}Warmwasser Normal"
+            },            "kuehl_konstanttemp": {
+                "name": "{prefix}Kühlen Konstanttemperatur"
+            },
+            "kuehl_konstanttemp2": {
+                "name": "{prefix}Kühlen Konstanttemperatur2"
+            },
+            "kuehl_konstanttemp3": {
+                "name": "{prefix}Kühlen Konstanttemperatur3"
+            },
+            "kuehl_konstanttemp4": {
+                "name": "{prefix}Kühlen Konstanttemperatur4"
+            },
+            "kuehl_konstanttemp5": {
+                "name": "{prefix}Kühlen Konstanttemperatur5"
+            },
+            "heiz_konstanttemp": {
+                "name": "{prefix}Heizen Konstanttemperatur"
+            },
+            "heiz_konstanttemp2": {
+                "name": "{prefix}Heizen Konstanttemperatur2"
+            },
+            "heiz_konstanttemp3": {
+                "name": "{prefix}Heizen Konstanttemperatur3"
+            },
+            "heiz_konstanttemp4": {
+                "name": "{prefix}Heizen Konstanttemperatur4"
+            },
+            "heiz_konstanttemp5": {
+                "name": "{prefix}Heizen Konstanttemperatur5"
+            },
+            "heiz_konstanttemp_absenk": {
+                "name": "{prefix}Heizen Konstanttemp Absenk"
+            },
+            "heiz_konstanttemp_absenk2": {
+                "name": "{prefix}Heizen Konstanttemp Absenk2"
+            },
+            "heiz_konstanttemp_absenk3": {
+                "name": "{prefix}Heizen Konstanttemp Absenk3"
+            },
+            "heiz_konstanttemp_absenk4": {
+                "name": "{prefix}Heizen Konstanttemp Absenk4"
+            },
+            "heiz_konstanttemp_absenk5": {
+                "name": "{prefix}Heizen Konstanttemp Absenk5"
             }
         },
         "select": {
@@ -549,6 +593,52 @@
                     "ww_push_95": "95 min",
                     "ww_push_aus": "AUS"
                 }
+            },
+                        "anf_typ": {
+                "name": "{prefix}Anforderung Typ",
+                "state": {
+                    "hz_anforderung_aus": "aus",
+                    "hz_anforderung_konstant": "konstant",
+                    "hz_anforderung_witterungsgefuehrt": "witterungsgeführt",
+                    "hz_anforderung_raumregelung": "Raumregelung"
+                }
+            },
+            "anf_typ2": {
+                "name": "{prefix}Anforderung Typ2",
+                "state": {
+                    "hz_anforderung_aus": "aus",
+                    "hz_anforderung_konstant": "konstant",
+                    "hz_anforderung_witterungsgefuehrt": "witterungsgeführt"
+                    ,
+                    "hz_anforderung_raumregelung": "Raumregelung"
+                }
+            },
+            "anf_typ3": {
+                "name": "{prefix}Anforderung Typ3",
+                "state": {
+                    "hz_anforderung_aus": "aus",
+                    "hz_anforderung_konstant": "konstant",
+                    "hz_anforderung_witterungsgefuehrt": "witterungsgeführt",
+                    "hz_anforderung_raumregelung": "Raumregelung"
+                }
+            },
+            "anf_typ4": {
+                "name": "{prefix}Anforderung Typ4",
+                "state": {
+                    "hz_anforderung_aus": "aus",
+                    "hz_anforderung_konstant": "konstant",
+                    "hz_anforderung_witterungsgefuehrt": "witterungsgeführt",
+                    "hz_anforderung_raumregelung": "Raumregelung"
+                }
+            },
+            "anf_typ5": {
+                "name": "{prefix}Anforderung Typ5",
+                "state": {
+                    "hz_anforderung_aus": "aus",
+                    "hz_anforderung_konstant": "konstant",
+                    "hz_anforderung_witterungsgefuehrt": "witterungsgeführt",
+                    "hz_anforderung_raumregelung": "Raumregelung"
+                }
             }
         },
         "sensor": {
@@ -596,52 +686,7 @@
                     "w2_konf_1": "AUS"
                 }
             },
-            "anf_typ": {
-                "name": "{prefix}Anforderung Typ",
-                "state": {
-                    "hz_anforderung_aus": "aus",
-                    "hz_anforderung_konstant": "konstant",
-                    "hz_anforderung_witterungsgefuehrt": "witterungsgeführt",
-                    "hz_anforderung_raumregelung": "Raumregelung"
-                }
-            },
-            "anf_typ2": {
-                "name": "{prefix}Anforderung Typ2",
-                "state": {
-                    "hz_anforderung_aus": "aus",
-                    "hz_anforderung_konstant": "konstant",
-                    "hz_anforderung_witterungsgefuehrt": "witterungsgeführt"
-                    ,
-                    "hz_anforderung_raumregelung": "Raumregelung"
-                }
-            },
-            "anf_typ3": {
-                "name": "{prefix}Anforderung Typ3",
-                "state": {
-                    "hz_anforderung_aus": "aus",
-                    "hz_anforderung_konstant": "konstant",
-                    "hz_anforderung_witterungsgefuehrt": "witterungsgeführt",
-                    "hz_anforderung_raumregelung": "Raumregelung"
-                }
-            },
-            "anf_typ4": {
-                "name": "{prefix}Anforderung Typ4",
-                "state": {
-                    "hz_anforderung_aus": "aus",
-                    "hz_anforderung_konstant": "konstant",
-                    "hz_anforderung_witterungsgefuehrt": "witterungsgeführt",
-                    "hz_anforderung_raumregelung": "Raumregelung"
-                }
-            },
-            "anf_typ5": {
-                "name": "{prefix}Anforderung Typ5",
-                "state": {
-                    "hz_anforderung_aus": "aus",
-                    "hz_anforderung_konstant": "konstant",
-                    "hz_anforderung_witterungsgefuehrt": "witterungsgeführt",
-                    "hz_anforderung_raumregelung": "Raumregelung"
-                }
-            },
+
             "anforderung_vl_regenerativ": {
                 "name": "{prefix}Anforderung(Vorlauf regenerativ)"
             },
@@ -916,36 +961,7 @@
             "heiz_energie_monat": {
                 "name": "{prefix}Heizen Energie Monat"
             },
-            "heiz_konstanttemp": {
-                "name": "{prefix}Heizen Konstanttemperatur"
-            },
-            "heiz_konstanttemp2": {
-                "name": "{prefix}Heizen Konstanttemperatur2"
-            },
-            "heiz_konstanttemp3": {
-                "name": "{prefix}Heizen Konstanttemperatur3"
-            },
-            "heiz_konstanttemp4": {
-                "name": "{prefix}Heizen Konstanttemperatur4"
-            },
-            "heiz_konstanttemp5": {
-                "name": "{prefix}Heizen Konstanttemperatur5"
-            },
-            "heiz_konstanttemp_absenk": {
-                "name": "{prefix}Heizen Konstanttemp Absenk"
-            },
-            "heiz_konstanttemp_absenk2": {
-                "name": "{prefix}Heizen Konstanttemp Absenk2"
-            },
-            "heiz_konstanttemp_absenk3": {
-                "name": "{prefix}Heizen Konstanttemp Absenk3"
-            },
-            "heiz_konstanttemp_absenk4": {
-                "name": "{prefix}Heizen Konstanttemp Absenk4"
-            },
-            "heiz_konstanttemp_absenk5": {
-                "name": "{prefix}Heizen Konstanttemp Absenk5"
-            },
+
             "hz_konf": {
                 "name": "{prefix}HZ_Konfiguration",
                 "state": {
@@ -1201,21 +1217,7 @@
             "kuehl_energie_monat": {
                 "name": "{prefix}Kühlen Energie Monat"
             },
-            "kuehl_konstanttemp": {
-                "name": "{prefix}Kühlen Konstanttemperatur"
-            },
-            "kuehl_konstanttemp2": {
-                "name": "{prefix}Kühlen Konstanttemperatur2"
-            },
-            "kuehl_konstanttemp3": {
-                "name": "{prefix}Kühlen Konstanttemperatur3"
-            },
-            "kuehl_konstanttemp4": {
-                "name": "{prefix}Kühlen Konstanttemperatur4"
-            },
-            "kuehl_konstanttemp5": {
-                "name": "{prefix}Kühlen Konstanttemperatur5"
-            },
+
             "leistungsanforderung": {
                 "name": "{prefix}Leistungsanforderung"
             },

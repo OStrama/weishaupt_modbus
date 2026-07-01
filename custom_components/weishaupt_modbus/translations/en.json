@@ -160,6 +160,51 @@
       },
       "ww_normal": {
         "name": "{prefix}Hot water normal"
+      },
+      "heiz_konstanttemp": {
+        "name": "{prefix}Heating constant temperature"
+      },
+      "heiz_konstanttemp2": {
+        "name": "{prefix}Heating constant temperature 2"
+      },
+      "heiz_konstanttemp3": {
+        "name": "{prefix}Heating constant temperature 3"
+      },
+      "heiz_konstanttemp4": {
+        "name": "{prefix}Heating constant temperature 4"
+      },
+      "heiz_konstanttemp5": {
+        "name": "{prefix}Heating constant temperature 5"
+      },
+      "heiz_konstanttemp_absenk": {
+        "name": "{prefix}Heating constant temp. lowering"
+      },
+      "heiz_konstanttemp_absenk2": {
+        "name": "{prefix}Heating constant temp. lowering2"
+      },
+      "heiz_konstanttemp_absenk3": {
+        "name": "{prefix}Heating constant temp. lowering3"
+      },
+      "heiz_konstanttemp_absenk4": {
+        "name": "{prefix}Heating constant temp. lowering4"
+      },
+      "heiz_konstanttemp_absenk5": {
+        "name": "{prefix}Heating constant temp. lowering5"
+      },
+            "kuehl_konstanttemp": {
+        "name": "{prefix}Cooling constant temperature"
+      },
+      "kuehl_konstanttemp2": {
+        "name": "{prefix}Cooling constant temperature 2"
+      },
+      "kuehl_konstanttemp3": {
+        "name": "{prefix}Cooling constant temperature 3"
+      },
+      "kuehl_konstanttemp4": {
+        "name": "{prefix}Cooling constant temperature 4"
+      },
+      "kuehl_konstanttemp5": {
+        "name": "{prefix}Cooling constant temperature 5"
       }
     },
     "select": {
@@ -549,6 +594,51 @@
           "ww_push_95": "95 min",
           "ww_push_aus": "off"
         }
+      },
+            "anf_typ": {
+        "name": "{prefix}Request type",
+        "state": {
+          "hz_anforderung_aus": "off",
+          "hz_anforderung_konstant": "constant",
+          "hz_anforderung_witterungsgefuehrt": "weather-guided",
+          "hz_anforderung_raumregelung": "Room control"
+        }
+      },
+      "anf_typ2": {
+        "name": "{prefix}Request type2",
+        "state": {
+          "hz_anforderung_aus": "off",
+          "hz_anforderung_konstant": "constrant",
+          "hz_anforderung_witterungsgefuehrt": "weather-guided",
+          "hz_anforderung_raumregelung": "Room control"
+        }
+      },
+      "anf_typ3": {
+        "name": "{prefix}Request type3",
+        "state": {
+          "hz_anforderung_aus": "off",
+          "hz_anforderung_konstant": "constrant",
+          "hz_anforderung_witterungsgefuehrt": "weather-guided",
+          "hz_anforderung_raumregelung": "Room control"
+        }
+      },
+      "anf_typ4": {
+        "name": "{prefix}Request type4",
+        "state": {
+          "hz_anforderung_aus": "off",
+          "hz_anforderung_konstant": "constrant",
+          "hz_anforderung_witterungsgefuehrt": "weather-guided",
+          "hz_anforderung_raumregelung": "Room control"
+        }
+      },
+      "anf_typ5": {
+        "name": "{prefix}Request type5",
+        "state": {
+          "hz_anforderung_aus": "off",
+          "hz_anforderung_konstant": "constrant",
+          "hz_anforderung_witterungsgefuehrt": "weather-guided",
+          "hz_anforderung_raumregelung": "Room control"
+        }
       }
     },
     "sensor": {
@@ -596,51 +686,7 @@
           "w2_konf_1": "OFF"
         }
       },
-      "anf_typ": {
-        "name": "{prefix}Request type",
-        "state": {
-          "hz_anforderung_aus": "off",
-          "hz_anforderung_konstant": "constant",
-          "hz_anforderung_witterungsgefuehrt": "weather-guided",
-          "hz_anforderung_raumregelung": "Room control"
-        }
-      },
-      "anf_typ2": {
-        "name": "{prefix}Request type2",
-        "state": {
-          "hz_anforderung_aus": "off",
-          "hz_anforderung_konstant": "constrant",
-          "hz_anforderung_witterungsgefuehrt": "weather-guided",
-          "hz_anforderung_raumregelung": "Room control"
-        }
-      },
-      "anf_typ3": {
-        "name": "{prefix}Request type3",
-        "state": {
-          "hz_anforderung_aus": "off",
-          "hz_anforderung_konstant": "constrant",
-          "hz_anforderung_witterungsgefuehrt": "weather-guided",
-          "hz_anforderung_raumregelung": "Room control"
-        }
-      },
-      "anf_typ4": {
-        "name": "{prefix}Request type4",
-        "state": {
-          "hz_anforderung_aus": "off",
-          "hz_anforderung_konstant": "constrant",
-          "hz_anforderung_witterungsgefuehrt": "weather-guided",
-          "hz_anforderung_raumregelung": "Room control"
-        }
-      },
-      "anf_typ5": {
-        "name": "{prefix}Request type5",
-        "state": {
-          "hz_anforderung_aus": "off",
-          "hz_anforderung_konstant": "constrant",
-          "hz_anforderung_witterungsgefuehrt": "weather-guided",
-          "hz_anforderung_raumregelung": "Room control"
-        }
-      },
+
       "anforderung_vl_regenerativ": {
         "name": "{prefix}Request(feed regenerative)"
       },
@@ -917,36 +963,7 @@
       "heiz_energie_monat": {
         "name": "{prefix}Heating energy month"
       },
-      "heiz_konstanttemp": {
-        "name": "{prefix}Heating constant temperature"
-      },
-      "heiz_konstanttemp2": {
-        "name": "{prefix}Heating constant temperature 2"
-      },
-      "heiz_konstanttemp3": {
-        "name": "{prefix}Heating constant temperature 3"
-      },
-      "heiz_konstanttemp4": {
-        "name": "{prefix}Heating constant temperature 4"
-      },
-      "heiz_konstanttemp5": {
-        "name": "{prefix}Heating constant temperature 5"
-      },
-      "heiz_konstanttemp_absenk": {
-        "name": "{prefix}Heating constant temp. lowering"
-      },
-      "heiz_konstanttemp_absenk2": {
-        "name": "{prefix}Heating constant temp. lowering2"
-      },
-      "heiz_konstanttemp_absenk3": {
-        "name": "{prefix}Heating constant temp. lowering3"
-      },
-      "heiz_konstanttemp_absenk4": {
-        "name": "{prefix}Heating constant temp. lowering4"
-      },
-      "heiz_konstanttemp_absenk5": {
-        "name": "{prefix}Heating constant temp. lowering5"
-      },
+
       "hz_konf": {
         "name": "{prefix}Heating circuit configuration",
         "state": {
@@ -1202,21 +1219,7 @@
       "kuehl_energie_monat": {
         "name": "{prefix}Cooling energy month"
       },
-      "kuehl_konstanttemp": {
-        "name": "{prefix}Cooling constant temperature"
-      },
-      "kuehl_konstanttemp2": {
-        "name": "{prefix}Cooling constant temperature 2"
-      },
-      "kuehl_konstanttemp3": {
-        "name": "{prefix}Cooling constant temperature 3"
-      },
-      "kuehl_konstanttemp4": {
-        "name": "{prefix}Cooling constant temperature 4"
-      },
-      "kuehl_konstanttemp5": {
-        "name": "{prefix}Cooling constant temperature 5"
-      },
+
       "leistungsanforderung": {
         "name": "{prefix}Power request"
       },
