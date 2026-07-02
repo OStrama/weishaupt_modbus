@@ -18,5 +18,5 @@
     "httpx",
     "weishaupt-webif-api>=0.1.2"
   ],
-  "version": "1.0.17"
+  "version": "1.0.18"
 }
