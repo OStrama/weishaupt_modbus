@@ -6,7 +6,12 @@ from typing import TYPE_CHECKING, Any
 
 from homeassistant.components.number import NumberEntity
 from homeassistant.components.select import SelectEntity
-from homeassistant.components.sensor import SensorEntity, SensorStateClass
+from homeassistant.components.sensor import (
+    SensorDeviceClass,
+    SensorEntity,
+    SensorStateClass,
+)
+from homeassistant.const import PERCENTAGE, UnitOfTemperature
 from homeassistant.core import callback
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity import Entity
@@ -486,12 +491,26 @@ class MyWebifSensorEntity(CoordinatorEntity, SensorEntity, MyEntity):
             dev_postfix = self._config_entry.data[CONF.DEVICE_POSTFIX]
 
         self._attr_unique_id = f"{dev_prefix}_{self._api_item.name}{dev_postfix}_webif"
-        self._attr_name = api_item.name
+        # Use the localized name from the translation files. translation_key and
+        # has_entity_name are already set by MyEntity.__init__; setting
+        # _attr_name here would override the translation with the raw German
+        # label, leaving these sensors German-only.
+        self._attr_translation_key = self._api_item.translation_key
+        self._attr_has_entity_name = True
 
         if self._api_item.format == FORMATS.TEXT:
             self._attr_suggested_display_precision = None
-        # Set sensor-specific attributes
-        # self._attr_state_class = SensorStateClass.MEASUREMENT
+        # WebItems carry no params, so the unit/device_class block in
+        # MyEntity.__init__ is skipped and WebItem.get_value() strips the unit
+        # text ("26.0 °C" -> "26.0"). Restore unit + device class by format.
+        elif self._api_item.format == FORMATS.TEMPERATURE:
+            self._attr_native_unit_of_measurement = UnitOfTemperature.CELSIUS
+            self._attr_device_class = SensorDeviceClass.TEMPERATURE
+            self._attr_state_class = SensorStateClass.MEASUREMENT
+            self._attr_suggested_display_precision = 1
+        elif self._api_item.format == FORMATS.PERCENTAGE:
+            self._attr_native_unit_of_measurement = PERCENTAGE
+            self._attr_state_class = SensorStateClass.MEASUREMENT
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -499,10 +518,19 @@ class MyWebifSensorEntity(CoordinatorEntity, SensorEntity, MyEntity):
         # print(self.coordinator.data)
         try:
             if self.coordinator.data is not None:
-                val = self._api_item.get_value(
+                raw = self._api_item.get_value(
                     self.coordinator.data[self._api_item.name]
                 )
-                self._attr_native_value = val
+                # get_value() returns the numeric part as a string; coerce to
+                # float for numeric formats so the temperature/percentage
+                # device class accepts the state instead of warning.
+                value: float | str | None = raw
+                if self._api_item.format in (FORMATS.TEMPERATURE, FORMATS.PERCENTAGE):
+                    try:
+                        value = float(raw)
+                    except (TypeError, ValueError):
+                        value = None
+                self._attr_native_value = value
                 self.async_write_ha_state()
             else:
                 _LOGGER.warning(
