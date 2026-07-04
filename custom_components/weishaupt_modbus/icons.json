@@ -1,0 +1,201 @@
+{
+  "entity": {
+    "sensor": {
+      "webif_info_heizkreis1_aussentemperatur": {
+        "default": "mdi:sun-thermometer"
+      },
+      "webif_info_heizkreis1_at_mittelwert": {
+        "default": "mdi:sun-thermometer-outline"
+      },
+      "webif_info_heizkreis1_at_langzeitwert": {
+        "default": "mdi:thermometer-lines"
+      },
+      "webif_info_heizkreis1_raumsolltemperatur": {
+        "default": "mdi:home-thermometer"
+      },
+      "webif_info_heizkreis1_vorlauftemperatur": {
+        "default": "mdi:thermometer"
+      },
+      "webif_info_waermepumpe_betrieb": {
+        "default": "mdi:heat-pump"
+      },
+      "webif_info_waermepumpe_stoermeldung": {
+        "default": "mdi:alert-circle-outline"
+      },
+      "webif_info_waermepumpe_warmwassertemperatur": {
+        "default": "mdi:water-thermometer"
+      },
+      "webif_info_waermepumpe_leistungsanforderung": {
+        "default": "mdi:heat-pump"
+      },
+      "webif_info_waermepumpe_solltemperatur": {
+        "default": "mdi:thermometer"
+      },
+      "webif_info_waermepumpe_anforderung": {
+        "default": "mdi:heat-pump"
+      },
+      "webif_info_waermepumpe_schaltdifferenz_dynamisch": {
+        "default": "mdi:thermometer-plus"
+      },
+      "webif_info_waermepumpe_vorlauftemperatur": {
+        "default": "mdi:thermometer-chevron-up"
+      },
+      "webif_info_waermepumpe_ruecklauftemperatur": {
+        "default": "mdi:thermometer-chevron-down"
+      },
+      "webif_info_waermepumpe_drehzahl_pumpe_m1": {
+        "default": "mdi:pump"
+      },
+      "webif_info_waermepumpe_volumenstrom": {
+        "default": "mdi:pump"
+      },
+      "webif_info_waermepumpe_stellung_umschaltventil": {
+        "default": "mdi:valve"
+      },
+      "webif_info_waermepumpe_version_wwp_sg": {
+        "default": "mdi:tag-outline"
+      },
+      "webif_info_waermepumpe_version_wwp_ec_wbb": {
+        "default": "mdi:tag-outline"
+      },
+      "webif_info_waermepumpe_soll_leistung": {
+        "default": "mdi:heat-pump"
+      },
+      "webif_info_waermepumpe_ist_leistung": {
+        "default": "mdi:heat-pump"
+      },
+      "webif_info_waermepumpe_expansionsventil_ag_eintr": {
+        "default": "mdi:thermometer"
+      },
+      "webif_info_waermepumpe_luftansaugtemperatur": {
+        "default": "mdi:thermometer"
+      },
+      "webif_info_waermepumpe_waermetauscher_ag_austrit": {
+        "default": "mdi:thermometer"
+      },
+      "webif_info_waermepumpe_verdichtersauggastemp": {
+        "default": "mdi:thermometer"
+      },
+      "webif_info_waermepumpe_evi_sauggastemperatur": {
+        "default": "mdi:thermometer"
+      },
+      "webif_info_waermepumpe_kaeltemittel_ig_austritt": {
+        "default": "mdi:thermometer"
+      },
+      "webif_info_waermepumpe_oelsumpftemperatur": {
+        "default": "mdi:oil-temperature"
+      },
+      "webif_info_waermepumpe_druckgastemperatur": {
+        "default": "mdi:gauge"
+      },
+      "webif_info_waermepumpe_niederdruck": {
+        "default": "mdi:gauge-low"
+      },
+      "webif_info_waermepumpe_verdampfungstemperatur": {
+        "default": "mdi:thermometer"
+      },
+      "webif_info_waermepumpe_hochdruck": {
+        "default": "mdi:gauge-full"
+      },
+      "webif_info_waermepumpe_kondensationstemperatur": {
+        "default": "mdi:thermometer"
+      },
+      "webif_info_waermepumpe_mitteldruck": {
+        "default": "mdi:gauge"
+      },
+      "webif_info_waermepumpe_saettigungstemperatur_evi": {
+        "default": "mdi:thermometer"
+      },
+      "webif_info_waermepumpe_ueberhitzung_heizen": {
+        "default": "mdi:thermometer-plus"
+      },
+      "webif_info_waermepumpe_oeffnungsgrad_exv_heizen": {
+        "default": "mdi:valve"
+      },
+      "webif_info_waermepumpe_ueberhitzung_verdichter": {
+        "default": "mdi:thermometer-plus"
+      },
+      "webif_info_waermepumpe_oeffnungsgrad_exv_kuehlen": {
+        "default": "mdi:valve"
+      },
+      "webif_info_waermepumpe_ueberhitzung_evi": {
+        "default": "mdi:thermometer-plus"
+      },
+      "webif_info_waermepumpe_oeffnungsgrad_evi": {
+        "default": "mdi:valve"
+      },
+      "webif_info_waermepumpe_betriebsstd_verdichter": {
+        "default": "mdi:fan"
+      },
+      "webif_info_waermepumpe_schaltspiele_verdichter": {
+        "default": "mdi:fan"
+      },
+      "webif_info_waermepumpe_schaltspiele_abtauen": {
+        "default": "mdi:counter"
+      },
+      "webif_info_waermepumpe_verdichter": {
+        "default": "mdi:fan"
+      },
+      "webif_info_waermepumpe_aussengeraet_variante": {
+        "default": "mdi:heat-pump-outline"
+      },
+      "webif_info_2wez_status": {
+        "default": "mdi:information-outline"
+      },
+      "webif_info_2wez_status_e_heizung_1": {
+        "default": "mdi:radiator"
+      },
+      "webif_info_2wez_status_e_heizung_2": {
+        "default": "mdi:radiator"
+      },
+      "webif_info_2wez_betriebsstunden_e1": {
+        "default": "mdi:clock-outline"
+      },
+      "webif_info_2wez_betriebsstunden_e2": {
+        "default": "mdi:clock-outline"
+      },
+      "webif_info_2wez_schaltspiele_e1": {
+        "default": "mdi:counter"
+      },
+      "webif_info_2wez_schaltspiele_e2": {
+        "default": "mdi:counter"
+      },
+      "webif_info_statistik_th_energie_heizen_tag": {
+        "default": "mdi:radiator"
+      },
+      "webif_info_statistik_th_energie_ww_tag": {
+        "default": "mdi:water-boiler"
+      },
+      "webif_info_statistik_th_energie_gesamt_tag": {
+        "default": "mdi:sigma"
+      },
+      "webif_info_statistik_elektrische_energie_tag": {
+        "default": "mdi:lightning-bolt"
+      },
+      "webif_info_statistik_th_energie_heizen_monat": {
+        "default": "mdi:radiator"
+      },
+      "webif_info_statistik_th_energie_ww_monat": {
+        "default": "mdi:water-boiler"
+      },
+      "webif_info_statistik_th_energie_gesamt_monat": {
+        "default": "mdi:sigma"
+      },
+      "webif_info_statistik_elektrische_energie_monat": {
+        "default": "mdi:lightning-bolt"
+      },
+      "webif_info_statistik_th_energie_heizen_jahr": {
+        "default": "mdi:radiator"
+      },
+      "webif_info_statistik_th_energie_ww_jahr": {
+        "default": "mdi:water-boiler"
+      },
+      "webif_info_statistik_th_energie_gesamt_jahr": {
+        "default": "mdi:sigma"
+      },
+      "webif_info_statistik_elektrische_energie_jahr": {
+        "default": "mdi:lightning-bolt"
+      }
+    }
+  }
+}
