@@ -702,6 +702,201 @@
             "ausg_h15": {
                 "name": "{prefix}Ausgang H1.5"
             },
+            "webif_info_heizkreis1_aussentemperatur": {
+                "name": "{prefix}Außentemperatur"
+            },
+            "webif_info_heizkreis1_at_mittelwert": {
+                "name": "{prefix}AT Mittelwert"
+            },
+            "webif_info_heizkreis1_at_langzeitwert": {
+                "name": "{prefix}AT Langzeitwert"
+            },
+            "webif_info_heizkreis1_raumsolltemperatur": {
+                "name": "{prefix}Raumsolltemperatur"
+            },
+            "webif_info_heizkreis1_vorlauftemperatur": {
+                "name": "{prefix}Vorlauftemperatur"
+            },
+            "webif_info_waermepumpe_betrieb": {
+                "name": "{prefix}Betrieb"
+            },
+            "webif_info_waermepumpe_stoermeldung": {
+                "name": "{prefix}Störmeldung"
+            },
+            "webif_info_waermepumpe_warmwassertemperatur": {
+                "name": "{prefix}Warmwassertemperatur"
+            },
+            "webif_info_waermepumpe_leistungsanforderung": {
+                "name": "{prefix}Leistungsanforderung"
+            },
+            "webif_info_waermepumpe_solltemperatur": {
+                "name": "{prefix}Solltemperatur"
+            },
+            "webif_info_waermepumpe_anforderung": {
+                "name": "{prefix}Anforderung"
+            },
+            "webif_info_waermepumpe_schaltdifferenz_dynamisch": {
+                "name": "{prefix}Schaltdifferenz dynamisch"
+            },
+            "webif_info_waermepumpe_vorlauftemperatur": {
+                "name": "{prefix}Vorlauftemperatur"
+            },
+            "webif_info_waermepumpe_ruecklauftemperatur": {
+                "name": "{prefix}Rücklauftemperatur"
+            },
+            "webif_info_waermepumpe_drehzahl_pumpe_m1": {
+                "name": "{prefix}Drehzahl Pumpe M1"
+            },
+            "webif_info_waermepumpe_volumenstrom": {
+                "name": "{prefix}Volumenstrom"
+            },
+            "webif_info_waermepumpe_stellung_umschaltventil": {
+                "name": "{prefix}Stellung Umschaltventil"
+            },
+            "webif_info_waermepumpe_version_wwp_sg": {
+                "name": "{prefix}Version WWP-SG"
+            },
+            "webif_info_waermepumpe_version_wwp_ec_wbb": {
+                "name": "{prefix}Version WWP-EC WBB"
+            },
+            "webif_info_waermepumpe_soll_leistung": {
+                "name": "{prefix}Soll Leistung"
+            },
+            "webif_info_waermepumpe_ist_leistung": {
+                "name": "{prefix}Ist Leistung"
+            },
+            "webif_info_waermepumpe_expansionsventil_ag_eintr": {
+                "name": "{prefix}Expansionsventil AG Eintr"
+            },
+            "webif_info_waermepumpe_luftansaugtemperatur": {
+                "name": "{prefix}Luftansaugtemperatur"
+            },
+            "webif_info_waermepumpe_waermetauscher_ag_austrit": {
+                "name": "{prefix}Wärmetauscher AG Austrit"
+            },
+            "webif_info_waermepumpe_verdichtersauggastemp": {
+                "name": "{prefix}Verdichtersauggastemp."
+            },
+            "webif_info_waermepumpe_evi_sauggastemperatur": {
+                "name": "{prefix}EVI Sauggastemperatur"
+            },
+            "webif_info_waermepumpe_kaeltemittel_ig_austritt": {
+                "name": "{prefix}Kältemittel IG Austritt"
+            },
+            "webif_info_waermepumpe_oelsumpftemperatur": {
+                "name": "{prefix}Ölsumpftemperatur"
+            },
+            "webif_info_waermepumpe_druckgastemperatur": {
+                "name": "{prefix}Druckgastemperatur"
+            },
+            "webif_info_waermepumpe_niederdruck": {
+                "name": "{prefix}Niederdruck"
+            },
+            "webif_info_waermepumpe_verdampfungstemperatur": {
+                "name": "{prefix}Verdampfungstemperatur"
+            },
+            "webif_info_waermepumpe_hochdruck": {
+                "name": "{prefix}Hochdruck"
+            },
+            "webif_info_waermepumpe_kondensationstemperatur": {
+                "name": "{prefix}Kondensationstemperatur"
+            },
+            "webif_info_waermepumpe_mitteldruck": {
+                "name": "{prefix}Mitteldruck"
+            },
+            "webif_info_waermepumpe_saettigungstemperatur_evi": {
+                "name": "{prefix}Sättigungstemperatur EVI"
+            },
+            "webif_info_waermepumpe_ueberhitzung_heizen": {
+                "name": "{prefix}Überhitzung Heizen"
+            },
+            "webif_info_waermepumpe_oeffnungsgrad_exv_heizen": {
+                "name": "{prefix}Öffnungsgrad EXV Heizen"
+            },
+            "webif_info_waermepumpe_ueberhitzung_verdichter": {
+                "name": "{prefix}Überhitzung Verdichter"
+            },
+            "webif_info_waermepumpe_oeffnungsgrad_exv_kuehlen": {
+                "name": "{prefix}Öffnungsgrad EXV Kühlen"
+            },
+            "webif_info_waermepumpe_ueberhitzung_evi": {
+                "name": "{prefix}Überhitzung EVI"
+            },
+            "webif_info_waermepumpe_oeffnungsgrad_evi": {
+                "name": "{prefix}Öffnungsgrad EVI"
+            },
+            "webif_info_waermepumpe_betriebsstd_verdichter": {
+                "name": "{prefix}Betriebsstd. Verdichter"
+            },
+            "webif_info_waermepumpe_schaltspiele_verdichter": {
+                "name": "{prefix}Schaltspiele Verdichter"
+            },
+            "webif_info_waermepumpe_schaltspiele_abtauen": {
+                "name": "{prefix}Schaltspiele Abtauen"
+            },
+            "webif_info_waermepumpe_verdichter": {
+                "name": "{prefix}Verdichter"
+            },
+            "webif_info_waermepumpe_aussengeraet_variante": {
+                "name": "{prefix}Außengerät Variante"
+            },
+            "webif_info_2wez_status": {
+                "name": "{prefix}Status"
+            },
+            "webif_info_2wez_status_e_heizung_1": {
+                "name": "{prefix}Status E-Heizung 1"
+            },
+            "webif_info_2wez_status_e_heizung_2": {
+                "name": "{prefix}Status E-Heizung 2"
+            },
+            "webif_info_2wez_betriebsstunden_e1": {
+                "name": "{prefix}Betriebsstunden E1"
+            },
+            "webif_info_2wez_betriebsstunden_e2": {
+                "name": "{prefix}Betriebsstunden E2"
+            },
+            "webif_info_2wez_schaltspiele_e1": {
+                "name": "{prefix}Schaltspiele E1"
+            },
+            "webif_info_2wez_schaltspiele_e2": {
+                "name": "{prefix}Schaltspiele E2"
+            },
+            "webif_info_statistik_th_energie_heizen_tag": {
+                "name": "{prefix}th. Energie Heizen Tag"
+            },
+            "webif_info_statistik_th_energie_ww_tag": {
+                "name": "{prefix}th. Energie WW Tag"
+            },
+            "webif_info_statistik_th_energie_gesamt_tag": {
+                "name": "{prefix}th. Energie gesamt Tag"
+            },
+            "webif_info_statistik_elektrische_energie_tag": {
+                "name": "{prefix}elektrische Energie Tag"
+            },
+            "webif_info_statistik_th_energie_heizen_monat": {
+                "name": "{prefix}th. Energie Heizen Monat"
+            },
+            "webif_info_statistik_th_energie_ww_monat": {
+                "name": "{prefix}th. Energie WW Monat"
+            },
+            "webif_info_statistik_th_energie_gesamt_monat": {
+                "name": "{prefix}th. Energie gesamt Monat"
+            },
+            "webif_info_statistik_elektrische_energie_monat": {
+                "name": "{prefix}elektrische Energie Monat"
+            },
+            "webif_info_statistik_th_energie_heizen_jahr": {
+                "name": "{prefix}th. Energie Heizen Jahr"
+            },
+            "webif_info_statistik_th_energie_ww_jahr": {
+                "name": "{prefix}th. Energie WW Jahr"
+            },
+            "webif_info_statistik_th_energie_gesamt_jahr": {
+                "name": "{prefix}th. Energie gesamt Jahr"
+            },
+            "webif_info_statistik_elektrische_energie_jahr": {
+                "name": "{prefix}elektrische Energie Jahr"
+            },
             "aussentemp": {
                 "name": "{prefix}Aussentemperatur"
             },
