@@ -702,6 +702,201 @@
       "ausg_h15": {
         "name": "{prefix}Output H1.5"
       },
+      "webif_info_heizkreis1_aussentemperatur": {
+        "name": "{prefix}Outside temperature"
+      },
+      "webif_info_heizkreis1_at_mittelwert": {
+        "name": "{prefix}Outside temperature average"
+      },
+      "webif_info_heizkreis1_at_langzeitwert": {
+        "name": "{prefix}Outside temperature long-term"
+      },
+      "webif_info_heizkreis1_raumsolltemperatur": {
+        "name": "{prefix}Room setpoint temperature"
+      },
+      "webif_info_heizkreis1_vorlauftemperatur": {
+        "name": "{prefix}Flow temperature"
+      },
+      "webif_info_waermepumpe_betrieb": {
+        "name": "{prefix}Operation"
+      },
+      "webif_info_waermepumpe_stoermeldung": {
+        "name": "{prefix}Fault message"
+      },
+      "webif_info_waermepumpe_warmwassertemperatur": {
+        "name": "{prefix}Domestic hot water temperature"
+      },
+      "webif_info_waermepumpe_leistungsanforderung": {
+        "name": "{prefix}Power demand"
+      },
+      "webif_info_waermepumpe_solltemperatur": {
+        "name": "{prefix}Setpoint temperature"
+      },
+      "webif_info_waermepumpe_anforderung": {
+        "name": "{prefix}Demand"
+      },
+      "webif_info_waermepumpe_schaltdifferenz_dynamisch": {
+        "name": "{prefix}Switching differential (dynamic)"
+      },
+      "webif_info_waermepumpe_vorlauftemperatur": {
+        "name": "{prefix}Flow temperature"
+      },
+      "webif_info_waermepumpe_ruecklauftemperatur": {
+        "name": "{prefix}Return temperature"
+      },
+      "webif_info_waermepumpe_drehzahl_pumpe_m1": {
+        "name": "{prefix}Pump speed M1"
+      },
+      "webif_info_waermepumpe_volumenstrom": {
+        "name": "{prefix}Volume flow"
+      },
+      "webif_info_waermepumpe_stellung_umschaltventil": {
+        "name": "{prefix}Diverter valve position"
+      },
+      "webif_info_waermepumpe_version_wwp_sg": {
+        "name": "{prefix}Version WWP-SG"
+      },
+      "webif_info_waermepumpe_version_wwp_ec_wbb": {
+        "name": "{prefix}Version WWP-EC WBB"
+      },
+      "webif_info_waermepumpe_soll_leistung": {
+        "name": "{prefix}Target power"
+      },
+      "webif_info_waermepumpe_ist_leistung": {
+        "name": "{prefix}Actual power"
+      },
+      "webif_info_waermepumpe_expansionsventil_ag_eintr": {
+        "name": "{prefix}Expansion valve outdoor unit inlet"
+      },
+      "webif_info_waermepumpe_luftansaugtemperatur": {
+        "name": "{prefix}Air intake temperature"
+      },
+      "webif_info_waermepumpe_waermetauscher_ag_austrit": {
+        "name": "{prefix}Heat exchanger outdoor unit outlet"
+      },
+      "webif_info_waermepumpe_verdichtersauggastemp": {
+        "name": "{prefix}Compressor suction gas temperature"
+      },
+      "webif_info_waermepumpe_evi_sauggastemperatur": {
+        "name": "{prefix}EVI suction gas temperature"
+      },
+      "webif_info_waermepumpe_kaeltemittel_ig_austritt": {
+        "name": "{prefix}Refrigerant indoor unit outlet"
+      },
+      "webif_info_waermepumpe_oelsumpftemperatur": {
+        "name": "{prefix}Oil sump temperature"
+      },
+      "webif_info_waermepumpe_druckgastemperatur": {
+        "name": "{prefix}Discharge gas temperature"
+      },
+      "webif_info_waermepumpe_niederdruck": {
+        "name": "{prefix}Low pressure"
+      },
+      "webif_info_waermepumpe_verdampfungstemperatur": {
+        "name": "{prefix}Evaporation temperature"
+      },
+      "webif_info_waermepumpe_hochdruck": {
+        "name": "{prefix}High pressure"
+      },
+      "webif_info_waermepumpe_kondensationstemperatur": {
+        "name": "{prefix}Condensation temperature"
+      },
+      "webif_info_waermepumpe_mitteldruck": {
+        "name": "{prefix}Intermediate pressure"
+      },
+      "webif_info_waermepumpe_saettigungstemperatur_evi": {
+        "name": "{prefix}Saturation temperature EVI"
+      },
+      "webif_info_waermepumpe_ueberhitzung_heizen": {
+        "name": "{prefix}Superheat (heating)"
+      },
+      "webif_info_waermepumpe_oeffnungsgrad_exv_heizen": {
+        "name": "{prefix}EXV opening (heating)"
+      },
+      "webif_info_waermepumpe_ueberhitzung_verdichter": {
+        "name": "{prefix}Superheat (compressor)"
+      },
+      "webif_info_waermepumpe_oeffnungsgrad_exv_kuehlen": {
+        "name": "{prefix}EXV opening (cooling)"
+      },
+      "webif_info_waermepumpe_ueberhitzung_evi": {
+        "name": "{prefix}Superheat EVI"
+      },
+      "webif_info_waermepumpe_oeffnungsgrad_evi": {
+        "name": "{prefix}EVI opening"
+      },
+      "webif_info_waermepumpe_betriebsstd_verdichter": {
+        "name": "{prefix}Compressor operating hours"
+      },
+      "webif_info_waermepumpe_schaltspiele_verdichter": {
+        "name": "{prefix}Compressor switching cycles"
+      },
+      "webif_info_waermepumpe_schaltspiele_abtauen": {
+        "name": "{prefix}Defrost switching cycles"
+      },
+      "webif_info_waermepumpe_verdichter": {
+        "name": "{prefix}Compressor speed"
+      },
+      "webif_info_waermepumpe_aussengeraet_variante": {
+        "name": "{prefix}Outdoor unit variant"
+      },
+      "webif_info_2wez_status": {
+        "name": "{prefix}Status"
+      },
+      "webif_info_2wez_status_e_heizung_1": {
+        "name": "{prefix}Electric heater status 1"
+      },
+      "webif_info_2wez_status_e_heizung_2": {
+        "name": "{prefix}Electric heater status 2"
+      },
+      "webif_info_2wez_betriebsstunden_e1": {
+        "name": "{prefix}Operating hours E1"
+      },
+      "webif_info_2wez_betriebsstunden_e2": {
+        "name": "{prefix}Operating hours E2"
+      },
+      "webif_info_2wez_schaltspiele_e1": {
+        "name": "{prefix}Switching cycles E1"
+      },
+      "webif_info_2wez_schaltspiele_e2": {
+        "name": "{prefix}Switching cycles E2"
+      },
+      "webif_info_statistik_th_energie_heizen_tag": {
+        "name": "{prefix}Th. energy heating (day)"
+      },
+      "webif_info_statistik_th_energie_ww_tag": {
+        "name": "{prefix}Th. energy DHW (day)"
+      },
+      "webif_info_statistik_th_energie_gesamt_tag": {
+        "name": "{prefix}Th. energy total (day)"
+      },
+      "webif_info_statistik_elektrische_energie_tag": {
+        "name": "{prefix}Electric energy (day)"
+      },
+      "webif_info_statistik_th_energie_heizen_monat": {
+        "name": "{prefix}Th. energy heating (month)"
+      },
+      "webif_info_statistik_th_energie_ww_monat": {
+        "name": "{prefix}Th. energy DHW (month)"
+      },
+      "webif_info_statistik_th_energie_gesamt_monat": {
+        "name": "{prefix}Th. energy total (month)"
+      },
+      "webif_info_statistik_elektrische_energie_monat": {
+        "name": "{prefix}Electric energy (month)"
+      },
+      "webif_info_statistik_th_energie_heizen_jahr": {
+        "name": "{prefix}Th. energy heating (year)"
+      },
+      "webif_info_statistik_th_energie_ww_jahr": {
+        "name": "{prefix}Th. energy DHW (year)"
+      },
+      "webif_info_statistik_th_energie_gesamt_jahr": {
+        "name": "{prefix}Th. energy total (year)"
+      },
+      "webif_info_statistik_elektrische_energie_jahr": {
+        "name": "{prefix}Electric energy (year)"
+      },
       "aussentemp": {
         "name": "{prefix}Outside temperature"
       },
