@@ -189,6 +189,8 @@ class MyWebIfCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         # try:
         async with asyncio.timeout(30):
             _LOGGER.debug("Trying to fetch complete mockup data")
+            result: dict[str, Any] | None = None
+
             if self.my_api is not None:
                 result = await self.my_api.update_all_mock()
                 hk = result.get("Heizkreis")
