@@ -139,6 +139,9 @@ async def build_webif_entity_list(
         Updated list of WebIF entities
 
     """
+    if coordinator.my_api is None:
+        return entries
+
     for index, item in enumerate(api_items):
         if item.type == item_type:
             if await check_available(item, config_entry=config_entry) is True:

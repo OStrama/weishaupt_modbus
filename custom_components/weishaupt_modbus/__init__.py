@@ -54,7 +54,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
     """Set up entry."""
     mbapi = ModbusAPI(config_entry=entry)
 
-    if entry.data[CONF.CB_WEBIF]:
+    if (
+        entry.data[CONF.CB_WEBIF]
+        and entry.data[CONF.PASSWORD] != ""
+        and entry.data[CONF.USERNAME] != ""
+        and entry.data[CONF.WEBIF_TOKEN] != ""
+    ):
         webapi = WebifConnection(
             ip=entry.data[CONF.HOST],
             user=entry.data[CONF.USERNAME],
