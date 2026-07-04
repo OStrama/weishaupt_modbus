@@ -27,9 +27,10 @@ try:
     _LOGGER.info(
         "Scipy available, use precise cubic spline interpolation for heating power"
     )
-except ModuleNotFoundError:
+except (ImportError, AttributeError) as err:
     _LOGGER.warning(
-        "Scipy not available, use less precise Chebyshef interpolation for heating power"
+        "Scipy not available or failed to load (%s), use less precise Chebyshev interpolation for heating power",
+        err,
     )
     SPLINE_AVAILABLE = False
 
@@ -37,8 +38,11 @@ MATPLOTLIB_AVAILABLE = True
 plt: Any = None
 try:
     import matplotlib.pyplot as plt  # type: ignore[import-not-found,import-untyped]
-except ModuleNotFoundError:
-    _LOGGER.warning("Matplotlib not available. Can't create power map image file")
+except (ImportError, AttributeError) as err:
+    _LOGGER.warning(
+        "Matplotlib not available or failed to load (%s). Can't create power map image file",
+        err,
+    )
     MATPLOTLIB_AVAILABLE = False
 
 
@@ -166,10 +170,17 @@ class PowerMap:
         self._all_t = np.linspace(-30, 40, 71)
         # cubic spline interpolation of power curves
         for idx in range(len(self._r_to_interpolate)):
-            if SPLINE_AVAILABLE is True and CubicSpline is not None:
-                f: Any = CubicSpline(
-                    self.known_x, self._interp_y[idx], bc_type="natural"
-                )
+            if SPLINE_AVAILABLE and CubicSpline is not None:
+                try:
+                    f: Any = CubicSpline(
+                        self.known_x, self._interp_y[idx], bc_type="natural"
+                    )
+                except (ImportError, AttributeError, RuntimeError) as err:
+                    _LOGGER.error(
+                        "CubicSpline calculation failed (%s), falling back to Chebyshev",
+                        err,
+                    )
+                    f = Chebyshev.fit(self.known_x, self._interp_y[idx], deg=8)
             else:
                 f = Chebyshev.fit(self.known_x, self._interp_y[idx], deg=8)
             self._max_power.append(f(self._all_t))
