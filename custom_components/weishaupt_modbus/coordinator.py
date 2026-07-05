@@ -188,11 +188,11 @@ class MyWebIfCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         """Fetch data from WebIF endpoint."""
         # try:
         async with asyncio.timeout(30):
-            _LOGGER.debug("Trying to fetch complete mockup data")
+            _LOGGER.debug("Trying to fetch complete WebIF data")
             result: dict[str, Any] | None = None
 
             if self.my_api is not None:
-                result = await self.my_api.update_all_mock()
+                result = await self.my_api.update_all()
                 hk = result.get("Heizkreis")
                 wp = result.get("Waermepumpe")
                 wez2 = result.get("2WEZ")
