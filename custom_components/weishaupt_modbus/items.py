@@ -292,7 +292,7 @@ class WebItem(ApiItem):
             FORMATS.TEMPERATURE,
             FORMATS.PERCENTAGE,
         ]:
-            return val.split(" ")[0]
+            return val.split(" ", maxsplit=1)[0]
         return val
 
 

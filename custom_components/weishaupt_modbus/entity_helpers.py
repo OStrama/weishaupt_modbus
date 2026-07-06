@@ -125,6 +125,7 @@ async def build_webif_entity_list(
 ) -> list[MyWebifSensorEntity]:
     """Build WebIF entity list.
 
+    https://github.com/MadOne/weishaupt_webif_api/pull/1
     Function builds a list of WebIF entities that can be used as parameter by async_setup_entry().
     Type of list is defined by the WebItem's type flag.
 

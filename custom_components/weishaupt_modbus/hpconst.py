@@ -5,17 +5,13 @@ from __future__ import annotations
 import copy
 from typing import Any
 
-from cronsim.explain import Hour
-
 from homeassistant.components.sensor import SensorDeviceClass, SensorStateClass
 from homeassistant.const import (
     PERCENTAGE,
     REVOLUTIONS_PER_MINUTE,
-    UnitOfConductivity,
     UnitOfEnergy,
     UnitOfPower,
     UnitOfPressure,
-    UnitOfSpeed,
     UnitOfTemperature,
     UnitOfTime,
     UnitOfVolumeFlowRate,
