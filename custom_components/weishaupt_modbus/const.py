@@ -31,6 +31,7 @@ class ConfConstants:
     PASSWORD: str = CONF_PASSWORD
     USERNAME: str = CONF_USERNAME
     WEBIF_TOKEN: str = "Web-IF-Token"
+    CB_WEBIF_MOCKUP_DATA: str = "Use-Mockup-Data"
 
 
 CONF = ConfConstants()

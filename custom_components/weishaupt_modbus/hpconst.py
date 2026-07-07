@@ -1582,7 +1582,7 @@ WEBIF_INFO_HEIZKREIS1: list[WebItem] = [
     WebItem(name="AT Mittelwert", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIH, params=PARAMS_STDTEMP, webif_group="WIH", translation_key="webif_info_heizkreis1_at_mittelwert"),
     WebItem(name="AT Langzeitwert", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIH, params=PARAMS_STDTEMP, webif_group="WIH", translation_key="webif_info_heizkreis1_at_langzeitwert"),
     WebItem(name="Raumsolltemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIH, params=PARAMS_STDTEMP, webif_group="WIH", translation_key="webif_info_heizkreis1_raumsolltemperatur"),
-    #WebItem(name="Vorlaufsolltemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIH, params=PARAMS_STDTEMP, webif_group="WIH", translation_key="webif_info_heizkreis1_vorlaufsolltemperatur"),
+    WebItem(name="Vorlaufsolltemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIH, params=PARAMS_STDTEMP, webif_group="WIH", translation_key="webif_info_heizkreis1_vorlaufsolltemperatur"),
     WebItem(name="Vorlauftemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIH, params=PARAMS_STDTEMP, webif_group="WIH", translation_key="webif_info_heizkreis1_vorlauftemperatur"),
 ]
 
@@ -1601,8 +1601,8 @@ WEBIF_INFO_WAERMEPUMPE: list[WebItem] = [
     WebItem(name="Stellung Umschaltventil", mformat=FORMATS.TEXT, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_waermepumpe_stellung_umschaltventil"),
     WebItem(name="Version WWP-SG", mformat=FORMATS.TEXT, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_waermepumpe_version_wwp_sg"),
     WebItem(name="Version WWP-EC WBB", mformat=FORMATS.TEXT, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_waermepumpe_version_wwp_ec_wbb"),
-    WebItem(name="Soll Leistung", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_POWER, webif_group="WIW", translation_key="webif_info_waermepumpe_soll_leistung"),
-    WebItem(name="Ist Leistung", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_POWER, webif_group="WIW", translation_key="webif_info_waermepumpe_ist_leistung"),
+    #WebItem(name="Soll Leistung", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_POWER, webif_group="WIW", translation_key="webif_info_waermepumpe_soll_leistung"),
+    #WebItem(name="Ist Leistung", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_POWER, webif_group="WIW", translation_key="webif_info_waermepumpe_ist_leistung"),
     WebItem(name="Expansionsventil AG Eintr", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_STDTEMP, webif_group="WIW", translation_key="webif_info_waermepumpe_expansionsventil_ag_eintr"),
     WebItem(name="Luftansaugtemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_STDTEMP, webif_group="WIW", translation_key="webif_info_waermepumpe_luftansaugtemperatur"),
     WebItem(name="Wärmetauscher AG Austrit", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIW, params=PARAMS_STDTEMP, webif_group="WIW", translation_key="webif_info_waermepumpe_waermetauscher_ag_austrit"),
@@ -1631,7 +1631,7 @@ WEBIF_INFO_WAERMEPUMPE: list[WebItem] = [
 ]
 
 WEBIF_INFO_2WEZ: list[WebItem] = [
-    WebItem(name="Status", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WI2W, webif_group="WI2W", translation_key="webif_info_2wez_status"),
+    WebItem(name="Status", mformat=FORMATS.TEXT, mtype=TYPES.SENSOR, device=DEVICES.WI2W, webif_group="WI2W", translation_key="webif_info_2wez_status"),
     WebItem(name="Status E-Heizung 1", mformat=FORMATS.TEXT, mtype=TYPES.SENSOR, device=DEVICES.WI2W, webif_group="WI2W", translation_key="webif_info_2wez_status_e_heizung_1"),
     WebItem(name="Status E-Heizung 2", mformat=FORMATS.TEXT, mtype=TYPES.SENSOR, device=DEVICES.WI2W, webif_group="WI2W", translation_key="webif_info_2wez_status_e_heizung_2"),
     WebItem(name="Betriebsstunden E1", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WI2W, params=PARAMS_HOUR, webif_group="WIH", translation_key="webif_info_2wez_betriebsstunden_e1"),

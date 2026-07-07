@@ -69,7 +69,7 @@ async def validate_input(data: dict[str, Any]) -> dict[str, Any]:
 class ConfigFlow(config_entries.ConfigFlow, domain=CONST.DOMAIN):  # pylint: disable=abstract-method
     """Class config flow."""
 
-    VERSION = 6
+    VERSION = 7
     MINOR_VERSION = 1
     # Pick one of the available connection classes in homeassistant/config_entries.py
     # This tells HA if it should be asking for updates, or it'll be notified of updates
@@ -106,6 +106,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=CONST.DOMAIN):  # pylint: dis
                 vol.Optional(schema=CONF.NAME_DEVICE_PREFIX, default=False): bool,
                 vol.Optional(schema=CONF.NAME_TOPIC_PREFIX, default=False): bool,
                 vol.Optional(schema=CONF.CB_WEBIF, default=False): bool,
+                vol.Optional(schema=CONF.CB_WEBIF_MOCKUP_DATA, default=False): bool,
                 vol.Optional(schema=CONF.USERNAME, default=""): str,
                 vol.Optional(schema=CONF.PASSWORD, default=""): str,
                 vol.Optional(schema=CONF.WEBIF_TOKEN, default=""): str,
@@ -185,6 +186,10 @@ class ConfigFlow(config_entries.ConfigFlow, domain=CONST.DOMAIN):  # pylint: dis
                 ): bool,
                 vol.Optional(
                     schema=CONF.CB_WEBIF, default=reconfigure_entry.data[CONF.CB_WEBIF]
+                ): bool,
+                vol.Optional(
+                    schema=CONF.CB_WEBIF_MOCKUP_DATA,
+                    default=reconfigure_entry.data[CONF.CB_WEBIF_MOCKUP_DATA],
                 ): bool,
                 vol.Optional(
                     schema=CONF.USERNAME, default=reconfigure_entry.data[CONF.USERNAME]

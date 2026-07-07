@@ -159,7 +159,9 @@ class MyCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         return self._modbus_api
 
 
-class MyWebIfCoordinator(DataUpdateCoordinator[dict[str, Any]]):
+class MyWebIfCoordinator(
+    DataUpdateCoordinator[dict[str, Any]],
+):
     """WebIF coordinator for Weishaupt heat pump."""
 
     def __init__(
@@ -192,7 +194,12 @@ class MyWebIfCoordinator(DataUpdateCoordinator[dict[str, Any]]):
             result: dict[str, Any] | None = None
 
             if self.my_api is not None:
-                result = await self.my_api.update_all()
+                if self.config_entry is not None:
+                    if self.config_entry.data[CONF.CB_WEBIF_MOCKUP_DATA] is True:
+                        result = await self.my_api.update_all_mock()
+                    else:
+                        result = await self.my_api.update_all()
+            if result is not None:
                 hk = result.get("Heizkreis")
                 wp = result.get("Waermepumpe")
                 wez2 = result.get("2WEZ")

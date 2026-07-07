@@ -23,6 +23,7 @@
                     "Port": "Port",
                     "Prefix": "Prefix",
                     "enable-webif": "enable experimental webif?",
+                    "Use-Mockup-Data": "Use Mockup data for developement?",
                     "Web-IF-Token": "4-Zeichen web-IF token, siehe readme"
                 }
             }

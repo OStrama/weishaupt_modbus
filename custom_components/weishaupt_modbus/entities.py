@@ -60,7 +60,7 @@ class MyEntity(Entity):
     ) -> None:
         """Initialize the entity."""
         self._config_entry = config_entry
-        self._api_item: ModbusItem | WebItem | None = api_item
+        self._api_item: ModbusItem | WebItem = api_item  # | None = api_item
 
         dev_postfix = "_" + self._config_entry.data[CONF.DEVICE_POSTFIX]
 
@@ -146,7 +146,7 @@ class MyEntity(Entity):
         if self._has_dynamic_min:
             self._dynamic_min = (
                 self._config_entry.runtime_data.coordinator.get_value_from_item(
-                    self._api_item.params.get("dynamic_min", None)
+                    self._api_item.params.get("dynamic_min")
                 )
             )
             if self._dynamic_min is not None:
@@ -155,7 +155,7 @@ class MyEntity(Entity):
         if self._has_dynamic_max:
             self._dynamic_max = (
                 self._config_entry.runtime_data.coordinator.get_value_from_item(
-                    self._api_item.params.get("dynamic_max", None)
+                    self._api_item.params.get("dynamic_max")
                 )
             )
             if self._dynamic_max is not None:
@@ -490,7 +490,8 @@ class MyWebifSensorEntity(CoordinatorEntity, SensorEntity, MyEntity):
         else:
             dev_postfix = self._config_entry.data[CONF.DEVICE_POSTFIX]
 
-        self._attr_unique_id = f"{dev_prefix}_{self._api_item.name}{dev_postfix}_webif"
+        # self._attr_unique_id = f"{dev_prefix}_{self._api_item.name}{dev_postfix}_webif"
+        self._attr_unique_id = self._api_item.translation_key
         # Use the localized name from the translation files. translation_key and
         # has_entity_name are already set by MyEntity.__init__; setting
         # _attr_name here would override the translation with the raw German

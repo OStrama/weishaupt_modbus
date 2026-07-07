@@ -21,7 +21,7 @@ class MyData:
     config_dir: str
     hass: HomeAssistant
     coordinator: MyCoordinator
-    webif_coordinator: MyWebIfCoordinator
+    webif_coordinator: MyWebIfCoordinator | None
     powermap: Any
 
 

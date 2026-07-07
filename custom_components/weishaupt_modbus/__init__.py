@@ -69,6 +69,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
             storage_path="./data",
         )
     else:
+        _LOGGER.debug("WebIF not fully configured. Skipping")
         webapi = None
 
     # Create independent copies of ModbusItems for each config entry
@@ -85,10 +86,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
         hass=hass, my_api=mbapi, api_items=itemlist, p_config_entry=entry
     )
     # await coordinator.async_config_entry_first_refresh()
-
-    webif_coordinator = MyWebIfCoordinator(
-        hass=hass, my_api=webapi, api_items=webif_itemlist, config_entry=entry
-    )
+    if webapi is not None:
+        webif_coordinator = MyWebIfCoordinator(
+            hass=hass, my_api=webapi, api_items=webif_itemlist, config_entry=entry
+        )
+    else:
+        _LOGGER.debug("webapi is none. SKip creating of webif coordinator")
+        webif_coordinator = None
 
     entry.runtime_data = MyData(
         modbus_api=mbapi,
@@ -152,14 +156,9 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: MyConfigEntry):
     """Migrate old entry."""
 
     new_data = {**config_entry.data}
-
-    if config_entry.version > 4:
-        # This means the user has downgraded from a future version
-        return True
-
-    # to ensure all update paths we have to check every version to not overwrite existing entries
-    if config_entry.version < 4:
-        _LOGGER.warning("Old Version detected")
+    _LOGGER.warning(
+        "Starting config migration process. Current version: %s", config_entry.version
+    )
 
     if config_entry.version < 2:
         _LOGGER.warning("Version <2 detected")
@@ -178,6 +177,7 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: MyConfigEntry):
         new_data[CONF.NAME_TOPIC_PREFIX] = False
 
     if config_entry.version < 5:
+        _LOGGER.warning("Version <5 detected")
         new_data[CONF.CB_WEBIF] = False
         new_data[CONF.USERNAME] = ""
         new_data[CONF.PASSWORD] = ""
@@ -185,11 +185,14 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: MyConfigEntry):
         hass.config_entries.async_update_entry(
             config_entry, data=new_data, minor_version=1, version=5
         )
-        _LOGGER.warning("Config entries updated to version 5")
+    if config_entry.version < 7:
+        _LOGGER.warning("Version <7 detected")
+        new_data[CONF.CB_WEBIF_MOCKUP_DATA] = False
 
     hass.config_entries.async_update_entry(
-        config_entry, data=new_data, minor_version=1, version=6
+        config_entry, data=new_data, minor_version=1, version=7
     )
+    _LOGGER.warning("Config entries updated to version 7")
     return True
 
 

@@ -85,7 +85,7 @@ class ApiItem:
     _state: Any = None
     _is_invalid: bool = False
     _translation_key: str = ""
-    _params: dict[Any, Any] | None = None
+    _params: dict[str, str] | None = None
     _divider: int = 1
 
     def __init__(
@@ -96,7 +96,7 @@ class ApiItem:
         device: str,
         translation_key: str | None = None,
         resultlist: Any = None,
-        params: dict[Any, Any] | None = None,
+        params: dict[str, str] | None = None,
     ) -> None:
         """Initialise ModbusItem."""
         self._name: str = name
@@ -250,7 +250,7 @@ class WebItem(ApiItem):
         webif_group: str,
         translation_key: str | None = None,
         resultlist: Any = None,
-        params: dict[Any, Any] | None = None,
+        params: dict[str, str] | None = None,
     ) -> None:
         """WebifItem is used to generate sensors for an Web interface value.
 
@@ -310,7 +310,7 @@ class ModbusItem(ApiItem):
         device: str,
         translation_key: str,
         resultlist: Any = None,
-        params: dict[Any, Any] | None = None,
+        params: dict[str, str] | None = None,
     ) -> None:
         """ModbusItem is used to generate entities.
 
