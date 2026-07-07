@@ -201,11 +201,14 @@ class MyWebIfCoordinator(
                         result = await self.my_api.update_all()
             if result is not None:
                 hk = result.get("Heizkreis")
+                hk1 = result.get("Heizkreis1")
                 wp = result.get("Waermepumpe")
                 wez2 = result.get("2WEZ")
                 wes = result.get("Statistik")
                 if hk is not None:
                     result = result | hk
+                if hk1 is not None:
+                    result = result | hk1
                 if wp is not None:
                     result = result | wp
                 if wez2 is not None:
