@@ -483,19 +483,8 @@ class MyWebifSensorEntity(CoordinatorEntity, SensorEntity, MyEntity):
         self._config_entry = config_entry
         self._api_item = api_item
 
-        # Set basic attributes without calling MyEntity.__init__
-        dev_prefix = self._config_entry.data[CONF.PREFIX]
-        if self._config_entry.data[CONF.DEVICE_POSTFIX] == "_":
-            dev_postfix = ""
-        else:
-            dev_postfix = self._config_entry.data[CONF.DEVICE_POSTFIX]
-
-        # self._attr_unique_id = f"{dev_prefix}_{self._api_item.name}{dev_postfix}_webif"
+        # Set unique id with translation key as it is a good choice for the webif items
         self._attr_unique_id = self._api_item.translation_key
-        # Use the localized name from the translation files. translation_key and
-        # has_entity_name are already set by MyEntity.__init__; setting
-        # _attr_name here would override the translation with the raw German
-        # label, leaving these sensors German-only.
         self._attr_translation_key = self._api_item.translation_key
         self._attr_has_entity_name = True
 
