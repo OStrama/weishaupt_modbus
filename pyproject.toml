@@ -592,3 +592,11 @@ python_version = "3.13"
 exclude = [
   "custom_components/weishaupt_modbus/test_modbus.py",
 ]
+# Tell mypy where the Home Assistant source code lives persistently
+mypy_path = "/usr/src/homeassistant"
+
+# Fix the duplicate namespace issues for custom components
+explicit_package_bases = true
+
+# Prevent mypy from failing on third-party modbus or integration libraries
+ignore_missing_imports = true
