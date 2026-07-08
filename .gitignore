@@ -15,6 +15,7 @@ coverage.xml
 .vscode
 .vs
 .venv
+.cache
 
 # Home Assistant configuration
 config/*
