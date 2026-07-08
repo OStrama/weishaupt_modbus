@@ -144,19 +144,21 @@ class MyEntity(Entity):
                 return
 
         if self._has_dynamic_min:
+            # Look up the key, and fall back to an empty string if it's missing or None
+            min_key = self._api_item.params.get("dynamic_min") or ""
+
             self._dynamic_min = (
-                self._config_entry.runtime_data.coordinator.get_value_from_item(
-                    self._api_item.params.get("dynamic_min")
-                )
+                self._config_entry.runtime_data.coordinator.get_value_from_item(min_key)
             )
             if self._dynamic_min is not None:
                 self._attr_native_min_value = self._dynamic_min / self._divider
 
         if self._has_dynamic_max:
+            # Look up the key, and fall back to an empty string if it's missing or None
+            max_key = self._api_item.params.get("dynamic_max") or ""
+
             self._dynamic_max = (
-                self._config_entry.runtime_data.coordinator.get_value_from_item(
-                    self._api_item.params.get("dynamic_max")
-                )
+                self._config_entry.runtime_data.coordinator.get_value_from_item(max_key)
             )
             if self._dynamic_max is not None:
                 self._attr_native_max_value = self._dynamic_max / self._divider
@@ -518,7 +520,7 @@ class MyWebifSensorEntity(CoordinatorEntity, SensorEntity, MyEntity):
                 if self._api_item.format in (FORMATS.TEMPERATURE, FORMATS.PERCENTAGE):
                     try:
                         value = float(raw)
-                    except (TypeError, ValueError):
+                    except TypeError, ValueError:
                         value = None
                 self._attr_native_value = value
                 self.async_write_ha_state()

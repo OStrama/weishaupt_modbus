@@ -1,7 +1,5 @@
 """Heat pump constants and definitions."""
 
-from __future__ import annotations
-
 import copy
 from typing import Any
 
@@ -1198,6 +1196,14 @@ PARAMS_ENERGY: dict[str, Any] = {
     "stateclass": SensorStateClass.TOTAL_INCREASING,
 }
 
+PARAMS_ENERGY_WEBIF: dict[str, Any] = {
+    "min": 0,
+    "max": 999999999999,
+    "deviceclass": SensorDeviceClass.ENERGY,
+    "precision": 3,
+    "unit": UnitOfEnergy.KILO_WATT_HOUR,
+    "stateclass": SensorStateClass.TOTAL_INCREASING,
+}
 
 PARAMS_POWER: dict = {
     "min": 0,
@@ -1641,18 +1647,18 @@ WEBIF_INFO_2WEZ: list[WebItem] = [
 ]
 
 WEBIF_INFO_STATISTIK: list[WebItem] = [
-    WebItem(name="th. Energie Heizen Tag", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIS, params=PARAMS_ENERGY, webif_group="WIS", translation_key="webif_info_statistik_th_energie_heizen_tag"),
-    WebItem(name="th. Energie WW Tag", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIS, params=PARAMS_ENERGY, webif_group="WIS", translation_key="webif_info_statistik_th_energie_ww_tag"),
-    WebItem(name="th. Energie gesamt Tag", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIS, params=PARAMS_ENERGY, webif_group="WIS", translation_key="webif_info_statistik_th_energie_gesamt_tag"),
-    WebItem(name="elektrische Energie Tag", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIS, params=PARAMS_ENERGY, webif_group="WIS", translation_key="webif_info_statistik_elektrische_energie_tag"),
-    WebItem(name="th. Energie Heizen Monat", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIS, params=PARAMS_ENERGY, webif_group="WIS", translation_key="webif_info_statistik_th_energie_heizen_monat"),
-    WebItem(name="th. Energie WW Monat", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIS, params=PARAMS_ENERGY, webif_group="WIS", translation_key="webif_info_statistik_th_energie_ww_monat"),
-    WebItem(name="th. Energie gesamt Monat", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIS, params=PARAMS_ENERGY, webif_group="WIS", translation_key="webif_info_statistik_th_energie_gesamt_monat"),
-    WebItem(name="elektrische Energie Monat", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIS, params=PARAMS_ENERGY, webif_group="WIS", translation_key="webif_info_statistik_elektrische_energie_monat"),
-    WebItem(name="th. Energie Heizen Jahr", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIS, params=PARAMS_ENERGY, webif_group="WIS", translation_key="webif_info_statistik_th_energie_heizen_jahr"),
-    WebItem(name="th. Energie WW Jahr", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIS, params=PARAMS_ENERGY, webif_group="WIS", translation_key="webif_info_statistik_th_energie_ww_jahr"),
-    WebItem(name="th. Energie gesamt Jahr", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIS, params=PARAMS_ENERGY, webif_group="WIS", translation_key="webif_info_statistik_th_energie_gesamt_jahr"),
-    WebItem(name="elektrische Energie Jahr", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIS, params=PARAMS_ENERGY, webif_group="WIS", translation_key="webif_info_statistik_elektrische_energie_jahr"),
+    WebItem(name="th. Energie Heizen Tag", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIS, params=PARAMS_ENERGY_WEBIF, webif_group="WIS", translation_key="webif_info_statistik_th_energie_heizen_tag"),
+    WebItem(name="th. Energie WW Tag", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIS, params=PARAMS_ENERGY_WEBIF, webif_group="WIS", translation_key="webif_info_statistik_th_energie_ww_tag"),
+    WebItem(name="th. Energie gesamt Tag", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIS, params=PARAMS_ENERGY_WEBIF, webif_group="WIS", translation_key="webif_info_statistik_th_energie_gesamt_tag"),
+    WebItem(name="elektrische Energie Tag", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIS, params=PARAMS_ENERGY_WEBIF, webif_group="WIS", translation_key="webif_info_statistik_elektrische_energie_tag"),
+    WebItem(name="th. Energie Heizen Monat", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIS, params=PARAMS_ENERGY_WEBIF, webif_group="WIS", translation_key="webif_info_statistik_th_energie_heizen_monat"),
+    WebItem(name="th. Energie WW Monat", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIS, params=PARAMS_ENERGY_WEBIF, webif_group="WIS", translation_key="webif_info_statistik_th_energie_ww_monat"),
+    WebItem(name="th. Energie gesamt Monat", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIS, params=PARAMS_ENERGY_WEBIF, webif_group="WIS", translation_key="webif_info_statistik_th_energie_gesamt_monat"),
+    WebItem(name="elektrische Energie Monat", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIS, params=PARAMS_ENERGY_WEBIF, webif_group="WIS", translation_key="webif_info_statistik_elektrische_energie_monat"),
+    WebItem(name="th. Energie Heizen Jahr", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIS, params=PARAMS_ENERGY_WEBIF, webif_group="WIS", translation_key="webif_info_statistik_th_energie_heizen_jahr"),
+    WebItem(name="th. Energie WW Jahr", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIS, params=PARAMS_ENERGY_WEBIF, webif_group="WIS", translation_key="webif_info_statistik_th_energie_ww_jahr"),
+    WebItem(name="th. Energie gesamt Jahr", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIS, params=PARAMS_ENERGY_WEBIF, webif_group="WIS", translation_key="webif_info_statistik_th_energie_gesamt_jahr"),
+    WebItem(name="elektrische Energie Jahr", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.WIS, params=PARAMS_ENERGY_WEBIF, webif_group="WIS", translation_key="webif_info_statistik_elektrische_energie_jahr"),
 ]
 
 DEVICELISTS: list = [

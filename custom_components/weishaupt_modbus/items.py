@@ -236,7 +236,7 @@ class ApiItem:
 
 
 class WebItem(ApiItem):
-    """Represents an ApiItem.
+    """Represents an WebItem.
 
     Used for generating entities.
     """

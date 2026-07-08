@@ -1,15 +1,14 @@
 """Heat pump characteristic curves (Kennfeld)."""
 
-from __future__ import annotations
-
+import importlib.util
 import json
 import logging
 from pathlib import Path
 from typing import Any
 
 import aiofiles  # type: ignore[import-untyped]
-import numpy as np
-from numpy.polynomial import Chebyshev
+import numpy as np  # type: ignore  # noqa: PGH003
+from numpy.polynomial import Chebyshev  # type: ignore  # noqa: PGH003
 
 from homeassistant.core import HomeAssistant
 
@@ -34,14 +33,13 @@ except (ImportError, AttributeError) as err:
     )
     SPLINE_AVAILABLE = False
 
-MATPLOTLIB_AVAILABLE = True
-plt: Any = None
-try:
+# Check if matplotlib is installed without actually loading the heavy library
+MATPLOTLIB_AVAILABLE = importlib.util.find_spec("matplotlib") is not None
+if MATPLOTLIB_AVAILABLE:
     import matplotlib.pyplot as plt  # type: ignore[import-not-found,import-untyped]
-except (ImportError, AttributeError) as err:
+else:
     _LOGGER.warning(
-        "Matplotlib not available or failed to load (%s). Can't create power map image file",
-        err,
+        "Matplotlib not available. Can't create power map image file",
     )
     MATPLOTLIB_AVAILABLE = False
 
