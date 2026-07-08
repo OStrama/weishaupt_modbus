@@ -84,8 +84,10 @@ async def build_entity_list(
         if item.type not in item_types:
             continue
 
-        if await check_available(item, config_entry=config_entry) is not True:
-            continue
+        # Reassure mypy that item is exactly one of the two expected types
+        if isinstance(item, (ModbusItem, WebItem)):
+            if await check_available(item, config_entry=config_entry) is not True:
+                continue
 
         if isinstance(item, ModbusItem):
             match item.type:
