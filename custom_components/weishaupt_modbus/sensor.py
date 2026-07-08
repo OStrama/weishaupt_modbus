@@ -29,21 +29,23 @@ async def async_setup_entry(
     coordinator = config_entry.runtime_data.coordinator
     webif_coordinator = config_entry.runtime_data.webif_coordinator
 
-    entries = await build_entity_list(
-        entries=entries,
-        config_entry=config_entry,
-        api_items=coordinator.modbus_items,
-        item_types=(TYPES.NUMBER_RO, TYPES.SENSOR_CALC, TYPES.SENSOR),
-        coordinator=coordinator,
-    )
+    if coordinator is not None:
+        entries = await build_entity_list(
+            entries=entries,
+            config_entry=config_entry,
+            api_items=coordinator.modbus_items,
+            item_types=(TYPES.NUMBER_RO, TYPES.SENSOR_CALC, TYPES.SENSOR),
+            coordinator=coordinator,
+        )
 
-    await build_webif_entity_list(
-        entries=entries,
-        config_entry=config_entry,
-        api_items=webif_coordinator.api_items,
-        item_type=(TYPES.SENSOR),
-        coordinator=webif_coordinator,
-    )
+    if webif_coordinator is not None:
+        await build_webif_entity_list(
+            entries=entries,
+            config_entry=config_entry,
+            api_items=webif_coordinator.api_items,
+            item_type=(TYPES.SENSOR),
+            coordinator=webif_coordinator,
+        )
 
     # entries.extend(webifentries)
 

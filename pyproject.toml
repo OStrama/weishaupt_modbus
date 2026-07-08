@@ -22,7 +22,7 @@ requires-python = ">=3.13.2"
 dependencies = [
   "pymodbus==3.8.3",
   "voluptuous==0.15.2",
-  "beautifulsoup4==4.13.4"
+  "beautifulsoup4==4.13.4",
   "weishaupt-webif-api>=0.1.3"
 ]
 

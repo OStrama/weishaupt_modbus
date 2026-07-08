@@ -117,7 +117,7 @@ async def build_entity_list(
 
 
 async def build_webif_entity_list(
-    entries: list[MyWebifSensorEntity],
+    entries: list[EntityType],
     config_entry: MyConfigEntry,
     api_items: list[WebItem],
     item_type: str,
