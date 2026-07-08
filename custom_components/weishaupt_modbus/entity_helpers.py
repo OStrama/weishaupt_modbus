@@ -1,7 +1,5 @@
 """Build entity List and Update Coordinator."""
 
-from __future__ import annotations
-
 import logging
 
 from .configentry import MyConfigEntry
@@ -122,7 +120,7 @@ async def build_webif_entity_list(
     api_items: list[WebItem],
     item_type: str,
     coordinator: MyWebIfCoordinator,
-) -> list[MyWebifSensorEntity]:
+) -> list[EntityType]:
     """Build WebIF entity list.
 
     https://github.com/MadOne/weishaupt_webif_api/pull/1
