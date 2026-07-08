@@ -588,15 +588,36 @@ max-complexity = 25
 property-decorators = ["propcache.api.cached_property"]
 
 [tool.mypy]
-python_version = "3.13"
+python_version = "3.14"
 exclude = [
   "custom_components/weishaupt_modbus/test_modbus.py",
 ]
-# Tell mypy where the Home Assistant source code lives persistently
-mypy_path = "/usr/src/homeassistant"
 
-# Fix the duplicate namespace issues for custom components
+# Path tracking rules
+mypy_path = "/usr/src/homeassistant"
 explicit_package_bases = true
 
-# Prevent mypy from failing on third-party modbus or integration libraries
+# --- OFFICIAL HOME ASSISTANT CI STRICT CORE FLAGS ---
+show_error_codes = true
+follow_imports = "silent"
 ignore_missing_imports = true
+strict_equality = true
+warn_incomplete_stub = true
+warn_redundant_casts = true
+warn_unused_configs = true
+warn_unused_ignores = true
+enable_error_code = ["ignore-without-code"]
+check_untyped_defs = true
+disallow_incomplete_defs = true
+disallow_subclassing_any = true
+disallow_untyped_calls = true
+disallow_untyped_decorators = true
+disallow_untyped_defs = true
+no_implicit_optional = true
+warn_return_any = true
+warn_unreachable = true
+
+# Silence Home Assistant core noise, keep context intact
+[[tool.mypy.overrides]]
+module = "homeassistant.*"
+ignore_errors = true
