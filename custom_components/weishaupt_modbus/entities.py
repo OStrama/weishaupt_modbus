@@ -520,7 +520,7 @@ class MyWebifSensorEntity(CoordinatorEntity, SensorEntity, MyEntity):
                 if self._api_item.format in (FORMATS.TEMPERATURE, FORMATS.PERCENTAGE):
                     try:
                         value = float(raw)
-                    except TypeError, ValueError:
+                    except (TypeError, ValueError) as _err:
                         value = None
                 self._attr_native_value = value
                 self.async_write_ha_state()
