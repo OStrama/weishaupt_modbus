@@ -1212,6 +1212,10 @@ PARAMS_POWER: dict = {
     "precision": 0,
     "unit": UnitOfPower.WATT,
     "stateclass": SensorStateClass.MEASUREMENT,
+    # The web interface reports a switched-off pump as a localized text ("Aus",
+    # "Uit", "Off", ...) instead of a number. For a power reading that means 0 W,
+    # so fall back to 0 (language-independent) instead of "unknown".
+    "non_numeric_value": 0,
 }
 
 PARAMS_PRESSURE: dict = {
