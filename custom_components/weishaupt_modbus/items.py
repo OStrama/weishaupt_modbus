@@ -84,6 +84,8 @@ class ApiItem:
     _device: str = DEVICES.UK
     _state: Any = None
     _is_invalid: bool = False
+    _invalid_retry_counter: int = 0
+    _invalid_retry_skips: int = 0
     _translation_key: str = ""
     _params: dict[str, str] | None = None
     _divider: int = 1
@@ -106,6 +108,8 @@ class ApiItem:
         self._resultlist = resultlist
         self._state = None
         self._is_invalid = False
+        self._invalid_retry_counter = 0
+        self._invalid_retry_skips = 0
         self._translation_key = translation_key or ""
         self._params = params
         self._divider = 1
@@ -136,6 +140,24 @@ class ApiItem:
     @is_invalid.setter
     def is_invalid(self, val: bool) -> None:
         self._is_invalid = val
+
+    @property
+    def invalid_retry_counter(self) -> int:
+        """Return the number of polls skipped since the last retry of an invalid item."""
+        return self._invalid_retry_counter
+
+    @invalid_retry_counter.setter
+    def invalid_retry_counter(self, val: int) -> None:
+        self._invalid_retry_counter = val
+
+    @property
+    def invalid_retry_skips(self) -> int:
+        """Return the current retry backoff (polls to skip before re-reading an invalid item)."""
+        return self._invalid_retry_skips
+
+    @invalid_retry_skips.setter
+    def invalid_retry_skips(self, val: int) -> None:
+        self._invalid_retry_skips = val
 
     @property
     def state(self) -> Any:

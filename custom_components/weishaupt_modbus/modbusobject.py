@@ -25,6 +25,14 @@ BACKOFF_BASE_SECONDS = 5 * 60  # 5 minutes
 BACKOFF_MAX_SECONDS = 60 * 60  # 60 minutes
 BACKOFF_THRESHOLD_FAILURES = 3
 
+# Retry backoff for registers that read invalid (no sensor 0x8000, 0xFFFF,
+# Modbus exception 2). A latched-invalid item is re-read after this many skipped
+# polls, doubling every time it is still invalid, capped at the maximum. At
+# SCAN_INTERVAL = 30 s this is a first retry after ~5 min, backing off to at most
+# ~1 h for a permanently absent register (same idea as the reconnect backoff).
+INVALID_RETRY_BASE_SKIPS = 10
+INVALID_RETRY_MAX_SKIPS = 120
+
 
 class ModbusAPI:
     """ModbusAPI class provides a connection to the modbus, which is used by the ModbusItems."""
@@ -358,34 +366,65 @@ class ModbusObject:
                 self._modbus_item.translation_key,
             )
             return None
-        if not self._modbus_item.is_invalid:
-            try:
-                match self._modbus_item.type:
-                    case TYPES.SENSOR | TYPES.SENSOR_CALC:
-                        # Sensor entities are read-only
-                        mbr = await self._modbus_client.read_input_registers(
-                            self._modbus_item.address, device_id=1
-                        )
-                        return self.validate_modbus_answer(mbr)
-                    case TYPES.SELECT | TYPES.NUMBER | TYPES.NUMBER_RO:
-                        mbr = await self._modbus_client.read_holding_registers(
-                            self._modbus_item.address, device_id=1
-                        )
-                        return self.validate_modbus_answer(mbr)
-                    case _:
-                        _LOGGER.warning(
-                            "Unknown Sensor type: %s in %s",
-                            str(self._modbus_item.type),
-                            str(self._modbus_item.name),
-                        )
-                        return None
-            except ModbusException as exc:
-                _LOGGER.warning(
-                    "ModbusException: Reading %s in item: %s failed",
-                    str(exc),
-                    str(self._modbus_item.name),
+        item = self._modbus_item
+        # A register that read invalid (no sensor 0x8000, 0xFFFF, exception 2) is
+        # not skipped forever. It is retried with exponential backoff so a
+        # transient invalid recovers on its own, while a permanently absent
+        # register trends towards zero bus load instead of freezing until an HA
+        # restart. is_invalid is re-evaluated from every response below.
+        backing_off = item.is_invalid
+        if backing_off:
+            if item.invalid_retry_counter < item.invalid_retry_skips:
+                item.invalid_retry_counter += 1
+                return None
+            # backoff window elapsed: attempt a single recheck this cycle
+            item.invalid_retry_counter = 0
+
+        result: int | None = None
+        try:
+            match item.type:
+                case TYPES.SENSOR | TYPES.SENSOR_CALC:
+                    # Sensor entities are read-only
+                    mbr = await self._modbus_client.read_input_registers(
+                        item.address, device_id=1
+                    )
+                    result = self.validate_modbus_answer(mbr)
+                case TYPES.SELECT | TYPES.NUMBER | TYPES.NUMBER_RO:
+                    mbr = await self._modbus_client.read_holding_registers(
+                        item.address, device_id=1
+                    )
+                    result = self.validate_modbus_answer(mbr)
+                case _:
+                    _LOGGER.warning(
+                        "Unknown Sensor type: %s in %s",
+                        str(item.type),
+                        str(item.name),
+                    )
+                    return None
+        except ModbusException as exc:
+            _LOGGER.warning(
+                "ModbusException: Reading %s in item: %s failed",
+                str(exc),
+                str(item.name),
+            )
+            return None
+
+        # Re-arm the retry backoff from the freshly evaluated validity.
+        if item.is_invalid:
+            if backing_off:
+                # still invalid after a recheck -> widen (10, 20, 40 ... capped)
+                item.invalid_retry_skips = min(
+                    item.invalid_retry_skips * 2, INVALID_RETRY_MAX_SKIPS
                 )
-        return None
+            else:
+                # just became invalid -> start backing off at the base interval
+                item.invalid_retry_skips = INVALID_RETRY_BASE_SKIPS
+        else:
+            # valid read -> resume normal every-cycle polling
+            item.invalid_retry_counter = 0
+            item.invalid_retry_skips = INVALID_RETRY_BASE_SKIPS
+
+        return result
 
     async def set_value(self, value: int) -> None:
         """Set the value of the modbus register, does nothing when not R/W.

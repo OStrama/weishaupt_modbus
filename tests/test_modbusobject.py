@@ -11,6 +11,8 @@ from custom_components.weishaupt_modbus.modbusobject import (
     BACKOFF_BASE_SECONDS,
     BACKOFF_MAX_SECONDS,
     BACKOFF_THRESHOLD_FAILURES,
+    INVALID_RETRY_BASE_SKIPS,
+    INVALID_RETRY_MAX_SKIPS,
     ModbusAPI,
     ModbusObject,
 )
@@ -44,6 +46,10 @@ def mock_modbus_item():
     item.format = FORMATS.TEMPERATURE
     item.type = TYPES.SENSOR
     item.is_invalid = False
+    # MagicMock(spec=...) would otherwise return truthy mocks for these, which
+    # would corrupt the retry-backoff arithmetic in get_value(); set real ints.
+    item.invalid_retry_counter = 0
+    item.invalid_retry_skips = 0
     return item
 
 
@@ -264,6 +270,110 @@ class TestModbusObject:
         assert result == 100
 
     @pytest.mark.asyncio
+    async def test_get_value_recovers_after_invalid(self, modbus_api, mock_modbus_item):
+        """A previously invalid item must be re-read once its backoff elapses and recover.
+
+        Regression test for the freeze bug: is_invalid must not skip the read
+        forever. An item that read invalid once (no sensor, 0xFFFF, exception 2)
+        would otherwise stay frozen until Home Assistant is restarted.
+        """
+        obj = ModbusObject(modbus_api, mock_modbus_item)
+        obj._modbus_client.connected = True
+        mock_modbus_item.is_invalid = True  # it read e.g. "no sensor" earlier
+        mock_modbus_item.invalid_retry_counter = 10  # backoff window elapsed
+        mock_modbus_item.invalid_retry_skips = 10
+
+        mock_response = MagicMock()
+        mock_response.isError.return_value = False
+        mock_response.registers = [250]  # 25.0 °C, valid again
+        obj._modbus_client.read_input_registers = AsyncMock(return_value=mock_response)
+
+        result = await obj.get_value()
+
+        assert result == 250
+        assert mock_modbus_item.is_invalid is False
+        obj._modbus_client.read_input_registers.assert_awaited_once()
+        # backoff reset to base after a valid read
+        assert mock_modbus_item.invalid_retry_counter == 0
+        assert mock_modbus_item.invalid_retry_skips == INVALID_RETRY_BASE_SKIPS
+
+    @pytest.mark.asyncio
+    async def test_get_value_skips_while_backing_off(
+        self, modbus_api, mock_modbus_item
+    ):
+        """Inside the backoff window an invalid item is not read from the bus."""
+        obj = ModbusObject(modbus_api, mock_modbus_item)
+        obj._modbus_client.connected = True
+        mock_modbus_item.is_invalid = True
+        mock_modbus_item.invalid_retry_counter = 3
+        mock_modbus_item.invalid_retry_skips = 10
+        obj._modbus_client.read_input_registers = AsyncMock()
+
+        result = await obj.get_value()
+
+        assert result is None
+        obj._modbus_client.read_input_registers.assert_not_awaited()
+        assert mock_modbus_item.invalid_retry_counter == 4  # advanced towards the retry
+
+    @pytest.mark.asyncio
+    async def test_get_value_backoff_widens_when_still_invalid(
+        self, modbus_api, mock_modbus_item
+    ):
+        """A recheck that is still invalid doubles the skip interval."""
+        obj = ModbusObject(modbus_api, mock_modbus_item)
+        obj._modbus_client.connected = True
+        mock_modbus_item.is_invalid = True
+        mock_modbus_item.invalid_retry_counter = 10  # due for a recheck
+        mock_modbus_item.invalid_retry_skips = 10
+
+        mock_response = MagicMock()
+        mock_response.isError.return_value = False
+        mock_response.registers = [32768]  # 0x8000 "no sensor" -> still invalid
+        obj._modbus_client.read_input_registers = AsyncMock(return_value=mock_response)
+
+        result = await obj.get_value()
+
+        assert result is None
+        assert mock_modbus_item.is_invalid is True
+        obj._modbus_client.read_input_registers.assert_awaited_once()
+        assert mock_modbus_item.invalid_retry_skips == 20  # doubled
+        assert mock_modbus_item.invalid_retry_counter == 0
+
+    @pytest.mark.asyncio
+    async def test_get_value_backoff_capped(self, modbus_api, mock_modbus_item):
+        """The skip interval never grows past INVALID_RETRY_MAX_SKIPS."""
+        obj = ModbusObject(modbus_api, mock_modbus_item)
+        obj._modbus_client.connected = True
+        mock_modbus_item.is_invalid = True
+        mock_modbus_item.invalid_retry_counter = INVALID_RETRY_MAX_SKIPS
+        mock_modbus_item.invalid_retry_skips = INVALID_RETRY_MAX_SKIPS
+
+        mock_response = MagicMock()
+        mock_response.isError.return_value = False
+        mock_response.registers = [32768]  # still invalid
+        obj._modbus_client.read_input_registers = AsyncMock(return_value=mock_response)
+
+        await obj.get_value()
+
+        assert mock_modbus_item.invalid_retry_skips == INVALID_RETRY_MAX_SKIPS
+
+    @pytest.mark.asyncio
+    async def test_get_value_healthy_never_skips(self, modbus_api, mock_modbus_item):
+        """A valid item is always read and never enters the backoff path."""
+        obj = ModbusObject(modbus_api, mock_modbus_item)
+        obj._modbus_client.connected = True
+        mock_modbus_item.is_invalid = False
+
+        mock_response = MagicMock()
+        mock_response.isError.return_value = False
+        mock_response.registers = [250]
+        obj._modbus_client.read_input_registers = AsyncMock(return_value=mock_response)
+
+        assert await obj.get_value() == 250
+        assert await obj.get_value() == 250
+        assert obj._modbus_client.read_input_registers.await_count == 2
+
+    @pytest.mark.asyncio
     async def test_set_value_success(self, modbus_api, mock_modbus_item):
         """Test setting value successfully."""
         mock_modbus_item.type = TYPES.NUMBER
@@ -330,3 +440,9 @@ class TestConstants:
         assert BACKOFF_BASE_SECONDS == 300  # 5 minutes
         assert BACKOFF_MAX_SECONDS == 3600  # 60 minutes
         assert BACKOFF_THRESHOLD_FAILURES == 3
+
+    def test_invalid_retry_constants(self):
+        """Test invalid-retry backoff constants are sane."""
+        assert INVALID_RETRY_BASE_SKIPS == 10
+        assert INVALID_RETRY_MAX_SKIPS == 120
+        assert INVALID_RETRY_MAX_SKIPS > INVALID_RETRY_BASE_SKIPS
