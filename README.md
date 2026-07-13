@@ -4,6 +4,8 @@ This integration lets you monitor and control your weishaupt heatpump through mo
 This is how it might look:
 ![image](https://github.com/user-attachments/assets/00e7b8fa-1779-428d-9361-7c66e228c2c6)
 
+If you have the weishaupt modbus module seperately this intgegration will not work. Maybe [this](https://github.com/BorgNumberOne/Weishaupt_CanApiJson/) is something for you?
+
 ## Installation
 
 [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=OStrama&repository=weishaupt_modbus&category=Integration)
