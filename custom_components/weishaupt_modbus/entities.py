@@ -492,6 +492,8 @@ class MyWebifSensorEntity(CoordinatorEntity, SensorEntity, MyEntity):
 
         if self._api_item.format == FORMATS.TEXT:
             self._attr_suggested_display_precision = None
+            self._attr_device_class = None
+            self._attr_state_class = None
         # WebItem.get_value() strips the unit text ("26.0 °C" -> "26.0"), so set
         # unit + device class explicitly for the well-known scalar formats. Items
         # that carry params get their device_class from MyEntity.__init__ as well.
@@ -522,8 +524,8 @@ class MyWebifSensorEntity(CoordinatorEntity, SensorEntity, MyEntity):
                 # 0 for power sensors that report "off" as text in various languages).
                 value: float | str | None = raw
                 if (
-                    self._attr_device_class is not None
-                    or self._attr_state_class is not None
+                    getattr(self, "_attr_device_class", None) is not None
+                    or getattr(self, "_attr_state_class", None) is not None
                 ):
                     try:
                         value = None if raw is None else float(raw)
