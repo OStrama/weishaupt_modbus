@@ -142,7 +142,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=CONST.DOMAIN):  # pylint: dis
         )
 
         if user_input:
-            return self.async_update_reload_and_abort(
+            return self.async_update_and_abort(
                 entry=reconfigure_entry, data_updates=user_input
             )
 
