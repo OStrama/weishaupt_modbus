@@ -152,7 +152,7 @@ async def update_listener(hass: HomeAssistant, entry: ConfigEntry) -> None:
     )  # list of entry_ids created for file
 
 
-async def async_migrate_entry(hass: HomeAssistant, config_entry: MyConfigEntry):
+async def async_migrate_entry(hass: HomeAssistant, config_entry: MyConfigEntry) -> bool:
     """Migrate old entry."""
 
     new_data = {**config_entry.data}

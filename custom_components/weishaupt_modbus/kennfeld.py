@@ -6,9 +6,9 @@ import logging
 from pathlib import Path
 from typing import Any
 
-import aiofiles  # type: ignore[import-untyped]
-import numpy as np  # type: ignore  # noqa: PGH003
-from numpy.polynomial import Chebyshev  # type: ignore  # noqa: PGH003
+import aiofiles
+import numpy as np
+from numpy.polynomial import Chebyshev
 
 from homeassistant.core import HomeAssistant
 
@@ -20,8 +20,8 @@ _LOGGER = logging.getLogger(__name__)
 SPLINE_AVAILABLE = True
 CubicSpline: Any = None
 try:
-    import scipy  # type: ignore[import-untyped] # noqa: F401 pylint: disable=unused-import
-    from scipy.interpolate import CubicSpline  # type: ignore[import-untyped]
+    import scipy  # noqa: F401
+    from scipy.interpolate import CubicSpline
 
     _LOGGER.info(
         "Scipy available, use precise cubic spline interpolation for heating power"

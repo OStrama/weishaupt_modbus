@@ -13,7 +13,7 @@ from .const import CONF, CONST
 from .kennfeld import get_filepath
 
 
-async def build_kennfeld_list(hass: HomeAssistant):
+async def build_kennfeld_list(hass: HomeAssistant) -> list[str]:
     """Browse integration directory for heat pump operation map ("kennfeld") files."""
     kennfelder = []
     filelist = []
@@ -77,7 +77,9 @@ class ConfigFlow(config_entries.ConfigFlow, domain=CONST.DOMAIN):  # pylint: dis
     # changes.
     CONNECTION_CLASS = config_entries.CONN_CLASS_LOCAL_PUSH
 
-    async def async_step_user(self, user_input=None) -> config_entries.ConfigFlowResult:
+    async def async_step_user(
+        self, user_input: dict[str, Any] | None = None
+    ) -> config_entries.ConfigFlowResult:
         """Step for setup process."""
         # This goes through the steps to take the user through the setup process.
         # Using this it is possible to update the UI and prompt for additional

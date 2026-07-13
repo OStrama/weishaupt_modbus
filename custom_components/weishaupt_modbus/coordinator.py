@@ -6,11 +6,11 @@ import logging
 from typing import Any
 
 from pymodbus import ModbusException
+from weishaupt_webif_api import WebifConnection
 
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
-from weishaupt_webif_api import WebifConnection
 
 from .configentry import MyConfigEntry
 from .const import CONF, CONST, TYPES, DeviceConstants

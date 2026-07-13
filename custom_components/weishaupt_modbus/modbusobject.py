@@ -58,7 +58,7 @@ class ModbusAPI:
         """Open modbus connection."""
         if self._connect_pending:
             _LOGGER.warning("Connection to heatpump already pending")
-            return self._modbus_client.connected
+            return bool(self._modbus_client.connected)
 
         self._connect_pending = True
         try:
