@@ -286,11 +286,14 @@ class WebItem(ApiItem):
         """Set webif_group."""
         self._webif_group = val
 
-    def get_value(self, val: str) -> str:
+    def get_value(self, val: str | None) -> str | None:
         """Get the value based on the format."""
+        if val is None:
+            return None
         if self._format in [
             FORMATS.TEMPERATURE,
             FORMATS.PERCENTAGE,
+            FORMATS.NUMBER,
         ]:
             return val.split(" ", maxsplit=1)[0]
         return val

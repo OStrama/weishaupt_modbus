@@ -492,9 +492,9 @@ class MyWebifSensorEntity(CoordinatorEntity, SensorEntity, MyEntity):
 
         if self._api_item.format == FORMATS.TEXT:
             self._attr_suggested_display_precision = None
-        # WebItems carry no params, so the unit/device_class block in
-        # MyEntity.__init__ is skipped and WebItem.get_value() strips the unit
-        # text ("26.0 °C" -> "26.0"). Restore unit + device class by format.
+        # WebItem.get_value() strips the unit text ("26.0 °C" -> "26.0"), so set
+        # unit + device class explicitly for the well-known scalar formats. Items
+        # that carry params get their device_class from MyEntity.__init__ as well.
         elif self._api_item.format == FORMATS.TEMPERATURE:
             self._attr_native_unit_of_measurement = UnitOfTemperature.CELSIUS
             self._attr_device_class = SensorDeviceClass.TEMPERATURE
@@ -513,15 +513,29 @@ class MyWebifSensorEntity(CoordinatorEntity, SensorEntity, MyEntity):
                 raw = self._api_item.get_value(
                     self.coordinator.data[self._api_item.name]
                 )
-                # get_value() returns the numeric part as a string; coerce to
-                # float for numeric formats so the temperature/percentage
-                # device class accepts the state instead of warning.
+                # get_value() returns a scraped string. Any sensor that carries a
+                # numeric device_class / state_class must expose a numeric (or None)
+                # native value, otherwise Home Assistant crashes converting a value
+                # like "Aus" via int()/float() (issue #159). Coerce for every numeric
+                # sensor, not just TEMPERATURE/PERCENTAGE. A non-numeric reading falls
+                # back to the item's "non_numeric_value" param (None by default, e.g.
+                # 0 for power sensors that report "off" as text in various languages).
                 value: float | str | None = raw
-                if self._api_item.format in (FORMATS.TEMPERATURE, FORMATS.PERCENTAGE):
+                if (
+                    self._attr_device_class is not None
+                    or self._attr_state_class is not None
+                ):
                     try:
-                        value = float(raw)
-                    except (TypeError, ValueError) as _err:
-                        value = None
+                        value = None if raw is None else float(raw)
+                    except ValueError:
+                        fallback = self._api_item.params.get("non_numeric_value")
+                        _LOGGER.debug(
+                            "WebIF sensor %s: non-numeric value %r, using %r",
+                            self._api_item.name,
+                            raw,
+                            fallback,
+                        )
+                        value = fallback
                 self._attr_native_value = value
                 self.async_write_ha_state()
             else:
