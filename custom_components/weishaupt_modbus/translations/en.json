@@ -23,9 +23,44 @@
           "Port": "Port",
           "Prefix": "Prefix",
           "enable-webif": "enable experimental webif?",
-          "Web-IF-Token": "four letter web-IF token, see readme"
+          "Web-IF-Token": "four letter web-IF token, see readme",
+          "Poll Heizkreis 1": "Retrieve Heating circuit 1?",
+          "Poll Heizkreis 2": "Retrieve Heating circuit 2?",
+          "Poll Heizkreis 3": "Retrieve Heating circuit 3?",
+          "Poll Heizkreis 4": "Retrieve Heating circuit 4?",
+          "Poll Heizkreis 5": "Retrieve Heating circuit 5?",
+          "Poll Wärmepumpe": "Retrieve Heat pump?",
+          "Poll 2. Wärmeerzeuger": "Retrieve 2nd heat source?",
+          "Poll Statistik": "Retrieve Statistics?"
         }
-      }
+      },
+      "reconfigure": {
+                "description": "Please update your Modbus configuration parameters.",
+                "data": {
+                    "Device-Postfix": "Device postfix",
+                    "Heizkreis 2": "2. Heizkreis",
+                    "Heizkreis 3": "3. Heizkreis",
+                    "Heizkreis 4": "4. Heizkreis",
+                    "Heizkreis 5": "5. Heizkreis",
+                    "Host": "Host!",
+                    "Kennfeld-File": "Filename Kennfeld",
+                    "Name-Device-Prefix": "Name Device Prefix",
+                    "Name-Topic-Prefix": "Name Topic Prefix",
+                    "Port": "Port",
+                    "Prefix": "Prefix",
+                    "enable-webif": "enable experimental webif?",
+                    "Use-Mockup-Data": "Use Mockup data for developement?",
+                    "Web-IF-Token": "4-Letter web-IF token, see readme",
+                    "Poll Heizkreis 1": "Retrieve Heating circuit 1?",
+                    "Poll Heizkreis 2": "Retrieve Heating circuit 2?",
+                    "Poll Heizkreis 3": "Retrieve Heating circuit 3?",
+                    "Poll Heizkreis 4": "Retrieve Heating circuit 4?",
+                    "Poll Heizkreis 5": "Retrieve Heating circuit 5?",
+                    "Poll Wärmepumpe": "Retrieve Heat pump?",
+                    "Poll 2. Wärmeerzeuger": "Retrieve 2nd heat source?",
+                    "Poll Statistik": "Retrieve Statistics?"
+                }
+            }
     }
   },
   "device": {

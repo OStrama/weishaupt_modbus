@@ -32,6 +32,14 @@ class ConfConstants:
     USERNAME: str = CONF_USERNAME
     WEBIF_TOKEN: str = "Web-IF-Token"
     CB_WEBIF_MOCKUP_DATA: str = "Use-Mockup-Data"
+    CB_WEBIF_HK1: str = "Poll Heizkreis 1"
+    CB_WEBIF_HK2: str = "Poll Heizkreis 2"
+    CB_WEBIF_HK3: str = "Poll Heizkreis 3"
+    CB_WEBIF_HK4: str = "Poll Heizkreis 4"
+    CB_WEBIF_HK5: str = "Poll Heizkreis 5"
+    CB_WEBIF_WP: str = "Poll Wärmepumpe"
+    CB_WEBIF_2WEZ: str = "Poll 2. Wärmeerzeuger"
+    CB_WEBIF_SATISTICS: str = "Poll Statistik"
 
 
 CONF = ConfConstants()

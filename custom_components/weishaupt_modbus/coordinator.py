@@ -193,12 +193,25 @@ class MyWebIfCoordinator(
             _LOGGER.debug("Trying to fetch complete WebIF data")
             result: dict[str, Any] | None = None
 
+            what_to_poll = []
+            if self.config_entry.data[CONF.CB_WEBIF_HK1] is True:
+                what_to_poll.append("Heizkreis1")
+
+            if self.config_entry.data[CONF.CB_WEBIF_WP] is True:
+                what_to_poll.append("Waermepumpe")
+
+            if self.config_entry.data[CONF.CB_WEBIF_2WEZ] is True:
+                what_to_poll.append("2WEZ")
+
+            if self.config_entry.data[CONF.CB_WEBIF_SATISTICS] is True:
+                what_to_poll.append("Statistik")
+
             if self.my_api is not None:
                 if self.config_entry is not None:
                     if self.config_entry.data[CONF.CB_WEBIF_MOCKUP_DATA] is True:
-                        result = await self.my_api.update_all_mock()
+                        result = await self.my_api.update_all_mock(what_to_poll)
                     else:
-                        result = await self.my_api.update_all()
+                        result = await self.my_api.update_all(what_to_poll)
             if result is not None:
                 hk = result.get("Heizkreis")
                 hk1 = result.get("Heizkreis1")

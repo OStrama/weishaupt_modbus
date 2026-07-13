@@ -23,10 +23,45 @@
                     "Port": "Port",
                     "Prefix": "Prefix",
                     "enable-webif": "experimentelles WebIf aktivieren?",
-                    "Web-IF-Token": "4-Zeichen web-IF token, siehe readme"
+                    "Web-IF-Token": "4-Zeichen web-IF token, siehe readme",
+                    "Poll Heizkreis 1": "Heizkreis 1 abrufen?",
+                    "Poll Heizkreis 2": "Heizkreis 2 abrufen?",
+                    "Poll Heizkreis 3": "Heizkreis 3 abrufen?",
+                    "Poll Heizkreis 4": "Heizkreis 4 abrufen?",
+                    "Poll Heizkreis 5": "Heizkreis 5 abrufen?",
+                    "Poll Wärmepumpe": "Wärmepumpe abrufen?",
+                    "Poll 2. Wärmeerzeuger": "Wärmeerzeuger 2 abrufen?",
+                    "Poll Statistik": "Statistik abrufen?"
                 }
             }
-        }
+        },
+                "reconfigure": {
+                "description": "Please update your Modbus configuration parameters.",
+                "data": {
+                    "Device-Postfix": "Device postfix",
+                    "Heizkreis 2": "2. Heizkreis",
+                    "Heizkreis 3": "3. Heizkreis",
+                    "Heizkreis 4": "4. Heizkreis",
+                    "Heizkreis 5": "5. Heizkreis",
+                    "Host": "Host!",
+                    "Kennfeld-File": "Filename Kennfeld",
+                    "Name-Device-Prefix": "Name Device Prefix",
+                    "Name-Topic-Prefix": "Name Topic Prefix",
+                    "Port": "Port",
+                    "Prefix": "Prefix",
+                    "enable-webif": "enable experimental webif?",
+                    "Use-Mockup-Data": "Use Mockup data for developement?",
+                    "Web-IF-Token": "4-Zeichen web-IF token, siehe readme",
+                    "Poll Heizkreis 1": "Heizkreis 1 abrufen?",
+                    "Poll Heizkreis 2": "Heizkreis 2 abrufen?",
+                    "Poll Heizkreis 3": "Heizkreis 3 abrufen?",
+                    "Poll Heizkreis 4": "Heizkreis 4 abrufen?",
+                    "Poll Heizkreis 5": "Heizkreis 5 abrufen?",
+                    "Poll Wärmepumpe": "Wärmepumpe abrufen?",
+                    "Poll 2. Wärmeerzeuger": "Wärmeerzeuger 2 abrufen?",
+                    "Poll Statistik": "Statistik abrufen?"
+                }
+            }
     },
     "device": {
         "dev_system": {

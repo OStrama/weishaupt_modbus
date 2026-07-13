@@ -1,17 +1,14 @@
 """Home Assistant integration initialization."""
 
-from __future__ import annotations
-
 import copy
 import json
 import logging
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
-from weishaupt_webif_api import WebifConnection
-
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+from weishaupt_webif_api import WebifConnection
 
 from .configentry import MyData
 
@@ -34,6 +31,10 @@ from .hpconst import (
     MODBUS_W2_ITEMS,
     MODBUS_WP_ITEMS,
     MODBUS_WW_ITEMS,
+    WEBIF_INFO_HEIZKREIS1,
+    WEBIF_INFO_2WEZ,
+    WEBIF_INFO_WAERMEPUMPE,
+    WEBIF_INFO_STATISTIK,
 )
 from .items import ModbusItem, WebItem
 from .kennfeld import PowerMap
@@ -79,8 +80,24 @@ async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
     for device in DEVICELISTS:
         itemlist.extend(copy.deepcopy(item) for item in device)
 
-    for device in DEVICELISTS_WEBIF:
+    if entry.data[CONF.CB_WEBIF_HK1] is True:
+        device = WEBIF_INFO_HEIZKREIS1
         webif_itemlist.extend(copy.deepcopy(item) for item in device)
+
+    if entry.data[CONF.CB_WEBIF_WP] is True:
+        device = WEBIF_INFO_WAERMEPUMPE
+        webif_itemlist.extend(copy.deepcopy(item) for item in device)
+
+    if entry.data[CONF.CB_WEBIF_2WEZ] is True:
+        device = WEBIF_INFO_2WEZ
+        webif_itemlist.extend(copy.deepcopy(item) for item in device)
+
+    if entry.data[CONF.CB_WEBIF_SATISTICS] is True:
+        device = WEBIF_INFO_STATISTIK
+        webif_itemlist.extend(copy.deepcopy(item) for item in device)
+
+    # for device in DEVICELISTS_WEBIF:
+    #    webif_itemlist.extend(copy.deepcopy(item) for item in device)
 
     modbus_coordinator = MyCoordinator(
         hass=hass, my_api=mbapi, api_items=itemlist, p_config_entry=entry
@@ -188,11 +205,21 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: MyConfigEntry) 
     if config_entry.version < 7:
         _LOGGER.warning("Version <7 detected")
         new_data[CONF.CB_WEBIF_MOCKUP_DATA] = False
+    if config_entry.version < 8:
+        _LOGGER.warning("Version <8 detected")
+        new_data[CONF.CB_WEBIF_HK1] = False
+        new_data[CONF.CB_WEBIF_HK2] = False
+        new_data[CONF.CB_WEBIF_HK3] = False
+        new_data[CONF.CB_WEBIF_HK4] = False
+        new_data[CONF.CB_WEBIF_HK5] = False
+        new_data[CONF.CB_WEBIF_WP] = False
+        new_data[CONF.CB_WEBIF_2WEZ] = False
+        new_data[CONF.CB_WEBIF_SATISTICS] = False
 
     hass.config_entries.async_update_entry(
-        config_entry, data=new_data, minor_version=1, version=7
+        config_entry, data=new_data, minor_version=1, version=8
     )
-    _LOGGER.warning("Config entries updated to version 7")
+    _LOGGER.warning("Config entries updated to version 8")
     return True
 
 

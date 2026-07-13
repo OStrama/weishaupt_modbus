@@ -69,7 +69,7 @@ async def validate_input(data: dict[str, Any]) -> dict[str, Any]:
 class ConfigFlow(config_entries.ConfigFlow, domain=CONST.DOMAIN):  # pylint: disable=abstract-method
     """Class config flow."""
 
-    VERSION = 7
+    VERSION = 8
     MINOR_VERSION = 1
     # Pick one of the available connection classes in homeassistant/config_entries.py
     # This tells HA if it should be asking for updates, or it'll be notified of updates
@@ -112,6 +112,14 @@ class ConfigFlow(config_entries.ConfigFlow, domain=CONST.DOMAIN):  # pylint: dis
                 vol.Optional(schema=CONF.USERNAME, default=""): str,
                 vol.Optional(schema=CONF.PASSWORD, default=""): str,
                 vol.Optional(schema=CONF.WEBIF_TOKEN, default=""): str,
+                vol.Optional(schema=CONF.CB_WEBIF_HK1, default=False): bool,
+                vol.Optional(schema=CONF.CB_WEBIF_HK2, default=False): bool,
+                vol.Optional(schema=CONF.CB_WEBIF_HK3, default=False): bool,
+                vol.Optional(schema=CONF.CB_WEBIF_HK4, default=False): bool,
+                vol.Optional(schema=CONF.CB_WEBIF_HK5, default=False): bool,
+                vol.Optional(schema=CONF.CB_WEBIF_WP, default=False): bool,
+                vol.Optional(schema=CONF.CB_WEBIF_2WEZ, default=False): bool,
+                vol.Optional(schema=CONF.CB_WEBIF_SATISTICS, default=False): bool,
             }
         )
 
@@ -203,6 +211,38 @@ class ConfigFlow(config_entries.ConfigFlow, domain=CONST.DOMAIN):  # pylint: dis
                     schema=CONF.WEBIF_TOKEN,
                     default=reconfigure_entry.data[CONF.WEBIF_TOKEN],
                 ): str,
+                vol.Optional(
+                    schema=CONF.CB_WEBIF_HK1,
+                    default=reconfigure_entry.data[CONF.CB_WEBIF_HK1],
+                ): bool,
+                vol.Optional(
+                    schema=CONF.CB_WEBIF_HK2,
+                    default=reconfigure_entry.data[CONF.CB_WEBIF_HK2],
+                ): bool,
+                vol.Optional(
+                    schema=CONF.CB_WEBIF_HK3,
+                    default=reconfigure_entry.data[CONF.CB_WEBIF_HK3],
+                ): bool,
+                vol.Optional(
+                    schema=CONF.CB_WEBIF_HK4,
+                    default=reconfigure_entry.data[CONF.CB_WEBIF_HK4],
+                ): bool,
+                vol.Optional(
+                    schema=CONF.CB_WEBIF_HK5,
+                    default=reconfigure_entry.data[CONF.CB_WEBIF_HK5],
+                ): bool,
+                vol.Optional(
+                    schema=CONF.CB_WEBIF_WP,
+                    default=reconfigure_entry.data[CONF.CB_WEBIF_WP],
+                ): bool,
+                vol.Optional(
+                    schema=CONF.CB_WEBIF_2WEZ,
+                    default=reconfigure_entry.data[CONF.CB_WEBIF_2WEZ],
+                ): bool,
+                vol.Optional(
+                    schema=CONF.CB_WEBIF_SATISTICS,
+                    default=reconfigure_entry.data[CONF.CB_WEBIF_SATISTICS],
+                ): bool,
             }
         )
 
