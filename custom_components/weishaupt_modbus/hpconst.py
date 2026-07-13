@@ -1391,6 +1391,7 @@ MODBUS_WP_ITEMS: list[ModbusItem] = [
     ModbusItem( address=33109, name="Anforderung(Vorlauf regenerativ)", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WP, params=PARAMS_STDTEMP, translation_key="anforderung_vl_regenerativ"),
     ModbusItem( address=33110, name="Puffertemperatur?", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WP, params=PARAMS_STDTEMP, translation_key="puffer_temp"),
     ModbusItem( address=33111, name="Vorlauftemperatur präzise(Summenvorlauf(B7))", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WP, params=PARAMS_STDTEMP, translation_key="vl_praeziese_summenvorlauf_b7"),
+    # Calculated Sensor below. Ignores Modbus Address
     ModbusItem( address=33111, name="Spreizung", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR_CALC, device=DEVICES.WP, params=PARAMS_CALCSPREIZUNG, translation_key="spreizung"),
 
     ModbusItem( address=43101, name="Konfiguration", mformat=FORMATS.STATUS, mtype=TYPES.NUMBER_RO, device=DEVICES.WP, resultlist=HP_KONFIGURATION, params = PARAMS_OPMODE, translation_key="wp_konf"),
@@ -1527,12 +1528,16 @@ MODBUS_W2_ITEMS: list[ModbusItem] = [
 
 MODBUS_ST_ITEMS: list[ModbusItem] = [
     ModbusItem( address=36101, name="Gesamt Energie heute", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="ges_energie_heute"),
+    # Calculated Sensor below. Ignores Modbus Address
     ModbusItem( address=36101, name="Tagesarbeitszahl heute", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR_CALC, device=DEVICES.ST, params=PARAMS_CALCTAZ, translation_key="tagesarbeitszahl_heute"),
     ModbusItem( address=36102, name="Gesamt Energie gestern", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="ges_energie_yesterday"),
+    # Calculated Sensor below. Ignores Modbus Address
     ModbusItem( address=36102, name="Tagesarbeitszahl gestern", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR_CALC, device=DEVICES.ST, params=PARAMS_CALCTAZ2, translation_key="tagesarbeitszahl_gestern"),
     ModbusItem( address=36103, name="Gesamt Energie Monat", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="ges_energie_monat"),
+    # Calculated Sensor below. Ignores Modbus Address
     ModbusItem( address=36103, name="Monatsarbeitszahl", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR_CALC, device=DEVICES.ST, params=PARAMS_CALCMAZ, translation_key="monatsarbeitszahl"),
     ModbusItem( address=36104, name="Gesamt Energie Jahr", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="ges_energie_jahr"),
+    # Calculated Sensor below. Ignores Modbus Address
     ModbusItem( address=36104, name="Jahresarbeitszahl", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR_CALC, device=DEVICES.ST, params=PARAMS_CALCJAZ, translation_key="jahresarbeitszahl"),
     ModbusItem( address=36201, name="Heizen Energie heute", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="heiz_energie_heute"),
     ModbusItem( address=36202, name="Heizen Energie gestern", mformat=FORMATS.NUMBER, mtype=TYPES.SENSOR, device=DEVICES.ST, params=PARAMS_ENERGY, translation_key="heiz_energie_getern"),
