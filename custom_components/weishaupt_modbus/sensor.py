@@ -38,7 +38,7 @@ async def async_setup_entry(
         )
         async_add_entities(
             modbus_entries,
-            update_before_add=False,
+            update_before_add=True,
         )
 
     if webif_coordinator is not None:
