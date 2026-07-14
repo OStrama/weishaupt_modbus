@@ -19,7 +19,6 @@ from .const import CONF, CONST, DEVICENAMES, FORMATS, TYPES
 from .coordinator import MyCoordinator, MyWebIfCoordinator
 from .hpconst import (
     DEVICELISTS,
-    DEVICELISTS_WEBIF,
     MODBUS_HZ2_ITEMS,
     MODBUS_HZ3_ITEMS,
     MODBUS_HZ4_ITEMS,
@@ -31,10 +30,10 @@ from .hpconst import (
     MODBUS_W2_ITEMS,
     MODBUS_WP_ITEMS,
     MODBUS_WW_ITEMS,
-    WEBIF_INFO_HEIZKREIS1,
     WEBIF_INFO_2WEZ,
-    WEBIF_INFO_WAERMEPUMPE,
+    WEBIF_INFO_HEIZKREIS1,
     WEBIF_INFO_STATISTIK,
+    WEBIF_INFO_WAERMEPUMPE,
 )
 from .items import ModbusItem, WebItem
 from .kennfeld import PowerMap
@@ -60,7 +59,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
     mbapi = ModbusAPI(config_entry=entry)
 
     if (
-        entry.data[CONF.CB_WEBIF]
+        entry.data.get(CONF.CB_WEBIF, False)
         and entry.data.get(CONF.PASSWORD, "") != ""
         and entry.data.get(CONF.USERNAME, "") != ""
         and entry.data.get(CONF.WEBIF_TOKEN, "") != ""
