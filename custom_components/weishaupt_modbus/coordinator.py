@@ -6,11 +6,11 @@ import logging
 from typing import Any
 
 from pymodbus import ModbusException
-from weishaupt_webif_api import WebifConnection
+from weishaupt_webif_api import WebifConnection, WeishauptWebifError
 
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
+from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .configentry import MyConfigEntry
 from .const import CONF, CONST, TYPES, DeviceConstants
@@ -176,7 +176,7 @@ class MyWebIfCoordinator(
             hass=hass,
             logger=_LOGGER,
             name="weishaupt-webif",
-            update_interval=timedelta(seconds=30),
+            update_interval=timedelta(seconds=60),
             always_update=True,
         )
 
@@ -189,74 +189,77 @@ class MyWebIfCoordinator(
     async def _async_update_data(self) -> dict[str, Any]:
         """Fetch data from WebIF endpoint."""
         # try:
-        async with asyncio.timeout(30):
-            _LOGGER.debug("Trying to fetch complete WebIF data")
-            result: dict[str, Any] | None = None
+        what_to_poll = []
+        if self.config_entry.data.get(CONF.CB_WEBIF_HK1, False) is True:
+            what_to_poll.append("Heizkreis1")
 
-            what_to_poll = []
-            if self.config_entry.data.get(CONF.CB_WEBIF_HK1, False) is True:
-                what_to_poll.append("Heizkreis1")
+        if self.config_entry.data.get(CONF.CB_WEBIF_HK2, False) is True:
+            what_to_poll.append("Heizkreis2")
 
-            if self.config_entry.data.get(CONF.CB_WEBIF_HK2, False) is True:
-                what_to_poll.append("Heizkreis2")
+        if self.config_entry.data.get(CONF.CB_WEBIF_HK3, False) is True:
+            what_to_poll.append("Heizkreis3")
 
-            if self.config_entry.data.get(CONF.CB_WEBIF_HK3, False) is True:
-                what_to_poll.append("Heizkreis3")
+        if self.config_entry.data.get(CONF.CB_WEBIF_HK4, False) is True:
+            what_to_poll.append("Heizkreis4")
 
-            if self.config_entry.data.get(CONF.CB_WEBIF_HK4, False) is True:
-                what_to_poll.append("Heizkreis4")
+        if self.config_entry.data.get(CONF.CB_WEBIF_HK5, False) is True:
+            what_to_poll.append("Heizkreis5")
 
-            if self.config_entry.data.get(CONF.CB_WEBIF_HK5, False) is True:
-                what_to_poll.append("Heizkreis5")
+        if self.config_entry.data.get(CONF.CB_WEBIF_WP, False) is True:
+            what_to_poll.append("Waermepumpe")
 
-            if self.config_entry.data.get(CONF.CB_WEBIF_WP, False) is True:
-                what_to_poll.append("Waermepumpe")
+        if self.config_entry.data.get(CONF.CB_WEBIF_2WEZ, False) is True:
+            what_to_poll.append("2WEZ")
 
-            if self.config_entry.data.get(CONF.CB_WEBIF_2WEZ, False) is True:
-                what_to_poll.append("2WEZ")
+        if self.config_entry.data.get(CONF.CB_WEBIF_SATISTICS, False) is True:
+            what_to_poll.append("Statistik")
 
-            if self.config_entry.data.get(CONF.CB_WEBIF_SATISTICS, False) is True:
-                what_to_poll.append("Statistik")
+        # Calculate dynamic budget: N requests * (delay + 5s network budget) + 5s buffer
+        delay = self.my_api._request_delay if self.my_api else 2
+        timeout_budget = len(what_to_poll) * (delay + 5.0) + 5.0
 
-            if self.my_api is not None:
-                if self.config_entry is not None:
-                    if self.config_entry.data.get(CONF.CB_WEBIF_MOCKUP_DATA, False):
-                        result = await self.my_api.update_all_mock(what_to_poll)
-                    else:
-                        result = await self.my_api.update_all(what_to_poll)
-            if result is not None:
-                hk = result.get("Heizkreis")
-                hk1 = result.get("Heizkreis1")
-                hk2 = result.get("Heizkreis2")
-                hk3 = result.get("Heizkreis3")
-                hk4 = result.get("Heizkreis4")
-                hk5 = result.get("Heizkreis5")
-                wp = result.get("Waermepumpe")
-                wez2 = result.get("2WEZ")
-                wes = result.get("Statistik")
-                if hk is not None:
-                    result = result | hk
-                if hk1 is not None:
-                    result = result | hk1
-                if hk2 is not None:
-                    result = result | hk2
-                if hk3 is not None:
-                    result = result | hk3
-                if hk4 is not None:
-                    result = result | hk4
-                if hk5 is not None:
-                    result = result | hk5
-                if wp is not None:
-                    result = result | wp
-                if wez2 is not None:
-                    result = result | wez2
-                if wes is not None:
-                    result = result | wes
+        try:
+            async with asyncio.timeout(timeout_budget):
+                _LOGGER.debug("Trying to fetch complete WebIF data")
+                result: dict[str, Any] | None = None
 
-            return result if result is not None else {}
-        # except TimeoutError:
-        #    _LOGGER.debug("Timeout while fetching WebIF data")
-        #    return {}
-        # except Exception as err:
-        #    _LOGGER.debug("Error fetching WebIF data: %s", err)
-        #    return {}
+                if self.my_api is not None:
+                    if self.config_entry is not None:
+                        if self.config_entry.data.get(CONF.CB_WEBIF_MOCKUP_DATA, False):
+                            result = await self.my_api.update_all_mock(what_to_poll)
+                        else:
+                            result = await self.my_api.update_all(what_to_poll)
+                if result is not None:
+                    hk = result.get("Heizkreis")
+                    hk1 = result.get("Heizkreis1")
+                    hk2 = result.get("Heizkreis2")
+                    hk3 = result.get("Heizkreis3")
+                    hk4 = result.get("Heizkreis4")
+                    hk5 = result.get("Heizkreis5")
+                    wp = result.get("Waermepumpe")
+                    wez2 = result.get("2WEZ")
+                    wes = result.get("Statistik")
+                    if hk is not None:
+                        result = result | hk
+                    if hk1 is not None:
+                        result = result | hk1
+                    if hk2 is not None:
+                        result = result | hk2
+                    if hk3 is not None:
+                        result = result | hk3
+                    if hk4 is not None:
+                        result = result | hk4
+                    if hk5 is not None:
+                        result = result | hk5
+                    if wp is not None:
+                        result = result | wp
+                    if wez2 is not None:
+                        result = result | wez2
+                    if wes is not None:
+                        result = result | wes
+
+                return result if result is not None else {}
+        except TimeoutError as err:
+            raise UpdateFailed("Timeout while fetching WebIF data") from err
+        except WeishauptWebifError as err:
+            raise UpdateFailed(f"Error fetching WebIF data: {err}") from err
