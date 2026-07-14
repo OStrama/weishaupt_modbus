@@ -227,6 +227,10 @@ class MyWebIfCoordinator(
             if result is not None:
                 hk = result.get("Heizkreis")
                 hk1 = result.get("Heizkreis1")
+                hk2 = result.get("Heizkreis2")
+                hk3 = result.get("Heizkreis3")
+                hk4 = result.get("Heizkreis4")
+                hk5 = result.get("Heizkreis5")
                 wp = result.get("Waermepumpe")
                 wez2 = result.get("2WEZ")
                 wes = result.get("Statistik")
@@ -234,6 +238,14 @@ class MyWebIfCoordinator(
                     result = result | hk
                 if hk1 is not None:
                     result = result | hk1
+                if hk2 is not None:
+                    result = result | hk2
+                if hk3 is not None:
+                    result = result | hk3
+                if hk4 is not None:
+                    result = result | hk4
+                if hk5 is not None:
+                    result = result | hk5
                 if wp is not None:
                     result = result | wp
                 if wez2 is not None:
