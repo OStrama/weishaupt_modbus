@@ -1,5 +1,6 @@
 """Home Assistant integration initialization."""
 
+import asyncio
 import copy
 import json
 import logging
@@ -58,6 +59,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
 
     mbapi = ModbusAPI(config_entry=entry)
 
+    # 1. Create the shared lock to serialize hardware communication
+    mcu_lock = asyncio.Lock()
+
     if (
         entry.data.get(CONF.CB_WEBIF, False)
         and entry.data.get(CONF.PASSWORD, "") != ""
@@ -100,12 +104,20 @@ async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
         itemlist.extend(copy.deepcopy(item) for item in device)
 
     modbus_coordinator = MyCoordinator(
-        hass=hass, my_api=mbapi, api_items=itemlist, p_config_entry=entry
+        hass=hass,
+        my_api=mbapi,
+        api_items=itemlist,
+        p_config_entry=entry,
+        mcu_lock=mcu_lock,
     )
     # await coordinator.async_config_entry_first_refresh()
     if webapi is not None:
         webif_coordinator = MyWebIfCoordinator(
-            hass=hass, my_api=webapi, api_items=webif_itemlist, config_entry=entry
+            hass=hass,
+            my_api=webapi,
+            api_items=webif_itemlist,
+            config_entry=entry,
+            mcu_lock=mcu_lock,
         )
     else:
         _LOGGER.debug("webapi is none. SKip creating of webif coordinator")

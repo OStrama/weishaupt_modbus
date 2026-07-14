@@ -46,6 +46,7 @@ class MyCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         my_api: ModbusAPI,
         api_items: list[ModbusItem],
         p_config_entry: MyConfigEntry,
+        mcu_lock: asyncio.Lock,
     ) -> None:
         """Initialize coordinator."""
         super().__init__(
@@ -60,6 +61,7 @@ class MyCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         self._modbusitems = api_items
         self._number_of_items = len(api_items)
         self._config_entry = p_config_entry
+        self._mcu_lock = mcu_lock
 
     @property
     def modbus_items(self) -> list[ModbusItem]:
@@ -142,16 +144,17 @@ class MyCoordinator(DataUpdateCoordinator[dict[str, Any]]):
 
     async def _async_update_data(self) -> dict[str, Any]:
         """Fetch data from API endpoint."""
-        try:
-            async with asyncio.timeout(10):
-                # listening_idx = set(self.async_contexts())
-                return await self.fetch_data()  # listening_idx)
-        except ModbusException as err:
-            _LOGGER.debug("Modbus connection failed: %s", err)
-            return {}
-        except TimeoutError as err:
-            _LOGGER.debug("Timeout while fetching data: %s", err)
-            return {}
+        async with self._mcu_lock:
+            try:
+                async with asyncio.timeout(10):
+                    # listening_idx = set(self.async_contexts())
+                    return await self.fetch_data()  # listening_idx)
+            except ModbusException as err:
+                _LOGGER.debug("Modbus connection failed: %s", err)
+                return {}
+            except TimeoutError as err:
+                _LOGGER.debug("Timeout while fetching data: %s", err)
+                return {}
 
     @property
     def modbus_api(self) -> ModbusAPI:
@@ -170,6 +173,7 @@ class MyWebIfCoordinator(
         my_api: WebifConnection | None,
         api_items: list[WebItem],
         config_entry: MyConfigEntry,
+        mcu_lock: asyncio.Lock,
     ) -> None:
         """Initialize WebIF coordinator."""
         super().__init__(
@@ -182,6 +186,8 @@ class MyWebIfCoordinator(
 
         self.my_api: WebifConnection | None = my_api
         self.api_items = api_items
+        self._mcu_lock = mcu_lock  # <-- Store lock
+        self.data: dict[str, Any] = {}  # Persistent cache to prevent KeyErrors
 
     async def _async_setup(self) -> None:
         """Set up the coordinator."""
@@ -219,46 +225,50 @@ class MyWebIfCoordinator(
         timeout_budget = len(what_to_poll) * (delay + 5.0) + 5.0
 
         try:
-            async with asyncio.timeout(timeout_budget):
-                _LOGGER.debug("Trying to fetch complete WebIF data")
-                result: dict[str, Any] | None = None
+            # Acquire lock to ensure we do not collide with Modbus polling
+            async with self._mcu_lock:
+                async with asyncio.timeout(timeout_budget):
+                    _LOGGER.debug("Trying to fetch complete WebIF data")
+                    result: dict[str, Any] | None = None
 
-                if self.my_api is not None:
-                    if self.config_entry is not None:
-                        if self.config_entry.data.get(CONF.CB_WEBIF_MOCKUP_DATA, False):
-                            result = await self.my_api.update_all_mock(what_to_poll)
-                        else:
-                            result = await self.my_api.update_all(what_to_poll)
-                if result is not None:
-                    hk = result.get("Heizkreis")
-                    hk1 = result.get("Heizkreis1")
-                    hk2 = result.get("Heizkreis2")
-                    hk3 = result.get("Heizkreis3")
-                    hk4 = result.get("Heizkreis4")
-                    hk5 = result.get("Heizkreis5")
-                    wp = result.get("Waermepumpe")
-                    wez2 = result.get("2WEZ")
-                    wes = result.get("Statistik")
-                    if hk is not None:
-                        result = result | hk
-                    if hk1 is not None:
-                        result = result | hk1
-                    if hk2 is not None:
-                        result = result | hk2
-                    if hk3 is not None:
-                        result = result | hk3
-                    if hk4 is not None:
-                        result = result | hk4
-                    if hk5 is not None:
-                        result = result | hk5
-                    if wp is not None:
-                        result = result | wp
-                    if wez2 is not None:
-                        result = result | wez2
-                    if wes is not None:
-                        result = result | wes
+                    if self.my_api is not None:
+                        if self.config_entry is not None:
+                            if self.config_entry.data.get(
+                                CONF.CB_WEBIF_MOCKUP_DATA, False
+                            ):
+                                result = await self.my_api.update_all_mock(what_to_poll)
+                            else:
+                                result = await self.my_api.update_all(what_to_poll)
+                    if result is not None:
+                        hk = result.get("Heizkreis")
+                        hk1 = result.get("Heizkreis1")
+                        hk2 = result.get("Heizkreis2")
+                        hk3 = result.get("Heizkreis3")
+                        hk4 = result.get("Heizkreis4")
+                        hk5 = result.get("Heizkreis5")
+                        wp = result.get("Waermepumpe")
+                        wez2 = result.get("2WEZ")
+                        wes = result.get("Statistik")
+                        if hk is not None:
+                            result = result | hk
+                        if hk1 is not None:
+                            result = result | hk1
+                        if hk2 is not None:
+                            result = result | hk2
+                        if hk3 is not None:
+                            result = result | hk3
+                        if hk4 is not None:
+                            result = result | hk4
+                        if hk5 is not None:
+                            result = result | hk5
+                        if wp is not None:
+                            result = result | wp
+                        if wez2 is not None:
+                            result = result | wez2
+                        if wes is not None:
+                            result = result | wes
 
-                return result if result is not None else {}
+                    return result if result is not None else {}
         except TimeoutError as err:
             raise UpdateFailed("Timeout while fetching WebIF data") from err
         except WeishauptWebifError as err:
