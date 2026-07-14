@@ -1592,14 +1592,39 @@ MODBUS_IO_ITEMS: list[ModbusItem] = [
 ]
 
 
-WEBIF_INFO_HEIZKREIS1: list[WebItem] = [
-    WebItem(name="Außentemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIH, params=PARAMS_STDTEMP, webif_group="WIH", translation_key="webif_info_heizkreis1_aussentemperatur"),
-    WebItem(name="AT Mittelwert", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIH, params=PARAMS_STDTEMP, webif_group="WIH", translation_key="webif_info_heizkreis1_at_mittelwert"),
-    WebItem(name="AT Langzeitwert", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIH, params=PARAMS_STDTEMP, webif_group="WIH", translation_key="webif_info_heizkreis1_at_langzeitwert"),
-    WebItem(name="Raumsolltemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIH, params=PARAMS_STDTEMP, webif_group="WIH", translation_key="webif_info_heizkreis1_raumsolltemperatur"),
-    WebItem(name="Vorlaufsolltemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIH, params=PARAMS_STDTEMP, webif_group="WIH", translation_key="webif_info_heizkreis1_vorlaufsolltemperatur"),
-    WebItem(name="Vorlauftemperatur", mformat=FORMATS.TEMPERATURE, mtype=TYPES.SENSOR, device=DEVICES.WIH, params=PARAMS_STDTEMP, webif_group="WIH", translation_key="webif_info_heizkreis1_vorlauftemperatur"),
+# The template containing only the variable parts
+_HEIZKREIS_TEMPLATE = [
+    ("Außentemperatur", "aussentemperatur"),
+    ("AT Mittelwert", "at_mittelwert"),
+    ("AT Langzeitwert", "at_langzeitwert"),
+    ("Raumsolltemperatur", "raumsolltemperatur"),
+    ("Vorlaufsolltemperatur", "vorlaufsolltemperatur"),
+    ("Vorlauftemperatur", "vorlauftemperatur"),
 ]
+
+
+def _generate_hk_items(hk_num: int) -> list[WebItem]:
+    """Helper to generate standard WebItems for a specific heating circuit."""
+    return [
+        WebItem(
+            name=f"{name} HK{hk_num}",
+            mformat=FORMATS.TEMPERATURE,
+            mtype=TYPES.SENSOR,
+            device=DEVICES.WIH,
+            params=PARAMS_STDTEMP,
+            webif_group="WIH",
+            translation_key=f"webif_info_heizkreis{hk_num}_{suffix}"
+        )
+        for name, suffix in _HEIZKREIS_TEMPLATE
+    ]
+
+
+# Dynamically generate lists for HK1 to HK5
+WEBIF_INFO_HEIZKREIS1 = _generate_hk_items(1)
+WEBIF_INFO_HEIZKREIS2 = _generate_hk_items(2)
+WEBIF_INFO_HEIZKREIS3 = _generate_hk_items(3)
+WEBIF_INFO_HEIZKREIS4 = _generate_hk_items(4)
+WEBIF_INFO_HEIZKREIS5 = _generate_hk_items(5)
 
 WEBIF_INFO_WAERMEPUMPE: list[WebItem] = [
     WebItem(name="Betrieb", mformat=FORMATS.TEXT, mtype=TYPES.SENSOR, device=DEVICES.WIW, webif_group="WIW", translation_key="webif_info_waermepumpe_betrieb"),

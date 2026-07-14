@@ -194,21 +194,33 @@ class MyWebIfCoordinator(
             result: dict[str, Any] | None = None
 
             what_to_poll = []
-            if self.config_entry.data[CONF.CB_WEBIF_HK1] is True:
+            if self.config_entry.data.get(CONF.CB_WEBIF_HK1, False) is True:
                 what_to_poll.append("Heizkreis1")
 
-            if self.config_entry.data[CONF.CB_WEBIF_WP] is True:
+            if self.config_entry.data.get(CONF.CB_WEBIF_HK2, False) is True:
+                what_to_poll.append("Heizkreis2")
+
+            if self.config_entry.data.get(CONF.CB_WEBIF_HK3, False) is True:
+                what_to_poll.append("Heizkreis3")
+
+            if self.config_entry.data.get(CONF.CB_WEBIF_HK4, False) is True:
+                what_to_poll.append("Heizkreis4")
+
+            if self.config_entry.data.get(CONF.CB_WEBIF_HK5, False) is True:
+                what_to_poll.append("Heizkreis5")
+
+            if self.config_entry.data.get(CONF.CB_WEBIF_WP, False) is True:
                 what_to_poll.append("Waermepumpe")
 
-            if self.config_entry.data[CONF.CB_WEBIF_2WEZ] is True:
+            if self.config_entry.data.get(CONF.CB_WEBIF_2WEZ, False) is True:
                 what_to_poll.append("2WEZ")
 
-            if self.config_entry.data[CONF.CB_WEBIF_SATISTICS] is True:
+            if self.config_entry.data.get(CONF.CB_WEBIF_SATISTICS, False) is True:
                 what_to_poll.append("Statistik")
 
             if self.my_api is not None:
                 if self.config_entry is not None:
-                    if self.config_entry.data[CONF.CB_WEBIF_MOCKUP_DATA] is True:
+                    if self.config_entry.data.get(CONF.CB_WEBIF_MOCKUP_DATA, False):
                         result = await self.my_api.update_all_mock(what_to_poll)
                     else:
                         result = await self.my_api.update_all(what_to_poll)
