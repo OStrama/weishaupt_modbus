@@ -53,13 +53,17 @@ PLATFORMS: list[str] = [
 
 async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
     """Set up entry."""
+    # Create independent copies of ModbusItems for each config entry
+    itemlist: list[ModbusItem] = []
+    webif_itemlist: list[WebItem] = []
+
     mbapi = ModbusAPI(config_entry=entry)
 
     if (
         entry.data[CONF.CB_WEBIF]
-        and entry.data[CONF.PASSWORD] != ""
-        and entry.data[CONF.USERNAME] != ""
-        and entry.data[CONF.WEBIF_TOKEN] != ""
+        and entry.data.get(CONF.PASSWORD, "") != ""
+        and entry.data.get(CONF.USERNAME, "") != ""
+        and entry.data.get(CONF.WEBIF_TOKEN, "") != ""
     ):
         webapi = WebifConnection(
             ip=entry.data[CONF.HOST],
@@ -69,35 +73,32 @@ async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
             request_delay=2,
             storage_path="./data",
         )
+
+        # Safely read optional webif switches using .get(..., False)
+        if entry.data.get(CONF.CB_WEBIF_HK1, False) is True:
+            device = WEBIF_INFO_HEIZKREIS1
+            webif_itemlist.extend(copy.deepcopy(item) for item in device)
+
+        if entry.data.get(CONF.CB_WEBIF_WP, False) is True:
+            device = WEBIF_INFO_WAERMEPUMPE
+            webif_itemlist.extend(copy.deepcopy(item) for item in device)
+
+        if entry.data.get(CONF.CB_WEBIF_2WEZ, False) is True:
+            device = WEBIF_INFO_2WEZ
+            webif_itemlist.extend(copy.deepcopy(item) for item in device)
+
+        if entry.data.get(CONF.CB_WEBIF_SATISTICS, False) is True:
+            device = WEBIF_INFO_STATISTIK
+            webif_itemlist.extend(copy.deepcopy(item) for item in device)
     else:
         _LOGGER.debug("WebIF not fully configured. Skipping")
         webapi = None
 
-    # Create independent copies of ModbusItems for each config entry
-    itemlist: list[ModbusItem] = []
-    webif_itemlist: list[WebItem] = []
+    # for device in DEVICELISTS_WEBIF:
+    #    webif_itemlist.extend(copy.deepcopy(item) for item in device)
 
     for device in DEVICELISTS:
         itemlist.extend(copy.deepcopy(item) for item in device)
-
-    if entry.data[CONF.CB_WEBIF_HK1] is True:
-        device = WEBIF_INFO_HEIZKREIS1
-        webif_itemlist.extend(copy.deepcopy(item) for item in device)
-
-    if entry.data[CONF.CB_WEBIF_WP] is True:
-        device = WEBIF_INFO_WAERMEPUMPE
-        webif_itemlist.extend(copy.deepcopy(item) for item in device)
-
-    if entry.data[CONF.CB_WEBIF_2WEZ] is True:
-        device = WEBIF_INFO_2WEZ
-        webif_itemlist.extend(copy.deepcopy(item) for item in device)
-
-    if entry.data[CONF.CB_WEBIF_SATISTICS] is True:
-        device = WEBIF_INFO_STATISTIK
-        webif_itemlist.extend(copy.deepcopy(item) for item in device)
-
-    # for device in DEVICELISTS_WEBIF:
-    #    webif_itemlist.extend(copy.deepcopy(item) for item in device)
 
     modbus_coordinator = MyCoordinator(
         hass=hass, my_api=mbapi, api_items=itemlist, p_config_entry=entry
