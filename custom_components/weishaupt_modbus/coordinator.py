@@ -180,7 +180,7 @@ class MyWebIfCoordinator(
             hass=hass,
             logger=_LOGGER,
             name="weishaupt-webif",
-            update_interval=timedelta(seconds=60),
+            update_interval=timedelta(seconds=10),
             always_update=True,
         )
 
@@ -188,6 +188,7 @@ class MyWebIfCoordinator(
         self.api_items = api_items
         self._mcu_lock = mcu_lock  # <-- Store lock
         self.data: dict[str, Any] = {}  # Persistent cache to prevent KeyErrors
+        self._category_queue: list[str] = []  # Queue to track our round-robin rotation
 
     async def _async_setup(self) -> None:
         """Set up the coordinator."""
@@ -195,44 +196,60 @@ class MyWebIfCoordinator(
     async def _async_update_data(self) -> dict[str, Any]:
         """Fetch data from WebIF endpoint."""
         # try:
-        what_to_poll = []
+        active_categories = []
 
         if self.config_entry.data.get(CONF.CB_WEBIF_HK1, False) is True:
-            what_to_poll.append("Heizkreis")
+            active_categories.append("Heizkreis")
 
         if self.config_entry.data.get(CONF.CB_WEBIF_HK1, False) is True:
-            what_to_poll.append("Heizkreis1")
+            active_categories.append("Heizkreis1")
 
         if self.config_entry.data.get(CONF.CB_WEBIF_HK2, False) is True:
-            what_to_poll.append("Heizkreis2")
+            active_categories.append("Heizkreis2")
 
         if self.config_entry.data.get(CONF.CB_WEBIF_HK3, False) is True:
-            what_to_poll.append("Heizkreis3")
+            active_categories.append("Heizkreis3")
 
         if self.config_entry.data.get(CONF.CB_WEBIF_HK4, False) is True:
-            what_to_poll.append("Heizkreis4")
+            active_categories.append("Heizkreis4")
 
         if self.config_entry.data.get(CONF.CB_WEBIF_HK5, False) is True:
-            what_to_poll.append("Heizkreis5")
+            active_categories.append("Heizkreis5")
 
         if self.config_entry.data.get(CONF.CB_WEBIF_WP, False) is True:
-            what_to_poll.append("Waermepumpe")
+            active_categories.append("Waermepumpe")
 
         if self.config_entry.data.get(CONF.CB_WEBIF_2WEZ, False) is True:
-            what_to_poll.append("2WEZ")
+            active_categories.append("2WEZ")
 
         if self.config_entry.data.get(CONF.CB_WEBIF_SATISTICS, False) is True:
-            what_to_poll.append("Statistik")
+            active_categories.append("Statistik")
 
-        # Calculate dynamic budget: N requests * (delay + 5s network budget) + 5s buffer
-        delay = self.my_api._request_delay if self.my_api else 2
-        timeout_budget = len(what_to_poll) * (delay + 5.0) + 5.0
+        if not active_categories:
+            return self.data
+
+        # 2. Refill or sanitize the queue
+        self._category_queue = [
+            cat for cat in self._category_queue if cat in active_categories
+        ]
+        if not self._category_queue:
+            self._category_queue = list(active_categories)
+
+        # 3. Pull exactly ONE category for this run
+        category_to_poll = self._category_queue.pop(0)
+
+        # Since we are fetching exactly 1 page, we can set a safe, relaxed timeout budget
+        delay = self.my_api._request_delay if self.my_api else 10
+        timeout_budget = delay + 15.0
 
         try:
             # Acquire lock to ensure we do not collide with Modbus polling
             async with self._mcu_lock:
                 async with asyncio.timeout(timeout_budget):
-                    _LOGGER.debug("Trying to fetch complete WebIF data")
+                    _LOGGER.debug(
+                        "Round-robin: polling single WebIF category '%s'",
+                        category_to_poll,
+                    )
                     result: dict[str, Any] | None = None
 
                     if self.my_api is not None:
@@ -240,39 +257,22 @@ class MyWebIfCoordinator(
                             if self.config_entry.data.get(
                                 CONF.CB_WEBIF_MOCKUP_DATA, False
                             ):
-                                result = await self.my_api.update_all_mock(what_to_poll)
+                                result = await self.my_api.update_all_mock(
+                                    [category_to_poll]
+                                )
                             else:
-                                result = await self.my_api.update_all(what_to_poll)
-                    if result is not None:
-                        hk = result.get("Heizkreis")
-                        hk1 = result.get("Heizkreis1")
-                        hk2 = result.get("Heizkreis2")
-                        hk3 = result.get("Heizkreis3")
-                        hk4 = result.get("Heizkreis4")
-                        hk5 = result.get("Heizkreis5")
-                        wp = result.get("Waermepumpe")
-                        wez2 = result.get("2WEZ")
-                        wes = result.get("Statistik")
-                        if hk is not None:
-                            result = result | hk
-                        if hk1 is not None:
-                            result = result | hk1
-                        if hk2 is not None:
-                            result = result | hk2
-                        if hk3 is not None:
-                            result = result | hk3
-                        if hk4 is not None:
-                            result = result | hk4
-                        if hk5 is not None:
-                            result = result | hk5
-                        if wp is not None:
-                            result = result | wp
-                        if wez2 is not None:
-                            result = result | wez2
-                        if wes is not None:
-                            result = result | wes
+                                result = await self.my_api.update_all(
+                                    [category_to_poll]
+                                )
 
-                    return result if result is not None else {}
+                    if result is not None:
+                        # Extract the data for the category we successfully polled
+                        category_data = result.get(category_to_poll)
+                        if isinstance(category_data, dict):
+                            # Update our persistent cache in-place
+                            self.data.update(category_data)
+
+                    return self.data
         except TimeoutError as err:
             raise UpdateFailed("Timeout while fetching WebIF data") from err
         except WeishauptWebifError as err:
