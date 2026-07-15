@@ -6,11 +6,11 @@ import logging
 from typing import Any
 
 from pymodbus import ModbusException
-from weishaupt_webif_api import WebifConnection, WeishauptWebifError
 
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
+from weishaupt_webif_api import WebifConnection, WeishauptWebifError
 
 from .configentry import MyConfigEntry
 from .const import CONF, CONST, TYPES, DeviceConstants
@@ -196,6 +196,10 @@ class MyWebIfCoordinator(
         """Fetch data from WebIF endpoint."""
         # try:
         what_to_poll = []
+
+        if self.config_entry.data.get(CONF.CB_WEBIF_HK1, False) is True:
+            what_to_poll.append("Heizkreis")
+
         if self.config_entry.data.get(CONF.CB_WEBIF_HK1, False) is True:
             what_to_poll.append("Heizkreis1")
 

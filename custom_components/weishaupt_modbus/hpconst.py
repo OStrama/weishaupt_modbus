@@ -1607,7 +1607,7 @@ def _generate_hk_items(hk_num: int) -> list[WebItem]:
     """Helper to generate standard WebItems for a specific heating circuit."""
     return [
         WebItem(
-            name=f"{name} HK{hk_num}",
+            name=f"{name}",
             mformat=FORMATS.TEMPERATURE,
             mtype=TYPES.SENSOR,
             device=DEVICES.WIH,
