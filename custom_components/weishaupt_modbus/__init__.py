@@ -72,7 +72,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
             ip=entry.data[CONF.HOST],
             user=entry.data[CONF.USERNAME],
             password=entry.data[CONF.PASSWORD],
-            token=entry.data[CONF.WEBIF_TOKEN],
+            # token=entry.data[CONF.WEBIF_TOKEN],
             # request_delay=10,
             storage_path="./data",
         )

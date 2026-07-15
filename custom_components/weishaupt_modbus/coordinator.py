@@ -187,7 +187,7 @@ class MyWebIfCoordinator(
         self.my_api: WebifConnection | None = my_api
         self.api_items = api_items
         self._mcu_lock = mcu_lock  # <-- Store lock
-        self.data: dict[str, Any] = {}  # Persistent cache to prevent KeyErrors
+        self.data: dict[str, Any] = {item.name: None for item in api_items}
         self._category_queue: list[str] = []  # Queue to track our round-robin rotation
 
     async def _async_setup(self) -> None:
@@ -197,9 +197,6 @@ class MyWebIfCoordinator(
         """Fetch data from WebIF endpoint."""
         # try:
         active_categories = []
-
-        if self.config_entry.data.get(CONF.CB_WEBIF_HK1, False) is True:
-            active_categories.append("Heizkreis")
 
         if self.config_entry.data.get(CONF.CB_WEBIF_HK1, False) is True:
             active_categories.append("Heizkreis1")
