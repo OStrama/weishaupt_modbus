@@ -11,19 +11,18 @@
     "step" : {
       "user" : {
         "data" : {
-          "Device-Postfix" : "Device postfix",
+          "Device-Postfix" : "Apparaat-postfix",
           "Heizkreis 2" : "2de verwarmingskring",
           "Heizkreis 3" : "3de verwarmingskring",
           "Heizkreis 4" : "4de verwarmingskring",
           "Heizkreis 5" : "5de verwarmingskring",
           "Host" : "Host!",
-          "Kennfeld-File" : "Filename Kennfeld",
-          "Name-Device-Prefix" : "Name Device Prefix",
-          "Name-Topic-Prefix" : "Name Topic Prefix",
+          "Kennfeld-File" : "Bestandsnaam werkingsschema",
+          "Name-Device-Prefix" : "Naam apparaat-prefix",
+          "Name-Topic-Prefix" : "Naam topic-prefix",
           "Port" : "Poort",
           "Prefix" : "Prefix",
-          "enable-webif": "enable experimental webif?",
-          "Web-IF-Token": "four letter web-IF token, see readme",
+          "enable-webif": "experimentele WebIf inschakelen?",
           "Poll Heizkreis 1": "1de verwarmingskring ophalen?",
           "Poll Heizkreis 2": "2de verwarmingskring ophalen?",
           "Poll Heizkreis 3": "3de verwarmingskring ophalen?",
@@ -35,27 +34,26 @@
         }
       },
       "reconfigure": {
-                "description": "Please update your Modbus configuration parameters.",
+                "description": "Werk uw Modbus-configuratieparameters bij.",
                 "data": {
-                    "Device-Postfix" : "Device postfix",
+                    "Device-Postfix" : "Apparaat-postfix",
                     "Heizkreis 2" : "2de verwarmingskring",
                     "Heizkreis 3" : "3de verwarmingskring",
                     "Heizkreis 4" : "4de verwarmingskring",
                     "Heizkreis 5" : "5de verwarmingskring",
                     "Host" : "Host!",
-                    "Kennfeld-File" : "Filename Kennfeld",
-                    "Name-Device-Prefix" : "Name Device Prefix",
-                    "Name-Topic-Prefix" : "Name Topic Prefix",
+                    "Kennfeld-File" : "Bestandsnaam werkingsschema",
+                    "Name-Device-Prefix" : "Naam apparaat-prefix",
+                    "Name-Topic-Prefix" : "Naam topic-prefix",
                     "Port" : "Poort",
                     "Prefix" : "Prefix",
-                    "enable-webif": "enable experimental webif?",
-                    "Web-IF-Token": "four letter web-IF token, see readme",
+                    "enable-webif": "experimentele WebIf inschakelen?",
                     "Poll Heizkreis 1": "1de verwarmingskring ophalen?",
                     "Poll Heizkreis 2": "2de verwarmingskring ophalen?",
                     "Poll Heizkreis 3": "3de verwarmingskring ophalen?",
                     "Poll Heizkreis 4": "4de verwarmingskring ophalen?",
                     "Poll Heizkreis 5": "5de verwarmingskring ophalen?",
-                      "Poll Wärmepumpe": "Warmtepomp ophalen?",
+                    "Poll Wärmepumpe": "Warmtepomp ophalen?",
                     "Poll 2. Wärmeerzeuger": "2de warmtebron ophalen?",
                     "Poll Statistik": "Statistieken ophalen?"
                 }
@@ -97,7 +95,7 @@
       "name" : "Onbekend{postfix}"
     },
     "dev_ein_aus" : {
-      "name" : "Input/output{postfix}"
+      "name" : "Ingangen/Uitgangen{postfix}"
     }
   },
   "entity" : {
@@ -1725,7 +1723,7 @@
         "state" : {
           "heatpump_operationmode_pvmode" : "PV-mode",
           "heatpump_operationmode_relaistest" : "relais-test",
-          "heatpump_operationmode_evu" : "EVU_SPERRE",
+          "heatpump_operationmode_evu" : "EVU-blokkering",
           "heatpump_operationmode_sgtariff" : "SG-tarief",
           "heatpump_operationmode_sgmax" : "SG-maximaal",
           "heatpump_operationmode_tariffload" : "Tarieflading",

@@ -17,13 +17,12 @@
           "Heizkreis 4": "4th heating circuit",
           "Heizkreis 5": "5th heating circuit",
           "Host": "Host!",
-          "Kennfeld-File": "Filename Kennfeld",
+          "Kennfeld-File": "Operation map file",
           "Name-Device-Prefix": "Name Device Prefix",
           "Name-Topic-Prefix": "Name Topic Prefix",
           "Port": "Port",
           "Prefix": "Prefix",
           "enable-webif": "enable experimental webif?",
-          "Web-IF-Token": "four letter web-IF token, see readme",
           "Poll Heizkreis 1": "Retrieve Heating circuit 1?",
           "Poll Heizkreis 2": "Retrieve Heating circuit 2?",
           "Poll Heizkreis 3": "Retrieve Heating circuit 3?",
@@ -38,19 +37,18 @@
                 "description": "Please update your Modbus configuration parameters.",
                 "data": {
                     "Device-Postfix": "Device postfix",
-                    "Heizkreis 2": "2. Heizkreis",
-                    "Heizkreis 3": "3. Heizkreis",
-                    "Heizkreis 4": "4. Heizkreis",
-                    "Heizkreis 5": "5. Heizkreis",
+                    "Heizkreis 2": "2nd heating circuit",
+                    "Heizkreis 3": "3rd heating circuit",
+                    "Heizkreis 4": "4th heating circuit",
+                    "Heizkreis 5": "5th heating circuit",
                     "Host": "Host!",
-                    "Kennfeld-File": "Filename Kennfeld",
+                    "Kennfeld-File": "Operation map file",
                     "Name-Device-Prefix": "Name Device Prefix",
                     "Name-Topic-Prefix": "Name Topic Prefix",
                     "Port": "Port",
                     "Prefix": "Prefix",
                     "enable-webif": "enable experimental webif?",
                     "Use-Mockup-Data": "Use Mockup data for developement?",
-                    "Web-IF-Token": "4-Letter web-IF token, see readme",
                     "Poll Heizkreis 1": "Retrieve Heating circuit 1?",
                     "Poll Heizkreis 2": "Retrieve Heating circuit 2?",
                     "Poll Heizkreis 3": "Retrieve Heating circuit 3?",
@@ -1110,7 +1108,7 @@
           "sys_fehler_33": "Controller EC has no connection to expansion module EM-HK",
           "sys_fehler_4": "Compressor suction gas sensor (T4)",
           "sys_fehler_40": "Volume flow too low",
-          "sys_fehler_41": "Spreizung LWT/Rücklauf negative / four-way valve does not switch back after defrosting; the system locks after 3 warnings)",
+          "sys_fehler_41": "Spread LWT/return flow negative / four-way valve does not switch back after defrosting; the system locks after 3 warnings)",
           "sys_fehler_43": "Fan blocked",
           "sys_fehler_44": "Fan speed too low",
           "sys_fehler_47": "Communication controller EC to control board refrigeration unit faulty",
@@ -1160,7 +1158,7 @@
       "ges_energie_2_yesterday": {
         "name": "{prefix}Total energy II yesterday"
       },
-      "ges_energie_2_heute": {
+      "ges_energie_today": {
         "name": "{prefix}Total energy II today"
       },
       "ges_energie_2_jahr": {
@@ -1694,7 +1692,7 @@
           "sys_fehler_33": "Controller EC has no connection to expansion module EM-HK",
           "sys_fehler_4": "Compressor suction gas sensor (T4)",
           "sys_fehler_40": "Volume flow too low",
-          "sys_fehler_41": "Spreizung LWT/Rücklauf negative / four-way valve does not switch back after defrosting; the system locks after 3 warnings)",
+          "sys_fehler_41": "Spread LWT/return flow negative / four-way valve does not switch back after defrosting; the system locks after 3 warnings)",
           "sys_fehler_43": "Fan blocked",
           "sys_fehler_44": "Fan speed too low",
           "sys_fehler_47": "Communication controller EC to control board refrigeration unit faulty",
@@ -1742,7 +1740,7 @@
         "state": {
           "heatpump_operationmode_pvmode": "PV Mode",
           "heatpump_operationmode_relaistest": "Relay test",
-          "heatpump_operationmode_evu": "EVU_SPERRE",
+          "heatpump_operationmode_evu": "Utility grid lock",
           "heatpump_operationmode_sgtariff": "SG tariff",
           "heatpump_operationmode_sgmax": "SG Maximum",
           "heatpump_operationmode_tariffload": "Tariff load",
@@ -1767,7 +1765,7 @@
           "heatpump_operationmode_locked": "Locked",
           "heatpump_operationmode_diagnosis": "Diagnosis",
           "heatpump_operationmode_lockedat": "Lock AT",
-          "hp_bheatpump_operationmode_lockedsummeretrieb_31": "Lock summer",
+          "heatpump_operationmode_lockedsummer": "Lock summer",
           "heatpump_operationmode_lockedwinter": "Winter lock",
           "heatpump_operationmode_applicationlimit": "Application limit",
           "heatpump_operationmode_lockedcv": "HK lock",
@@ -1818,7 +1816,7 @@
         "name": "{prefix}Hot water energy yesterday"
       },
       "ww_energie_heute": {
-        "name": "{prefix}Hot water energy heute"
+        "name": "{prefix}Hot water energy today"
       },
       "ww_energie_jahr": {
         "name": "{prefix}Hot water energy year"

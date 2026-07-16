@@ -1,29 +1,28 @@
 {
     "config": {
         "abort": {
-            "already_configured": "Account is already configured"
+            "already_configured": "Konto ist bereits konfiguriert"
         },
         "error": {
-            "cannot_connect": "Failed to connect",
-            "invalid_auth": "Invalid authentication",
-            "unknown": "Unexpected error"
+            "cannot_connect": "Verbindung fehlgeschlagen",
+            "invalid_auth": "Ungültige Authentifizierung",
+            "unknown": "Unerwarteter Fehler"
         },
         "step": {
             "user": {
                 "data": {
-                    "Device-Postfix": "Device postfix",
+                    "Device-Postfix": "Geräte-Postfix",
                     "Heizkreis 2": "2. Heizkreis",
                     "Heizkreis 3": "3. Heizkreis",
                     "Heizkreis 4": "4. Heizkreis",
                     "Heizkreis 5": "5. Heizkreis",
-                    "Host": "Host!",
-                    "Kennfeld-File": "Filename Kennfeld",
-                    "Name-Device-Prefix": "Name Device Prefix",
-                    "Name-Topic-Prefix": "Name Topic Prefix",
+                    "Host": "Host/IP-Adresse",
+                    "Kennfeld-File": "Kennfeld Dateiname",
+                    "Name-Device-Prefix": "Name Geräte-Prefix",
+                    "Name-Topic-Prefix": "Name Topic-Prefix",
                     "Port": "Port",
                     "Prefix": "Prefix",
                     "enable-webif": "experimentelles WebIf aktivieren?",
-                    "Web-IF-Token": "4-Zeichen web-IF token, siehe readme",
                     "Poll Heizkreis 1": "Heizkreis 1 abrufen?",
                     "Poll Heizkreis 2": "Heizkreis 2 abrufen?",
                     "Poll Heizkreis 3": "Heizkreis 3 abrufen?",
@@ -33,25 +32,23 @@
                     "Poll 2. Wärmeerzeuger": "Wärmeerzeuger 2 abrufen?",
                     "Poll Statistik": "Statistik abrufen?"
                 }
-            }
-        },
+            },
                 "reconfigure": {
-                "description": "Please update your Modbus configuration parameters.",
+                "description": "Bitte aktualisieren Sie Ihre Modbus-Konfigurationsparameter.",
                 "data": {
-                    "Device-Postfix": "Device postfix",
+                    "Device-Postfix": "Geräte-Postfix",
                     "Heizkreis 2": "2. Heizkreis",
                     "Heizkreis 3": "3. Heizkreis",
                     "Heizkreis 4": "4. Heizkreis",
                     "Heizkreis 5": "5. Heizkreis",
-                    "Host": "Host!",
-                    "Kennfeld-File": "Filename Kennfeld",
-                    "Name-Device-Prefix": "Name Device Prefix",
-                    "Name-Topic-Prefix": "Name Topic Prefix",
+                    "Host": "Host/IP-Adresse",
+                    "Kennfeld-File": "Kennfeld Dateiname",
+                    "Name-Device-Prefix": "Name Geräte-Prefix",
+                    "Name-Topic-Prefix": "Name Topic-Prefix",
                     "Port": "Port",
                     "Prefix": "Prefix",
-                    "enable-webif": "enable experimental webif?",
-                    "Use-Mockup-Data": "Use Mockup data for developement?",
-                    "Web-IF-Token": "4-Zeichen web-IF token, siehe readme",
+                    "enable-webif": "experimentelles WebIf aktivieren?",
+                    "Use-Mockup-Data": "Mockup-Daten für die Entwicklung verwenden?",
                     "Poll Heizkreis 1": "Heizkreis 1 abrufen?",
                     "Poll Heizkreis 2": "Heizkreis 2 abrufen?",
                     "Poll Heizkreis 3": "Heizkreis 3 abrufen?",
@@ -62,6 +59,7 @@
                     "Poll Statistik": "Statistik abrufen?"
                 }
             }
+        }
     },
     "device": {
         "dev_system": {
@@ -95,7 +93,7 @@
             "name": "WH Statistik{postfix}"
         },
         "dev_unknown": {
-            "name": "WH Unknown{postfix}"
+            "name": "WH Unbekannt{postfix}"
         },
         "dev_ein_aus": {
             "name": "WH Eingänge/Ausgänge{postfix}"
@@ -1839,18 +1837,6 @@
             },
             "ww_temp": {
                 "name": "{prefix}Warmwassertemperatur"
-            }
-        }
-    },
-    "options": {
-        "step": {
-            "init": {
-                "data": {
-                    "api_scan_interval": "Api scan interval (default = 300 sec)",
-                    "language": "Language (default = en)",
-                    "mode": "Mode(default = api)",
-                    "scan_interval": "Web scraping interval (default = 1800 sec)"
-                }
             }
         }
     },
