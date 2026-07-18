@@ -2,22 +2,24 @@
 
 import asyncio
 import copy
-import json
 import logging
-from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
+from config.custom_components.weishaupt_modbus.weishaupt_modbus_api.modbus_api import (
+    WeishauptModbusClient,
+)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from weishaupt_webif_api import WebifConnection
 
 from .configentry import MyData
+from .translations import update_translation
 
 if TYPE_CHECKING:
     from .configentry import MyConfigEntry
 
-from .const import CONF, CONST, DEVICENAMES, FORMATS, TYPES
-from .coordinator import MyCoordinator, MyWebIfCoordinator
+from .const import CONF, CONST, DEVICENAMES
+from .coordinator import MyWebIfCoordinator, WeishauptModbusCoordinator
 from .hpconst import (
     DEVICELISTS,
     MODBUS_HZ2_ITEMS,
@@ -39,7 +41,6 @@ from .hpconst import (
 from .items import ModbusItem, WebItem
 from .kennfeld import PowerMap
 from .migrate_helpers import migrate_entities
-from .modbusobject import ModbusAPI
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -56,8 +57,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
     # Create independent copies of ModbusItems for each config entry
     itemlist: list[ModbusItem] = []
     webif_itemlist: list[WebItem] = []
-
-    mbapi = ModbusAPI(config_entry=entry)
 
     # 1. Create the shared lock to serialize hardware communication
     mcu_lock = asyncio.Lock()
@@ -103,14 +102,15 @@ async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
     for device in DEVICELISTS:
         itemlist.extend(copy.deepcopy(item) for item in device)
 
-    modbus_coordinator = MyCoordinator(
+    modbus_api = WeishauptModbusClient(host=entry.data[CONF.HOST], mcu_lock=mcu_lock)
+
+    modbus_coordinator = WeishauptModbusCoordinator(
         hass=hass,
-        my_api=mbapi,
+        client=modbus_api,
         api_items=itemlist,
         p_config_entry=entry,
-        mcu_lock=mcu_lock,
     )
-    # await coordinator.async_config_entry_first_refresh()
+    await modbus_coordinator.async_config_entry_first_refresh()
     if webapi is not None:
         webif_coordinator = MyWebIfCoordinator(
             hass=hass,
@@ -124,7 +124,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
         webif_coordinator = None
 
     entry.runtime_data = MyData(
-        modbus_api=mbapi,
+        modbus_api=modbus_api,
         webif_api=webapi,
         config_dir=hass.config.config_dir,
         hass=hass,
@@ -163,7 +163,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
     entry.async_on_unload(entry.add_update_listener(update_listener))
 
     # This is used to generate a strings.json file from hpconst.py
-    # create_string_json()
+
+    # update_translation()
 
     # This creates each HA object for each platform your device requires.
     # It's done by calling the `async_setup_entry` function in each platform module.
@@ -251,80 +252,3 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             _LOGGER.warning("KeyError: %s", str(entry.data[CONF.PREFIX]))
 
     return unload_ok
-
-
-def create_string_json() -> None:
-    """Create strings.json from hpconst.py."""
-    myEntity: dict[str, dict[str, dict[str, Any]]] = {}
-    myJson: dict[str, Any] = {}
-    mySensors: dict[str, dict[str, Any]] = {}
-    myNumbers: dict[str, dict[str, Any]] = {}
-    mySelects: dict[str, dict[str, Any]] = {}
-
-    # generate list of all mbitems
-    DEVICELIST: list[ModbusItem] = []
-    for devicelist in DEVICELISTS:
-        DEVICELIST = DEVICELIST + devicelist
-
-    for item in DEVICELIST:
-        match item.type:
-            case TYPES.SENSOR | TYPES.NUMBER_RO | TYPES.SENSOR_CALC:
-                mySensor: dict[str, Any] = {}
-                mySensor["name"] = "{prefix}" + item.name
-                if item.resultlist is not None:
-                    if item.format is FORMATS.STATUS:
-                        myValues: dict[str, str] = {}
-                        for myStatusItem in item.resultlist:
-                            myValues[myStatusItem.translation_key] = myStatusItem.text
-                        mySensor["state"] = myValues
-                mySensors[item.translation_key] = mySensor.copy()
-            case TYPES.NUMBER:
-                myNumber: dict[str, Any] = {}
-                myNumber["name"] = "{prefix}" + item.name
-                if item.resultlist is not None:
-                    if item.format is FORMATS.STATUS:
-                        myNumberValues: dict[str, str] = {}
-                        for myStatusItem in item.resultlist:
-                            myNumberValues[myStatusItem.translation_key] = (
-                                myStatusItem.text
-                            )
-                        myNumber["value"] = myNumberValues
-                myNumbers[item.translation_key] = myNumber.copy()
-            case TYPES.SELECT:
-                mySelect: dict[str, Any] = {}
-                mySelect["name"] = "{prefix}" + item.name
-                if item.resultlist is not None:
-                    if item.format is FORMATS.STATUS:
-                        mySelectValues: dict[str, str] = {}
-                        for myStatusItem in item.resultlist:
-                            mySelectValues[myStatusItem.translation_key] = (
-                                myStatusItem.text
-                            )
-                        mySelect["state"] = mySelectValues
-                mySelects[item.translation_key] = mySelect.copy()
-    myEntity["sensor"] = mySensors
-    myEntity["number"] = myNumbers
-    myEntity["select"] = mySelects
-    myJson["entity"] = myEntity
-
-    # iterate over all devices in order to create a translation. TODO
-    # for key, value in asdict(DeviceConstants).items():
-    #    ...
-
-    # load strings.json into string
-    # replaced Path.open by open
-    with Path("config/custom_components/weishaupt_modbus/strings.json").open(
-        encoding="utf-8"
-    ) as file:
-        data = file.read()
-    # create dict from json
-    data_dict = json.loads(data)
-    # overwrite entity dict
-    data_dict["entity"] = myEntity
-    # write whole json to file again
-    # replaced Path.open by open
-    with Path("config/custom_components/weishaupt_modbus/strings.json").open(
-        mode="w",
-        encoding="utf-8",
-    ) as file:
-        file.write(json.dumps(data_dict, indent=4, sort_keys=True, ensure_ascii=False))
