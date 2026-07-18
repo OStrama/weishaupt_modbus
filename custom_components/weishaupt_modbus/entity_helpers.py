@@ -4,7 +4,7 @@ import logging
 
 from .configentry import MyConfigEntry
 from .const import TYPES
-from .coordinator import MyCoordinator, MyWebIfCoordinator, check_configured
+from .coordinator import MyWebIfCoordinator, WeishauptModbusCoordinator
 from .entities import (
     MyCalcSensorEntity,
     MyNumberEntity,
@@ -13,7 +13,6 @@ from .entities import (
     MyWebifSensorEntity,
 )
 from .items import ModbusItem, WebItem
-from .modbusobject import ModbusObject
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -27,39 +26,12 @@ EntityType = (
 )
 
 
-async def check_available(
-    api_item: ModbusItem | WebItem, config_entry: MyConfigEntry
-) -> bool:
-    """Check if item is valid and available.
-
-    Args:
-        api_item: definition of modbus or web item
-        config_entry: HASS config entry
-
-    Returns:
-        True if item is available, False otherwise
-
-    """
-    # WebItem doesn't need configuration check
-    if isinstance(api_item, WebItem):
-        return True
-
-    # For ModbusItem, check configuration
-    if await check_configured(api_item, config_entry) is False:
-        return False
-
-    modbus_api = config_entry.runtime_data.modbus_api
-    mbo = ModbusObject(modbus_api, api_item, no_connect_warn=True)
-    _ = await mbo.get_value()
-    return api_item.is_invalid is False
-
-
 async def build_entity_list(
     entries: list[EntityType],
     config_entry: MyConfigEntry,
     api_items: list[ModbusItem] | list[WebItem],
     item_types: str | tuple[str, ...],
-    coordinator: MyCoordinator,
+    coordinator: WeishauptModbusCoordinator,
 ) -> list[EntityType]:
     """Build entity list.
 
@@ -83,11 +55,6 @@ async def build_entity_list(
     for index, item in enumerate(api_items):
         if item.type not in item_types:
             continue
-
-        # Reassure mypy that item is exactly one of the two expected types
-        if isinstance(item, (ModbusItem, WebItem)):
-            if await check_available(item, config_entry=config_entry) is not True:
-                continue
 
         if isinstance(item, ModbusItem):
             match item.type:
@@ -145,12 +112,11 @@ async def build_webif_entity_list(
 
     for index, item in enumerate(api_items):
         if item.type == item_type:
-            if await check_available(item, config_entry=config_entry) is True:
-                match item_type:
-                    case TYPES.SENSOR:
-                        entries.append(
-                            MyWebifSensorEntity(config_entry, item, coordinator, index)
-                        )
-                    # Add other WebIF entity types as needed
+            match item_type:
+                case TYPES.SENSOR:
+                    entries.append(
+                        MyWebifSensorEntity(config_entry, item, coordinator, index)
+                    )
+                # Add other WebIF entity types as needed
 
     return entries

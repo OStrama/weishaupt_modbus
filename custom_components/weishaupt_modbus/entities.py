@@ -1,7 +1,5 @@
 """Entity classes used in this integration."""
 
-from __future__ import annotations
-
 from typing import TYPE_CHECKING, Any
 
 from homeassistant.components.number import NumberEntity
@@ -19,11 +17,10 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .configentry import MyConfigEntry
 from .const import CONF, CONST, FORMATS
-from .coordinator import MyCoordinator, MyWebIfCoordinator
+from .coordinator import MyWebIfCoordinator, WeishauptModbusCoordinator
 from .hpconst import reverse_device_list
 from .items import ModbusItem, WebItem
 from .migrate_helpers import create_unique_id
-from .modbusobject import ModbusAPI, ModbusObject
 
 if TYPE_CHECKING:
     import logging
@@ -32,16 +29,7 @@ _LOGGER: logging.Logger = __import__("logging").getLogger(__name__)
 
 
 class MyEntity(Entity):
-    """An entity using CoordinatorEntity.
-
-    The CoordinatorEntity class provides:
-    should_poll
-    async_update
-    async_added_to_hass
-    available
-
-    The base class for entities that hold general parameters
-    """
+    """An entity using CoordinatorEntity."""
 
     _divider = 1
     _attr_should_poll = True
@@ -56,14 +44,12 @@ class MyEntity(Entity):
         self,
         config_entry: MyConfigEntry,
         api_item: ModbusItem | WebItem,
-        api: ModbusAPI | MyWebIfCoordinator,
     ) -> None:
         """Initialize the entity."""
         self._config_entry = config_entry
-        self._api_item: ModbusItem | WebItem = api_item  # | None = api_item
+        self._api_item: ModbusItem | WebItem = api_item
 
         dev_postfix = "_" + self._config_entry.data[CONF.DEVICE_POSTFIX]
-
         if dev_postfix == "_":
             dev_postfix = ""
 
@@ -92,7 +78,6 @@ class MyEntity(Entity):
         if isinstance(self._api_item, ModbusItem):
             self._attr_unique_id = create_unique_id(self._config_entry, self._api_item)
         else:
-            # For WebItem, create a simple unique ID
             dev_postfix = "_" + self._config_entry.data[CONF.DEVICE_POSTFIX]
             if dev_postfix == "_":
                 dev_postfix = ""
@@ -101,14 +86,11 @@ class MyEntity(Entity):
                 f"{dev_prefix}_{self._api_item.name}{dev_postfix}_webif"
             )
 
-        self._api = api
-
         if self._api_item.format == FORMATS.STATUS:
             self._divider = 1
         elif self._api_item.format == FORMATS.TEXT:
             self._attr_suggested_display_precision = None
         else:
-            # Set attributes for non-status items
             if self._api_item.params is not None:
                 self._attr_native_unit_of_measurement = self._api_item.params.get(
                     "unit", ""
@@ -134,9 +116,7 @@ class MyEntity(Entity):
 
     def set_min_max(self, onlydynamic: bool = False):
         """Set min max to fixed or dynamic values."""
-        if self._api_item is None:
-            return
-        if self._api_item.params is None:
+        if self._api_item is None or self._api_item.params is None:
             return
 
         if onlydynamic is True:
@@ -144,22 +124,16 @@ class MyEntity(Entity):
                 return
 
         if self._has_dynamic_min:
-            # Look up the key, and fall back to an empty string if it's missing or None
             min_key = self._api_item.params.get("dynamic_min") or ""
-
-            self._dynamic_min = (
-                self._config_entry.runtime_data.coordinator.get_value_from_item(min_key)
-            )
+            # Safely fetch the dynamic min from the coordinator
+            self._dynamic_min = self.coordinator.get_value_from_item(min_key)
             if self._dynamic_min is not None:
                 self._attr_native_min_value = self._dynamic_min / self._divider
 
         if self._has_dynamic_max:
-            # Look up the key, and fall back to an empty string if it's missing or None
             max_key = self._api_item.params.get("dynamic_max") or ""
-
-            self._dynamic_max = (
-                self._config_entry.runtime_data.coordinator.get_value_from_item(max_key)
-            )
+            # Safely fetch the dynamic max from the coordinator
+            self._dynamic_max = self.coordinator.get_value_from_item(max_key)
             if self._dynamic_max is not None:
                 self._attr_native_max_value = self._dynamic_max / self._divider
 
@@ -174,7 +148,7 @@ class MyEntity(Entity):
         return float(val) / self._divider
 
     async def set_translate_val(self, value: str | float) -> int | None:
-        """Translate and writes a value to the modbus."""
+        """Translate and write a value directly to the Modbus client."""
         if not isinstance(self._api_item, ModbusItem):
             return None
 
@@ -187,13 +161,29 @@ class MyEntity(Entity):
         if val is None:
             return None
 
-        if not isinstance(self._api, ModbusAPI):
+        address = getattr(self._api_item, "_address", None) or getattr(
+            self._api_item, "address", None
+        )
+        if address is None:
+            _LOGGER.error(
+                "Cannot write value: No register address found for %s",
+                self._api_item.translation_key,
+            )
             return None
 
-        await self._api.connect()
-        mbo = ModbusObject(self._api, self._api_item)
-        await mbo.set_value(val)
-        return val
+        try:
+            client = getattr(self.coordinator, "client", None)
+            if client is None:
+                _LOGGER.error(
+                    "Cannot write value: Coordinator does not contain a Modbus client"
+                )
+                return None
+
+            await client.write_register(address=address, value=val)
+            return val
+        except Exception as err:
+            _LOGGER.error("Failed to write to register %s: %s", address, err)
+            return None
 
     def my_device_info(self) -> DeviceInfo:
         """Build the device info."""
@@ -223,13 +213,14 @@ class MySensorEntity(CoordinatorEntity, SensorEntity, MyEntity):
         self,
         config_entry: MyConfigEntry,
         modbus_item: ModbusItem,
-        coordinator: MyCoordinator,
+        coordinator: WeishauptModbusCoordinator,
         idx,
     ) -> None:
         """Initialize of MySensorEntity."""
+
         super().__init__(coordinator, context=idx)
         self.idx = idx
-        MyEntity.__init__(self, config_entry, modbus_item, coordinator.modbus_api)
+        MyEntity.__init__(self, config_entry, modbus_item)
 
         # Set sensor-specific state class
         if modbus_item.format in [
@@ -261,13 +252,8 @@ class MySensorEntity(CoordinatorEntity, SensorEntity, MyEntity):
 
 
 class MyCalcSensorEntity(MySensorEntity):
-    """class that represents a sensor entity.
+    """Class that represents a calculated sensor entity."""
 
-    Derived from Sensorentity
-    and decorated with general parameters from MyEntity
-    """
-
-    # calculates output from map
     _calculation_source = None
     _calculation = None
 
@@ -275,10 +261,11 @@ class MyCalcSensorEntity(MySensorEntity):
         self,
         config_entry: MyConfigEntry,
         modbus_item: ModbusItem,
-        coordinator: MyCoordinator,
+        coordinator: WeishauptModbusCoordinator,
         idx,
     ) -> None:
         """Initialize MyCalcSensorEntity."""
+
         MySensorEntity.__init__(self, config_entry, modbus_item, coordinator, idx)
 
         if self._api_item.params is not None:
@@ -290,7 +277,9 @@ class MyCalcSensorEntity(MySensorEntity):
                     self._calculation_source, "calculation", "eval"
                 )
             except SyntaxError:
-                _LOGGER.warning("Syntax error %s", self._calculation_source)
+                _LOGGER.warning(
+                    "Syntax error in calculation formula: %s", self._calculation_source
+                )
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -298,61 +287,73 @@ class MyCalcSensorEntity(MySensorEntity):
         self._attr_native_value = self.translate_val(self._api_item.state)
         self.async_write_ha_state()
 
-    def translate_val(self, val):
-        """Translate a value from the modbus."""
-        if self._calculation_source is None:
-            return None
-        if self._api_item.params is None:
-            return None
-        if "val_1" in self._calculation_source:
-            val_1 = self._config_entry.runtime_data.coordinator.get_value_from_item(  # noqa: F841 pylint: disable=unused-variable
-                self._api_item.params.get("val_1", 1)
-            )
-        if "val_2" in self._calculation_source:
-            val_2 = self._config_entry.runtime_data.coordinator.get_value_from_item(  # noqa: F841 pylint: disable=unused-variable
-                self._api_item.params.get("val_2", 1)
-            )
-        if "val_3" in self._calculation_source:
-            val_3 = self._config_entry.runtime_data.coordinator.get_value_from_item(  # noqa: F841 pylint: disable=unused-variable
-                self._api_item.params.get("val_3", 1)
-            )
-        if "val_4" in self._calculation_source:
-            val_4 = self._config_entry.runtime_data.coordinator.get_value_from_item(  # noqa: F841 pylint: disable=unused-variable
-                self._api_item.params.get("val_4", 1)
-            )
-        if "val_5" in self._calculation_source:
-            val_5 = self._config_entry.runtime_data.coordinator.get_value_from_item(  # noqa: F841 pylint: disable=unused-variable
-                self._api_item.params.get("val_5", 1)
-            )
-        if "val_6" in self._calculation_source:
-            val_6 = self._config_entry.runtime_data.coordinator.get_value_from_item(  # noqa: F841 pylint: disable=unused-variable
-                self._api_item.params.get("val_6", 1)
-            )
-        if "val_7" in self._calculation_source:
-            val_7 = self._config_entry.runtime_data.coordinator.get_value_from_item(  # noqa: F841 pylint: disable=unused-variable
-                self._api_item.params.get("val_7", 1)
-            )
-        if "val_8" in self._calculation_source:
-            val_8 = self._config_entry.runtime_data.coordinator.get_value_from_item(  # noqa: F841 pylint: disable=unused-variable
-                self._api_item.params.get("val_8", 1)
-            )
-        if "power" in self._calculation_source:
-            power = self._config_entry.runtime_data.powermap  # noqa: F841 pylint: disable=unused-variable
+    async def async_added_to_hass(self) -> None:
+        """When entity is added to Hass, perform immediate initial calculation."""
+        await super().async_added_to_hass()
+        # Force a calculation using the standard sensors' freshly loaded boot states
+        self._attr_native_value = self.translate_val(self._api_item.state)
+        self.async_write_ha_state()
 
+    def translate_val(self, val: Any) -> float | None:
+        """Translate a value from the modbus in-memory with custom console logging."""
+
+        if self._calculation_source is None or self._api_item.params is None:
+            return None
+
+        # Build the local namespace dictionary dynamically
+        eval_locals: dict[str, Any] = {}
+
+        # 1. Get this calculated sensor's own Modbus register address
+        address = getattr(self._api_item, "_address", None) or getattr(
+            self._api_item, "address", None
+        )
+        # 2. Fetch its raw polled value directly from the batch cache
+        fetched_raw = (
+            self.coordinator.client.get_value(address) if address is not None else None
+        )
+
+        # Pull val_0 to val_8 dynamically if they are referenced in the formula
+        for i in range(9):
+            var_name = f"val_{i}"
+            if var_name in self._calculation_source:
+                # Fetch key from params (e.g. "vl_temp", "ges_volumenstrom", etc.)
+                key_map = self._api_item.params.get(var_name, None)
+
+                if key_map is not None:
+                    # Fetch from the standalone standard sensor in memory
+                    fetched_val = self.coordinator.get_value_from_item(key_map)
+
+                    if var_name == "val_0":
+                        eval_locals[var_name] = (
+                            (fetched_val / self._divider)
+                            if fetched_val is not None
+                            else 0.0
+                        )
+                    else:
+                        eval_locals[var_name] = fetched_val
+                # Fallback if no mapping exists in params (retrieve val_0 from our own cached register)
+                elif var_name == "val_0":
+                    eval_locals[var_name] = (
+                        (fetched_raw / self._divider)
+                        if fetched_raw is not None
+                        else 0.0
+                    )
+                else:
+                    eval_locals[var_name] = None
+
+        # Include powermap if referenced
+        if "power" in self._calculation_source:
+            eval_locals["power"] = self._config_entry.runtime_data.powermap
+
+        # Perform the evaluation
         try:
-            val_0 = val / self._divider  # noqa: F841 pylint: disable=unused-variable
             if self._calculation is not None:
-                y = eval(self._calculation)  # pylint: disable=eval-used  # noqa: S307
+                y = eval(self._calculation, {}, eval_locals)  # pylint: disable=eval-used  # noqa: S307
             else:
                 return None
         except ZeroDivisionError:
-            return None
-        except NameError:
-            _LOGGER.warning("Variable not defined %s", self._calculation_source)
-            return None
-        except TypeError:
-            _LOGGER.warning("No valid calculation string")
-            return None
+            return 0.0
+
         return round(y, self._attr_suggested_display_precision)
 
 
@@ -367,13 +368,13 @@ class MyNumberEntity(CoordinatorEntity, NumberEntity, MyEntity):  # pylint: disa
         self,
         config_entry: MyConfigEntry,
         modbus_item: ModbusItem,
-        coordinator: MyCoordinator,
+        coordinator: WeishauptModbusCoordinator,
         idx: Any,
     ) -> None:
         """Initialize NyNumberEntity."""
         super().__init__(coordinator, context=idx)
         self._idx = idx
-        MyEntity.__init__(self, config_entry, modbus_item, coordinator.modbus_api)
+        MyEntity.__init__(self, config_entry, modbus_item)  # , coordinator.modbus_api)
 
     def translate_val_number(self, val: Any) -> float | None:
         """Translate modbus value for number entity."""
@@ -413,13 +414,13 @@ class MySelectEntity(CoordinatorEntity, SelectEntity, MyEntity):  # pylint: disa
         self,
         config_entry: MyConfigEntry,
         modbus_item: ModbusItem,
-        coordinator: MyCoordinator,
+        coordinator: WeishauptModbusCoordinator,
         idx: Any,
     ) -> None:
         """Initialize MySelectEntity."""
         super().__init__(coordinator, context=idx)
         self._idx = idx
-        MyEntity.__init__(self, config_entry, modbus_item, coordinator.modbus_api)
+        MyEntity.__init__(self, config_entry, modbus_item)
         self.async_internal_will_remove_from_hass_port = self._config_entry.data[
             CONF.PORT
         ]

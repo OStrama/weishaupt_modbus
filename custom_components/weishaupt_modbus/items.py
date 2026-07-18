@@ -1,7 +1,5 @@
 """Item classes."""
 
-from __future__ import annotations
-
 from typing import Any
 
 from .const import DEVICES, FORMATS, TYPES
@@ -314,6 +312,7 @@ class ModbusItem(ApiItem):
         translation_key: str,
         resultlist: Any = None,
         params: dict[str, str] | None = None,
+        batch: int | None = None,
     ) -> None:
         """ModbusItem is used to generate entities.
 
@@ -338,6 +337,7 @@ class ModbusItem(ApiItem):
             params=params,
         )
         self._address = address
+        self.batch = batch
 
     @property
     def address(self) -> int:
