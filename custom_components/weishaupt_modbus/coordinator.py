@@ -7,6 +7,12 @@ from typing import Any
 
 from pymodbus import ModbusException
 
+from config.custom_components.weishaupt_modbus.weishaupt_modbus_api.exceptions import (
+    ConnectionFailedError,
+)
+from config.custom_components.weishaupt_modbus.weishaupt_modbus_api.modbus_api import (
+    WeishauptModbusClient,
+)
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
@@ -15,7 +21,7 @@ from weishaupt_webif_api import WebifConnection, WeishauptWebifError
 from .configentry import MyConfigEntry
 from .const import CONF, CONST, TYPES, DeviceConstants
 from .items import ModbusItem, WebItem
-from .modbusobject import ModbusAPI, ModbusObject
+from .modbusobject import ModbusAPI
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -35,131 +41,6 @@ async def check_configured(
             return config_entry.data[CONF.HK5]
         case _:
             return True
-
-
-class MyCoordinator(DataUpdateCoordinator[dict[str, Any]]):
-    """Modbus coordinator for Weishaupt heat pump."""
-
-    def __init__(
-        self,
-        hass: HomeAssistant,
-        my_api: ModbusAPI,
-        api_items: list[ModbusItem],
-        p_config_entry: MyConfigEntry,
-        mcu_lock: asyncio.Lock,
-    ) -> None:
-        """Initialize coordinator."""
-        super().__init__(
-            hass,
-            _LOGGER,
-            name="weishaupt-coordinator",
-            update_interval=CONST.SCAN_INTERVAL,
-            always_update=True,
-        )
-        self._modbus_api = my_api
-        self._device: Any = None
-        self._modbusitems = api_items
-        self._number_of_items = len(api_items)
-        self._config_entry = p_config_entry
-        self._mcu_lock = mcu_lock
-
-    @property
-    def modbus_items(self) -> list[ModbusItem]:
-        """Return the list of modbus items for this coordinator."""
-        return self._modbusitems
-
-    async def get_value(self, modbus_item: ModbusItem) -> Any:
-        """Read a value from the modbus."""
-        mbo = ModbusObject(self._modbus_api, modbus_item)
-        if mbo is None:
-            modbus_item.state = None
-        else:
-            modbus_item.state = await mbo.get_value()
-        return modbus_item.state
-
-    def get_value_from_item(self, translation_key: str) -> Any:
-        """Read a value from another modbus item."""
-        for item in self._modbusitems:
-            if item.translation_key == translation_key:
-                return item.state
-        return None
-
-    async def _async_setup(self) -> None:
-        """Set up the coordinator."""
-        if self._modbus_api._modbus_client is None:  # noqa: SLF001
-            _LOGGER.warning("Modbus client is None")
-            raise ConfigEntryNotReady("Modbus client not initialized")
-
-        await self._modbus_api.connect(startup=True)
-        if not self._modbus_api._modbus_client.connected:  # noqa: SLF001
-            _LOGGER.warning("Connection failed during setup")
-            raise ConfigEntryNotReady("Could not connect to modbus")
-
-    async def fetch_data(self, idx: set[int] | None = None) -> dict[str, Any]:
-        """Fetch all values from the modbus."""
-        if idx is None or len(idx) == 0:
-            to_update = tuple(range(len(self._modbusitems)))
-        else:
-            to_update = tuple(idx)
-
-        if not await self._ensure_connection():
-            return {}
-
-        results: dict[str, Any] = {}
-
-        for index in to_update:
-            if index >= len(self._modbusitems):
-                continue
-
-            item = self._modbusitems[index]
-
-            if not await check_configured(item, self._config_entry):
-                continue
-
-            match item.type:
-                case (
-                    TYPES.SENSOR
-                    | TYPES.NUMBER_RO
-                    | TYPES.NUMBER
-                    | TYPES.SELECT
-                    | TYPES.SENSOR_CALC
-                ):
-                    value = await self.get_value(item)
-                    results[item.translation_key] = value
-
-        return results
-
-    async def _ensure_connection(self) -> bool:
-        """Establish modbus connection."""
-        if self._modbus_api._modbus_client is None:  # noqa: SLF001
-            _LOGGER.debug("Modbus client is None")
-            return False
-
-        if not self._modbus_api._modbus_client.connected:  # noqa: SLF001
-            status = await self._modbus_api.connect(startup=False)
-            if not status:
-                _LOGGER.debug("Connection retry failed")
-                return False
-        return True
-
-    async def _async_update_data(self) -> dict[str, Any]:
-        """Fetch data from API endpoint."""
-        async with self._mcu_lock:
-            try:
-                async with asyncio.timeout(10):
-                    # listening_idx = set(self.async_contexts())
-                    return await self.fetch_data()  # listening_idx)
-            except ModbusException as err:
-                _LOGGER.debug("Modbus connection failed: %s", err)
-                return {}
-            except TimeoutError as err:
-                _LOGGER.debug("Timeout while fetching data: %s", err)
-                return {}
-
-    @property
-    def modbus_api(self) -> ModbusAPI:
-        """Return modbus API."""
-        return self._modbus_api
 
 
 class MyWebIfCoordinator(
@@ -274,3 +155,87 @@ class MyWebIfCoordinator(
             raise UpdateFailed("Timeout while fetching WebIF data") from err
         except WeishauptWebifError as err:
             raise UpdateFailed(f"Error fetching WebIF data: {err}") from err
+
+
+class WeishauptModbusCoordinator(DataUpdateCoordinator[dict[str, Any]]):
+    """Clean, lock-free DataUpdateCoordinator for batch Modbus register polling."""
+
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        client: WeishauptModbusClient,
+        api_items: list[ModbusItem],
+        p_config_entry: MyConfigEntry,
+    ) -> None:
+        """Initialize the coordinator without synchronization overhead."""
+        super().__init__(
+            hass,
+            _LOGGER,
+            name="weishaupt-modbus-coordinator",
+            update_interval=CONST.SCAN_INTERVAL,
+            always_update=True,
+        )
+        self.client = client
+        self._modbusitems = api_items
+        self.modbus_items = api_items
+        self._config_entry = p_config_entry
+
+    def get_value_from_item(self, translation_key: str) -> Any:
+        """Read a value from another modbus item by its translation key."""
+        for item in self._modbusitems:
+            if item.translation_key == translation_key:
+                return item.state
+        return None
+
+    async def _async_setup(self) -> None:
+        """Verify client connection during integration startup."""
+        if not self.client.connected:
+            _LOGGER.debug("Establishing initial connection to heat pump...")
+            connected = await self.client.connect()
+            if not connected:
+                raise ConfigEntryNotReady(
+                    "Could not establish initial Modbus connection"
+                )
+
+    async def _async_update_data(self) -> dict[str, Any]:
+        """Fetch all configured registers using high-efficiency batch reads."""
+        try:
+            # The locking context is shifted down. The coordinator simply triggers the update.
+            async with asyncio.timeout(15):
+                await self.client.update()
+
+            return await self._process_cached_data()
+
+        except (TimeoutError, ConnectionFailedError, ModbusException) as err:
+            raise UpdateFailed(f"Modbus communication failure: {err}") from err
+        except Exception as err:
+            raise UpdateFailed(f"Unexpected coordinator update error: {err}") from err
+
+    async def _process_cached_data(self) -> dict[str, Any]:
+        """Map the raw/sanitized cache to the expected translation keys."""
+        results: dict[str, Any] = {}
+
+        for item in self._modbusitems:
+            # Skip items belonging to unconfigured heating circuits
+            if not await check_configured(item, self._config_entry):
+                continue
+
+            # 1. Catch purely virtual calculated sensors immediately.
+            # They never poll Modbus directly and evaluate entirely in-memory.
+            if getattr(item, "type", None) == TYPES.SENSOR_CALC:
+                item.state = None
+                results[item.translation_key] = None
+                continue
+
+            address = getattr(item, "_address", None) or getattr(item, "address", None)
+
+            # 2. Process standard Modbus-polled items
+            if address is not None:
+                # Instantly retrieve the pre-processed register value from client cache
+                val = self.client.get_value(address)
+                item.state = val
+                results[item.translation_key] = val
+            else:
+                results[item.translation_key] = None
+
+        return results
