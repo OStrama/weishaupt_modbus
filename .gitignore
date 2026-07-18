@@ -40,3 +40,4 @@ home-assistant_v2.db-wal
 Dockerfile.dev
 scripts/
 .ha_run.lock
+www/local/weishaupt_modbus_powermap.svg
