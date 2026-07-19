@@ -308,7 +308,14 @@ class WeishauptModbusClient:
                 if not await self.connect(startup=False):
                     return False
             try:
-                # ----- Legacy temperature value conversion (check_valid_response) -----
+                cached_val = self.get_value(address)
+                if cached_val is not None and cached_val == value:
+                    _LOGGER.debug(
+                        "Schreiben auf Register %d übersprungen: Wert %d ist bereits aktiv (EEPROM geschont).",
+                        address,
+                        value,
+                    )
+                    return True
                 item = self._items_dict.get(address)
                 if item:
                     mformat = getattr(
@@ -327,6 +334,7 @@ class WeishauptModbusClient:
                         f"Modbus error writing to register {address}: {response}"
                     )
 
+                self.data[address] = value
                 return True
             except (TimeoutError, ModbusException, OSError) as err:
                 raise WriteError(
