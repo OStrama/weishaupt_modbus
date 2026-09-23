@@ -259,17 +259,20 @@
             },
             "heat_pump_hot_water_pump_power_setpoint": {
                 "name": "Sollwert Pumpe Leistung Warmwasser"
+            },
+            "system_pv_setpoint": {
+                "name": "SollwertPV"
             }
         },
         "select": {
-            "hz_operationmode": {
+            "heating_circuit_operation_mode": {
                 "name": "Betriebsart",
                 "state": {
-                    "hz_operationmode_lowering": "Absenkbetrieb",
-                    "hz_operationmode_automatic": "Automatik",
-                    "hz_operationmode_normal": "Normal",
-                    "hz_operationmode_standby": "Standby",
-                    "hz_operationmode_comfort": "Komfort"
+                    "heating_circuit_operation_mode_lowering": "Absenkbetrieb",
+                    "heating_circuit_operation_mode_automatic": "Automatik",
+                    "heating_circuit_operation_mode_normal": "Normal",
+                    "heating_circuit_operation_mode_standby": "Standby",
+                    "heating_circuit_operation_mode_comfort": "Komfort"
                 }
             },
             "hz_operationmode2": {
@@ -312,58 +315,58 @@
                     "hz_operationmode_comfort": "Komfort"
                 }
             },
-            "party_pause": {
+            "heating_circuit_party_pause": {
                 "name": "Pause / Party",
                 "state": {
-                    "hz_party_0_5": "Party 0.5h",
-                    "hz_party_1": "Party 1.0h",
-                    "hz_party_10": "Party 10.0h",
-                    "hz_party_10_5": "Party 10.5h",
-                    "hz_party_11": "Party 11.0h",
-                    "hz_party_11_5": "Party 11.5h",
-                    "hz_party_12": "Party 12.0h",
-                    "hz_party_1_5": "Party 1.5h",
-                    "hz_party_2": "Party 2.0h",
-                    "hz_party_2_5": "Party 2.5h",
-                    "hz_party_3": "Party 3.0h",
-                    "hz_party_3_5": "Party 3.5h",
-                    "hz_party_4": "Party 4.0h",
-                    "hz_party_4_5": "Party 4.5h",
-                    "hz_party_5": "Party 5.0h",
-                    "hz_party_5_5": "Party 5.5h",
-                    "hz_party_6": "Party 6.0h",
-                    "hz_party_6_5": "Party 6.5h",
-                    "hz_party_7": "Party 7.0h",
-                    "hz_party_7_5": "Party 7.5h",
-                    "hz_party_8": "Party 8.0h",
-                    "hz_party_8_5": "Party 8.5h",
-                    "hz_party_9": "Party 9.0h",
-                    "hz_party_9_5": "Party 9.5h",
-                    "hz_party_pause_auto": "Automatik",
-                    "hz_pause_0_5": "Pause 0.5h",
-                    "hz_pause_1": "Pause 1.0h",
-                    "hz_pause_10": "Pause 10.0h",
-                    "hz_pause_10_5": "Pause 10.5h",
-                    "hz_pause_11": "Pause 11.0h",
-                    "hz_pause_11_5": "Pause 11.5h",
-                    "hz_pause_12": "Pause 12.0h",
-                    "hz_pause_1_5": "Pause 1.5h",
-                    "hz_pause_2": "Pause 2.0h",
-                    "hz_pause_2_5": "Pause 2.5h",
-                    "hz_pause_3": "Pause 3.0h",
-                    "hz_pause_3_5": "Pause 3.5h",
-                    "hz_pause_4": "Pause 4.0h",
-                    "hz_pause_4_5": "Pause 4.5h",
-                    "hz_pause_5": "Pause 5.0h",
-                    "hz_pause_5_5": "Pause 5.5h",
-                    "hz_pause_6": "Pause 6.0h",
-                    "hz_pause_6_5": "Pause 6.5h",
-                    "hz_pause_7": "Pause 7.0h",
-                    "hz_pause_7_5": "Pause 7.5h",
-                    "hz_pause_8": "Pause 8.0h",
-                    "hz_pause_8_5": "Pause 8.5h",
-                    "hz_pause_9": "Pause 9.0h",
-                    "hz_pause_9_5": "Pause 9.5h"
+                    "heating_circuit_party_0_5": "Party 0.5h",
+                    "heating_circuit_party_1": "Party 1.0h",
+                    "heating_circuit_party_1_5": "Party 1.5h",
+                    "heating_circuit_party_2": "Party 2.0h",
+                    "heating_circuit_party_2_5": "Party 2.5h",
+                    "heating_circuit_party_3": "Party 3.0h",
+                    "heating_circuit_party_3_5": "Party 3.5h",
+                    "heating_circuit_party_4": "Party 4.0h",
+                    "heating_circuit_party_4_5": "Party 4.5h",
+                    "heating_circuit_party_5": "Party 5.0h",
+                    "heating_circuit_party_5_5": "Party 5.5h",
+                    "heating_circuit_party_6": "Party 6.0h",
+                    "heating_circuit_party_6_5": "Party 6.5h",
+                    "heating_circuit_party_7": "Party 7.0h",
+                    "heating_circuit_party_7_5": "Party 7.5h",
+                    "heating_circuit_party_8": "Party 8.0h",
+                    "heating_circuit_party_8_5": "Party 8.5h",
+                    "heating_circuit_party_9": "Party 9.0h",
+                    "heating_circuit_party_9_5": "Party 9.5h",
+                    "heating_circuit_party_10": "Party 10.0h",
+                    "heating_circuit_party_10_5": "Party 10.5h",
+                    "heating_circuit_party_11": "Party 11.0h",
+                    "heating_circuit_party_11_5": "Party 11.5h",
+                    "heating_circuit_party_12": "Party 12.0h",
+                    "heating_circuit_party_pause_automatic": "Automatik",
+                    "heating_circuit_pause_0_5": "Pause 0.5h",
+                    "heating_circuit_pause_1": "Pause 1.0h",
+                    "heating_circuit_pause_1_5": "Pause 1.5h",
+                    "heating_circuit_pause_2": "Pause 2.0h",
+                    "heating_circuit_pause_2_5": "Pause 2.5h",
+                    "heating_circuit_pause_3": "Pause 3.0h",
+                    "heating_circuit_pause_3_5": "Pause 3.5h",
+                    "heating_circuit_pause_4": "Pause 4.0h",
+                    "heating_circuit_pause_4_5": "Pause 4.5h",
+                    "heating_circuit_pause_5": "Pause 5.0h",
+                    "heating_circuit_pause_5_5": "Pause 5.5h",
+                    "heating_circuit_pause_6": "Pause 6.0h",
+                    "heating_circuit_pause_6_5": "Pause 6.5h",
+                    "heating_circuit_pause_7": "Pause 7.0h",
+                    "heating_circuit_pause_7_5": "Pause 7.5h",
+                    "heating_circuit_pause_8": "Pause 8.0h",
+                    "heating_circuit_pause_8_5": "Pause 8.5h",
+                    "heating_circuit_pause_9": "Pause 9.0h",
+                    "heating_circuit_pause_9_5": "Pause 9.5h",
+                    "heating_circuit_pause_10": "Pause 10.0h",
+                    "heating_circuit_pause_10_5": "Pause 10.5h",
+                    "heating_circuit_pause_11": "Pause 11.0h",
+                    "heating_circuit_pause_11_5": "Pause 11.5h",
+                    "heating_circuit_pause_12": "Pause 12.0h"
                 }
             },
             "party_pause2": {
@@ -593,69 +596,75 @@
                     "system_operating_mode_standby": "Standby"
                 }
             },
-            "system_pv_setpoint": {
-                "name": "SollwertPV"
-            },
-            "ww_push": {
+
+            "domestic_hot_water_push": {
                 "name": "Warmwasser Push",
                 "state": {
-                    "ww_push_10": "10 min",
-                    "ww_push_100": "100 min",
-                    "ww_push_105": "105 min",
-                    "ww_push_110": "110 min",
-                    "ww_push_115": "115 min",
-                    "ww_push_120": "120 min",
-                    "ww_push_125": "125 min",
-                    "ww_push_130": "130 min",
-                    "ww_push_135": "135 min",
-                    "ww_push_140": "140 min",
-                    "ww_push_145": "145 min",
-                    "ww_push_15": "15 min",
-                    "ww_push_150": "150 min",
-                    "ww_push_155": "155 min",
-                    "ww_push_160": "160 min",
-                    "ww_push_165": "165 min",
-                    "ww_push_170": "170 min",
-                    "ww_push_175": "175 min",
-                    "ww_push_180": "180 min",
-                    "ww_push_185": "185 min",
-                    "ww_push_190": "190 min",
-                    "ww_push_195": "195 min",
-                    "ww_push_20": "20 min",
-                    "ww_push_200": "200 min",
-                    "ww_push_205": "205 min",
-                    "ww_push_210": "210 min",
-                    "ww_push_215": "215 min",
-                    "ww_push_220": "220 min",
-                    "ww_push_225": "225 min",
-                    "ww_push_230": "230 min",
-                    "ww_push_235": "235 min",
-                    "ww_push_25": "25 min",
-                    "ww_push_30": "30 min",
-                    "ww_push_35": "35 min",
-                    "ww_push_40": "40 min",
-                    "ww_push_45": "45 min",
-                    "ww_push_5": "5 min",
-                    "ww_push_50": "50 min",
-                    "ww_push_55": "55 min",
-                    "ww_push_60": "60 min",
-                    "ww_push_65": "65 min",
-                    "ww_push_70": "70 min",
-                    "ww_push_75": "75 min",
-                    "ww_push_80": "80 min",
-                    "ww_push_85": "85 min",
-                    "ww_push_90": "90 min",
-                    "ww_push_95": "95 min",
-                    "ww_push_aus": "AUS"
+                    "domestic_hot_water_push_10": "10 min",
+                    "domestic_hot_water_push_100": "100 min",
+                    "domestic_hot_water_push_105": "105 min",
+                    "domestic_hot_water_push_110": "110 min",
+                    "domestic_hot_water_push_115": "115 min",
+                    "domestic_hot_water_push_120": "120 min",
+                    "domestic_hot_water_push_125": "125 min",
+                    "domestic_hot_water_push_130": "130 min",
+                    "domestic_hot_water_push_135": "135 min",
+                    "domestic_hot_water_push_140": "140 min",
+                    "domestic_hot_water_push_145": "145 min",
+                    "domestic_hot_water_push_15": "15 min",
+                    "domestic_hot_water_push_150": "150 min",
+                    "domestic_hot_water_push_155": "155 min",
+                    "domestic_hot_water_push_160": "160 min",
+                    "domestic_hot_water_push_165": "165 min",
+                    "domestic_hot_water_push_170": "170 min",
+                    "domestic_hot_water_push_175": "175 min",
+                    "domestic_hot_water_push_180": "180 min",
+                    "domestic_hot_water_push_185": "185 min",
+                    "domestic_hot_water_push_190": "190 min",
+                    "domestic_hot_water_push_195": "195 min",
+                    "domestic_hot_water_push_20": "20 min",
+                    "domestic_hot_water_push_200": "200 min",
+                    "domestic_hot_water_push_205": "205 min",
+                    "domestic_hot_water_push_210": "210 min",
+                    "domestic_hot_water_push_215": "215 min",
+                    "domestic_hot_water_push_220": "220 min",
+                    "domestic_hot_water_push_225": "225 min",
+                    "domestic_hot_water_push_230": "230 min",
+                    "domestic_hot_water_push_235": "235 min",
+                    "domestic_hot_water_push_25": "25 min",
+                    "domestic_hot_water_push_30": "30 min",
+                    "domestic_hot_water_push_35": "35 min",
+                    "domestic_hot_water_push_40": "40 min",
+                    "domestic_hot_water_push_45": "45 min",
+                    "domestic_hot_water_push_5": "5 min",
+                    "domestic_hot_water_push_50": "50 min",
+                    "domestic_hot_water_push_55": "55 min",
+                    "domestic_hot_water_push_60": "60 min",
+                    "domestic_hot_water_push_65": "65 min",
+                    "domestic_hot_water_push_70": "70 min",
+                    "domestic_hot_water_push_75": "75 min",
+                    "domestic_hot_water_push_80": "80 min",
+                    "domestic_hot_water_push_85": "85 min",
+                    "domestic_hot_water_push_90": "90 min",
+                    "domestic_hot_water_push_95": "95 min",
+                    "domestic_hot_water_push_off": "AUS"
                 }
             },
-            "anf_typ": {
+            "domestic_hot_water_configuration": {
+                "name": "WW_Konfiguration",
+                "state": {
+                    "domestic_hot_water_configuration_off": "aus",
+                    "domestic_hot_water_configuration_pump": "Pumpe",
+                    "domestic_hot_water_configuration_diverter_valve": "Umlenkventil"
+                }
+            },
+            "heating_circuit_demand": {
                 "name": "Anforderung Typ",
                 "state": {
-                    "hz_anforderung_aus": "aus",
-                    "hz_anforderung_konstant": "konstant",
-                    "hz_anforderung_witterungsgefuehrt": "witterungsgef\u00fchrt",
-                    "hz_anforderung_raumregelung": "Raumregelung"
+                    "heating_circuit_demand_off": "aus",
+                    "heating_circuit_demand_constant": "konstant",
+                    "heating_circuit_demand_weather_compensated": "witterungsgef\u00fchrt",
+                    "heating_circuit_demand_room_control": "Raumregelung"
                 }
             },
             "anf_typ2": {
@@ -693,7 +702,36 @@
                     "hz_anforderung_witterungsgefuehrt": "witterungsgef\u00fchrt",
                     "hz_anforderung_raumregelung": "Raumregelung"
                 }
+            },
+            "heat_pump_rest_mode": {
+                "name": "Ruhemodus",
+                "state": {
+                    "heat_pump_rest_mode_off": "aus",
+                    "heat_pump_rest_mode_80_percent": "80 %",
+                    "heat_pump_rest_mode_60_percent": "60 %",
+                    "heat_pump_rest_mode_40_percent": "40 %"
+                }
+            },
+            "heat_pump_configuration": {
+                "name": "Konfiguration",
+                "state": {
+                    "heat_pump_configuration_heating": "Heizen",
+                    "heat_pump_configuration_heating_cooling_2": "Heizen, K\u00fchlen",
+                    "heat_pump_configuration_heating_cooling_3": "Heizen, K\u00fchlen",
+                    "heat_pump_configuration_heating_hot_water": "Heizen, Warmwasser",
+                    "heat_pump_configuration_not_configured": "Nicht konfiguriert"
+                }
+            },
+            "heating_circuit_water_configuration": {
+                "name": "HZ_Konfiguration",
+                "state": {
+                    "heating_circuit_water_configuration_off": "aus",
+                    "heating_circuit_water_configuration_diverter_valve": "Mischkreis",
+                    "heating_circuit_water_configuration_pump": "Pumpenkreis",
+                    "heating_circuit_water_configuration_setpoint_pump_m1": "Sollwert (Pumpe M1)"
+                }
             }
+
         },
         "sensor": {
             "abtau_energie_gester": {
@@ -1212,15 +1250,7 @@
             "heiz_energie_monat": {
                 "name": "Heizen Energie Monat"
             },
-            "hz_konf": {
-                "name": "HZ_Konfiguration",
-                "state": {
-                    "hp_konf_aus": "aus",
-                    "hp_konf_mischkreis": "Mischkreis",
-                    "hp_konf_pumpenkreis": "Pumpenkreis",
-                    "hp_konf_sollwert_pumpe_m1": "Sollwert (Pumpe M1)"
-                }
-            },
+
             "hz_konf2": {
                 "name": "HZ_Konfiguration2",
                 "state": {
@@ -1527,15 +1557,7 @@
             "heat_pump_return_temperature": {
                 "name": "R\u00fccklauftemperatur"
             },
-            "heat_pump_rest_mode": {
-                "name": "Ruhemodus",
-                "state": {
-                    "hp_ruhemodus_0": "aus",
-                    "hp_ruhemodus_1": "80 %",
-                    "hp_ruhemodus_2": "60 %",
-                    "hp_ruhemodus_3": "40 %"
-                }
-            },
+
             "schaltsp_e1": {
                 "name": "Schaltspiele E-Heizung 1"
             },
@@ -1779,16 +1801,7 @@
                     "heat_pump_operation_43": "Ölrückführung"
                 }
             },
-            "heat_pump_configuration": {
-                "name": "Konfiguration",
-                "state": {
-                    "hp_conf_1": "Heizen",
-                    "hp_conf_2": "Heizen, K\u00fchlen",
-                    "hp_conf_3": "Heizen, K\u00fchlen",
-                    "hp_conf_4": "Heizen, Warmwasser",
-                    "hp_konf_0": "Nicht konfiguriert"
-                }
-            },
+
             "heat_pump_fault": {
                 "name": "St\u00f6rmeldung",
                 "state": {
@@ -1823,14 +1836,7 @@
             "ww_energie_monat": {
                 "name": "Warmwasser Energie Monat"
             },
-            "ww_konf": {
-                "name": "WW_Konfiguration",
-                "state": {
-                    "ww_konf_aus": "aus",
-                    "ww_konf_pumpe": "Pumpe",
-                    "ww_konf_umlenkventil": "Umlenkventil"
-                }
-            },
+
             "domestic_hot_water_target_temperature": {
                 "name": "Warmwassersolltemperatur"
             },

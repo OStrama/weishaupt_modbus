@@ -57,25 +57,32 @@ class HeatingCircuitConfig(Component):
     configuration = enum(
         41101,
         HeatingCircuitConfiguration,
+        writable=True,
     )
 
     demand = enum(
         41102,
         HeatingCircuitDemand,
+        writable=True,
     )
 
     operation_mode = enum(
         41103,
         HeatingCircuitOperation,
+        writable=True,
     )
 
-    party_pause = integer(41104)
+    party_pause = integer(
+        41104,
+        writable=True,
+    )
 
     comfort_room_target_temperature = gauge(
         41105,
         0.1,
         unit="°C",
         nan=32768,
+        writable=True,
     )
 
     normal_room_target_temperature = gauge(
@@ -83,6 +90,7 @@ class HeatingCircuitConfig(Component):
         0.1,
         unit="°C",
         nan=32768,
+        writable=True,
     )
 
     lowering_room_target_temperature = gauge(
@@ -90,11 +98,13 @@ class HeatingCircuitConfig(Component):
         0.1,
         unit="°C",
         nan=32768,
+        writable=True,
     )
 
     heating_curve = gauge(
         41108,
         0.01,
+        writable=True,
     )
 
     summer_winter_switch_temperature = gauge(
@@ -102,6 +112,7 @@ class HeatingCircuitConfig(Component):
         0.1,
         unit="°C",
         nan=32768,
+        writable=True,
     )
 
     constant_heating_temperature = gauge(
@@ -109,6 +120,7 @@ class HeatingCircuitConfig(Component):
         0.1,
         unit="°C",
         nan=32768,
+        writable=True,
     )
 
     constant_heating_lowering_temperature = gauge(
@@ -116,6 +128,7 @@ class HeatingCircuitConfig(Component):
         0.1,
         unit="°C",
         nan=32768,
+        writable=True,
     )
 
     constant_cooling_temperature = gauge(
@@ -123,6 +136,7 @@ class HeatingCircuitConfig(Component):
         0.1,
         unit="°C",
         nan=32768,
+        writable=True,
     )
 
 

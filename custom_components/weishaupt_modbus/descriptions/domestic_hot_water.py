@@ -6,14 +6,8 @@ from .description import (
     SelectDescription,
     SensorDescription,
 )
-from .params import (
-    ENUM,
-    NUMBER_EMPTY,
-    SGR_RAISE,
-    TEMPERATURE,
-    WW_TEMP,
-)
-
+from .myenums import DomesticHotWaterConfiguration, DomesticHotWaterPush
+from .params import NUMBER_EMPTY, SGR_RAISE, TEMPERATURE, WW_TEMP
 
 DOMESTIC_HOT_WATER_ENTITIES: tuple[EntityDescription, ...] = (
     SensorDescription(
@@ -30,7 +24,7 @@ DOMESTIC_HOT_WATER_ENTITIES: tuple[EntityDescription, ...] = (
     ),
     SelectDescription(
         key="configuration",
-        enum=None,
+        enum=DomesticHotWaterConfiguration,
         report_name="domestic_hot_water",
         value_fn=lambda device: device.domestic_hot_water_config.configuration,
         set_value_fn=lambda device, value: device.domestic_hot_water_config.write(
@@ -38,9 +32,9 @@ DOMESTIC_HOT_WATER_ENTITIES: tuple[EntityDescription, ...] = (
             value,
         ),
     ),
-    NumberDescription(
+    SelectDescription(
         key="push",
-        params=NUMBER_EMPTY,
+        enum=DomesticHotWaterPush,
         report_name="domestic_hot_water",
         value_fn=lambda device: device.domestic_hot_water_config.push,
         set_value_fn=lambda device, value: device.domestic_hot_water_config.write(

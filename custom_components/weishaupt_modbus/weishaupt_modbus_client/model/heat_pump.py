@@ -98,19 +98,31 @@ class HeatPumpInput(Component):
 class HeatPumpConfig(Component):
     """Weishaupt heat pump configuration registers."""
 
-    configuration = enum(43101, HeatPumpConfiguration)
+    configuration = enum(
+        43101,
+        HeatPumpConfiguration,
+        writable=True,
+    )
     """Heat pump configuration."""
 
-    rest_mode = enum(43102, HeatPumpRestMode)
+    rest_mode = enum(
+        43102,
+        HeatPumpRestMode,
+        writable=True,
+    )
     """Heat pump rest mode."""
 
-    pump_start_type = integer(43103)
+    pump_start_type = integer(
+        43103,
+        writable=True,
+    )
     """Pump start type."""
 
     heating_pump_power_setpoint = gauge(
         43104,
         1,
         unit="%",
+        writable=True,
     )
     """Pump power setpoint for heating."""
 
@@ -118,6 +130,7 @@ class HeatPumpConfig(Component):
         43105,
         1,
         unit="%",
+        writable=True,
     )
     """Pump power setpoint for cooling."""
 
@@ -125,6 +138,7 @@ class HeatPumpConfig(Component):
         43106,
         1,
         unit="%",
+        writable=True,
     )
     """Pump power setpoint for hot water."""
 
@@ -132,6 +146,7 @@ class HeatPumpConfig(Component):
         43107,
         1,
         unit="%",
+        writable=True,
     )
     """Pump power setpoint for defrosting."""
 
@@ -139,6 +154,7 @@ class HeatPumpConfig(Component):
         43108,
         0.01,
         unit="m³/h",
+        writable=True,
     )
     """Volume flow setpoint for heating."""
 
@@ -146,6 +162,7 @@ class HeatPumpConfig(Component):
         43109,
         0.01,
         unit="m³/h",
+        writable=True,
     )
     """Volume flow setpoint for cooling."""
 
@@ -153,5 +170,6 @@ class HeatPumpConfig(Component):
         43110,
         0.01,
         unit="m³/h",
+        writable=True,
     )
     """Volume flow setpoint for hot water."""

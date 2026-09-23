@@ -7,7 +7,7 @@ from .description import (
     SensorDescription,
 )
 from .myenums import SystemOperationMode
-from .params import EMPTY, ENUM, NUMBER_POWER, TEMPERATURE
+from .params import ENUM, NUMBER_POWER, TEMPERATURE
 
 SYSTEM_ENTITIES: tuple[EntityDescription, ...] = (
     SensorDescription(

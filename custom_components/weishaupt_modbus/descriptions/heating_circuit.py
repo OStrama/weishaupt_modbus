@@ -6,15 +6,20 @@ from .description import (
     SelectDescription,
     SensorDescription,
 )
+from .myenums import (
+    Dummy,
+    HeatingCircuitDemand,
+    HeatingCircuitOperation,
+    HeatingCircuitPartyPause,
+    HeatingCircuitWaterConfiguration,
+)
 from .params import (
-    ENUM,
     HUMIDITY,
     ROOM_TEMP_COMFORT,
     ROOM_TEMP_LOW,
     ROOM_TEMP_NORMAL,
     TEMPERATURE,
 )
-
 
 HEATING_CIRCUIT_ENTITIES: tuple[EntityDescription, ...] = (
     SensorDescription(
@@ -48,8 +53,8 @@ HEATING_CIRCUIT_ENTITIES: tuple[EntityDescription, ...] = (
         value_fn=lambda device: device.heating_circuit_input.flow_temperature,
     ),
     SelectDescription(
-        key="configuration",
-        enum=None,
+        key="water_configuration",
+        enum=HeatingCircuitWaterConfiguration,
         report_name="heating_circuit",
         value_fn=lambda device: device.heating_circuit_config.configuration,
         set_value_fn=lambda device, value: device.heating_circuit_config.write(
@@ -59,7 +64,7 @@ HEATING_CIRCUIT_ENTITIES: tuple[EntityDescription, ...] = (
     ),
     SelectDescription(
         key="demand",
-        enum=None,
+        enum=HeatingCircuitDemand,
         report_name="heating_circuit",
         value_fn=lambda device: device.heating_circuit_config.demand,
         set_value_fn=lambda device, value: device.heating_circuit_config.write(
@@ -69,7 +74,7 @@ HEATING_CIRCUIT_ENTITIES: tuple[EntityDescription, ...] = (
     ),
     SelectDescription(
         key="operation_mode",
-        enum=None,
+        enum=HeatingCircuitOperation,
         report_name="heating_circuit",
         value_fn=lambda device: device.heating_circuit_config.operation_mode,
         set_value_fn=lambda device, value: device.heating_circuit_config.write(
@@ -79,7 +84,7 @@ HEATING_CIRCUIT_ENTITIES: tuple[EntityDescription, ...] = (
     ),
     SelectDescription(
         key="party_pause",
-        enum=None,
+        enum=HeatingCircuitPartyPause,
         report_name="heating_circuit",
         value_fn=lambda device: device.heating_circuit_config.party_pause,
         set_value_fn=lambda device, value: device.heating_circuit_config.write(

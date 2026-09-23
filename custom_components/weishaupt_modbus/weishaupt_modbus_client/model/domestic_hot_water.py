@@ -26,15 +26,22 @@ class DomesticHotWaterInput(Component):
 class DomesticHotWaterConfig(Component):
     """Weishaupt domestic hot water configuration registers."""
 
-    configuration = integer(42101)
+    configuration = integer(
+        42101,
+        writable=True,
+    )
 
-    push = integer(42102)
+    push = integer(
+        42102,
+        writable=True,
+    )
 
     normal_temperature = gauge(
         42103,
         0.1,
         unit="°C",
         nan=32768,
+        writable=True,
     )
 
     lowering_temperature = gauge(
@@ -42,6 +49,7 @@ class DomesticHotWaterConfig(Component):
         0.1,
         unit="°C",
         nan=32768,
+        writable=True,
     )
 
     sg_ready_raise = gauge(
@@ -49,4 +57,5 @@ class DomesticHotWaterConfig(Component):
         0.1,
         unit="°C",
         nan=32768,
+        writable=True,
     )

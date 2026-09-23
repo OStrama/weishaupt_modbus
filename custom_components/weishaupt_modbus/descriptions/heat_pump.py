@@ -6,6 +6,7 @@ from .description import (
     SelectDescription,
     SensorDescription,
 )
+from .myenums import Dummy, HeatPumpConfiguration, HeatPumpRestMode
 from .params import (
     ENUM,
     NUMBER_FLOWRATE,
@@ -13,7 +14,6 @@ from .params import (
     SENSOR_PERCENTAGE,
     TEMPERATURE,
 )
-
 
 HEAT_PUMP_ENTITIES: tuple[EntityDescription, ...] = (
     # Heat pump input
@@ -93,7 +93,7 @@ HEAT_PUMP_ENTITIES: tuple[EntityDescription, ...] = (
     SelectDescription(
         key="configuration",
         report_name="heat_pump",
-        enum=None,
+        enum=HeatPumpConfiguration,
         value_fn=lambda device: device.heat_pump_config.configuration,
         set_value_fn=lambda device, value: device.heat_pump_config.write(
             "configuration",
@@ -103,7 +103,7 @@ HEAT_PUMP_ENTITIES: tuple[EntityDescription, ...] = (
     SelectDescription(
         key="rest_mode",
         report_name="heat_pump",
-        enum=None,
+        enum=HeatPumpRestMode,
         value_fn=lambda device: device.heat_pump_config.rest_mode,
         set_value_fn=lambda device, value: device.heat_pump_config.write(
             "rest_mode",
@@ -113,7 +113,7 @@ HEAT_PUMP_ENTITIES: tuple[EntityDescription, ...] = (
     SelectDescription(
         key="pump_start_type",
         report_name="heat_pump",
-        enum=None,
+        enum=Dummy,
         value_fn=lambda device: device.heat_pump_config.pump_start_type,
         set_value_fn=lambda device, value: device.heat_pump_config.write(
             "pump_start_type",
