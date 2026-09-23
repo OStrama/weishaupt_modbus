@@ -675,6 +675,9 @@
       }
     },
     "sensor": {
+      "system_outside_temperature": {
+        "name": "Outside Temperature BLA"
+      },
       "abtau_energie_gester": {
         "name": "{prefix}Defrost energy yesterday"
       },

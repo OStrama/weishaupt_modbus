@@ -2,18 +2,23 @@
 
 import asyncio
 import copy
+from datetime import timedelta
 import logging
 from typing import TYPE_CHECKING
+
+from weishaupt_webif_api import WebifConnection
 
 from config.custom_components.weishaupt_modbus.weishaupt_modbus_api.modbus_api import (
     WeishauptModbusClient,
 )
+from homeassistant.components.modbus.connection import ModbusTcpParams, async_get_unit
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from weishaupt_webif_api import WebifConnection
 
 from .configentry import MyData
+from .coordinator import WeishauptCoordinator
 from .translations import update_translation
+from .weishaupt_modbus_client.model.device import Weishaupt
 
 if TYPE_CHECKING:
     from .configentry import MyConfigEntry
@@ -40,13 +45,12 @@ from .hpconst import (
 )
 from .items import ModbusItem, WebItem
 from .kennfeld import PowerMap
-from .migrate_helpers import migrate_entities
 
 _LOGGER = logging.getLogger(__name__)
 
 PLATFORMS: list[str] = [
-    "number",
-    "select",
+    # "number",
+    # "select",
     "sensor",
     #    "switch",
 ]
@@ -55,109 +59,37 @@ PLATFORMS: list[str] = [
 async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
     """Set up entry."""
     # Create independent copies of ModbusItems for each config entry
-    itemlist: list[ModbusItem] = []
-    webif_itemlist: list[WebItem] = []
 
-    # 1. Create the shared lock to serialize hardware communication
-    mcu_lock = asyncio.Lock()
-
-    if (
-        entry.data.get(CONF.CB_WEBIF, False)
-        and entry.data.get(CONF.PASSWORD, "") != ""
-        and entry.data.get(CONF.USERNAME, "") != ""
-        and entry.data.get(CONF.WEBIF_TOKEN, "") != ""
-    ):
-        webapi = WebifConnection(
-            ip=entry.data[CONF.HOST],
-            user=entry.data[CONF.USERNAME],
-            password=entry.data[CONF.PASSWORD],
-            # token=entry.data[CONF.WEBIF_TOKEN],
-            # request_delay=10,
-            storage_path="./data",
-        )
-
-        # Safely read optional webif switches using .get(..., False)
-        if entry.data.get(CONF.CB_WEBIF_HK1, False) is True:
-            device = WEBIF_INFO_HEIZKREIS1
-            webif_itemlist.extend(copy.deepcopy(item) for item in device)
-
-        if entry.data.get(CONF.CB_WEBIF_WP, False) is True:
-            device = WEBIF_INFO_WAERMEPUMPE
-            webif_itemlist.extend(copy.deepcopy(item) for item in device)
-
-        if entry.data.get(CONF.CB_WEBIF_2WEZ, False) is True:
-            device = WEBIF_INFO_2WEZ
-            webif_itemlist.extend(copy.deepcopy(item) for item in device)
-
-        if entry.data.get(CONF.CB_WEBIF_SATISTICS, False) is True:
-            device = WEBIF_INFO_STATISTIK
-            webif_itemlist.extend(copy.deepcopy(item) for item in device)
-    else:
-        _LOGGER.debug("WebIF not fully configured. Skipping")
-        webapi = None
-
-    # for device in DEVICELISTS_WEBIF:
-    #    webif_itemlist.extend(copy.deepcopy(item) for item in device)
-
-    for device in DEVICELISTS:
-        itemlist.extend(copy.deepcopy(item) for item in device)
-
-    modbus_api = WeishauptModbusClient(host=entry.data[CONF.HOST], mcu_lock=mcu_lock)
-
-    modbus_coordinator = WeishauptModbusCoordinator(
-        hass=hass,
-        client=modbus_api,
-        api_items=itemlist,
-        p_config_entry=entry,
+    params = ModbusTcpParams(
+        host=entry.data[CONF.HOST],
+        port=entry.data[CONF.PORT],
     )
-    await modbus_coordinator.async_config_entry_first_refresh()
-    if webapi is not None:
-        webif_coordinator = MyWebIfCoordinator(
-            hass=hass,
-            my_api=webapi,
-            api_items=webif_itemlist,
-            config_entry=entry,
-            mcu_lock=mcu_lock,
-        )
-    else:
-        _LOGGER.debug("webapi is none. SKip creating of webif coordinator")
-        webif_coordinator = None
+    # New modbus-connection based device/coordinator.
+    unit = async_get_unit(
+        hass,
+        entry,
+        params,
+        1,
+    )
+    device = Weishaupt(unit)
+    weishaupt_coordinator = WeishauptCoordinator(
+        hass=hass,
+        # entry=entry,
+        device=device,
+        # interval=timedelta(seconds=30),
+    )
+    await weishaupt_coordinator.async_config_entry_first_refresh()
 
     entry.runtime_data = MyData(
-        modbus_api=modbus_api,
-        webif_api=webapi,
         config_dir=hass.config.config_dir,
         hass=hass,
-        coordinator=modbus_coordinator,
-        webif_coordinator=webif_coordinator,
         powermap=None,
+        weishaupt_coordinator=weishaupt_coordinator,
     )
 
     powermap = PowerMap(entry, hass)
     await powermap.initialize()
     entry.runtime_data.powermap = powermap
-
-    # myWebifCon = WebifConnection()
-    # data = await myWebifCon.return_test_data()
-    # print(data)
-    # print(myWebifCon._session.closed)
-    # await myWebifCon.login()
-    # print(myWebifCon._session.closed)
-    # data = await myWebifCon.get_info()
-    # await myWebifCon.close()
-    # print(myWebifCon._session.closed)
-
-    hass.add_job(migrate_entities, entry, MODBUS_SYS_ITEMS, DEVICENAMES.SYS)
-    hass.add_job(migrate_entities, entry, MODBUS_HZ_ITEMS, DEVICENAMES.HZ)
-    hass.add_job(migrate_entities, entry, MODBUS_HZ2_ITEMS, DEVICENAMES.HZ2)
-    hass.add_job(migrate_entities, entry, MODBUS_HZ3_ITEMS, DEVICENAMES.HZ3)
-    hass.add_job(migrate_entities, entry, MODBUS_HZ4_ITEMS, DEVICENAMES.HZ4)
-    hass.add_job(migrate_entities, entry, MODBUS_HZ5_ITEMS, DEVICENAMES.HZ5)
-    hass.add_job(migrate_entities, entry, MODBUS_WP_ITEMS, DEVICENAMES.WP)
-    hass.add_job(migrate_entities, entry, MODBUS_WW_ITEMS, DEVICENAMES.WW)
-    hass.add_job(migrate_entities, entry, MODBUS_W2_ITEMS, DEVICENAMES.W2)
-    hass.add_job(migrate_entities, entry, MODBUS_IO_ITEMS, DEVICENAMES.IO)
-    hass.add_job(migrate_entities, entry, MODBUS_ST_ITEMS, DEVICENAMES.ST)
 
     # see https://community.home-assistant.io/t/config-flow-how-to-update-an-existing-entity/522442/8
     entry.async_on_unload(entry.add_update_listener(update_listener))
@@ -171,6 +103,17 @@ async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
     _LOGGER.info("Init done")
+    for state in hass.states.async_all("sensor"):
+        unit = state.attributes.get("unit_of_measurement")
+
+        if not isinstance(unit, (str, type(None))):
+            _LOGGER.error(
+                "INVALID GLOBAL SENSOR UNIT: %s -> %r (%s), attributes=%r",
+                state.entity_id,
+                unit,
+                type(unit).__name__,
+                state.attributes,
+            )
 
     return True
 
@@ -190,49 +133,13 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: MyConfigEntry) 
         "Starting config migration process. Current version: %s", config_entry.version
     )
 
-    if config_entry.version < 2:
-        _LOGGER.warning("Version <2 detected")
-        new_data[CONF.PREFIX] = CONST.DEF_PREFIX
-        new_data[CONF.DEVICE_POSTFIX] = ""
-        new_data[CONF.KENNFELD_FILE] = CONST.DEF_KENNFELDFILE
-    if config_entry.version < 3:
-        _LOGGER.warning("Version <3 detected")
-        new_data[CONF.HK2] = False
-        new_data[CONF.HK3] = False
-        new_data[CONF.HK4] = False
-        new_data[CONF.HK5] = False
-    if config_entry.version < 4:
-        _LOGGER.warning("Version <4 detected")
-        new_data[CONF.NAME_DEVICE_PREFIX] = False
-        new_data[CONF.NAME_TOPIC_PREFIX] = False
-
-    if config_entry.version < 5:
-        _LOGGER.warning("Version <5 detected")
-        new_data[CONF.CB_WEBIF] = False
-        new_data[CONF.USERNAME] = ""
-        new_data[CONF.PASSWORD] = ""
-        new_data[CONF.WEBIF_TOKEN] = ""
-        hass.config_entries.async_update_entry(
-            config_entry, data=new_data, minor_version=1, version=5
-        )
-    if config_entry.version < 7:
-        _LOGGER.warning("Version <7 detected")
-        new_data[CONF.CB_WEBIF_MOCKUP_DATA] = False
-    if config_entry.version < 8:
-        _LOGGER.warning("Version <8 detected")
-        new_data[CONF.CB_WEBIF_HK1] = False
-        new_data[CONF.CB_WEBIF_HK2] = False
-        new_data[CONF.CB_WEBIF_HK3] = False
-        new_data[CONF.CB_WEBIF_HK4] = False
-        new_data[CONF.CB_WEBIF_HK5] = False
-        new_data[CONF.CB_WEBIF_WP] = False
-        new_data[CONF.CB_WEBIF_2WEZ] = False
-        new_data[CONF.CB_WEBIF_SATISTICS] = False
+    if config_entry.version < 1:
+        _LOGGER.warning("Version <1 detected")
 
     hass.config_entries.async_update_entry(
-        config_entry, data=new_data, minor_version=1, version=8
+        config_entry, data=new_data, minor_version=1, version=2
     )
-    _LOGGER.warning("Config entries updated to version 8")
+    _LOGGER.warning("Config entries updated to version 2")
     return True
 
 

@@ -7,7 +7,8 @@ import voluptuous as vol
 
 from homeassistant import config_entries, exceptions
 from homeassistant.core import HomeAssistant
-import homeassistant.helpers.config_validation as cv
+from homeassistant.helpers import config_validation as cv
+from homeassistant.helpers.device_registry import format_mac
 
 from .const import CONF, CONST
 from .kennfeld import get_filepath
@@ -16,6 +17,7 @@ from .kennfeld import get_filepath
 async def build_kennfeld_list(hass: HomeAssistant) -> list[str]:
     """Browse integration directory for heat pump operation map ("kennfeld") files."""
     kennfelder = []
+
     try:
         dir_iterator = await scandir(get_filepath(hass))
         for item in dir_iterator:
@@ -31,13 +33,24 @@ async def build_kennfeld_list(hass: HomeAssistant) -> list[str]:
 
 
 async def validate_input(data: dict[str, Any]) -> dict[str, Any]:
-    """Validate the input."""
+    """Validate the input and return normalized configuration data."""
     if len(data.get(CONF.HOST, "")) < 3:
         raise InvalidHost
-    return {"title": data[CONF.HOST]}
+
+    try:
+        mac = format_mac(data[CONF.MAC])
+    except (TypeError, ValueError) as err:
+        raise InvalidMac from err
+
+    return {
+        CONF.MAC: mac,
+    }
 
 
-class ConfigFlow(config_entries.ConfigFlow, domain=CONST.DOMAIN):  # pylint: disable=abstract-method
+class ConfigFlow(
+    config_entries.ConfigFlow,
+    domain=CONST.DOMAIN,
+):  # pylint: disable=abstract-method
     """Class config flow."""
 
     VERSION = 8
@@ -50,15 +63,18 @@ class ConfigFlow(config_entries.ConfigFlow, domain=CONST.DOMAIN):  # pylint: dis
         self._reconfigure_entry: config_entries.ConfigEntry | None = None
 
     async def async_step_user(
-        self, user_input: dict[str, Any] | None = None
+        self,
+        user_input: dict[str, Any] | None = None,
     ) -> config_entries.ConfigFlowResult:
         """Step 1: Core configuration setup."""
         errors: dict[str, str] = {}
 
         if user_input is not None:
             try:
-                await validate_input(user_input)
+                validated_data = await validate_input(user_input)
+
                 self._stored_data.update(user_input)
+                self._stored_data.update(validated_data)
 
                 # Check if we need to progress to Page 2 (Web Interface)
                 if user_input.get(CONF.CB_WEBIF):
@@ -66,11 +82,14 @@ class ConfigFlow(config_entries.ConfigFlow, domain=CONST.DOMAIN):  # pylint: dis
 
                 # Otherwise, complete configuration immediately
                 return self.async_create_entry(
-                    title=self._stored_data[CONF.HOST], data=self._stored_data
+                    title=self._stored_data[CONF.HOST],
+                    data=self._stored_data,
                 )
 
             except InvalidHost:
                 errors["base"] = "invalid_host"
+            except InvalidMac:
+                errors["base"] = "invalid_mac"
             except Exception:  # noqa: BLE001
                 errors["base"] = "unknown"
 
@@ -81,22 +100,19 @@ class ConfigFlow(config_entries.ConfigFlow, domain=CONST.DOMAIN):  # pylint: dis
                     schema=CONF.HOST,
                     default=self._stored_data.get(CONF.HOST, ""),
                 ): str,
+                vol.Required(
+                    CONF.MAC,
+                    default=self._stored_data.get(CONF.MAC, ""),
+                ): str,
                 vol.Optional(
                     schema=CONF.PORT,
                     default=self._stored_data.get(CONF.PORT, "502"),
                 ): cv.port,
                 vol.Optional(
-                    schema=CONF.PREFIX,
-                    default=self._stored_data.get(CONF.PREFIX, CONST.DEF_PREFIX),
-                ): str,
-                vol.Optional(
-                    schema=CONF.DEVICE_POSTFIX,
-                    default=self._stored_data.get(CONF.DEVICE_POSTFIX, ""),
-                ): str,
-                vol.Optional(
                     schema=CONF.KENNFELD_FILE,
                     default=self._stored_data.get(
-                        CONF.KENNFELD_FILE, "weishaupt_wbb_kennfeld.json"
+                        CONF.KENNFELD_FILE,
+                        "weishaupt_wbb_kennfeld.json",
                     ),
                 ): vol.In(container=await build_kennfeld_list(self.hass)),
                 vol.Optional(
@@ -116,14 +132,6 @@ class ConfigFlow(config_entries.ConfigFlow, domain=CONST.DOMAIN):  # pylint: dis
                     default=self._stored_data.get(CONF.HK5, False),
                 ): bool,
                 vol.Optional(
-                    schema=CONF.NAME_DEVICE_PREFIX,
-                    default=self._stored_data.get(CONF.NAME_DEVICE_PREFIX, False),
-                ): bool,
-                vol.Optional(
-                    schema=CONF.NAME_TOPIC_PREFIX,
-                    default=self._stored_data.get(CONF.NAME_TOPIC_PREFIX, False),
-                ): bool,
-                vol.Optional(
                     schema=CONF.CB_WEBIF,
                     default=self._stored_data.get(CONF.CB_WEBIF, False),
                 ): bool,
@@ -131,27 +139,30 @@ class ConfigFlow(config_entries.ConfigFlow, domain=CONST.DOMAIN):  # pylint: dis
         )
 
         return self.async_show_form(
-            step_id="user", data_schema=schema_page1, errors=errors
+            step_id="user",
+            data_schema=schema_page1,
+            errors=errors,
         )
 
     async def async_step_webif(
-        self, user_input: dict[str, Any] | None = None
+        self,
+        user_input: dict[str, Any] | None = None,
     ) -> config_entries.ConfigFlowResult:
         """Step 2: Experimental Web Interface setup."""
-        errors: dict[str, str] = {}
-
         if user_input is not None:
             self._stored_data.update(user_input)
 
             # If we are in a reconfigure flow, finalize the updates
             if self._reconfigure_entry:
                 return self.async_update_and_abort(
-                    entry=self._reconfigure_entry, data_updates=self._stored_data
+                    entry=self._reconfigure_entry,
+                    data_updates=self._stored_data,
                 )
 
             # Standard creation path
             return self.async_create_entry(
-                title=self._stored_data[CONF.HOST], data=self._stored_data
+                title=self._stored_data[CONF.HOST],
+                data=self._stored_data,
             )
 
         # Define Schema for Page 2
@@ -209,11 +220,14 @@ class ConfigFlow(config_entries.ConfigFlow, domain=CONST.DOMAIN):  # pylint: dis
         )
 
         return self.async_show_form(
-            step_id="webif", data_schema=schema_page2, errors=errors
+            step_id="webif",
+            data_schema=schema_page2,
+            errors={},
         )
 
     async def async_step_reconfigure(
-        self, user_input: dict[str, Any] | None = None
+        self,
+        user_input: dict[str, Any] | None = None,
     ) -> config_entries.ConfigFlowResult:
         """Trigger a reconfiguration flow."""
         errors: dict[str, str] = {}
@@ -225,14 +239,17 @@ class ConfigFlow(config_entries.ConfigFlow, domain=CONST.DOMAIN):  # pylint: dis
 
         if user_input is not None:
             try:
-                await validate_input(user_input)
+                validated_data = await validate_input(user_input)
+
                 self._stored_data.update(user_input)
+                self._stored_data.update(validated_data)
 
                 # Route to WebIF step if it was activated (or kept active)
                 if user_input.get(CONF.CB_WEBIF):
                     return await self.async_step_webif()
 
-                # If CB_WEBIF is false, clear any stale webif settings from stored data
+                # If CB_WEBIF is false, clear any stale webif settings
+                # from stored data.
                 for key in [
                     CONF.CB_WEBIF_MOCKUP_DATA,
                     CONF.USERNAME,
@@ -250,10 +267,14 @@ class ConfigFlow(config_entries.ConfigFlow, domain=CONST.DOMAIN):  # pylint: dis
                     self._stored_data.pop(key, None)
 
                 return self.async_update_and_abort(
-                    entry=self._reconfigure_entry, data_updates=self._stored_data
+                    entry=self._reconfigure_entry,
+                    data_updates=self._stored_data,
                 )
+
             except InvalidHost:
                 errors["base"] = "invalid_host"
+            except InvalidMac:
+                errors["base"] = "invalid_mac"
             except Exception:  # noqa: BLE001
                 errors["base"] = "unknown"
 
@@ -262,20 +283,16 @@ class ConfigFlow(config_entries.ConfigFlow, domain=CONST.DOMAIN):  # pylint: dis
             schema={
                 vol.Required(
                     schema=CONF.HOST,
-                    default=self._stored_data.get(CONF.HOST),
+                    default=self._stored_data.get(CONF.HOST, ""),
+                ): str,
+                vol.Required(
+                    CONF.MAC,
+                    default=self._stored_data.get(CONF.MAC, ""),
                 ): str,
                 vol.Optional(
                     schema=CONF.PORT,
                     default=self._stored_data.get(CONF.PORT, "502"),
                 ): cv.port,
-                vol.Optional(
-                    schema=CONF.PREFIX,
-                    default=self._stored_data.get(CONF.PREFIX, CONST.DEF_PREFIX),
-                ): str,
-                vol.Optional(
-                    schema=CONF.DEVICE_POSTFIX,
-                    default=self._stored_data.get(CONF.DEVICE_POSTFIX, ""),
-                ): str,
                 vol.Optional(
                     schema=CONF.KENNFELD_FILE,
                     default=self._stored_data.get(CONF.KENNFELD_FILE),
@@ -295,14 +312,6 @@ class ConfigFlow(config_entries.ConfigFlow, domain=CONST.DOMAIN):  # pylint: dis
                 vol.Optional(
                     schema=CONF.HK5,
                     default=self._stored_data.get(CONF.HK5, False),
-                ): bool,
-                vol.Optional(
-                    schema=CONF.NAME_DEVICE_PREFIX,
-                    default=self._stored_data.get(CONF.NAME_DEVICE_PREFIX, False),
-                ): bool,
-                vol.Optional(
-                    schema=CONF.NAME_TOPIC_PREFIX,
-                    default=self._stored_data.get(CONF.NAME_TOPIC_PREFIX, False),
                 ): bool,
                 vol.Optional(
                     schema=CONF.CB_WEBIF,
@@ -325,5 +334,9 @@ class InvalidHost(exceptions.HomeAssistantError):
     """Error to indicate there is an invalid hostname."""
 
 
+class InvalidMac(exceptions.HomeAssistantError):
+    """Error to indicate there is an invalid MAC address."""
+
+
 class ConnectionFailed(exceptions.HomeAssistantError):
-    """Error to indicate there is an invalid hostname."""
+    """Error to indicate there is a connection failure."""

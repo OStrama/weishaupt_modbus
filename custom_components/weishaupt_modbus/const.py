@@ -18,15 +18,12 @@ class ConfConstants:
 
     HOST: str = CONF_HOST
     PORT: str = CONF_PORT
-    PREFIX: str = CONF_PREFIX
-    DEVICE_POSTFIX: str = "Device-Postfix"
+    MAC: str = "mac"
     KENNFELD_FILE: str = "Kennfeld-File"
     HK2: str = "Heizkreis 2"
     HK3: str = "Heizkreis 3"
     HK4: str = "Heizkreis 4"
     HK5: str = "Heizkreis 5"
-    NAME_DEVICE_PREFIX: str = "Name-Device-Prefix"
-    NAME_TOPIC_PREFIX: str = "Name-Topic-Prefix"
     CB_WEBIF: str = "enable-webif"
     PASSWORD: str = CONF_PASSWORD
     USERNAME: str = CONF_USERNAME
@@ -54,7 +51,6 @@ class MainConstants:
     UNIQUE_ID: str = "unique_id"
     APPID: int = 100
     DEF_KENNFELDFILE: str = "weishaupt_wbb_kennfeld.json"
-    DEF_PREFIX: str = "weishaupt_wbb"
 
 
 CONST = MainConstants()
