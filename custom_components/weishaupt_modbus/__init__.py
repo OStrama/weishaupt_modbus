@@ -49,8 +49,8 @@ from .kennfeld import PowerMap
 _LOGGER = logging.getLogger(__name__)
 
 PLATFORMS: list[str] = [
-    # "number",
-    # "select",
+    "number",
+    "select",
     "sensor",
     #    "switch",
 ]

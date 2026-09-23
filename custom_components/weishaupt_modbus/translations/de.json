@@ -68,7 +68,7 @@
         "dev_heat_pump": {
             "name": "WH W\u00e4rmepumpe"
         },
-        "dev_warmwasser": {
+        "dev_domestic_hot_water": {
             "name": "WH Warmwasser"
         },
         "dev_heating_circuit": {
@@ -125,7 +125,7 @@
             "heizkennlinie5": {
                 "name": "Heizkennlinie5"
             },
-            "raum_soll_temp_absenk": {
+            "heating_circuit_lowering_room_target_temperature": {
                 "name": "Raumsolltemperatur Absenk"
             },
             "raum_soll_temp_absenk2": {
@@ -140,7 +140,7 @@
             "raum_soll_temp_absenk5": {
                 "name": "Raumsolltemperatur Absenk5"
             },
-            "raum_soll_temp_komf": {
+            "heating_circuit_comfort_room_target_temperature": {
                 "name": "Raumsolltemperatur Komfort"
             },
             "raum_soll_temp_komf2": {
@@ -155,7 +155,7 @@
             "raum_soll_temp_komf5": {
                 "name": "Raumsolltemperatur Komfort5"
             },
-            "raum_soll_temp_normal": {
+            "heating_circuit_normal_room_target_temperature": {
                 "name": "Raumsolltemperatur Normal"
             },
             "raum_soll_temp_normal2": {
@@ -170,7 +170,7 @@
             "raum_soll_temp_normal5": {
                 "name": "Raumsolltemperatur Normal5"
             },
-            "sgr_anhebung": {
+            "domestic_hot_water_sg_ready_raise": {
                 "name": "SG Ready Anhebung"
             },
             "so_wi_umschalt": {
@@ -188,10 +188,10 @@
             "so_wi_umschalt5": {
                 "name": "Sommer Winter Umschaltung5"
             },
-            "ww_absenk": {
+            "domestic_hot_water_lowering_temperature": {
                 "name": "Warmwasser Absenk"
             },
-            "ww_normal": {
+            "domestic_hot_water_normal_temperature": {
                 "name": "Warmwasser Normal"
             },
             "heiz_konstanttemp": {
@@ -238,6 +238,27 @@
             },
             "kuehl_konstanttemp5": {
                 "name": "K\u00fchlen Konstanttemperatur5"
+            },
+            "heat_pump_heating_flow_rate_setpoint": {
+                "name": "Sollwert Volumenstrom Heizen"
+            },
+            "heat_pump_cooling_flow_rate_setpoint": {
+                "name": "Sollwert Volumenstrom K\u00fchlen"
+            },
+            "heat_pump_hot_water_flow_rate_setpoint": {
+                "name": "Sollwert Volumenstrom Warmwasser"
+            },
+            "heat_pump_defrost_pump_power_setpoint": {
+                "name": "Sollwert Pumpe Leistung Abtaubetrieb"
+            },
+            "heat_pump_heating_pump_power_setpoint": {
+                "name": "Sollwert Pumpe Leistung Heizen"
+            },
+            "heat_pump_cooling_pump_power_setpoint": {
+                "name": "Sollwert Pumpe Leistung K\u00fchlen"
+            },
+            "heat_pump_hot_water_pump_power_setpoint": {
+                "name": "Sollwert Pumpe Leistung Warmwasser"
             }
         },
         "select": {
@@ -564,12 +585,12 @@
             "system_operating_mode": {
                 "name": "Systembetriebsart",
                 "state": {
-                    "sys_operationmode_2ndheatsource": "2.WEZ",
-                    "sys_operationmode_automatic": "Automatik",
-                    "sys_operationmode_heating": "Heizen",
-                    "sys_operationmode_cooling": "K\u00fchlen",
-                    "sys_operationmode_summer": "Sommer",
-                    "sys_operationmode_standby": "Standby"
+                    "system_operating_mode_second_heat_source": "2.WEZ",
+                    "system_operating_mode_automatic": "Automatik",
+                    "system_operating_mode_heating": "Heizen",
+                    "system_operating_mode_cooling": "K\u00fchlen",
+                    "system_operating_mode_summer": "Sommer",
+                    "system_operating_mode_standby": "Standby"
                 }
             },
             "system_pv_setpoint": {
@@ -1236,7 +1257,7 @@
                     "hp_konf_sollwert_pumpe_m1": "Sollwert (Pumpe M1)"
                 }
             },
-            "hz_vl_temp": {
+            "heating_circuit_flow_temperature": {
                 "name": "HZ_Vorlauftemperatur"
             },
             "hz_vl_temp2": {
@@ -1251,7 +1272,7 @@
             "hz_vl_temp5": {
                 "name": "HZ_Vorlauftemperatur5"
             },
-            "hz_vl_solltemp": {
+            "heating_circuit_flow_target_temperature": {
                 "name": "HZ_Vorlaufsolltemperatur"
             },
             "hz_vl_solltemp2": {
@@ -1458,7 +1479,7 @@
             "heat_pump_pump_start_type": {
                 "name": "Pumpe Einschaltart"
             },
-            "raum_feuchte": {
+            "heating_circuit_room_humidity": {
                 "name": "Raumfeuchte"
             },
             "raum_feuchte2": {
@@ -1527,27 +1548,7 @@
             "sgr2": {
                 "name": "SG-Ready 2"
             },
-            "heat_pump_heating_flow_rate_setpoint": {
-                "name": "Sollwert Volumenstrom Heizen"
-            },
-            "heat_pump_cooling_flow_rate_setpoint": {
-                "name": "Sollwert Volumenstrom K\u00fchlen"
-            },
-            "heat_pump_hot_water_flow_rate_setpoint": {
-                "name": "Sollwert Volumenstrom Warmwasser"
-            },
-            "heat_pump_defrost_pump_power_setpoint": {
-                "name": "Sollwert Pumpe Leistung Abtaubetrieb"
-            },
-            "heat_pump_heating_pump_power_setpoint": {
-                "name": "Sollwert Pumpe Leistung Heizen"
-            },
-            "heat_pump_cooling_pump_power_setpoint": {
-                "name": "Sollwert Pumpe Leistung K\u00fchlen"
-            },
-            "heat_pump_hot_water_pump_power_setpoint": {
-                "name": "Sollwert Pumpe Leistung Warmwasser"
-            },
+
             "status_2_wez": {
                 "name": "Status 2. WEZ",
                 "state": {
@@ -1830,10 +1831,10 @@
                     "ww_konf_umlenkventil": "Umlenkventil"
                 }
             },
-            "ww_soll_temp": {
+            "domestic_hot_water_target_temperature": {
                 "name": "Warmwassersolltemperatur"
             },
-            "ww_temp": {
+            "domestic_hot_water_temperature": {
                 "name": "Warmwassertemperatur"
             }
         }

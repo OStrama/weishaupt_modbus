@@ -135,20 +135,23 @@ class HeatPumpConfig(Component):
     )
     """Pump power setpoint for defrosting."""
 
-    heating_flow_rate_setpoint = integer(
+    heating_flow_rate_setpoint = gauge(
         43108,
+        0.01,
         unit="m³/h",
     )
     """Volume flow setpoint for heating."""
 
-    cooling_flow_rate_setpoint = integer(
+    cooling_flow_rate_setpoint = gauge(
         43109,
+        0.01,
         unit="m³/h",
     )
     """Volume flow setpoint for cooling."""
 
-    hot_water_flow_rate_setpoint = integer(
+    hot_water_flow_rate_setpoint = gauge(
         43110,
+        0.01,
         unit="m³/h",
     )
     """Volume flow setpoint for hot water."""

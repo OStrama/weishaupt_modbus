@@ -2,8 +2,8 @@
 
 from modbus_connection.model import ComponentGroup, Device, UpdateReport
 
+from .domestic_hot_water import DomesticHotWaterConfig, DomesticHotWaterInput
 from .heat_pump import HeatPumpConfig, HeatPumpInput
-
 from .heating_circuit import HeatingCircuitConfigs, HeatingCircuitInputs
 from .system import SystemConfig, SystemStatus
 
@@ -11,6 +11,7 @@ READINGS = (
     "system",
     "heat_pump",
     "heating_circuit",
+    "domestic_hot_water",
     # "heating_circuit_configs",
 )
 
@@ -47,6 +48,17 @@ class Weishaupt(Device):
             [
                 self.heating_circuit_config,
                 self.heating_circuit_input,
+            ],
+        )
+
+        self.domestic_hot_water_config = DomesticHotWaterConfig(unit)
+        self.domestic_hot_water_input = DomesticHotWaterInput(unit)
+
+        self.domestic_hot_water = ComponentGroup(
+            unit,
+            [
+                self.domestic_hot_water_config,
+                self.domestic_hot_water_input,
             ],
         )
 

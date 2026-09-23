@@ -1,9 +1,15 @@
 """Weishaupt system entity descriptions."""
 
-from .description import NumberDescription, SelectDescription, SensorDescription
-from .params import EMPTY, POWER, TEMPERATURE, ENUM
+from .description import (
+    EntityDescription,
+    NumberDescription,
+    SelectDescription,
+    SensorDescription,
+)
+from .myenums import SystemOperationMode
+from .params import EMPTY, ENUM, NUMBER_POWER, TEMPERATURE
 
-SYSTEM_ENTITIES: tuple[SensorDescription, ...] = (
+SYSTEM_ENTITIES: tuple[EntityDescription, ...] = (
     SensorDescription(
         key="outside_temperature",
         params=TEMPERATURE,
@@ -42,16 +48,22 @@ SYSTEM_ENTITIES: tuple[SensorDescription, ...] = (
     ),
     SelectDescription(
         key="operating_mode",
-        params=EMPTY,
+        enum=SystemOperationMode,
         report_name="system",
         value_fn=lambda device: device.system_config.operating_mode,
-        set_value_fn=lambda device, value: device.system_config.operating_mode(value),
+        set_value_fn=lambda device, value: device.system_config.write(
+            "operating_mode",
+            value,
+        ),
     ),
     NumberDescription(
         key="pv_setpoint",
-        params=POWER,
+        params=NUMBER_POWER,
         report_name="system",
         value_fn=lambda device: device.system_config.pv_setpoint,
-        set_value_fn=lambda device, value: device.system_config.pv_setpoint(value),
+        set_value_fn=lambda device, value: device.system_config.write(
+            "pv_setpoint",
+            value,
+        ),
     ),
 )

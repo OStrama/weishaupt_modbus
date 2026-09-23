@@ -213,3 +213,70 @@ HUMIDITY = SensorParams(
     native_unit_of_measurement=PERCENTAGE,
     suggested_display_precision=0,
 )
+
+
+NUMBER_POWER = NumberParams(
+    device_class=SensorDeviceClass.POWER,
+    native_unit_of_measurement=UnitOfPower.WATT,
+    native_min_value=0.0,
+    native_max_value=10000,
+    native_step=500,
+)
+
+
+NUMBER_EMPTY = NumberParams(
+    device_class=NumberDeviceClass.TEMPERATURE,
+    native_min_value=-60,
+    native_max_value=100,
+    native_step=0.5,
+    native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+)
+
+
+NUMBER_FLOWRATE = NumberParams(
+    native_min_value=0,
+    native_max_value=5,
+    native_step=0.1,
+    native_unit_of_measurement=UnitOfVolumeFlowRate.CUBIC_METERS_PER_HOUR,
+)
+
+
+ROOM_TEMP_LOW = NumberParams(
+    device_class=NumberDeviceClass.TEMPERATURE,
+    native_min_value=10,
+    native_max_value=20,
+    native_step=0.5,
+    native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+)
+
+ROOM_TEMP_NORMAL = NumberParams(
+    device_class=NumberDeviceClass.TEMPERATURE,
+    native_min_value=18,
+    native_max_value=25,
+    native_step=0.5,
+    native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+)
+
+ROOM_TEMP_COMFORT = NumberParams(
+    device_class=NumberDeviceClass.TEMPERATURE,
+    native_min_value=20,
+    native_max_value=28,
+    native_step=0.5,
+    native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+)
+
+SGR_RAISE = NumberParams(
+    device_class=NumberDeviceClass.TEMPERATURE,
+    native_min_value=0,
+    native_max_value=10,
+    native_step=0.5,
+    native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+)
+
+WW_TEMP = NumberParams(
+    device_class=NumberDeviceClass.TEMPERATURE,
+    native_min_value=40,
+    native_max_value=60,
+    native_step=0.5,
+    native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+)

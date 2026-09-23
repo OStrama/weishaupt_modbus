@@ -6,7 +6,14 @@ from .description import (
     SelectDescription,
     SensorDescription,
 )
-from .params import EMPTY, SENSOR_PERCENTAGE, TEMPERATURE, ENUM
+from .params import (
+    ENUM,
+    NUMBER_FLOWRATE,
+    NUMBER_PERCENTAGE,
+    SENSOR_PERCENTAGE,
+    TEMPERATURE,
+)
+
 
 HEAT_PUMP_ENTITIES: tuple[EntityDescription, ...] = (
     # Heat pump input
@@ -86,89 +93,101 @@ HEAT_PUMP_ENTITIES: tuple[EntityDescription, ...] = (
     SelectDescription(
         key="configuration",
         report_name="heat_pump",
-        params=EMPTY,
+        enum=None,
         value_fn=lambda device: device.heat_pump_config.configuration,
-        set_value_fn=lambda device, value: device.heat_pump_config.set_configuration(
-            value
+        set_value_fn=lambda device, value: device.heat_pump_config.write(
+            "configuration",
+            value,
         ),
     ),
     SelectDescription(
         key="rest_mode",
         report_name="heat_pump",
-        params=EMPTY,
+        enum=None,
         value_fn=lambda device: device.heat_pump_config.rest_mode,
-        set_value_fn=lambda device, value: device.heat_pump_config.set_rest_mode(value),
+        set_value_fn=lambda device, value: device.heat_pump_config.write(
+            "rest_mode",
+            value,
+        ),
     ),
-    NumberDescription(
+    SelectDescription(
         key="pump_start_type",
         report_name="heat_pump",
-        params=EMPTY,
+        enum=None,
         value_fn=lambda device: device.heat_pump_config.pump_start_type,
-        set_value_fn=lambda device, value: device.heat_pump_config.set_pump_start_type(
-            value
+        set_value_fn=lambda device, value: device.heat_pump_config.write(
+            "pump_start_type",
+            value,
         ),
     ),
     NumberDescription(
         key="heating_pump_power_setpoint",
         report_name="heat_pump",
-        params=SENSOR_PERCENTAGE,
+        params=NUMBER_PERCENTAGE,
         value_fn=lambda device: device.heat_pump_config.heating_pump_power_setpoint,
-        set_value_fn=lambda device, value: (
-            device.heat_pump_config.set_heating_pump_power_setpoint(value)
+        set_value_fn=lambda device, value: device.heat_pump_config.write(
+            "heating_pump_power_setpoint",
+            value,
         ),
     ),
     NumberDescription(
         key="cooling_pump_power_setpoint",
         report_name="heat_pump",
-        params=SENSOR_PERCENTAGE,
+        params=NUMBER_PERCENTAGE,
         value_fn=lambda device: device.heat_pump_config.cooling_pump_power_setpoint,
-        set_value_fn=lambda device, value: (
-            device.heat_pump_config.set_cooling_pump_power_setpoint(value)
+        set_value_fn=lambda device, value: device.heat_pump_config.write(
+            "cooling_pump_power_setpoint",
+            value,
         ),
     ),
     NumberDescription(
         key="hot_water_pump_power_setpoint",
         report_name="heat_pump",
-        params=SENSOR_PERCENTAGE,
+        params=NUMBER_PERCENTAGE,
         value_fn=lambda device: device.heat_pump_config.hot_water_pump_power_setpoint,
-        set_value_fn=lambda device, value: (
-            device.heat_pump_config.set_hot_water_pump_power_setpoint(value)
+        set_value_fn=lambda device, value: device.heat_pump_config.write(
+            "hot_water_pump_power_setpoint",
+            value,
         ),
     ),
     NumberDescription(
         key="defrost_pump_power_setpoint",
         report_name="heat_pump",
-        params=SENSOR_PERCENTAGE,
+        params=NUMBER_PERCENTAGE,
         value_fn=lambda device: device.heat_pump_config.defrost_pump_power_setpoint,
-        set_value_fn=lambda device, value: (
-            device.heat_pump_config.set_defrost_pump_power_setpoint(value)
+        set_value_fn=lambda device, value: device.heat_pump_config.write(
+            "defrost_pump_power_setpoint",
+            value,
         ),
     ),
     NumberDescription(
         key="heating_flow_rate_setpoint",
         report_name="heat_pump",
-        params=EMPTY,
+        params=NUMBER_FLOWRATE,
         value_fn=lambda device: device.heat_pump_config.heating_flow_rate_setpoint,
-        set_value_fn=lambda device, value: (
-            device.heat_pump_config.set_heating_flow_rate_setpoint(value)
+        set_value_fn=lambda device, value: device.heat_pump_config.write(
+            "heating_flow_rate_setpoint",
+            value,
         ),
     ),
     NumberDescription(
         key="cooling_flow_rate_setpoint",
         report_name="heat_pump",
-        params=EMPTY,
+        params=NUMBER_FLOWRATE,
         value_fn=lambda device: device.heat_pump_config.cooling_flow_rate_setpoint,
-        set_value_fn=lambda device, value: (
-            device.heat_pump_config.cooling_flow_rate_setpoint(value)
+        set_value_fn=lambda device, value: device.heat_pump_config.write(
+            "cooling_flow_rate_setpoint",
+            value,
         ),
     ),
     NumberDescription(
         key="hot_water_flow_rate_setpoint",
         report_name="heat_pump",
-        params=EMPTY,
+        params=NUMBER_FLOWRATE,
         value_fn=lambda device: device.heat_pump_config.hot_water_flow_rate_setpoint,
-        set_value_fn=lambda device, value: (
-            device.heat_pump_config.hot_water_flow_rate_setpoint(value)
+        set_value_fn=lambda device, value: device.heat_pump_config.write(
+            "hot_water_flow_rate_setpoint",
+            value,
         ),
     ),
 )

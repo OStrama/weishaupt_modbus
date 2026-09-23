@@ -1,38 +1,74 @@
 """Entity classes used in this integration."""
 
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
-from config.custom_components.weishaupt_modbus.descriptions.description import (
-    SensorDescription,
-)
 from homeassistant.components.number import NumberEntity
 from homeassistant.components.select import SelectEntity
-from homeassistant.components.sensor import (
-    SensorDeviceClass,
-    SensorEntity,
-    SensorStateClass,
-)
-from homeassistant.const import PERCENTAGE, UnitOfTemperature
-from homeassistant.core import callback
+from homeassistant.components.sensor import SensorEntity
 from homeassistant.helpers.device_registry import DeviceInfo
-from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .configentry import MyConfigEntry
-from .const import CONF, CONST, FORMATS
+from .const import CONF, CONST
 from .coordinator import WeishauptCoordinator
-
+from .descriptions.description import (
+    NumberDescription,
+    SelectDescription,
+    SensorDescription,
+)
 
 if TYPE_CHECKING:
     import logging
 
-_LOGGER: logging.Logger = __import__("logging").getLogger(__name__)
+    _LOGGER: logging.Logger = __import__("logging").getLogger(__name__)
 
 
-class WeishauptSensor(
-    CoordinatorEntity[WeishauptCoordinator],
-    SensorEntity,
-):
+class WeishauptEntity(CoordinatorEntity[WeishauptCoordinator]):
+    """Base entity for Weishaupt devices."""
+
+    def __init__(
+        self,
+        coordinator: WeishauptCoordinator,
+        description,
+        config_entry: MyConfigEntry,
+    ) -> None:
+        """Initialize the entity."""
+        super().__init__(coordinator)
+
+        self._entity_description = description
+        self._mac = config_entry.data[CONF.MAC]
+
+        self._attr_has_entity_name = True
+        self._attr_unique_id = (
+            f"{self._mac}_{description.report_name}_{description.key}"
+        )
+        self._attr_translation_key = f"{description.report_name}_{description.key}"
+
+    @property
+    def available(self) -> bool:
+        """Return whether the entity is available."""
+        return (
+            super().available
+            and self._entity_description.report_name in self.coordinator.data.updated
+        )
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return device info."""
+        report_name = self._entity_description.report_name
+
+        return DeviceInfo(
+            identifiers={
+                (CONST.DOMAIN, self._mac, report_name),
+            },
+            translation_key=f"dev_{report_name}",
+            sw_version="Device_SW_Version",
+            model="Device_model",
+            manufacturer="Weishaupt",
+        )
+
+
+class WeishauptSensor(WeishauptEntity, SensorEntity):
     """Representation of a Weishaupt sensor."""
 
     entity_description: SensorDescription
@@ -44,14 +80,8 @@ class WeishauptSensor(
         config_entry: MyConfigEntry,
     ) -> None:
         """Initialize the sensor."""
-        super().__init__(coordinator)
-        self._entity_description = description
-        self._mac = config_entry.data[CONF.MAC]
-        self._attr_has_entity_name = True
-        self._attr_unique_id = (
-            f"{self._mac}_{description.report_name}_{description.key}"
-        )
-        self._attr_translation_key = f"{description.report_name}_{description.key}"
+        super().__init__(coordinator, description, config_entry)
+
         self._attr_device_class = description.params.device_class
         self._attr_state_class = description.params.state_class
         self._attr_native_unit_of_measurement = (
@@ -59,36 +89,95 @@ class WeishauptSensor(
         )
 
     @property
-    def available(self) -> bool:
-        """Return whether the sensor is available."""
-        return (
-            super().available
-            and self._entity_description.report_name in self.coordinator.data.updated
-        )
-
-    @property
-    def native_value(self) -> float | None:
+    def native_value(self) -> float | str | None:
         """Return the sensor value."""
-
         value = self._entity_description.value_fn(self.coordinator.device)
 
+        if value is None:
+            return None
+
         if self._entity_description.params.is_enum:
-            return f"{self._entity_description.report_name}_{self._entity_description.key}_{value}"
+            return (
+                f"{self._entity_description.report_name}_"
+                f"{self._entity_description.key}_{value}"
+            )
 
         return value
 
-    def my_device_info(self) -> DeviceInfo:
-        """Build the device info."""
-        return DeviceInfo(
-            identifiers={self._entity_description.report_name},
-            translation_key=f"dev_{self._entity_description.report_name}",
-            # translation_placeholders=self._dev_translation_placeholders,
-            sw_version="Device_SW_Version",
-            model="Device_model",
-            manufacturer="Weishaupt",
+
+class WeishauptNumber(WeishauptEntity, NumberEntity):
+    """Representation of a Weishaupt number."""
+
+    entity_description: NumberDescription
+
+    def __init__(
+        self,
+        coordinator: WeishauptCoordinator,
+        description: NumberDescription,
+        config_entry: MyConfigEntry,
+    ) -> None:
+        """Initialize the number."""
+        super().__init__(coordinator, description, config_entry)
+
+        self._attr_device_class = description.params.device_class
+        self._attr_native_unit_of_measurement = (
+            description.params.native_unit_of_measurement
         )
+        self._attr_native_min_value = description.params.native_min_value
+        self._attr_native_max_value = description.params.native_max_value
+        self._attr_native_step = description.params.native_step
+        print(self._attr_translation_key)
 
     @property
-    def device_info(self) -> DeviceInfo | None:
-        """Return device info."""
-        return self.my_device_info()
+    def native_value(self) -> float | None:
+        """Return the current value."""
+        return self._entity_description.value_fn(self.coordinator.device)
+
+    async def async_set_native_value(self, value: float) -> None:
+        """Set the value."""
+        await self._entity_description.set_value_fn(
+            self.coordinator.device,
+            value,
+        )
+        await self.coordinator.async_request_refresh()
+
+
+class WeishauptSelect(WeishauptEntity, SelectEntity):
+    """Representation of a Weishaupt select."""
+
+    entity_description: SelectDescription
+
+    def __init__(
+        self,
+        coordinator: WeishauptCoordinator,
+        description: SelectDescription,
+        config_entry: MyConfigEntry,
+    ) -> None:
+        """Initialize the select."""
+        super().__init__(coordinator, description, config_entry)
+
+        self._enum = description.enum
+
+        self._attr_options = tuple(member.name for member in self._enum)
+        print(description.key)
+
+    @property
+    def current_option(self) -> str | None:
+        """Return the current option."""
+        value = self._entity_description.value_fn(self.coordinator.device)
+
+        if value is None:
+            return None
+
+        return self._enum(value).name
+
+    async def async_select_option(self, option: str) -> None:
+        """Set the selected option."""
+        value = self._enum[option].value
+
+        await self._entity_description.set_value_fn(
+            self.coordinator.device,
+            value,
+        )
+
+        await self.coordinator.async_request_refresh()

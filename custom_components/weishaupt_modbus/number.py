@@ -4,6 +4,11 @@ from __future__ import annotations
 
 from typing import Any
 
+from config.custom_components.weishaupt_modbus.descriptions.all import ENTITIES
+from config.custom_components.weishaupt_modbus.descriptions.description import (
+    NumberDescription,
+)
+from config.custom_components.weishaupt_modbus.entities import WeishauptNumber
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
@@ -17,5 +22,15 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up the number platform."""
-    _useless = hass
-    # start with an empty list of entries
+
+    weishaupt_coordinator = config_entry.runtime_data.weishaupt_coordinator
+
+    for description in ENTITIES:
+        if isinstance(description, NumberDescription):
+            entity = WeishauptNumber(
+                weishaupt_coordinator,
+                description,
+                config_entry,
+            )
+
+            async_add_entities([entity])

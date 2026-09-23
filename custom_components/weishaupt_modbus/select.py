@@ -1,14 +1,14 @@
 """Select."""
 
-from __future__ import annotations
-
-from typing import Any
-
+from config.custom_components.weishaupt_modbus.descriptions.all import ENTITIES
+from config.custom_components.weishaupt_modbus.descriptions.description import (
+    SelectDescription,
+)
+from config.custom_components.weishaupt_modbus.entities import WeishauptSelect
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .configentry import MyConfigEntry
-from .const import TYPES
 
 
 async def async_setup_entry(
@@ -16,7 +16,16 @@ async def async_setup_entry(
     config_entry: MyConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
-    """Select entry setup."""
-    _useless = hass
-    # start with an empty list of entries
-    entries: list[Any] = []
+    """Set up the number platform."""
+
+    weishaupt_coordinator = config_entry.runtime_data.weishaupt_coordinator
+
+    for description in ENTITIES:
+        if isinstance(description, SelectDescription):
+            entity = WeishauptSelect(
+                weishaupt_coordinator,
+                description,
+                config_entry,
+            )
+
+            async_add_entities([entity])
