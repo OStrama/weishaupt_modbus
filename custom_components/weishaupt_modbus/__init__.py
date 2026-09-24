@@ -24,7 +24,7 @@ if TYPE_CHECKING:
     from .configentry import MyConfigEntry
 
 from .const import CONF, CONST, DEVICENAMES
-from .coordinator import MyWebIfCoordinator, WeishauptModbusCoordinator
+from .coordinator import MyWebIfCoordinator
 from .hpconst import (
     DEVICELISTS,
     MODBUS_HZ2_ITEMS,

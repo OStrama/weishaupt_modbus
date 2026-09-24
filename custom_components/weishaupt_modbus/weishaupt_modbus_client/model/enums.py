@@ -296,3 +296,31 @@ class HeatingCircuitOperation(IntEnum):
     NORMAL = 2
     LOWERING = 3
     STANDBY = 4
+
+
+class SecondHeatSourceStatus(IntEnum):
+    """Second heat source status."""
+
+    OFF = 0
+    ON = 1
+
+
+class SecondHeatSourceConfiguration(IntEnum):
+    """Second heat source configuration."""
+
+    CONFIGURATION_0 = 0
+    CONFIGURATION_1 = 1
+
+
+class ElectricHeater1Configuration(IntEnum):
+    """Electric heater 1 configuration."""
+
+    ENABLED = 5
+    OFF = 255
+
+
+class ElectricHeater2Configuration(IntEnum):
+    """Electric heater 2 configuration."""
+
+    ENABLED = 6
+    OFF = 255

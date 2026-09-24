@@ -28,8 +28,8 @@
                     "Poll Heizkreis 3": "Retrieve Heating circuit 3?",
                     "Poll Heizkreis 4": "Retrieve Heating circuit 4?",
                     "Poll Heizkreis 5": "Retrieve Heating circuit 5?",
-                    "Poll Wärmepumpe": "Retrieve Heat pump?",
-                    "Poll 2. Wärmeerzeuger": "Retrieve 2nd heat source?",
+                    "Poll W\u00e4rmepumpe": "Retrieve Heat pump?",
+                    "Poll 2. W\u00e4rmeerzeuger": "Retrieve 2nd heat source?",
                     "Poll Statistik": "Retrieve Statistics?"
                 }
             },
@@ -54,25 +54,19 @@
                     "Poll Heizkreis 3": "Retrieve Heating circuit 3?",
                     "Poll Heizkreis 4": "Retrieve Heating circuit 4?",
                     "Poll Heizkreis 5": "Retrieve Heating circuit 5?",
-                    "Poll Wärmepumpe": "Retrieve Heat pump?",
-                    "Poll 2. Wärmeerzeuger": "Retrieve 2nd heat source?",
+                    "Poll W\u00e4rmepumpe": "Retrieve Heat pump?",
+                    "Poll 2. W\u00e4rmeerzeuger": "Retrieve 2nd heat source?",
                     "Poll Statistik": "Retrieve Statistics?"
                 }
             }
         }
     },
     "device": {
-        "dev_system": {
-            "name": "WH System"
+        "dev_ein_aus": {
+            "name": "WH Input/output"
         },
-        "dev_heat_pump": {
-            "name": "WH Heat pump"
-        },
-        "dev_domestic_hot_water": {
-            "name": "WH Hot water"
-        },
-        "dev_heating_circuit": {
-            "name": "WH Heizkreis"
+        "dev_heizkreis": {
+            "name": "WH Heating circuit"
         },
         "dev_heizkreis2": {
             "name": "WH Heating circuit2"
@@ -86,17 +80,23 @@
         "dev_heizkreis5": {
             "name": "WH Heating circuit5"
         },
-        "dev_second_heat_source": {
-            "name": "WH 2nd heat source"
-        },
-        "dev_statistics": {
+        "dev_statistik": {
             "name": "WH Statistics"
+        },
+        "dev_system": {
+            "name": "WH System"
         },
         "dev_unknown": {
             "name": "WH Unknown"
         },
-        "dev_ein_aus": {
-            "name": "WH Input/output"
+        "dev_waermeerzeuger2": {
+            "name": "WH 2nd heat source"
+        },
+        "dev_heat_pump": {
+            "name": "WH Heat pump"
+        },
+        "dev_warmwasser": {
+            "name": "WH Hot water"
         }
     },
     "entity": {
@@ -125,7 +125,7 @@
             "heizkennlinie5": {
                 "name": "Heating curve5"
             },
-            "heating_circuit_lowering_room_target_temperature": {
+            "raum_soll_temp_absenk": {
                 "name": "Room setpoint temperature lowering"
             },
             "raum_soll_temp_absenk2": {
@@ -140,7 +140,7 @@
             "raum_soll_temp_absenk5": {
                 "name": "Room setpoint temperature lowering5"
             },
-            "heating_circuit_comfort_room_target_temperature": {
+            "raum_soll_temp_komf": {
                 "name": "Room setpoint temperature comfort"
             },
             "raum_soll_temp_komf2": {
@@ -155,7 +155,7 @@
             "raum_soll_temp_komf5": {
                 "name": "Room setpoint temperature comfort5"
             },
-            "heating_circuit_normal_room_target_temperature": {
+            "raum_soll_temp_normal": {
                 "name": "Room setpoint temperature normal"
             },
             "raum_soll_temp_normal2": {
@@ -170,7 +170,7 @@
             "raum_soll_temp_normal5": {
                 "name": "Room setpoint temperature normal5"
             },
-            "domestic_hot_water_sg_ready_raise": {
+            "sgr_anhebung": {
                 "name": "SG Ready increase"
             },
             "so_wi_umschalt": {
@@ -188,10 +188,10 @@
             "so_wi_umschalt5": {
                 "name": "Summer winter changeover5"
             },
-            "domestic_hot_water_lowering_temperature": {
+            "ww_absenk": {
                 "name": "Hot water lowering"
             },
-            "domestic_hot_water_normal_temperature": {
+            "ww_normal": {
                 "name": "Hot water normal"
             },
             "heiz_konstanttemp": {
@@ -238,41 +238,17 @@
             },
             "kuehl_konstanttemp5": {
                 "name": "Cooling constant temperature 5"
-            },
-            "heat_pump_heating_flow_rate_setpoint": {
-                "name": "Setpoint volume flow Heating"
-            },
-            "heat_pump_cooling_flow_rate_setpoint": {
-                "name": "Setpoint volume flow Cooling"
-            },
-            "heat_pump_hot_water_flow_rate_setpoint": {
-                "name": "Setpoint volume flow Hot water"
-            },
-            "heat_pump_defrost_pump_power_setpoint": {
-                "name": "Setpoint pump power defrost"
-            },
-            "heat_pump_heating_pump_power_setpoint": {
-                "name": "Setpoint pump power Heating"
-            },
-            "heat_pump_cooling_pump_power_setpoint": {
-                "name": "Setpoint pump power Cooling"
-            },
-            "heat_pump_hot_water_pump_power_setpoint": {
-                "name": "Setpoint pump power Hot water"
-            },
-            "system_pv_setpoint": {
-                "name": "Set point PV"
             }
         },
         "select": {
             "heating_circuit_operation_mode": {
                 "name": "Operation mode",
                 "state": {
-                    "heating_circuit_operation_mode_lowering": "Absenkbetrieb",
-                    "heating_circuit_operation_mode_automatic": "Automatik",
-                    "heating_circuit_operation_mode_normal": "Normal",
-                    "heating_circuit_operation_mode_standby": "Standby",
-                    "heating_circuit_operation_mode_comfort": "Komfort"
+                    "hz_operationmode_lowering": "Lowering mode",
+                    "hz_operationmode_automatic": "Automatic",
+                    "hz_operationmode_normal": "Normal",
+                    "hz_operationmode_standby": "Standby",
+                    "hz_operationmode_comfort": "Comfort"
                 }
             },
             "hz_operationmode2": {
@@ -318,55 +294,55 @@
             "heating_circuit_party_pause": {
                 "name": "Pause / Party",
                 "state": {
-                    "heating_circuit_party_0_5": "Party 0.5h",
-                    "heating_circuit_party_1": "Party 1.0h",
-                    "heating_circuit_party_1_5": "Party 1.5h",
-                    "heating_circuit_party_2": "Party 2.0h",
-                    "heating_circuit_party_2_5": "Party 2.5h",
-                    "heating_circuit_party_3": "Party 3.0h",
-                    "heating_circuit_party_3_5": "Party 3.5h",
-                    "heating_circuit_party_4": "Party 4.0h",
-                    "heating_circuit_party_4_5": "Party 4.5h",
-                    "heating_circuit_party_5": "Party 5.0h",
-                    "heating_circuit_party_5_5": "Party 5.5h",
-                    "heating_circuit_party_6": "Party 6.0h",
-                    "heating_circuit_party_6_5": "Party 6.5h",
-                    "heating_circuit_party_7": "Party 7.0h",
-                    "heating_circuit_party_7_5": "Party 7.5h",
-                    "heating_circuit_party_8": "Party 8.0h",
-                    "heating_circuit_party_8_5": "Party 8.5h",
-                    "heating_circuit_party_9": "Party 9.0h",
-                    "heating_circuit_party_9_5": "Party 9.5h",
-                    "heating_circuit_party_10": "Party 10.0h",
-                    "heating_circuit_party_10_5": "Party 10.5h",
-                    "heating_circuit_party_11": "Party 11.0h",
-                    "heating_circuit_party_11_5": "Party 11.5h",
-                    "heating_circuit_party_12": "Party 12.0h",
-                    "heating_circuit_party_pause_automatic": "Automatik",
-                    "heating_circuit_pause_0_5": "Pause 0.5h",
-                    "heating_circuit_pause_1": "Pause 1.0h",
-                    "heating_circuit_pause_1_5": "Pause 1.5h",
-                    "heating_circuit_pause_2": "Pause 2.0h",
-                    "heating_circuit_pause_2_5": "Pause 2.5h",
-                    "heating_circuit_pause_3": "Pause 3.0h",
-                    "heating_circuit_pause_3_5": "Pause 3.5h",
-                    "heating_circuit_pause_4": "Pause 4.0h",
-                    "heating_circuit_pause_4_5": "Pause 4.5h",
-                    "heating_circuit_pause_5": "Pause 5.0h",
-                    "heating_circuit_pause_5_5": "Pause 5.5h",
-                    "heating_circuit_pause_6": "Pause 6.0h",
-                    "heating_circuit_pause_6_5": "Pause 6.5h",
-                    "heating_circuit_pause_7": "Pause 7.0h",
-                    "heating_circuit_pause_7_5": "Pause 7.5h",
-                    "heating_circuit_pause_8": "Pause 8.0h",
-                    "heating_circuit_pause_8_5": "Pause 8.5h",
-                    "heating_circuit_pause_9": "Pause 9.0h",
-                    "heating_circuit_pause_9_5": "Pause 9.5h",
-                    "heating_circuit_pause_10": "Pause 10.0h",
-                    "heating_circuit_pause_10_5": "Pause 10.5h",
-                    "heating_circuit_pause_11": "Pause 11.0h",
-                    "heating_circuit_pause_11_5": "Pause 11.5h",
-                    "heating_circuit_pause_12": "Pause 12.0h"
+                    "hz_party_0_5": "Party 0.5h",
+                    "hz_party_1": "Party 1.0h",
+                    "hz_party_10": "Party 10.0h",
+                    "hz_party_10_5": "Party 10.5h",
+                    "hz_party_11": "Party 11.0h",
+                    "hz_party_11_5": "Party 11.5h",
+                    "hz_party_12": "Party 12.0h",
+                    "hz_party_1_5": "Party 1.5h",
+                    "hz_party_2": "Party 2.0h",
+                    "hz_party_2_5": "Party 2.5h",
+                    "hz_party_3": "Party 3.0h",
+                    "hz_party_3_5": "Party 3.5h",
+                    "hz_party_4": "Party 4.0h",
+                    "hz_party_4_5": "Party 4.5h",
+                    "hz_party_5": "Party 5.0h",
+                    "hz_party_5_5": "Party 5.5h",
+                    "hz_party_6": "Party 6.0h",
+                    "hz_party_6_5": "Party 6.5h",
+                    "hz_party_7": "Party 7.0h",
+                    "hz_party_7_5": "Party 7.5h",
+                    "hz_party_8": "Party 8.0h",
+                    "hz_party_8_5": "Party 8.5h",
+                    "hz_party_9": "Party 9.0h",
+                    "hz_party_9_5": "Party 9.5h",
+                    "hz_party_pause_auto": "Automatic",
+                    "hz_pause_0_5": "Pause 0.5h",
+                    "hz_pause_1": "Pause 1.0h",
+                    "hz_pause_10": "Pause 10.0h",
+                    "hz_pause_10_5": "Pause 10.5h",
+                    "hz_pause_11": "Pause 11.0h",
+                    "hz_pause_11_5": "Pause 11.5h",
+                    "hz_pause_12": "Pause 12.0h",
+                    "hz_pause_1_5": "Pause 1.5h",
+                    "hz_pause_2": "Pause 2.0h",
+                    "hz_pause_2_5": "Pause 2.5h",
+                    "hz_pause_3": "Pause 3.0h",
+                    "hz_pause_3_5": "Pause 3.5h",
+                    "hz_pause_4": "Pause 4.0h",
+                    "hz_pause_4_5": "Pause 4.5h",
+                    "hz_pause_5": "Pause 5.0h",
+                    "hz_pause_5_5": "Pause 5.5h",
+                    "hz_pause_6": "Pause 6.0h",
+                    "hz_pause_6_5": "Pause 6.5h",
+                    "hz_pause_7": "Pause 7.0h",
+                    "hz_pause_7_5": "Pause 7.5h",
+                    "hz_pause_8": "Pause 8.0h",
+                    "hz_pause_8_5": "Pause 8.5h",
+                    "hz_pause_9": "Pause 9.0h",
+                    "hz_pause_9_5": "Pause 9.5h"
                 }
             },
             "party_pause2": {
@@ -585,85 +561,80 @@
                     "hz_pause_9_5": "Pause 9.5h"
                 }
             },
-            "system_operating_mode": {
-                "name": "Systembetriebsart",
+            "system_config_operating_mode": {
+                "name": "System operation mode",
                 "state": {
-                    "system_operating_mode_second_heat_source": "2.WEZ",
-                    "system_operating_mode_automatic": "Automatik",
-                    "system_operating_mode_heating": "Heizen",
-                    "system_operating_mode_cooling": "Kühlen",
-                    "system_operating_mode_summer": "Sommer",
-                    "system_operating_mode_standby": "Standby"
+                    "sys_operationmode_2ndheatsource": "2nd heat source",
+                    "sys_operationmode_automatic": "Automatic",
+                    "sys_operationmode_heating": "Heating",
+                    "sys_operationmode_cooling": "Cooling",
+                    "sys_operationmode_summer": "Summer",
+                    "sys_operationmode_standby": "Standby"
                 }
+            },
+            "system_config_pv_setpoint": {
+                "name": "Set point PV"
             },
             "domestic_hot_water_push": {
                 "name": "Hot water Push",
                 "state": {
-                    "domestic_hot_water_push_10": "10 min",
-                    "domestic_hot_water_push_100": "100 min",
-                    "domestic_hot_water_push_105": "105 min",
-                    "domestic_hot_water_push_110": "110 min",
-                    "domestic_hot_water_push_115": "115 min",
-                    "domestic_hot_water_push_120": "120 min",
-                    "domestic_hot_water_push_125": "125 min",
-                    "domestic_hot_water_push_130": "130 min",
-                    "domestic_hot_water_push_135": "135 min",
-                    "domestic_hot_water_push_140": "140 min",
-                    "domestic_hot_water_push_145": "145 min",
-                    "domestic_hot_water_push_15": "15 min",
-                    "domestic_hot_water_push_150": "150 min",
-                    "domestic_hot_water_push_155": "155 min",
-                    "domestic_hot_water_push_160": "160 min",
-                    "domestic_hot_water_push_165": "165 min",
-                    "domestic_hot_water_push_170": "170 min",
-                    "domestic_hot_water_push_175": "175 min",
-                    "domestic_hot_water_push_180": "180 min",
-                    "domestic_hot_water_push_185": "185 min",
-                    "domestic_hot_water_push_190": "190 min",
-                    "domestic_hot_water_push_195": "195 min",
-                    "domestic_hot_water_push_20": "20 min",
-                    "domestic_hot_water_push_200": "200 min",
-                    "domestic_hot_water_push_205": "205 min",
-                    "domestic_hot_water_push_210": "210 min",
-                    "domestic_hot_water_push_215": "215 min",
-                    "domestic_hot_water_push_220": "220 min",
-                    "domestic_hot_water_push_225": "225 min",
-                    "domestic_hot_water_push_230": "230 min",
-                    "domestic_hot_water_push_235": "235 min",
-                    "domestic_hot_water_push_25": "25 min",
-                    "domestic_hot_water_push_30": "30 min",
-                    "domestic_hot_water_push_35": "35 min",
-                    "domestic_hot_water_push_40": "40 min",
-                    "domestic_hot_water_push_45": "45 min",
-                    "domestic_hot_water_push_5": "5 min",
-                    "domestic_hot_water_push_50": "50 min",
-                    "domestic_hot_water_push_55": "55 min",
-                    "domestic_hot_water_push_60": "60 min",
-                    "domestic_hot_water_push_65": "65 min",
-                    "domestic_hot_water_push_70": "70 min",
-                    "domestic_hot_water_push_75": "75 min",
-                    "domestic_hot_water_push_80": "80 min",
-                    "domestic_hot_water_push_85": "85 min",
-                    "domestic_hot_water_push_90": "90 min",
-                    "domestic_hot_water_push_95": "95 min",
-                    "domestic_hot_water_push_off": "AUS"
-                }
-            },
-            "domestic_hot_water_configuration": {
-                "name": "HW_Configuration",
-                "state": {
-                    "domestic_hot_water_configuration_off": "aus",
-                    "domestic_hot_water_configuration_pump": "Pumpe",
-                    "domestic_hot_water_configuration_diverter_valve": "Umlenkventil"
+                    "ww_push_10": "10 min",
+                    "ww_push_100": "100 min",
+                    "ww_push_105": "105 min",
+                    "ww_push_110": "110 min",
+                    "ww_push_115": "115 min",
+                    "ww_push_120": "120 min",
+                    "ww_push_125": "125 min",
+                    "ww_push_130": "130 min",
+                    "ww_push_135": "135 min",
+                    "ww_push_140": "140 min",
+                    "ww_push_145": "145 min",
+                    "ww_push_15": "15 min",
+                    "ww_push_150": "150 min",
+                    "ww_push_155": "155 min",
+                    "ww_push_160": "160 min",
+                    "ww_push_165": "165 min",
+                    "ww_push_170": "170 min",
+                    "ww_push_175": "175 min",
+                    "ww_push_180": "180 min",
+                    "ww_push_185": "185 min",
+                    "ww_push_190": "190 min",
+                    "ww_push_195": "195 min",
+                    "ww_push_20": "20 min",
+                    "ww_push_200": "200 min",
+                    "ww_push_205": "205 min",
+                    "ww_push_210": "210 min",
+                    "ww_push_215": "215 min",
+                    "ww_push_220": "220 min",
+                    "ww_push_225": "225 min",
+                    "ww_push_230": "230 min",
+                    "ww_push_235": "235 min",
+                    "ww_push_25": "25 min",
+                    "ww_push_30": "30 min",
+                    "ww_push_35": "35 min",
+                    "ww_push_40": "40 min",
+                    "ww_push_45": "45 min",
+                    "ww_push_5": "5 min",
+                    "ww_push_50": "50 min",
+                    "ww_push_55": "55 min",
+                    "ww_push_60": "60 min",
+                    "ww_push_65": "65 min",
+                    "ww_push_70": "70 min",
+                    "ww_push_75": "75 min",
+                    "ww_push_80": "80 min",
+                    "ww_push_85": "85 min",
+                    "ww_push_90": "90 min",
+                    "ww_push_95": "95 min",
+                    "ww_push_aus": "off"
                 }
             },
             "heating_circuit_demand": {
                 "name": "Request type",
                 "state": {
-                    "heating_circuit_demand_off": "aus",
-                    "heating_circuit_demand_constant": "konstant",
-                    "heating_circuit_demand_weather_compensated": "witterungsgeführt",
-                    "heating_circuit_demand_room_control": "Raumregelung"
+                    "hz_anforderung_aus": "off",
+                    "hz_anforderung_konstant": "constant",
+                    "hz_anforderung_witterungsgefuehrt": "weather-guided",
+                    "hz_anforderung_raumregelung": "Room control"
                 }
             },
             "anf_typ2": {
@@ -701,59 +672,13 @@
                     "hz_anforderung_witterungsgefuehrt": "weather-guided",
                     "hz_anforderung_raumregelung": "Room control"
                 }
-            },
-            "heat_pump_rest_mode": {
-                "name": "Silent mode",
-                "state": {
-                    "heat_pump_rest_mode_off": "aus",
-                    "heat_pump_rest_mode_80_percent": "80 %",
-                    "heat_pump_rest_mode_60_percent": "60 %",
-                    "heat_pump_rest_mode_40_percent": "40 %"
-                }
-            },
-            "heat_pump_configuration": {
-                "name": "Configuration",
-                "state": {
-                    "heat_pump_configuration_heating": "Heizen",
-                    "heat_pump_configuration_heating_cooling_2": "Heizen, Kühlen",
-                    "heat_pump_configuration_heating_cooling_3": "Heizen, Kühlen",
-                    "heat_pump_configuration_heating_hot_water": "Heizen, Warmwasser",
-                    "heat_pump_configuration_not_configured": "Nicht konfiguriert"
-                }
-            },
-            "heating_circuit_water_configuration": {
-                "name": "Heating circuit configuration",
-                "state": {
-                    "heating_circuit_water_configuration_off": "aus",
-                    "heating_circuit_water_configuration_diverter_valve": "Mischkreis",
-                    "heating_circuit_water_configuration_pump": "Pumpenkreis",
-                    "heating_circuit_water_configuration_setpoint_pump_m1": "Sollwert (Pumpe M1)"
-                }
-            },
-            "second_heat_source_electric_heater_1_configuration": {
-                "name": "Configuration EP1",
-                "state": {
-                    "second_heat_source_electric_heater_1_configuration_enabled": "aktiviert",
-                    "second_heat_source_electric_heater_1_configuration_disabled": "deaktiviert"
-                }
-            },
-            "second_heat_source_electric_heater_2_configuration": {
-                "name": "Configuration EP2",
-                "state": {
-                    "second_heat_source_electric_heater_2_configuration_enabled": "aktiviert",
-                    "second_heat_source_electric_heater_2_configuration_disabled": "deaktiviert"
-                }
-            },
-            "second_heat_source_configuration": {
-                "name": "W2_Configuration",
-                "state": {
-                    "second_heat_source_configuration_0": "0",
-                    "second_heat_source_configuration_1": "1"
-                }
             }
         },
         "sensor": {
-            "statistics_defrost_energy_yesterday": {
+            "system_outside_temperature": {
+                "name": "Outside Temperature BLA"
+            },
+            "statistics_defrost_energie_yesterday": {
                 "name": "Defrost energy yesterday"
             },
             "statistics_defrost_energy_today": {
@@ -782,6 +707,20 @@
             },
             "adr36801": {
                 "name": "Adr. 36801"
+            },
+            "adr44102": {
+                "name": "Configuration EP1",
+                "state": {
+                    "w2_konf_0": "enabled",
+                    "w2_konf_1": "OFF"
+                }
+            },
+            "adr44103": {
+                "name": "Configuration EP2",
+                "state": {
+                    "w2_konf_0": "enabled",
+                    "w2_konf_1": "OFF"
+                }
             },
             "heat_pump_regenerative_flow_temperature": {
                 "name": "Request(feed regenerative)"
@@ -999,46 +938,45 @@
             "system_operating_display": {
                 "name": "Operation indicator",
                 "state": {
-                    "system_operating_display_0": "PV Mode",
-                    "system_operating_display_1": "Relais test",
-                    "system_operating_display_2": "Emergency stop",
-                    "system_operating_display_3": "Diagnosis",
-                    "system_operating_display_4": "Manual mode",
-                    "system_operating_display_5": "Manual heating",
-                    "system_operating_display_6": "Manual cooling",
-                    "system_operating_display_7": "Manual defrost",
-                    "system_operating_display_8": "Defrost",
-                    "system_operating_display_9": "2nd heat source",
-                    "system_operating_display_10": "EVU_SPERRE",
-                    "system_operating_display_11": "SG tariff",
-                    "system_operating_display_12": "SG maximum",
-                    "system_operating_display_13": "Tariff load",
-                    "system_operating_display_14": "Elevated operation",
-                    "system_operating_display_15": "Standby time",
-                    "system_operating_display_16": "Standby",
-                    "system_operating_display_17": "Rinse",
-                    "system_operating_display_18": "Frost protection",
-                    "system_operating_display_19": "Heating mode",
-                    "system_operating_display_20": "Hot water mode",
-                    "system_operating_display_21": "Legionella protection",
-                    "system_operating_display_22": "Switchover HZ KU",
-                    "system_operating_display_23": "Cooling mode",
-                    "system_operating_display_24": "Passive cooling",
-                    "system_operating_display_25": "Summer mode",
-                    "system_operating_display_26": "Swimming pool mode",
-                    "system_operating_display_27": "Vacation",
-                    "system_operating_display_28": "Screed program",
-                    "system_operating_display_29": "Locked",
-                    "system_operating_display_30": "Lock AT",
-                    "system_operating_display_31": "Lock summer",
-                    "system_operating_display_32": "Winter lock",
-                    "system_operating_display_33": "Application limit",
-                    "system_operating_display_34": "HK block",
-                    "system_operating_display_35": "Lowering mode",
-                    "system_operating_display_36": "Regenerative flow",
-                    "system_operating_display_37": "Heating mode SGR",
-                    "system_operating_display_39": "Hot water mode SGR",
-                    "system_operating_display_43": "Oil recirculation"
+                    "system_operationmode_pvmode": "PV Mode",
+                    "system_operationmode_relaistest": "Relais test",
+                    "system_operationmode_sgtariff": "SG tariff",
+                    "system_operationmode_sgmax": "SG maximum",
+                    "system_operationmode_tariffload": "Tariff load",
+                    "system_operationmode_elevatedoperation": "Elevated operation",
+                    "system_operationmode_standbytime": "Standby time",
+                    "system_operationmode_standby": "Standby",
+                    "system_operationmode_rinse": "Rinse",
+                    "system_operationmode_frosprotection": "Frost protection",
+                    "system_operationmode_heating": "Heating mode",
+                    "system_operationmode_heating_sgr": "Heating mode SGR",
+                    "system_operationmode_emergencystop": "Emergency stop",
+                    "system_operationmode_hotwater": "Hot water mode",
+                    "system_operationmode_hotwater_sgr": "Hot water mode SGR",
+                    "system_operationmode_legionellaprotection": "Legionella protection",
+                    "system_operationmode_switchheatingcooling": "Switchover HZ KU",
+                    "system_operationmode_cooling": "Cooling mode",
+                    "system_operationmode_passivecooling": "Passive cooling",
+                    "system_operationmode_summer": "Summer mode",
+                    "system_operationmode_swimmingpool": "Swimming pool mode",
+                    "system_operationmode_vacation": "Vacation",
+                    "system_operationmode_screedprogram": "Screed program",
+                    "system_operationmode_locked": "Locked",
+                    "system_operationmode_diagnosis": "Diagnosis",
+                    "system_operationmode_lockedat": "Lock AT",
+                    "system_operationmode_lockedsummer": "Lock summer",
+                    "system_operationmode_lockedwinter": "Winter lock",
+                    "system_operationmode_applicationlimit": "Application limit",
+                    "system_operationmode_lockedcv": "HK block",
+                    "system_operationmode_lowering": "Lowering mode",
+                    "system_operationmode_regenerativeflow": "Regenerative flow",
+                    "system_operationmode_manual": "Manual mode",
+                    "system_operationmode_oilrecirculation": "Oil recirculation",
+                    "system_operationmode_manualheating": "Manual heating",
+                    "system_operationmode_manualcooling": "Manual cooling",
+                    "system_operationmode_manualdefrost": "Manual defrost",
+                    "system_operationmode_defrost": "Defrost",
+                    "system_operationmode_manual2ndheatsource": "2nd heat source"
                 }
             },
             "second_heat_source_electric_heater_1_operating_hours": {
@@ -1061,7 +999,7 @@
                     "w2_status_ein": "on"
                 }
             },
-            "statistics_electric_energy_yesterday": {
+            "el_energie_yesterday": {
                 "name": "Electr. energy yesterday"
             },
             "statistics_electric_energy_today": {
@@ -1215,20 +1153,20 @@
             "system_error_free": {
                 "name": "No error",
                 "state": {
-                    "system_error_free_False": "Fehler aktiv",
-                    "system_error_free_True": "Störungsfreier Betrieb"
+                    "fehler_aktiv": "Error active",
+                    "stoerungsfreier_betrieb": "Fault-free operation"
                 }
             },
-            "statistics_total_energy_2_yesterday": {
+            "ges_energie_2_yesterday": {
                 "name": "Total energy II yesterday"
             },
-            "statistics_total_energy_2_today": {
-                "name": "Gesamt Energie II heute"
+            "ges_energie_today": {
+                "name": "Total energy II today"
             },
-            "statistics_total_energy_2_year": {
+            "ges_energie_2_jahr": {
                 "name": "Total energy II year"
             },
-            "statistics_total_energy_2_month": {
+            "ges_energie_2_monat": {
                 "name": "Total energy II month"
             },
             "statistics_total_energy_yesterday": {
@@ -1249,11 +1187,20 @@
             "statistics_heating_energy_today": {
                 "name": "Heating energy today"
             },
-            "statistics_heating_energy_year": {
+            "statistics_heating_energy_jahr": {
                 "name": "Heating energy year"
             },
             "statistics_heating_energy_month": {
                 "name": "Heating energy month"
+            },
+            "hz_konf": {
+                "name": "Heating circuit configuration",
+                "state": {
+                    "hp_konf_aus": "off",
+                    "hp_konf_mischkreis": "Mixing circuit",
+                    "hp_konf_pumpenkreis": "Pump circuit",
+                    "hp_konf_sollwert_pumpe_m1": "Setpoint (pump M1)"
+                }
             },
             "hz_konf2": {
                 "name": "Heating circuit configuration 2",
@@ -1291,8 +1238,8 @@
                     "hp_konf_sollwert_pumpe_m1": "Setpoint (pump M1)"
                 }
             },
-            "heating_circuit_flow_temperature": {
-                "name": "HZ_Vorlauftemperatur"
+            "hz_vl_temp": {
+                "name": "Heat circuit feed temperature"
             },
             "hz_vl_temp2": {
                 "name": "Heat circuit feed temperature 2"
@@ -1306,8 +1253,8 @@
             "hz_vl_temp5": {
                 "name": "Heat circuit feed temperature 5"
             },
-            "heating_circuit_flow_target_temperature": {
-                "name": "HZ_Vorlaufsolltemperatur"
+            "hz_vl_solltemp": {
+                "name": "Heat circuit feed setpoint temperature"
             },
             "hz_vl_solltemp2": {
                 "name": "Heat circuit feed setpoint temperature2"
@@ -1489,7 +1436,7 @@
                     "io_konf_in_9": "Producer block WW"
                 }
             },
-            "statistics_cooling_energy_yesterday": {
+            "kuehl_energie_yesterday": {
                 "name": "Cooling energy yesterday"
             },
             "statistics_cooling_energy_today": {
@@ -1561,6 +1508,15 @@
             "heat_pump_return_temperature": {
                 "name": "Return flow temperature"
             },
+            "heat_pump_rest_mode": {
+                "name": "Silent mode",
+                "state": {
+                    "hp_ruhemodus_0": "off",
+                    "hp_ruhemodus_1": "80 %",
+                    "hp_ruhemodus_2": "60 %",
+                    "hp_ruhemodus_3": "40 %"
+                }
+            },
             "second_heat_source_electric_heater_1_switch_cycles": {
                 "name": "Switching cycles E-heating 1"
             },
@@ -1573,25 +1529,46 @@
             "sgr2": {
                 "name": "SG-Ready 2"
             },
+            "heat_pump_heating_flow_rate_setpoint": {
+                "name": "Setpoint volume flow Heating"
+            },
+            "heat_pump_cooling_flow_rate_setpoint": {
+                "name": "Setpoint volume flow Cooling"
+            },
+            "heat_pump_hot_water_flow_rate_setpoint": {
+                "name": "Setpoint volume flow Hot water"
+            },
+            "heat_pump_defrost_pump_power_setpoint": {
+                "name": "Setpoint pump power defrost"
+            },
+            "heat_pump_heating_pump_power_setpoint": {
+                "name": "Setpoint pump power Heating"
+            },
+            "heat_pump_cooling_pump_power_setpoint": {
+                "name": "Setpoint pump power Cooling"
+            },
+            "heat_pump_hot_water_pump_power_setpoint": {
+                "name": "Setpoint pump power Hot water"
+            },
             "second_heat_source_status": {
                 "name": "Status 2nd heat source",
                 "state": {
-                    "second_heat_source_status_0": "aus",
-                    "second_heat_source_status_1": "ein"
+                    "w2_status_aus": "off",
+                    "w2_status_ein": "on"
                 }
             },
             "second_heat_source_electric_heater_1_status": {
                 "name": "Status E-Heater 1",
                 "state": {
-                    "second_heat_source_electric_heater_1_status_0": "aus",
-                    "second_heat_source_electric_heater_1_status_1": "ein"
+                    "w2_status_aus": "off",
+                    "w2_status_ein": "on"
                 }
             },
             "second_heat_source_electric_heater_2_status": {
                 "name": "Status E-Heater 2",
                 "state": {
-                    "second_heat_source_electric_heater_2_status_0": "aus",
-                    "second_heat_source_electric_heater_2_status_1": "ein"
+                    "w2_status_aus": "off",
+                    "w2_status_ein": "on"
                 }
             },
             "heat_pump_evaporation_temperature": {
@@ -1601,10 +1578,17 @@
                 "name": "Compressor suction gas temp"
             },
             "heat_pump_precise_flow_temperature": {
-                "name": "Feed temperature präzise(Summenvorlauf(B7))"
+                "name": "Feed temperature pr\u00e4zise(Summenvorlauf(B7))"
             },
             "heat_pump_flow_temperature": {
                 "name": "Feed temperature"
+            },
+            "second_heat_source_configuration": {
+                "name": "W2_Configuration",
+                "state": {
+                    "w2_konf_0": "0",
+                    "w2_konf_1": "1"
+                }
             },
             "waermeleistung": {
                 "name": "Heating power"
@@ -1612,140 +1596,140 @@
             "system_warning": {
                 "name": "Warning",
                 "state": {
-                    "system_warning_1": "Refrigerant sensor expansion valve inlet (T1)",
-                    "system_warning_10": "High pressure sensor (P2)",
-                    "system_warning_101": "Heat pump is being operated outside the operating limits",
-                    "system_warning_102": "Maximum defrost time exceeded",
-                    "system_warning_103": "Communication refrigeration circuit faulty",
-                    "system_warning_104": "discharge gas temperature too high",
-                    "system_warning_105": "Current consumption from inverter too high",
-                    "system_warning_106": "Current consumption too high",
-                    "system_warning_107": "DC voltage on inverter too high",
-                    "system_warning_108": "DC voltage on inverter too low",
-                    "system_warning_109": "Heat pump is operated outside the permissible voltage range",
-                    "system_warning_11": "Medium pressure sensor (P3)",
-                    "system_warning_110": "Heat pump is being operated outside the permissible voltage range",
-                    "system_warning_111": "High pressure switch has triggered",
-                    "system_warning_112": "Inverter has overheated",
-                    "system_warning_113": "Inverter has overheated",
-                    "system_warning_114": "Position of compressor motor cannot be determined",
-                    "system_warning_117": "DC voltage on inverter too low",
-                    "system_warning_118": "Current between inverter and compressor is too high",
-                    "system_warning_119": "Current consumption from compressor too high Timeout",
-                    "system_warning_12": "Cooling expansion valve defective",
-                    "system_warning_120": "Inverter temperature too high",
-                    "system_warning_121": "Voltage on inverter too low",
-                    "system_warning_122": "Modbus configuration error",
-                    "system_warning_123": "No Modbus connection",
-                    "system_warning_124": "discharge gas temperature too high",
-                    "system_warning_127": "Inverter temperature too high",
-                    "system_warning_128": "Inverter is overheated",
-                    "system_warning_129": "Modbus communication faulty",
-                    "system_warning_13": "No communication to the inverter",
-                    "system_warning_130": "Modbus communication faulty",
-                    "system_warning_133": "Electronics error",
-                    "system_warning_135": "High pressure switch defective",
-                    "system_warning_136": "Compressor does not match configuration",
-                    "system_warning_137": "High pressure switch does not match the configuration",
-                    "system_warning_14": "No communication with the outdoor unit",
-                    "system_warning_140": "discharge gas temperature too low",
-                    "system_warning_143": "Inverter temperature too low",
-                    "system_warning_144": "Choke coil temperature too low",
-                    "system_warning_15": "High pressure switch has triggered",
-                    "system_warning_150": "Compressor current sensor phase U error",
-                    "system_warning_151": "Compressor current sensor phase V error",
-                    "system_warning_152": "Compressor current sensor phase W error voltage supply from input terminal",
-                    "system_warning_153": "Current sensor error",
-                    "system_warning_154": "Inverter temperature sensor error",
-                    "system_warning_155": "Temperature sensor error",
-                    "system_warning_156": "Compressed gas sensor (DT)",
-                    "system_warning_157": "No communication to the cooling unit control board",
-                    "system_warning_158": "EEPROM memory error",
-                    "system_warning_159": "Current consumption too high",
-                    "system_warning_16": "Inverter disabled because 10 errors have occurred in the last 10 hours",
-                    "system_warning_160": "Heat pump is being operated outside the permissible voltage range",
-                    "system_warning_161": "Heat pump is being operated outside the permissible voltage range",
-                    "system_warning_162": "DC voltage on inverter too high",
-                    "system_warning_163": "DC voltage on inverter too low",
-                    "system_warning_164": "High pressure switch has triggered",
-                    "system_warning_165": "Phase between input and compressor interrupted",
-                    "system_warning_166": "Inverter overheated",
-                    "system_warning_167": "Inverter overheated",
-                    "system_warning_168": "Compressor configuration error",
-                    "system_warning_169": "Compressor current consumption too high",
-                    "system_warning_17": "EEPROM memory error",
-                    "system_warning_170": "Compressor phase U overvoltage",
-                    "system_warning_171": "Compressor phase V overvoltage",
-                    "system_warning_172": "Compressor phase W overvoltage",
-                    "system_warning_173": "Compressor phase failure",
-                    "system_warning_174": "Compressor blocked",
-                    "system_warning_175": "Compressor does not start",
-                    "system_warning_176": "Irregular voltage supply from inverter",
-                    "system_warning_177": "Compressor overloaded",
-                    "system_warning_178": "Temperature at discharge gas sensor (DT) too high",
-                    "system_warning_179": "Temperature at inverter",
-                    "system_warning_18": "No Modbus communication between EC controller and refrigeration unit control board",
-                    "system_warning_180": "Compressor blocked",
-                    "system_warning_181": "Compressor blocked",
-                    "system_warning_182": "Current consumption too high",
-                    "system_warning_183": "Current consumption too high",
-                    "system_warning_184": "Voltage too high",
-                    "system_warning_19": "Heat pump switched off by inverter alarm",
-                    "system_warning_2": "Air intake sensor (T2)",
-                    "system_warning_20": "Compressor does not match the configuration",
-                    "system_warning_21": "Low pressure fault",
-                    "system_warning_22": "Insufficient superheat",
-                    "system_warning_23": "excessive superheat",
-                    "system_warning_24": "EVI too high overheating",
-                    "system_warning_25": "Refrigerant quantity too low",
-                    "system_warning_26": "High pressure fault",
-                    "system_warning_27": "Condensation temperature too low",
-                    "system_warning_28": "Condensation temperature too high",
-                    "system_warning_29": "Evaporation temperature too low",
-                    "system_warning_3": "Heat exchanger sensor AG outlet (T3)",
-                    "system_warning_30": "Evaporation temperature too high",
-                    "system_warning_32": "Heat pump not compatible",
-                    "system_warning_33": "Controller EC has no connection to expansion module EM-HK",
-                    "system_warning_4": "Compressor suction gas sensor (T4)",
-                    "system_warning_40": "Volume flow too low",
-                    "system_warning_41": "Spread LWT/return flow negative / four-way valve does not switch back after defrosting; the system locks after 3 warnings)",
-                    "system_warning_43": "Fan blocked",
-                    "system_warning_44": "Fan speed too low",
-                    "system_warning_47": "Communication controller EC to control board refrigeration unit faulty",
-                    "system_warning_5": "EVI suction gas sensor (T5)",
-                    "system_warning_50": "Outdoor sensor (B1) interrupted",
-                    "system_warning_51": "Outdoor sensor (B1) short-circuited",
-                    "system_warning_52": "Point sensor (B2) interrupted",
-                    "system_warning_53": "Point sensor (B2) short-circuited",
-                    "system_warning_54": "Hot water sensor (B3) interrupted",
-                    "system_warning_55": "Hot water sensor (B3) short-circuited",
-                    "system_warning_56": "Condenser flow sensor (B4) interrupted",
-                    "system_warning_57": "Condenser flow sensor (B4) short-circuited",
-                    "system_warning_58": "Flow sensor (B7) interrupted",
-                    "system_warning_59": "Flow sensor (B7) short-circuited",
-                    "system_warning_6": "Refrigerant sensor IG outlet (T6)",
-                    "system_warning_60": "Return flow sensor (B9) interrupted",
-                    "system_warning_61": "Return flow sensor (B9) short-circuited",
-                    "system_warning_64": "Buffer sensor (B11) interrupted",
-                    "system_warning_65": "Buffer sensor (B11) short-circuited",
-                    "system_warning_65535": "no error",
-                    "system_warning_66": "Regenerative mixer sensor (B2.1) interrupted",
-                    "system_warning_67": "Regenerative mixer sensor (B2.1) short-circuited",
-                    "system_warning_7": "Oil sump sensor (T7)",
-                    "system_warning_70": "Second heating circuit flow sensor (B6.2) interrupted",
-                    "system_warning_71": "Second heating circuit flow sensor (B6.2) short-circuited",
-                    "system_warning_72": "Sensor (T1.2) interrupted",
-                    "system_warning_73": "Sensor (T1.2) short-circuited",
-                    "system_warning_74": "Sensor (T2.2) interrupted",
-                    "system_warning_75": "Sensor (T2.2) short-circuited",
-                    "system_warning_8": "Expansion valve EVI",
-                    "system_warning_9": "Low pressure sensor (P1)",
-                    "system_warning_90": "Analog input AE1 interrupted",
-                    "system_warning_91": "Analog input AE1 short-circuited",
-                    "system_warning_92": "Analog input AE2 interrupted",
-                    "system_warning_93": "Analog input AE2 short-circuited",
-                    "system_warning_94": "Analog input AE3 interrupted",
-                    "system_warning_95": "Analog input AE3 short-circuited"
+                    "system_error_1": "Refrigerant sensor expansion valve inlet (T1)",
+                    "system_error_10": "High pressure sensor (P2)",
+                    "system_error_101": "Heat pump is being operated outside the operating limits",
+                    "system_error_102": "Maximum defrost time exceeded",
+                    "system_error_103": "Communication refrigeration circuit faulty",
+                    "system_error_104": "discharge gas temperature too high",
+                    "system_error_105": "Current consumption from inverter too high",
+                    "system_error_106": "Current consumption too high",
+                    "system_error_107": "DC voltage on inverter too high",
+                    "system_error_108": "DC voltage on inverter too low",
+                    "system_error_109": "Heat pump is operated outside the permissible voltage range",
+                    "system_error_11": "Medium pressure sensor (P3)",
+                    "system_error_110": "Heat pump is being operated outside the permissible voltage range",
+                    "system_error_111": "High pressure switch has triggered",
+                    "system_error_112": "Inverter has overheated",
+                    "system_error_113": "Inverter has overheated",
+                    "system_error_114": "Position of compressor motor cannot be determined",
+                    "system_error_117": "DC voltage on inverter too low",
+                    "system_error_118": "Current between inverter and compressor is too high",
+                    "system_error_119": "Current consumption from compressor too high Timeout",
+                    "system_error_12": "Cooling expansion valve defective",
+                    "system_error_120": "Inverter temperature too high",
+                    "system_error_121": "Voltage on inverter too low",
+                    "system_error_122": "Modbus configuration error",
+                    "system_error_123": "No Modbus connection",
+                    "system_error_124": "discharge gas temperature too high",
+                    "system_error_127": "Inverter temperature too high",
+                    "system_error_128": "Inverter is overheated",
+                    "system_error_129": "Modbus communication faulty",
+                    "system_error_13": "No communication to the inverter",
+                    "system_error_130": "Modbus communication faulty",
+                    "system_error_133": "Electronics error",
+                    "system_error_135": "High pressure switch defective",
+                    "system_error_136": "Compressor does not match configuration",
+                    "system_error_137": "High pressure switch does not match the configuration",
+                    "system_error_14": "No communication with the outdoor unit",
+                    "system_error_140": "discharge gas temperature too low",
+                    "system_error_143": "Inverter temperature too low",
+                    "system_error_144": "Choke coil temperature too low",
+                    "system_error_15": "High pressure switch has triggered",
+                    "system_error_150": "Compressor current sensor phase U error",
+                    "system_error_151": "Compressor current sensor phase V error",
+                    "system_error_152": "Compressor current sensor phase W error voltage supply from input terminal",
+                    "system_error_153": "Current sensor error",
+                    "system_error_154": "Inverter temperature sensor error",
+                    "system_error_155": "Temperature sensor error",
+                    "system_error_156": "Compressed gas sensor (DT)",
+                    "system_error_157": "No communication to the cooling unit control board",
+                    "system_error_158": "EEPROM memory error",
+                    "system_error_159": "Current consumption too high",
+                    "system_error_16": "Inverter disabled because 10 errors have occurred in the last 10 hours",
+                    "system_error_160": "Heat pump is being operated outside the permissible voltage range",
+                    "system_error_161": "Heat pump is being operated outside the permissible voltage range",
+                    "system_error_162": "DC voltage on inverter too high",
+                    "system_error_163": "DC voltage on inverter too low",
+                    "system_error_164": "High pressure switch has triggered",
+                    "system_error_165": "Phase between input and compressor interrupted",
+                    "system_error_166": "Inverter overheated",
+                    "system_error_167": "Inverter overheated",
+                    "system_error_168": "Compressor configuration error",
+                    "system_error_169": "Compressor current consumption too high",
+                    "system_error_17": "EEPROM memory error",
+                    "system_error_170": "Compressor phase U overvoltage",
+                    "system_error_171": "Compressor phase V overvoltage",
+                    "system_error_172": "Compressor phase W overvoltage",
+                    "system_error_173": "Compressor phase failure",
+                    "system_error_174": "Compressor blocked",
+                    "system_error_175": "Compressor does not start",
+                    "system_error_176": "Irregular voltage supply from inverter",
+                    "system_error_177": "Compressor overloaded",
+                    "system_error_178": "Temperature at discharge gas sensor (DT) too high",
+                    "system_error_179": "Temperature at inverter",
+                    "system_error_18": "No Modbus communication between EC controller and refrigeration unit control board",
+                    "system_error_180": "Compressor blocked",
+                    "system_error_181": "Compressor blocked",
+                    "system_error_182": "Current consumption too high",
+                    "system_error_183": "Current consumption too high",
+                    "system_error_184": "Voltage too high",
+                    "system_error_19": "Heat pump switched off by inverter alarm",
+                    "system_error_2": "Air intake sensor (T2)",
+                    "system_error_20": "Compressor does not match the configuration",
+                    "system_error_21": "Low pressure fault",
+                    "system_error_22": "Insufficient superheat",
+                    "system_error_23": "excessive superheat",
+                    "system_error_24": "EVI too high overheating",
+                    "system_error_25": "Refrigerant quantity too low",
+                    "system_error_26": "High pressure fault",
+                    "system_error_27": "Condensation temperature too low",
+                    "system_error_28": "Condensation temperature too high",
+                    "system_error_29": "Evaporation temperature too low",
+                    "system_error_3": "Heat exchanger sensor AG outlet (T3)",
+                    "system_error_30": "Evaporation temperature too high",
+                    "system_error_32": "Heat pump not compatible",
+                    "system_error_33": "Controller EC has no connection to expansion module EM-HK",
+                    "system_error_4": "Compressor suction gas sensor (T4)",
+                    "system_error_40": "Volume flow too low",
+                    "system_error_41": "Spread LWT/return flow negative / four-way valve does not switch back after defrosting; the system locks after 3 warnings)",
+                    "system_error_43": "Fan blocked",
+                    "system_error_44": "Fan speed too low",
+                    "system_error_47": "Communication controller EC to control board refrigeration unit faulty",
+                    "system_error_5": "EVI suction gas sensor (T5)",
+                    "system_error_50": "Outdoor sensor (B1) interrupted",
+                    "system_error_51": "Outdoor sensor (B1) short-circuited",
+                    "system_error_52": "Point sensor (B2) interrupted",
+                    "system_error_53": "Point sensor (B2) short-circuited",
+                    "system_error_54": "Hot water sensor (B3) interrupted",
+                    "system_error_55": "Hot water sensor (B3) short-circuited",
+                    "system_error_56": "Condenser flow sensor (B4) interrupted",
+                    "system_error_57": "Condenser flow sensor (B4) short-circuited",
+                    "system_error_58": "Flow sensor (B7) interrupted",
+                    "system_error_59": "Flow sensor (B7) short-circuited",
+                    "system_error_6": "Refrigerant sensor IG outlet (T6)",
+                    "system_error_60": "Return flow sensor (B9) interrupted",
+                    "system_error_61": "Return flow sensor (B9) short-circuited",
+                    "system_error_64": "Buffer sensor (B11) interrupted",
+                    "system_error_65": "Buffer sensor (B11) short-circuited",
+                    "system_error_65535": "no error",
+                    "system_error_66": "Regenerative mixer sensor (B2.1) interrupted",
+                    "system_error_67": "Regenerative mixer sensor (B2.1) short-circuited",
+                    "system_error_7": "Oil sump sensor (T7)",
+                    "system_error_70": "Second heating circuit flow sensor (B6.2) interrupted",
+                    "system_error_71": "Second heating circuit flow sensor (B6.2) short-circuited",
+                    "system_error_72": "Sensor (T1.2) interrupted",
+                    "system_error_73": "Sensor (T1.2) short-circuited",
+                    "system_error_74": "Sensor (T2.2) interrupted",
+                    "system_error_75": "Sensor (T2.2) short-circuited",
+                    "system_error_8": "Expansion valve EVI",
+                    "system_error_9": "Low pressure sensor (P1)",
+                    "system_error_90": "Analog input AE1 interrupted",
+                    "system_error_91": "Analog input AE1 short-circuited",
+                    "system_error_92": "Analog input AE2 interrupted",
+                    "system_error_93": "Analog input AE2 short-circuited",
+                    "system_error_94": "Analog input AE3 interrupted",
+                    "system_error_95": "Analog input AE3 short-circuited"
                 }
             },
             "heat_pump_diverter_temperature": {
@@ -1754,53 +1738,63 @@
             "heat_pump_operation": {
                 "name": "Operation",
                 "state": {
-                    "heat_pump_operation_0": "PV Modus",
-                    "heat_pump_operation_1": "Relaistest",
-                    "heat_pump_operation_2": "Notaus",
-                    "heat_pump_operation_3": "Diagnose",
-                    "heat_pump_operation_4": "Handbetrieb",
-                    "heat_pump_operation_5": "Handbetrieb Heizen",
-                    "heat_pump_operation_6": "Handbetrieb Kühlen",
-                    "heat_pump_operation_7": "Manueller Abtaubetrieb",
-                    "heat_pump_operation_8": "Abtauen",
-                    "heat_pump_operation_9": "WEZ2",
-                    "heat_pump_operation_10": "EVU_SPERRE",
-                    "heat_pump_operation_11": "SG Tarif",
-                    "heat_pump_operation_12": "SG Maximal",
-                    "heat_pump_operation_13": "Tarifladung",
-                    "heat_pump_operation_14": "Erhöhter Betrieb",
-                    "heat_pump_operation_15": "Standzeit",
-                    "heat_pump_operation_16": "Standbybetrieb",
-                    "heat_pump_operation_17": "Spülbetrieb",
-                    "heat_pump_operation_18": "Frostschutz",
-                    "heat_pump_operation_19": "Heizbetrieb",
-                    "heat_pump_operation_20": "Warmwasserbetrieb",
-                    "heat_pump_operation_21": "Legionellenschutz",
-                    "heat_pump_operation_22": "Umschaltung HZ KU",
-                    "heat_pump_operation_23": "Kühlbetrieb",
-                    "heat_pump_operation_24": "Passive Kühlung",
-                    "heat_pump_operation_25": "Sommerbetrieb",
-                    "heat_pump_operation_26": "Schwimmbad",
-                    "heat_pump_operation_27": "Urlaub",
-                    "heat_pump_operation_28": "Estrich",
-                    "heat_pump_operation_29": "Gesperrt",
-                    "heat_pump_operation_30": "Sperre AT",
-                    "heat_pump_operation_31": "Sperre Sommer",
-                    "heat_pump_operation_32": "Sperre Winter",
-                    "heat_pump_operation_33": "Einsatzgrenze",
-                    "heat_pump_operation_34": "HK Sperre",
-                    "heat_pump_operation_35": "Absenk",
-                    "heat_pump_operation_36": "BEREITSCHAFT",
-                    "heat_pump_operation_37": "Heizbetrieb SGR",
-                    "heat_pump_operation_39": "Warmwasserbetrieb SGR",
-                    "heat_pump_operation_43": "Ölrückführung"
+                    "heatpump_operationmode_pvmode": "PV Mode",
+                    "heatpump_operationmode_relaistest": "Relay test",
+                    "heatpump_operationmode_evu": "Utility grid lock",
+                    "heatpump_operationmode_sgtariff": "SG tariff",
+                    "heatpump_operationmode_sgmax": "SG Maximum",
+                    "heatpump_operationmode_tariffload": "Tariff load",
+                    "heatpump_operationmode_elevatedoperation": "Increased operation",
+                    "heatpump_operationmode_standbytime": "Standstill time",
+                    "heatpump_operationmode_standby": "Standby mode",
+                    "heatpump_operationmode_rinse": "Rinsing mode",
+                    "heatpump_operationmode_frosprotection": "Frost protection",
+                    "heatpump_operationmode_heating": "Heating mode",
+                    "heatpump_operationmode_heating_sgr": "Heating mode SGR",
+                    "heatpump_operationmode_emergencystop": "Emergency stop",
+                    "heatpump_operationmode_hotwater": "Hot water mode",
+                    "heatpump_operationmode_hotwater_sgr": "Hot water mode SGR",
+                    "heatpump_operationmode_legionellaprotection": "Legionella protection",
+                    "heatpump_operationmode_switchheatingcooling": "Switchover HZ KU",
+                    "heatpump_operationmode_cooling": "Cooling mode",
+                    "heatpump_operationmode_passivecooling": "Passive cooling",
+                    "heatpump_operationmode_summer": "Summer mode",
+                    "heatpump_operationmode_swimmingpool": "Swimming pool",
+                    "heatpump_operationmode_vacation": "Vacation",
+                    "heatpump_operationmode_screedprogram": "Screed",
+                    "heatpump_operationmode_locked": "Locked",
+                    "heatpump_operationmode_diagnosis": "Diagnosis",
+                    "heatpump_operationmode_lockedat": "Lock AT",
+                    "heatpump_operationmode_lockedsummer": "Lock summer",
+                    "heatpump_operationmode_lockedwinter": "Winter lock",
+                    "heatpump_operationmode_applicationlimit": "Application limit",
+                    "heatpump_operationmode_lockedcv": "HK lock",
+                    "heatpump_operationmode_lowering": "lowering",
+                    "heatpump_operationmode_regenerativ": "Regenerative",
+                    "heatpump_operationmode_manual": "Manual mode",
+                    "heatpump_operationmode_oilrecirculation": "Oil return",
+                    "heatpump_operationmode_manualheating": "Manual mode heating",
+                    "heatpump_operationmode_manualcooling": "Manual mode cooling",
+                    "heatpump_operationmode_manualdefrost": "Manual defrosting mode",
+                    "heatpump_operationmode_defrost": "Defrost",
+                    "heatpump_operationmode_manual2ndheatsource": "2nd heat source"
+                }
+            },
+            "heat_pump_configuration": {
+                "name": "Configuration",
+                "state": {
+                    "hp_conf_1": "Heating",
+                    "hp_conf_2": "Heating, Cooling",
+                    "hp_conf_3": "Heating, Cooling",
+                    "hp_conf_4": "Heating, Hot water",
+                    "hp_konf_0": "not configured"
                 }
             },
             "heat_pump_fault": {
                 "name": "Error message",
                 "state": {
-                    "heat_pump_fault_0": "Störung",
-                    "heat_pump_fault_1": "Störungsfrei"
+                    "hp_stoerung": "error",
+                    "hp_stoerungsfrei": "no error"
                 }
             },
             "tagesarbeitszahl_heute": {
@@ -1818,7 +1812,7 @@
             "monatsarbeitszahl": {
                 "name": "Monthly performance factor"
             },
-            "statistics_hot_water_energy_yesterday": {
+            "ww_energie_yesterday": {
                 "name": "Hot water energy yesterday"
             },
             "statistics_hot_water_energy_today": {
@@ -1830,11 +1824,31 @@
             "statistics_hot_water_energy_month": {
                 "name": "Hot water energy month"
             },
+            "domestic_hot_water_configuration": {
+                "name": "HW_Configuration",
+                "state": {
+                    "ww_konf_aus": "off",
+                    "ww_konf_pumpe": "Pump",
+                    "ww_konf_umlenkventil": "Diverting valve"
+                }
+            },
             "domestic_hot_water_target_temperature": {
                 "name": "Hot water setpoint temperature"
             },
             "domestic_hot_water_temperature": {
                 "name": "Hot water temperature"
+            }
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "data": {
+                    "api_scan_interval": "Api scan interval (default = 300 sec)",
+                    "language": "Language (default = en)",
+                    "mode": "Mode(default = api)",
+                    "scan_interval": "Web scraping interval (default = 1800 sec)"
+                }
             }
         }
     },

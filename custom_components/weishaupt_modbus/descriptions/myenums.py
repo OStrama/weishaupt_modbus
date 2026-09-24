@@ -380,3 +380,32 @@ class HeatingCircuitPartyPause(IntEnum):
     heating_circuit_party_11 = 47
     heating_circuit_party_11_5 = 48
     heating_circuit_party_12 = 49
+
+
+class SecondHeatSourceStatus(IntEnum):
+    """Second heat source status."""
+
+    second_heat_source_status_off = 0
+    second_heat_source_status_on = 1
+
+
+class SecondHeatSourceConfiguration(IntEnum):
+    """Second heat source configuration."""
+
+    second_heat_source_configuration_0 = 0
+    second_heat_source_configuration_1 = 1
+    second_heat_source_configuration_255 = 255
+
+
+class ElectricHeater1Configuration(IntEnum):
+    """Electric heater 1 configuration."""
+
+    second_heat_source_electric_heater_1_configuration_enabled = 5
+    second_heat_source_electric_heater_1_configuration_disabled = 225
+
+
+class ElectricHeater2Configuration(IntEnum):
+    """Electric heater 2 configuration."""
+
+    second_heat_source_electric_heater_2_configuration_enabled = 6
+    second_heat_source_electric_heater_2_configuration_disabled = 225

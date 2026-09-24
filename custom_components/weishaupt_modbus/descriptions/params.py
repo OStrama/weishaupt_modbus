@@ -280,3 +280,19 @@ WW_TEMP = NumberParams(
     native_step=0.5,
     native_unit_of_measurement=UnitOfTemperature.CELSIUS,
 )
+
+
+TIME_HOURS = SensorParams(
+    device_class=SensorDeviceClass.DURATION,
+    state_class=SensorStateClass.TOTAL_INCREASING,
+    native_unit_of_measurement=UnitOfTime.HOURS,
+)
+
+
+BIVALENCE_TEMPERATURE = NumberParams(
+    native_min_value=-20,
+    native_max_value=40,
+    native_step=0.5,
+    device_class=SensorDeviceClass.TEMPERATURE,
+    native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+)
