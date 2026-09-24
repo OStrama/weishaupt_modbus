@@ -1215,8 +1215,8 @@
             "system_error_free": {
                 "name": "No error",
                 "state": {
-                    "system_error_free_False": "Fehler aktiv",
-                    "system_error_free_True": "Störungsfreier Betrieb"
+                    "system_error_free_false": "Fehler aktiv",
+                    "system_error_free_true": "Störungsfreier Betrieb"
                 }
             },
             "statistics_total_energy_2_yesterday": {
