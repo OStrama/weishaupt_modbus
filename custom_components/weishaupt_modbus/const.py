@@ -3,13 +3,7 @@
 from dataclasses import dataclass
 from datetime import timedelta
 
-from homeassistant.const import (
-    CONF_HOST,
-    CONF_PASSWORD,
-    CONF_PORT,
-    CONF_PREFIX,
-    CONF_USERNAME,
-)
+from homeassistant.const import CONF_HOST, CONF_PASSWORD, CONF_PORT, CONF_USERNAME
 
 
 @dataclass(frozen=True)

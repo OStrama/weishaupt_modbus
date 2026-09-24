@@ -1,49 +1,20 @@
 """Home Assistant integration initialization."""
 
-import asyncio
-import copy
-from datetime import timedelta
 import logging
 from typing import TYPE_CHECKING
 
-from weishaupt_webif_api import WebifConnection
-
-from config.custom_components.weishaupt_modbus.weishaupt_modbus_api.modbus_api import (
-    WeishauptModbusClient,
-)
 from homeassistant.components.modbus.connection import ModbusTcpParams, async_get_unit
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
 from .configentry import MyData
 from .coordinator import WeishauptCoordinator
-from .translations import update_translation
 from .weishaupt_modbus_client.model.device import Weishaupt
 
 if TYPE_CHECKING:
     from .configentry import MyConfigEntry
 
-from .const import CONF, CONST, DEVICENAMES
-from .coordinator import MyWebIfCoordinator
-from .hpconst import (
-    DEVICELISTS,
-    MODBUS_HZ2_ITEMS,
-    MODBUS_HZ3_ITEMS,
-    MODBUS_HZ4_ITEMS,
-    MODBUS_HZ5_ITEMS,
-    MODBUS_HZ_ITEMS,
-    MODBUS_IO_ITEMS,
-    MODBUS_ST_ITEMS,
-    MODBUS_SYS_ITEMS,
-    MODBUS_W2_ITEMS,
-    MODBUS_WP_ITEMS,
-    MODBUS_WW_ITEMS,
-    WEBIF_INFO_2WEZ,
-    WEBIF_INFO_HEIZKREIS1,
-    WEBIF_INFO_STATISTIK,
-    WEBIF_INFO_WAERMEPUMPE,
-)
-from .items import ModbusItem, WebItem
+from .const import CONF
 from .kennfeld import PowerMap
 
 _LOGGER = logging.getLogger(__name__)

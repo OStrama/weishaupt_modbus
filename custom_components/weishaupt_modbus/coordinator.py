@@ -6,25 +6,17 @@ import logging
 from typing import TYPE_CHECKING, Any
 
 from modbus_connection.model import UpdateReport
-from pymodbus import ModbusException
 from weishaupt_webif_api import WebifConnection, WeishauptWebifError
 
-from config.custom_components.weishaupt_modbus.weishaupt_modbus_api.exceptions import (
-    ConnectionFailedError,
-)
-from config.custom_components.weishaupt_modbus.weishaupt_modbus_api.modbus_api import (
-    WeishauptModbusClient,
-)
 from config.custom_components.weishaupt_modbus.weishaupt_modbus_client.model.device import (
     Weishaupt,
 )
 from homeassistant.core import HomeAssistant
-from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 if TYPE_CHECKING:
     from .configentry import MyConfigEntry
-from .const import CONF, CONST, TYPES, DeviceConstants
+from .const import CONF, DeviceConstants
 from .items import ModbusItem, WebItem
 
 _LOGGER = logging.getLogger(__name__)

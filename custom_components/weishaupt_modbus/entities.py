@@ -94,7 +94,13 @@ class WeishauptSensor(WeishauptEntity, SensorEntity):
     @property
     def native_value(self) -> float | str | None:
         """Return the sensor value."""
-        value = self.description.value_fn(self.coordinator.device)
+        if self.description.calculated_value_fn is not None:
+            value = self.description.calculated_value_fn(
+                self.coordinator,
+                self.coordinator.config_entry.runtime_data.powermap,
+            )
+        else:
+            value = self.description.value_fn(self.coordinator.device)
 
         if value is None:
             return None

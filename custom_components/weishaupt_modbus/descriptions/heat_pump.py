@@ -83,12 +83,6 @@ HEAT_PUMP_ENTITIES: tuple[EntityDescription, ...] = (
         params=TEMPERATURE,
         value_fn=lambda device: device.heat_pump_input.precise_flow_temperature,
     ),
-    SensorDescription(
-        key="temperature_spread",
-        report_name="heat_pump",
-        params=TEMPERATURE,
-        value_fn=lambda device: device.heat_pump_input.temperature_spread,
-    ),
     # Heat pump configuration
     SelectDescription(
         key="configuration",

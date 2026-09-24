@@ -6,6 +6,7 @@ from .heating_circuit import HEATING_CIRCUIT_ENTITIES
 from .second_heat_source import SECOND_HEAT_SOURCE_ENTITIES
 from .stats import STATISTICS_ENTITIES
 from .system import SYSTEM_ENTITIES
+from .calculated import CALCULATERD_ENTITIES
 
 ENTITIES = (
     SYSTEM_ENTITIES
@@ -14,4 +15,5 @@ ENTITIES = (
     + STATISTICS_ENTITIES
     + DOMESTIC_HOT_WATER_ENTITIES
     + SECOND_HEAT_SOURCE_ENTITIES
+    + CALCULATERD_ENTITIES
 )

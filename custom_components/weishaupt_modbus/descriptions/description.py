@@ -5,6 +5,9 @@ from dataclasses import dataclass
 from enum import IntEnum
 from typing import TYPE_CHECKING
 
+from config.custom_components.weishaupt_modbus.coordinator import WeishauptCoordinator
+from homeassistant.helpers.update_coordinator import Any
+
 if TYPE_CHECKING:
     from ...weishaupt_modbus_client.model.device import Weishaupt
 
@@ -18,7 +21,8 @@ class SensorDescription:
     key: str
     report_name: str
     params: SensorParams
-    value_fn: Callable[[Weishaupt], float | None]
+    value_fn: Callable[[Weishaupt], float | str | None]
+    calculated_value_fn: Callable[[WeishauptCoordinator], float | None] | None = None
 
 
 @dataclass(frozen=True, kw_only=True)

@@ -44,3 +44,43 @@ class StatisticsInput(Component):
     electric_energy_year = integer(36704)
 
     register_36801 = integer(36801)
+
+    @staticmethod
+    def _cop(total_energy: int, electric_energy: int) -> float | None:
+        """Calculate the coefficient of performance."""
+        if electric_energy == 0:
+            return None
+
+        return total_energy / electric_energy
+
+    @property
+    def daily_cop(self) -> float | None:
+        """Return today's coefficient of performance."""
+        return self._cop(
+            self.total_energy_today,
+            self.electric_energy_today,
+        )
+
+    @property
+    def yesterday_cop(self) -> float | None:
+        """Return yesterday's coefficient of performance."""
+        return self._cop(
+            self.total_energy_yesterday,
+            self.electric_energy_yesterday,
+        )
+
+    @property
+    def monthly_cop(self) -> float | None:
+        """Return this month's coefficient of performance."""
+        return self._cop(
+            self.total_energy_month,
+            self.electric_energy_month,
+        )
+
+    @property
+    def yearly_cop(self) -> float | None:
+        """Return this year's coefficient of performance."""
+        return self._cop(
+            self.total_energy_year,
+            self.electric_energy_year,
+        )
