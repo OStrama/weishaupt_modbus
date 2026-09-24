@@ -1218,8 +1218,8 @@
             "system_error_free": {
                 "name": "Fehlerfrei",
                 "state": {
-                    "system_error_free_False": "Fehler aktiv",
-                    "system_error_free_True": "St\u00f6rungsfreier Betrieb"
+                    "system_error_free_0": "Fehler aktiv",
+                    "system_error_free_1": "St\u00f6rungsfreier Betrieb"
                 }
             },
             "statistics_total_energy_2_yesterday": {

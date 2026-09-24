@@ -68,10 +68,10 @@
             "name": "Warmtepomp"
         },
         "dev_domestic_hot_water": {
-            "name": "Warmwater"
+            "name": "Warm water"
         },
         "dev_heating_circuit": {
-            "name": "WH Heizkreis"
+            "name": "WH Heating circuit"
         },
         "dev_heizkreis2": {
             "name": "Verwarmingscircuit2"
@@ -341,7 +341,7 @@
                     "heating_circuit_party_11": "Party 11.0h",
                     "heating_circuit_party_11_5": "Party 11.5h",
                     "heating_circuit_party_12": "Party 12.0h",
-                    "heating_circuit_party_pause_automatic": "Automatik",
+                    "heating_circuit_party_pause_automatic": "Automatisch",
                     "heating_circuit_pause_0_5": "Pause 0.5h",
                     "heating_circuit_pause_1": "Pause 1.0h",
                     "heating_circuit_pause_1_5": "Pause 1.5h",
@@ -659,10 +659,10 @@
             "heating_circuit_demand": {
                 "name": "Aanvraagtype",
                 "state": {
-                    "heating_circuit_demand_off": "aus",
-                    "heating_circuit_demand_constant": "konstant",
-                    "heating_circuit_demand_weather_compensated": "witterungsgeführt",
-                    "heating_circuit_demand_room_control": "Raumregelung"
+                    "hz_anforderung_aus": "Uit",
+                    "hz_anforderung_konstant": "Constant",
+                    "hz_anforderung_witterungsgefuehrt": "Weersafhankelijk",
+                    "hz_anforderung_raumregelung": "Ruimtegestuurd"
                 }
             },
             "anf_typ2": {
@@ -704,45 +704,46 @@
             "heat_pump_rest_mode": {
                 "name": "Stille mode",
                 "state": {
-                    "heat_pump_rest_mode_off": "aus",
+                    "heat_pump_rest_mode_off": "Uit",
                     "heat_pump_rest_mode_80_percent": "80 %",
                     "heat_pump_rest_mode_60_percent": "60 %",
                     "heat_pump_rest_mode_40_percent": "40 %"
                 }
             },
             "heat_pump_configuration": {
-                "name": "Configuratie",
+                "name": "Warmtepompconfiguratie",
                 "state": {
-                    "heat_pump_configuration_heating": "Heizen",
-                    "heat_pump_configuration_heating_cooling_2": "Heizen, Kühlen",
-                    "heat_pump_configuration_heating_cooling_3": "Heizen, Kühlen",
-                    "heat_pump_configuration_heating_hot_water": "Heizen, Warmwasser",
-                    "heat_pump_configuration_not_configured": "Nicht konfiguriert"
+                    "heat_pump_configuration_heating": "Verwarmen",
+                    "heat_pump_configuration_heating_cooling_2": "Verwarmen, koelen",
+                    "heat_pump_configuration_heating_cooling_3": "Verwarmen, koelen",
+                    "heat_pump_configuration_heating_hot_water": "Verwarmen, warm water",
+                    "heat_pump_configuration_not_configured": "Niet geconfigureerd"
                 }
             },
             "heating_circuit_water_configuration": {
                 "name": "Verwarmingscircuitconfiguratie",
                 "state": {
-                    "heating_circuit_water_configuration_off": "aus",
-                    "heating_circuit_water_configuration_diverter_valve": "Mischkreis",
-                    "heating_circuit_water_configuration_pump": "Pumpenkreis",
-                    "heating_circuit_water_configuration_setpoint_pump_m1": "Sollwert (Pumpe M1)"
+                    "heating_circuit_water_configuration_off": "uit",
+                    "heating_circuit_water_configuration_diverter_valve": "Mengcircuit",
+                    "heating_circuit_water_configuration_pump": "Pompcircuit",
+                    "heating_circuit_water_configuration_setpoint_pump_m1": "Instelwaarde (pomp M1)"
                 }
             },
             "second_heat_source_electric_heater_1_configuration": {
                 "name": "Configuratie EP1",
                 "state": {
-                    "second_heat_source_electric_heater_1_configuration_enabled": "aktiviert",
-                    "second_heat_source_electric_heater_1_configuration_disabled": "deaktiviert"
+                    "second_heat_source_electric_heater_1_configuration_enabled": "ingeschakeld",
+                    "second_heat_source_electric_heater_1_configuration_disabled": "uitgeschakeld"
                 }
             },
             "second_heat_source_electric_heater_2_configuration": {
                 "name": "Configuratie EP2",
                 "state": {
-                    "second_heat_source_electric_heater_2_configuration_enabled": "aktiviert",
-                    "second_heat_source_electric_heater_2_configuration_disabled": "deaktiviert"
+                    "second_heat_source_electric_heater_2_configuration_enabled": "ingeschakeld",
+                    "second_heat_source_electric_heater_2_configuration_disabled": "uitgeschakeld"
                 }
             },
+
             "second_heat_source_configuration": {
                 "name": "W2_Configuratie",
                 "state": {
@@ -1214,8 +1215,8 @@
             "system_error_free": {
                 "name": "Foutvrij",
                 "state": {
-                    "system_error_free_False": "Fehler aktiv",
-                    "system_error_free_True": "Störungsfreier Betrieb"
+                    "system_error_free_0": "Fout actief",
+                    "system_error_free_1": "Storingsbedrijf"
                 }
             },
             "statistics_total_energy_2_yesterday": {
@@ -1751,55 +1752,55 @@
                 "name": "Switch temperature"
             },
             "heat_pump_operation": {
-                "name": "Operation",
+                "name": "Werking",
                 "state": {
-                    "heat_pump_operation_0": "PV Modus",
+                    "heat_pump_operation_0": "PV-modus",
                     "heat_pump_operation_1": "Relaistest",
-                    "heat_pump_operation_2": "Notaus",
+                    "heat_pump_operation_2": "Noodstop",
                     "heat_pump_operation_3": "Diagnose",
-                    "heat_pump_operation_4": "Handbetrieb",
-                    "heat_pump_operation_5": "Handbetrieb Heizen",
-                    "heat_pump_operation_6": "Handbetrieb Kühlen",
-                    "heat_pump_operation_7": "Manueller Abtaubetrieb",
-                    "heat_pump_operation_8": "Abtauen",
+                    "heat_pump_operation_4": "Handbediening",
+                    "heat_pump_operation_5": "Handbediening verwarmen",
+                    "heat_pump_operation_6": "Handbediening koelen",
+                    "heat_pump_operation_7": "Handmatig ontdooien",
+                    "heat_pump_operation_8": "Ontdooien",
                     "heat_pump_operation_9": "WEZ2",
-                    "heat_pump_operation_10": "EVU_SPERRE",
-                    "heat_pump_operation_11": "SG Tarif",
-                    "heat_pump_operation_12": "SG Maximal",
-                    "heat_pump_operation_13": "Tarifladung",
-                    "heat_pump_operation_14": "Erhöhter Betrieb",
-                    "heat_pump_operation_15": "Standzeit",
-                    "heat_pump_operation_16": "Standbybetrieb",
-                    "heat_pump_operation_17": "Spülbetrieb",
-                    "heat_pump_operation_18": "Frostschutz",
-                    "heat_pump_operation_19": "Heizbetrieb",
-                    "heat_pump_operation_20": "Warmwasserbetrieb",
-                    "heat_pump_operation_21": "Legionellenschutz",
-                    "heat_pump_operation_22": "Umschaltung HZ KU",
-                    "heat_pump_operation_23": "Kühlbetrieb",
-                    "heat_pump_operation_24": "Passive Kühlung",
-                    "heat_pump_operation_25": "Sommerbetrieb",
-                    "heat_pump_operation_26": "Schwimmbad",
-                    "heat_pump_operation_27": "Urlaub",
-                    "heat_pump_operation_28": "Estrich",
-                    "heat_pump_operation_29": "Gesperrt",
-                    "heat_pump_operation_30": "Sperre AT",
-                    "heat_pump_operation_31": "Sperre Sommer",
-                    "heat_pump_operation_32": "Sperre Winter",
-                    "heat_pump_operation_33": "Einsatzgrenze",
-                    "heat_pump_operation_34": "HK Sperre",
-                    "heat_pump_operation_35": "Absenk",
-                    "heat_pump_operation_36": "BEREITSCHAFT",
-                    "heat_pump_operation_37": "Heizbetrieb SGR",
-                    "heat_pump_operation_39": "Warmwasserbetrieb SGR",
-                    "heat_pump_operation_43": "Ölrückführung"
+                    "heat_pump_operation_10": "EVU-blokkering",
+                    "heat_pump_operation_11": "SG-tarief",
+                    "heat_pump_operation_12": "SG-maximaal",
+                    "heat_pump_operation_13": "Tariefladen",
+                    "heat_pump_operation_14": "Verhoogd bedrijf",
+                    "heat_pump_operation_15": "Stilstandstijd",
+                    "heat_pump_operation_16": "Stand-by bedrijf",
+                    "heat_pump_operation_17": "Spoelbedrijf",
+                    "heat_pump_operation_18": "Vorstbeveiliging",
+                    "heat_pump_operation_19": "Verwarmingsbedrijf",
+                    "heat_pump_operation_20": "Warmwaterbedrijf",
+                    "heat_pump_operation_21": "Legionellabeveiliging",
+                    "heat_pump_operation_22": "Omschakeling verwarmen/koelen",
+                    "heat_pump_operation_23": "Koelbedrijf",
+                    "heat_pump_operation_24": "Passieve koeling",
+                    "heat_pump_operation_25": "Zomerbedrijf",
+                    "heat_pump_operation_26": "Zwembad",
+                    "heat_pump_operation_27": "Vakantie",
+                    "heat_pump_operation_28": "Dekvloer",
+                    "heat_pump_operation_29": "Geblokkeerd",
+                    "heat_pump_operation_30": "Blokkering buitentemp.",
+                    "heat_pump_operation_31": "Blokkering zomer",
+                    "heat_pump_operation_32": "Blokkering winter",
+                    "heat_pump_operation_33": "Werkingsgrens",
+                    "heat_pump_operation_34": "Blokkering verwarmingscircuit",
+                    "heat_pump_operation_35": "Verlaging",
+                    "heat_pump_operation_36": "STAND-BY",
+                    "heat_pump_operation_37": "Verwarmingsbedrijf SGR",
+                    "heat_pump_operation_39": "Warmwaterbedrijf SGR",
+                    "heat_pump_operation_43": "Olieterugvoer"
                 }
             },
             "heat_pump_fault": {
                 "name": "Foutmelding",
                 "state": {
-                    "heat_pump_fault_0": "Störung",
-                    "heat_pump_fault_1": "Störungsfrei"
+                    "hp_stoerung": "Fout actief",
+                    "hp_stoerungsfrei": "Geen fout"
                 }
             },
             "tagesarbeitszahl_heute": {

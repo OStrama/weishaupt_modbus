@@ -12,6 +12,7 @@ from .configentry import MyConfigEntry
 from .const import CONF, CONST
 from .coordinator import WeishauptCoordinator
 from .descriptions.description import (
+    EntityDescription,
     NumberDescription,
     SelectDescription,
     SensorDescription,
@@ -26,16 +27,18 @@ if TYPE_CHECKING:
 class WeishauptEntity(CoordinatorEntity[WeishauptCoordinator]):
     """Base entity for Weishaupt devices."""
 
+    description: EntityDescription
+
     def __init__(
         self,
         coordinator: WeishauptCoordinator,
-        description,
+        description: EntityDescription,
         config_entry: MyConfigEntry,
     ) -> None:
         """Initialize the entity."""
         super().__init__(coordinator)
 
-        self._entity_description = description
+        self.description = description
         self._mac = config_entry.data[CONF.MAC]
 
         self._attr_has_entity_name = True
@@ -49,13 +52,13 @@ class WeishauptEntity(CoordinatorEntity[WeishauptCoordinator]):
         """Return whether the entity is available."""
         return (
             super().available
-            and self._entity_description.report_name in self.coordinator.data.updated
+            and self.description.report_name in self.coordinator.data.updated
         )
 
     @property
     def device_info(self) -> DeviceInfo:
         """Return device info."""
-        report_name = self._entity_description.report_name
+        report_name = self.description.report_name
 
         return DeviceInfo(
             identifiers={
@@ -71,7 +74,7 @@ class WeishauptEntity(CoordinatorEntity[WeishauptCoordinator]):
 class WeishauptSensor(WeishauptEntity, SensorEntity):
     """Representation of a Weishaupt sensor."""
 
-    entity_description: SensorDescription
+    description: SensorDescription
 
     def __init__(
         self,
@@ -91,16 +94,13 @@ class WeishauptSensor(WeishauptEntity, SensorEntity):
     @property
     def native_value(self) -> float | str | None:
         """Return the sensor value."""
-        value = self._entity_description.value_fn(self.coordinator.device)
+        value = self.description.value_fn(self.coordinator.device)
 
         if value is None:
             return None
 
-        if self._entity_description.params.is_enum:
-            return (
-                f"{self._entity_description.report_name}_"
-                f"{self._entity_description.key}_{value}"
-            )
+        if self.description.params.is_enum:
+            return f"{self.description.report_name}_{self.description.key}_{value}"
 
         return value
 
@@ -108,7 +108,7 @@ class WeishauptSensor(WeishauptEntity, SensorEntity):
 class WeishauptNumber(WeishauptEntity, NumberEntity):
     """Representation of a Weishaupt number."""
 
-    entity_description: NumberDescription
+    description: NumberDescription
 
     def __init__(
         self,
@@ -126,16 +126,15 @@ class WeishauptNumber(WeishauptEntity, NumberEntity):
         self._attr_native_min_value = description.params.native_min_value
         self._attr_native_max_value = description.params.native_max_value
         self._attr_native_step = description.params.native_step
-        print(self._attr_translation_key)
 
     @property
     def native_value(self) -> float | None:
         """Return the current value."""
-        return self._entity_description.value_fn(self.coordinator.device)
+        return self.description.value_fn(self.coordinator.device)
 
     async def async_set_native_value(self, value: float) -> None:
         """Set the value."""
-        await self._entity_description.set_value_fn(
+        await self.description.set_value_fn(
             self.coordinator.device,
             value,
         )
@@ -145,7 +144,7 @@ class WeishauptNumber(WeishauptEntity, NumberEntity):
 class WeishauptSelect(WeishauptEntity, SelectEntity):
     """Representation of a Weishaupt select."""
 
-    entity_description: SelectDescription
+    description: SelectDescription
 
     def __init__(
         self,
@@ -159,12 +158,11 @@ class WeishauptSelect(WeishauptEntity, SelectEntity):
         self._enum = description.enum
 
         self._attr_options = tuple(member.name for member in self._enum)
-        print(description.key)
 
     @property
     def current_option(self) -> str | None:
         """Return the current option."""
-        value = self._entity_description.value_fn(self.coordinator.device)
+        value = self.description.value_fn(self.coordinator.device)
 
         if value is None:
             return None
@@ -175,9 +173,8 @@ class WeishauptSelect(WeishauptEntity, SelectEntity):
         """Set the selected option."""
         value = self._enum[option].value
 
-        await self._entity_description.set_value_fn(
+        await self.description.set_value_fn(
             self.coordinator.device,
             value,
         )
-
         await self.coordinator.async_request_refresh()

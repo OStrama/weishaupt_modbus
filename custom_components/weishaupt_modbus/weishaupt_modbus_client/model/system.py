@@ -30,7 +30,7 @@ class SystemStatus(Component):
     warning = enum(30004, SysError)
     """System warning status."""
 
-    error_free = boolean(30005)
+    error_free = integer(30005)
     """System error-free status."""
 
     operating_display = enum(30006, SysOperatingDisplay)
