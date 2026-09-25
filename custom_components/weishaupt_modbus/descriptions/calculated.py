@@ -7,7 +7,7 @@ from .description import EntityDescription, SensorDescription
 from ..kennfeld import PowerMap
 from .params import (
     POWER,
-    EMPTY,
+    COP,
     TEMPERATURE,
 )
 
@@ -49,27 +49,27 @@ CALCULATERD_ENTITIES: tuple[EntityDescription, ...] = (
     ),
     SensorDescription(
         key="daily_cop",
-        params=EMPTY,
+        params=COP,
         report_name="statistics",
-        value_fn=lambda device: device.statistics_input.daily_cop,
+        value_fn=lambda device: round(device.statistics_input.daily_cop, 2),
     ),
     SensorDescription(
         key="yesterday_cop",
-        params=EMPTY,
+        params=COP,
         report_name="statistics",
-        value_fn=lambda device: device.statistics_input.yesterday_cop,
+        value_fn=lambda device: round(device.statistics_input.yesterday_cop, 2),
     ),
     SensorDescription(
         key="monthly_cop",
-        params=EMPTY,
+        params=COP,
         report_name="statistics",
-        value_fn=lambda device: device.statistics_input.monthly_cop,
+        value_fn=lambda device: round(device.statistics_input.monthly_cop, 2),
     ),
     SensorDescription(
         key="yearly_cop",
-        params=EMPTY,
+        params=COP,
         report_name="statistics",
-        value_fn=lambda device: device.statistics_input.yearly_cop,
+        value_fn=lambda device: round(device.statistics_input.yearly_cop, 2),
     ),
     SensorDescription(
         key="temperature_spread",

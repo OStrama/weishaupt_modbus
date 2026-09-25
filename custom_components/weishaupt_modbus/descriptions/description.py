@@ -6,12 +6,11 @@ from enum import IntEnum
 from typing import TYPE_CHECKING
 
 from config.custom_components.weishaupt_modbus.coordinator import WeishauptCoordinator
-from homeassistant.helpers.update_coordinator import Any
 
 if TYPE_CHECKING:
     from ...weishaupt_modbus_client.model.device import Weishaupt
 
-from .params import NumberParams, SelectParams, SensorParams
+from .params import NumberParams, SensorParams
 
 
 @dataclass(frozen=True, kw_only=True)

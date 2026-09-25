@@ -310,6 +310,7 @@ class SecondHeatSourceConfiguration(IntEnum):
 
     CONFIGURATION_0 = 0
     CONFIGURATION_1 = 1
+    CONFIGURATION255 = 255
 
 
 class ElectricHeater1Configuration(IntEnum):

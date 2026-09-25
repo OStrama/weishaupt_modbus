@@ -90,6 +90,9 @@ class WeishauptSensor(WeishauptEntity, SensorEntity):
         self._attr_native_unit_of_measurement = (
             description.params.native_unit_of_measurement
         )
+        self._attr_suggested_display_precision = (
+            description.params.suggested_display_precision
+        )
 
     @property
     def native_value(self) -> float | str | None:
@@ -132,6 +135,7 @@ class WeishauptNumber(WeishauptEntity, NumberEntity):
         self._attr_native_min_value = description.params.native_min_value
         self._attr_native_max_value = description.params.native_max_value
         self._attr_native_step = description.params.native_step
+        self._attr_mode = description.params.mode
 
     @property
     def native_value(self) -> float | None:

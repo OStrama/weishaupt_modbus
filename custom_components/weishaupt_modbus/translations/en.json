@@ -74,16 +74,16 @@
         "dev_heating_circuit": {
             "name": "Heating Circuit"
         },
-        "dev_heizkreis2": {
+        "dev_heating_circuit2": {
             "name": "Heating circuit2"
         },
-        "dev_heizkreis3": {
+        "dev_heating_circuit3": {
             "name": "Heating circuit3"
         },
-        "dev_heizkreis4": {
+        "dev_heating_circuit4": {
             "name": "Heating circuit4"
         },
-        "dev_heizkreis5": {
+        "dev_heating_circuit5": {
             "name": "Heating circuit5"
         },
         "dev_second_heat_source": {
@@ -128,46 +128,46 @@
             "heating_circuit_lowering_room_target_temperature": {
                 "name": "Room setpoint temperature lowering"
             },
-            "raum_soll_temp_absenk2": {
+            "heating_circuit2_lowering_room_target_temperature": {
                 "name": "Room setpoint temperature lowering2"
             },
-            "raum_soll_temp_absenk3": {
+            "heating_circuit3_lowering_room_target_temperature": {
                 "name": "Room setpoint temperature lowering3"
             },
-            "raum_soll_temp_absenk4": {
+            "heating_circuit4_lowering_room_target_temperature": {
                 "name": "Room setpoint temperature lowering4"
             },
-            "raum_soll_temp_absenk5": {
+            "heating_circuit5_lowering_room_target_temperature": {
                 "name": "Room setpoint temperature lowering5"
             },
             "heating_circuit_comfort_room_target_temperature": {
                 "name": "Room setpoint temperature comfort"
             },
-            "raum_soll_temp_komf2": {
+            "heating_circuit2_comfort_room_target_temperature": {
                 "name": "Room setpoint temperature comfort2"
             },
-            "raum_soll_temp_komf3": {
+            "heating_circuit3_comfort_room_target_temperature": {
                 "name": "Room setpoint temperature comfort3"
             },
-            "raum_soll_temp_komf4": {
+            "heating_circuit4_comfort_room_target_temperature": {
                 "name": "Room setpoint temperature comfort4"
             },
-            "raum_soll_temp_komf5": {
+            "heating_circuit5_comfort_room_target_temperature": {
                 "name": "Room setpoint temperature comfort5"
             },
             "heating_circuit_normal_room_target_temperature": {
                 "name": "Room setpoint temperature normal"
             },
-            "raum_soll_temp_normal2": {
+            "heating_circuit2_normal_room_target_temperature": {
                 "name": "Room setpoint temperature normal2"
             },
-            "raum_soll_temp_normal3": {
+            "heating_circuit3_normal_room_target_temperature": {
                 "name": "Room setpoint temperature normal3"
             },
-            "raum_soll_temp_normal4": {
+            "heating_circuit4_normal_room_target_temperature": {
                 "name": "Room setpoint temperature normal4"
             },
-            "raum_soll_temp_normal5": {
+            "heating_circuit5_normal_room_target_temperature": {
                 "name": "Room setpoint temperature normal5"
             },
             "domestic_hot_water_sg_ready_raise": {
@@ -1294,31 +1294,31 @@
             "heating_circuit_flow_temperature": {
                 "name": "Flow temperature"
             },
-            "heating_circuit_feed_temperature_2": {
+            "heating_circuit2_flow_temperature": {
                 "name": "Heat circuit feed temperature 2"
             },
-            "hz_vl_temp3": {
+            "heating_circuit3_flow_temperature": {
                 "name": "Heat circuit feed temperature 3"
             },
-            "hz_vl_temp4": {
+            "heating_circuit4_flow_temperature": {
                 "name": "Heat circuit feed temperature 4"
             },
-            "hz_vl_temp5": {
+            "heating_circuit5_flow_temperature": {
                 "name": "Heat circuit feed temperature 5"
             },
             "heating_circuit_flow_target_temperature": {
                 "name": "Flow target temperature"
             },
-            "hz_vl_solltemp2": {
+            "heating_circuit2_flow_target_temperature": {
                 "name": "Heat circuit feed setpoint temperature2"
             },
-            "hz_vl_solltemp3": {
+            "heating_circuit3_flow_target_temperature": {
                 "name": "Heat circuit feed setpoint temperature3"
             },
-            "hz_vl_solltemp4": {
+            "heating_circuit4_flow_target_temperature": {
                 "name": "Heat circuit feed setpoint temperature4"
             },
-            "hz_vl_solltemp5": {
+            "heating_circuit5_flow_target_temperature": {
                 "name": "Heat circuit feed setpoint temperature5"
             },
             "konf_ausg_h12": {
@@ -1516,46 +1516,46 @@
             "heating_circuit_room_humidity": {
                 "name": "Room humidity"
             },
-            "raum_feuchte2": {
+            "heating_circuit2_room_humidity": {
                 "name": "Room humidity 2"
             },
-            "raum_feuchte3": {
+            "heating_circuit3_room_humidity": {
                 "name": "Room humidity 3"
             },
-            "raum_feuchte4": {
+            "heating_circuit4_room_humidity": {
                 "name": "Room humidity 4"
             },
-            "raum_feuchte5": {
+            "heating_circuit5_room_humidity": {
                 "name": "Room humidity 5"
             },
             "heating_circuit_room_target_temperature": {
                 "name": "Room setpoint temperature"
             },
-            "raum_soll_temp2": {
+            "heating_circuit2_room_target_temperature": {
                 "name": "Room setpoint temperature 2"
             },
-            "raum_soll_temp3": {
+            "heating_circuit3_room_target_temperature": {
                 "name": "Room setpoint temperature 3"
             },
-            "raum_soll_temp4": {
+            "heating_circuit4_room_target_temperature": {
                 "name": "Room setpoint temperature 4"
             },
-            "raum_soll_temp5": {
+            "heating_circuit5_room_target_temperature": {
                 "name": "Room setpoint temperature 5"
             },
             "heating_circuit_room_temperature": {
                 "name": "Room temperature"
             },
-            "raum_temp2": {
+            "heating_circuit2_room_temperature": {
                 "name": "Room temperature 2"
             },
-            "raum_temp3": {
+            "heating_circuit3_room_temperature": {
                 "name": "Room temperature 3"
             },
-            "raum_temp4": {
+            "heating_circuit4_room_temperature": {
                 "name": "Room temperature 4"
             },
-            "raum_temp5": {
+            "heating_circuit5_room_temperature": {
                 "name": "Room temperature 5"
             },
             "heat_pump_return_temperature": {
@@ -1606,7 +1606,7 @@
             "heat_pump_flow_temperature": {
                 "name": "Feed temperature"
             },
-            "waermeleistung": {
+            "heat_pump_thermal_power": {
                 "name": "Heating power"
             },
             "system_warning": {
@@ -1803,20 +1803,20 @@
                     "heat_pump_fault_1": "No error"
                 }
             },
-            "tagesarbeitszahl_heute": {
+            "statistics_daily_cop": {
                 "name": "Daily performance factor today"
+            },
+            "statistics_yesterday_cop": {
+                "name": "Daily performance factor yesterday"
+            },
+            "statistics_monthly_cop": {
+                "name": "Monthly performance factor"
+            },
+            "statistics_yearly_cop": {
+                "name": "Annual performance factor"
             },
             "heat_pump_temperature_spread": {
                 "name": "Spread"
-            },
-            "jahresarbeitszahl": {
-                "name": "Annual performance factor"
-            },
-            "tagesarbeitszahl_gestern": {
-                "name": "Daily performance factor yesterday"
-            },
-            "monatsarbeitszahl": {
-                "name": "Monthly performance factor"
             },
             "statistics_hot_water_energy_yesterday": {
                 "name": "Hot water energy yesterday"

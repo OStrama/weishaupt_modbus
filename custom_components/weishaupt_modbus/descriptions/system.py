@@ -7,7 +7,7 @@ from .description import (
     SensorDescription,
 )
 from .myenums import SystemOperationMode
-from .params import ENUM, NUMBER_POWER, TEMPERATURE
+from .params import ENUM, PV_POWER, TEMPERATURE
 
 SYSTEM_ENTITIES: tuple[EntityDescription, ...] = (
     SensorDescription(
@@ -58,7 +58,7 @@ SYSTEM_ENTITIES: tuple[EntityDescription, ...] = (
     ),
     NumberDescription(
         key="pv_setpoint",
-        params=NUMBER_POWER,
+        params=PV_POWER,
         report_name="system",
         value_fn=lambda device: device.system_config.pv_setpoint,
         set_value_fn=lambda device, value: device.system_config.write(

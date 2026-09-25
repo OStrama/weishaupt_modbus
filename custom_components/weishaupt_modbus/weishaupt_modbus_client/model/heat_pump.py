@@ -92,7 +92,7 @@ class HeatPumpInput(Component):
         if self.flow_temperature is None or self.return_temperature is None:
             return None
 
-        return self.flow_temperature - self.return_temperature
+        return self.precise_flow_temperature - self.return_temperature
 
 
 class HeatPumpConfig(Component):

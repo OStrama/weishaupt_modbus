@@ -30,6 +30,22 @@ PLATFORMS: list[str] = [
 async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
     """Set up entry."""
     # Create independent copies of ModbusItems for each config entry
+    readings = [
+        "system",
+        "heat_pump",
+        "heating_circuit",
+        "domestic_hot_water",
+        "second_heat_source",
+        "statistics",
+    ]
+    if entry.data.get(CONF.HK2, False) is True:
+        readings.append("heating_circuit2")
+    if entry.data.get(CONF.HK3, False) is True:
+        readings.append("heating_circuit3")
+    if entry.data.get(CONF.HK4, False) is True:
+        readings.append("heating_circuit4")
+    if entry.data.get(CONF.HK5, False) is True:
+        readings.append("heating_circuit5")
 
     params = ModbusTcpParams(
         host=entry.data[CONF.HOST],
@@ -42,7 +58,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
         params,
         1,
     )
-    device = Weishaupt(unit)
+    device = Weishaupt(unit, readings)
     weishaupt_coordinator = WeishauptCoordinator(
         hass=hass,
         # entry=entry,

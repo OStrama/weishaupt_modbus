@@ -1,7 +1,7 @@
 """Weishaupt statistics entity descriptions."""
 
 from .description import EntityDescription, SensorDescription
-from .params import ENERGY
+from .params import ENERGY, EMPTY
 
 STATISTICS_ENTITIES: tuple[EntityDescription, ...] = (
     SensorDescription(
@@ -171,5 +171,11 @@ STATISTICS_ENTITIES: tuple[EntityDescription, ...] = (
         params=ENERGY,
         report_name="statistics",
         value_fn=lambda device: device.statistics_input.electric_energy_year,
+    ),
+    SensorDescription(
+        key="adr36801",
+        params=EMPTY,
+        report_name="statistics",
+        value_fn=lambda device: device.statistics_input.register_36801,
     ),
 )

@@ -152,6 +152,60 @@ class HeatingCircuitPartyPause(IntEnum):
     heating_circuit_party_12 = 49
 
 
+class HeatingCircuit2PartyPause(IntEnum):
+    """Heating circuit2  party and pause mode."""
+
+    heating_circuit2_pause_12 = 1
+    heating_circuit2_pause_11_5 = 2
+    heating_circuit2_pause_11 = 3
+    heating_circuit2_pause_10_5 = 4
+    heating_circuit2_pause_10 = 5
+    heating_circuit2_pause_9_5 = 6
+    heating_circuit2_pause_9 = 7
+    heating_circuit2_pause_8_5 = 8
+    heating_circuit2_pause_8 = 9
+    heating_circuit2_pause_7_5 = 10
+    heating_circuit2_pause_7 = 11
+    heating_circuit2_pause_6_5 = 12
+    heating_circuit2_pause_6 = 13
+    heating_circuit2_pause_5_5 = 14
+    heating_circuit2_pause_5 = 15
+    heating_circuit2_pause_4_5 = 16
+    heating_circuit2_pause_4 = 17
+    heating_circuit2_pause_3_5 = 18
+    heating_circuit2_pause_3 = 19
+    heating_circuit2_pause_2_5 = 20
+    heating_circuit2_pause_2 = 21
+    heating_circuit2_pause_1_5 = 22
+    heating_circuit2_pause_1 = 23
+    heating_circuit2_pause_0_5 = 24
+    heating_circuit2_party_pause_automatic = 25
+    heating_circuit2_party_0_5 = 26
+    heating_circuit2_party_1 = 27
+    heating_circuit2_party_1_5 = 28
+    heating_circuit2_party_2 = 29
+    heating_circuit2_party_2_5 = 30
+    heating_circuit2_party_3 = 31
+    heating_circuit2_party_3_5 = 32
+    heating_circuit2_party_4 = 33
+    heating_circuit2_party_4_5 = 34
+    heating_circuit2_party_5 = 35
+    heating_circuit2_party_5_5 = 36
+    heating_circuit2_party_6 = 37
+    heating_circuit2_party_6_5 = 38
+    heating_circuit2_party_7 = 39
+    heating_circuit2_party_7_5 = 40
+    heating_circuit2_party_8 = 41
+    heating_circuit2_party_8_5 = 42
+    heating_circuit2_party_9 = 43
+    heating_circuit2_party_9_5 = 44
+    heating_circuit2_party_10 = 45
+    heating_circuit2_party_10_5 = 46
+    heating_circuit2_party_11 = 47
+    heating_circuit2_party_11_5 = 48
+    heating_circuit2_party_12 = 49
+
+
 class DomesticHotWaterPush(IntEnum):
     """Domestic hot water push duration."""
 

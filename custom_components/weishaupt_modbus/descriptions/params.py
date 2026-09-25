@@ -38,6 +38,7 @@ class NumberParams:
     native_max_value: float = 100
     native_step: float = 1
     icon: str | None = None
+    mode: str = "auto"
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -62,6 +63,14 @@ ROOM_TEMPERATURE = NumberParams(
     device_class=NumberDeviceClass.TEMPERATURE,
     native_min_value=16,
     native_max_value=28,
+    native_step=0.5,
+    native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+)
+
+CONST_TEEP_HEATING = NumberParams(
+    device_class=NumberDeviceClass.TEMPERATURE,
+    native_min_value=30,
+    native_max_value=60,
     native_step=0.5,
     native_unit_of_measurement=UnitOfTemperature.CELSIUS,
 )
@@ -174,11 +183,13 @@ KELVIN = SensorParams(
     suggested_display_precision=0,
 )
 
-PV_POWER = SensorParams(
+PV_POWER = NumberParams(
     device_class=SensorDeviceClass.POWER,
-    state_class=SensorStateClass.MEASUREMENT,
     native_unit_of_measurement=UnitOfPower.WATT,
-    suggested_display_precision=0,
+    native_min_value=0.0,
+    native_max_value=65535,
+    native_step=500,
+    mode="box",
 )
 
 
@@ -295,4 +306,17 @@ BIVALENCE_TEMPERATURE = NumberParams(
     native_step=0.5,
     device_class=SensorDeviceClass.TEMPERATURE,
     native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+)
+
+
+COP = SensorParams(
+    device_class=None,
+    state_class=None,
+    native_unit_of_measurement=None,
+    suggested_display_precision=2,
+)
+HEATING_CURVE = NumberParams(
+    native_min_value=0.00,
+    native_max_value=3.00,
+    native_step=0.01,
 )

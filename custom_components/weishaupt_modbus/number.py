@@ -4,7 +4,9 @@ from __future__ import annotations
 
 from typing import Any
 
-from config.custom_components.weishaupt_modbus.descriptions.all import ENTITIES
+from config.custom_components.weishaupt_modbus.descriptions.all import (
+    get_entities,
+)
 from config.custom_components.weishaupt_modbus.descriptions.description import (
     NumberDescription,
 )
@@ -25,7 +27,7 @@ async def async_setup_entry(
 
     weishaupt_coordinator = config_entry.runtime_data.weishaupt_coordinator
 
-    for description in ENTITIES:
+    for description in get_entities(config_entry):
         if isinstance(description, NumberDescription):
             entity = WeishauptNumber(
                 weishaupt_coordinator,
