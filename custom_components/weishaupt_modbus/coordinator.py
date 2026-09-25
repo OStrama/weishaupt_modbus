@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING, Any
 from modbus_connection.model import UpdateReport
 from weishaupt_webif_api import WebifConnection, WeishauptWebifError
 
-from config.custom_components.weishaupt_modbus.weishaupt_modbus_client.model.device import (
+from config.custom_components.weishaupt_modbus.modbus.weishaupt_modbus_client.model.device import (
     Weishaupt,
 )
 from homeassistant.core import HomeAssistant
@@ -16,27 +16,10 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, Upda
 
 if TYPE_CHECKING:
     from .configentry import MyConfigEntry
-from .const import CONF, DeviceConstants
-from .items import ModbusItem, WebItem
+from .const import CONF
+from .items import WebItem
 
 _LOGGER = logging.getLogger(__name__)
-
-
-async def check_configured(
-    modbus_item: ModbusItem, config_entry: MyConfigEntry
-) -> bool:
-    """Check if item is configured."""
-    match modbus_item.device:
-        case DeviceConstants.HZ2:
-            return config_entry.data[CONF.HK2]
-        case DeviceConstants.HZ3:
-            return config_entry.data[CONF.HK3]
-        case DeviceConstants.HZ4:
-            return config_entry.data[CONF.HK4]
-        case DeviceConstants.HZ5:
-            return config_entry.data[CONF.HK5]
-        case _:
-            return True
 
 
 class MyWebIfCoordinator(

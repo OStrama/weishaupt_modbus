@@ -9,13 +9,13 @@ from homeassistant.core import HomeAssistant
 
 from .configentry import MyData
 from .coordinator import WeishauptCoordinator
-from .weishaupt_modbus_client.model.device import Weishaupt
+from .modbus.weishaupt_modbus_client.model.device import Weishaupt
 
 if TYPE_CHECKING:
     from .configentry import MyConfigEntry
 
 from .const import CONF
-from .kennfeld import PowerMap
+from .kennfeld.kennfeld import PowerMap
 
 _LOGGER = logging.getLogger(__name__)
 

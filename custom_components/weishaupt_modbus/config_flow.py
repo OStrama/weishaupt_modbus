@@ -11,7 +11,7 @@ from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.device_registry import format_mac
 
 from .const import CONF, CONST
-from .kennfeld import get_filepath
+from .kennfeld.kennfeld import get_filepath
 
 
 async def build_kennfeld_list(hass: HomeAssistant) -> list[str]:

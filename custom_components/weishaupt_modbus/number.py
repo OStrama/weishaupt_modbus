@@ -4,10 +4,10 @@ from __future__ import annotations
 
 from typing import Any
 
-from config.custom_components.weishaupt_modbus.descriptions.all import (
+from config.custom_components.weishaupt_modbus.modbus.descriptions.all import (
     get_entities,
 )
-from config.custom_components.weishaupt_modbus.descriptions.description import (
+from config.custom_components.weishaupt_modbus.modbus.descriptions.description import (
     NumberDescription,
 )
 from config.custom_components.weishaupt_modbus.entities import WeishauptNumber

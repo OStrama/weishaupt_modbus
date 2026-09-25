@@ -11,8 +11,8 @@ import aiofiles
 
 from homeassistant.core import HomeAssistant
 
-from .configentry import MyConfigEntry
-from .const import CONF, CONST
+from ..configentry import MyConfigEntry
+from ..const import CONF, CONST
 
 _LOGGER = logging.getLogger(__name__)
 

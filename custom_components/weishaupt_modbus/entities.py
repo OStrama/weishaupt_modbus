@@ -11,7 +11,7 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from .configentry import MyConfigEntry
 from .const import CONF, CONST
 from .coordinator import WeishauptCoordinator
-from .descriptions.description import (
+from .modbus.descriptions.description import (
     EntityDescription,
     NumberDescription,
     SelectDescription,
