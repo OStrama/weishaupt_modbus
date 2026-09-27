@@ -5,10 +5,11 @@ from datetime import timedelta
 import logging
 
 from modbus_connection.model import UpdateReport
-from weishaupt_modbus_client.model.device import Weishaupt
 
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
+
+from .weishaupt_modbus_client.model.device import Weishaupt
 
 _LOGGER = logging.getLogger(__name__)
 
