@@ -52,6 +52,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
         )
 
         await webif_coordinator.async_config_entry_first_refresh()
+    else:
+        webif_api = None
     readings = [
         "system",
         "heat_pump",
