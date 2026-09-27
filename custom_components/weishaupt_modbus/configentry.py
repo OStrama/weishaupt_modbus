@@ -6,12 +6,10 @@ from typing import Any
 
 from weishaupt_webif_api import WebifConnection
 
-from config.custom_components.weishaupt_modbus.modbus.coordinator import (
-    WeishauptCoordinator,
-)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
+from .modbus.coordinator import WeishauptCoordinator
 from .webif.coordinator import WeishauptWebifCoordinator
 
 

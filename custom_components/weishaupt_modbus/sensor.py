@@ -2,24 +2,16 @@
 
 import logging
 
-from config.custom_components.weishaupt_modbus.modbus.entities import WeishauptSensor
-from config.custom_components.weishaupt_modbus.modbus.descriptions.all import (
-    get_entities,
-)
-from config.custom_components.weishaupt_modbus.modbus.descriptions.description import (
-    SensorDescription,
-)
-from config.custom_components.weishaupt_modbus.webif.description.all import (
-    get_webif_entities,
-)
-from config.custom_components.weishaupt_modbus.webif.description.description import (
-    WebifSensorDescription,
-)
-from config.custom_components.weishaupt_modbus.webif.entity import WebifSensor
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .configentry import MyConfigEntry
+from .modbus.descriptions.all import get_entities
+from .modbus.descriptions.description import SensorDescription
+from .modbus.entities import WeishauptSensor
+from .webif.description.all import get_webif_entities
+from .webif.description.description import WebifSensorDescription
+from .webif.entity import WebifSensor
 
 _LOGGER = logging.getLogger(__name__)
 

@@ -1,9 +1,9 @@
-from config.custom_components.weishaupt_modbus.configentry import MyConfigEntry
-from config.custom_components.weishaupt_modbus.const import CONF, CONST
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
+from ..configentry import MyConfigEntry
+from ..const import CONF, CONST
 from .coordinator import WeishauptWebifCoordinator
 from .description.description import WebifSensorDescription
 

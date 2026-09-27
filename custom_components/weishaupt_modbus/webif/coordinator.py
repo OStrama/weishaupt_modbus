@@ -7,10 +7,11 @@ from typing import Any
 
 from weishaupt_webif_api import WebifConnection, WeishauptWebifError
 
-from config.custom_components.weishaupt_modbus.const import CONF
 from homeassistant import config_entries
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
+
+from ...weishaupt_modbus.const import CONF
 
 _LOGGER = logging.getLogger(__name__)
 

@@ -1,21 +1,12 @@
 """Number."""
 
-from __future__ import annotations
-
-from typing import Any
-
-from config.custom_components.weishaupt_modbus.modbus.descriptions.all import (
-    get_entities,
-)
-from config.custom_components.weishaupt_modbus.modbus.descriptions.description import (
-    NumberDescription,
-)
-from config.custom_components.weishaupt_modbus.modbus.entities import WeishauptNumber
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .configentry import MyConfigEntry
-from .const import TYPES
+from .modbus.descriptions.all import get_entities
+from .modbus.descriptions.description import NumberDescription
+from .modbus.entities import WeishauptNumber
 
 
 async def async_setup_entry(
