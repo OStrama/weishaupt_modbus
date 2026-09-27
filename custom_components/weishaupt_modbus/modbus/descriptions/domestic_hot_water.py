@@ -7,7 +7,7 @@ from .description import (
     SensorDescription,
 )
 from .myenums import DomesticHotWaterConfiguration, DomesticHotWaterPush
-from .params import NUMBER_EMPTY, SGR_RAISE, TEMPERATURE, WW_TEMP
+from .params import SGR_RAISE, TEMPERATURE, WW_TEMP
 
 DOMESTIC_HOT_WATER_ENTITIES: tuple[EntityDescription, ...] = (
     SensorDescription(

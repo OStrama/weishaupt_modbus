@@ -1,7 +1,4 @@
-from config.custom_components.weishaupt_modbus.webif.description.description import (
-    WebifSensorDescription,
-)
-
+from .description import WebifSensorDescription
 from .params import PARAMS_ENERGY_WEBIF
 
 WEBIF_STATISTICS: list[WebifSensorDescription] = [

@@ -10,16 +10,8 @@ from .myenums import (
     ElectricHeater1Configuration,
     ElectricHeater2Configuration,
     SecondHeatSourceConfiguration,
-    SecondHeatSourceStatus,
 )
-from .params import (
-    BIVALENCE_TEMPERATURE,
-    EMPTY,
-    ENUM,
-    NUMBER_EMPTY,
-    TEMPERATURE,
-    TIME_HOURS,
-)
+from .params import BIVALENCE_TEMPERATURE, EMPTY, ENUM, TIME_HOURS
 
 SECOND_HEAT_SOURCE_ENTITIES: tuple[EntityDescription, ...] = (
     SensorDescription(

@@ -4,7 +4,7 @@ import asyncio
 import logging
 from typing import TYPE_CHECKING
 
-from config.custom_components.weishaupt_modbus.webif.description.description import (
+from webif.description.description import (
     WebifConnection,
 )
 from homeassistant.components.modbus.connection import ModbusTcpParams, async_get_unit

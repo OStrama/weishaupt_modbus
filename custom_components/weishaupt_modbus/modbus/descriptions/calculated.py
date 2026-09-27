@@ -3,15 +3,10 @@
 # from ..kennfeld import power
 from homeassistant.core import _LOGGER
 
-from .description import EntityDescription, SensorDescription
 from ...kennfeld.kennfeld import PowerMap
-from .params import (
-    POWER,
-    COP,
-    TEMPERATURE,
-)
-
 from ..coordinator import WeishauptCoordinator
+from .description import EntityDescription, SensorDescription
+from .params import COP, POWER, TEMPERATURE
 
 
 def calculate_thermal_power(

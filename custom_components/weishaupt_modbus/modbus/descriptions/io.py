@@ -1,10 +1,8 @@
 """Weishaupt IO entity descriptions."""
 
-from config.custom_components.weishaupt_modbus.modbus.descriptions.myenums import Dummy
-
 from .description import EntityDescription, SelectDescription, SensorDescription
 from .myenums import IoConfigInput, IoConfigOutput, IoConfigSgr
-from .params import ENUM, IO, NUMBER_EMPTY
+from .params import ENUM
 
 IO_ENTITIES: tuple[EntityDescription, ...] = (
     SensorDescription(

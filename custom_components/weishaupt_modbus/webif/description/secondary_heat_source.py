@@ -1,11 +1,5 @@
-from config.custom_components.weishaupt_modbus.webif.description.description import (
-    WebifSensorDescription,
-)
-from config.custom_components.weishaupt_modbus.webif.description.params import (
-    PARAMS_HOURS,
-    PARAMS_INTEGER,
-    PARAMS_TEXT,
-)
+from .description import WebifSensorDescription
+from .params import PARAMS_HOURS, PARAMS_INTEGER, PARAMS_TEXT
 
 WEBIF_SECONDARY_HEAT_SOURCE: list[WebifSensorDescription] = [
     WebifSensorDescription(

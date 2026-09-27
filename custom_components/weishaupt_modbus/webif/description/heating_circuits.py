@@ -1,10 +1,5 @@
-from config.custom_components.weishaupt_modbus.webif.description.description import (
-    WebifSensorDescription,
-)
-from config.custom_components.weishaupt_modbus.webif.description.params import (
-    PARAMS_TEMPERATURE,
-)
-
+from .description import WebifSensorDescription
+from .params import PARAMS_TEMPERATURE
 
 _HEATING_CIRCUIT_TEMPLATE = [
     ("outside_temperature", PARAMS_TEMPERATURE),

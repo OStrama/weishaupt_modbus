@@ -1,7 +1,6 @@
 """All entities from the different modules."""
 
-from config.custom_components.weishaupt_modbus.const import CONF
-
+from ...const import CONF
 from .calculated import CALCULATERD_ENTITIES
 from .domestic_hot_water import DOMESTIC_HOT_WATER_ENTITIES
 from .heat_pump import HEAT_PUMP_ENTITIES
