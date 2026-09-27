@@ -8,10 +8,10 @@ from homeassistant.components.sensor import SensorEntity
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .configentry import MyConfigEntry
-from .const import CONF, CONST
-from .modbus.coordinator import WeishauptCoordinator
-from .modbus.descriptions.description import (
+from ..configentry import MyConfigEntry
+from ..const import CONF, CONST
+from .coordinator import WeishauptCoordinator
+from .descriptions.description import (
     EntityDescription,
     NumberDescription,
     SelectDescription,

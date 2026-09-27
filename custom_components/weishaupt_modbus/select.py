@@ -6,7 +6,7 @@ from config.custom_components.weishaupt_modbus.modbus.descriptions.all import (
 from config.custom_components.weishaupt_modbus.modbus.descriptions.description import (
     SelectDescription,
 )
-from config.custom_components.weishaupt_modbus.entities import WeishauptSelect
+from config.custom_components.weishaupt_modbus.modbus.entities import WeishauptSelect
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 

@@ -2,7 +2,7 @@
 
 import logging
 
-from config.custom_components.weishaupt_modbus.entities import WeishauptSensor
+from config.custom_components.weishaupt_modbus.modbus.entities import WeishauptSensor
 from config.custom_components.weishaupt_modbus.modbus.descriptions.all import (
     get_entities,
 )

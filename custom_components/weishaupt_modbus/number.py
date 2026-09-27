@@ -10,7 +10,7 @@ from config.custom_components.weishaupt_modbus.modbus.descriptions.all import (
 from config.custom_components.weishaupt_modbus.modbus.descriptions.description import (
     NumberDescription,
 )
-from config.custom_components.weishaupt_modbus.entities import WeishauptNumber
+from config.custom_components.weishaupt_modbus.modbus.entities import WeishauptNumber
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
