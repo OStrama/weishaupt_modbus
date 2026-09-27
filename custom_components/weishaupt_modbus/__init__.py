@@ -1,15 +1,20 @@
 """Home Assistant integration initialization."""
 
+import asyncio
 import logging
 from typing import TYPE_CHECKING
 
+from config.custom_components.weishaupt_modbus.webif.description.description import (
+    WebifConnection,
+)
 from homeassistant.components.modbus.connection import ModbusTcpParams, async_get_unit
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
 from .configentry import MyData
-from .coordinator import WeishauptCoordinator
+from .modbus.coordinator import WeishauptCoordinator
 from .modbus.weishaupt_modbus_client.model.device import Weishaupt
+from .webif.coordinator import WeishauptWebifCoordinator
 
 if TYPE_CHECKING:
     from .configentry import MyConfigEntry
@@ -29,7 +34,26 @@ PLATFORMS: list[str] = [
 
 async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
     """Set up entry."""
-    # Create independent copies of ModbusItems for each config entry
+
+    mcu_lock = asyncio.Lock()
+
+    webif_coordinator = None
+
+    if entry.data.get(CONF.CB_WEBIF):
+        webif_api = WebifConnection(
+            ip=entry.data[CONF.HOST],
+            user=entry.data[CONF.USERNAME],
+            password=entry.data[CONF.PASSWORD],
+        )
+
+        webif_coordinator = WeishauptWebifCoordinator(
+            hass=hass,
+            api=webif_api,
+            entry=entry,
+            mcu_lock=mcu_lock,
+        )
+
+        await webif_coordinator.async_config_entry_first_refresh()
     readings = [
         "system",
         "heat_pump",
@@ -37,6 +61,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
         "domestic_hot_water",
         "second_heat_source",
         "statistics",
+        "io",
     ]
     if entry.data.get(CONF.HK2, False) is True:
         readings.append("heating_circuit2")
@@ -64,6 +89,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
         # entry=entry,
         device=device,
         # interval=timedelta(seconds=30),
+        mcu_lock=mcu_lock,
     )
     await weishaupt_coordinator.async_config_entry_first_refresh()
 
@@ -72,6 +98,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
         hass=hass,
         powermap=None,
         weishaupt_coordinator=weishaupt_coordinator,
+        webif_api=webif_api,
+        webif_coordinator=webif_coordinator,
+        mcu_lock=mcu_lock,
     )
 
     powermap = PowerMap(entry, hass)
@@ -132,17 +161,10 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: MyConfigEntry) 
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload entry."""
-    # This is called when an entry/configured device is to be removed. The class
-    # needs to unload itself, and remove callbacks. See the classes for further
-    # details
-    entry.runtime_data.modbus_api.close()
     if entry.runtime_data.webif_api is not None:
         await entry.runtime_data.webif_api.close()
-    unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
-    if unload_ok:
-        try:
-            hass.data[entry.data[CONF.PREFIX]].pop(entry.entry_id)
-        except KeyError:
-            _LOGGER.warning("KeyError: %s", str(entry.data[CONF.PREFIX]))
 
-    return unload_ok
+    return await hass.config_entries.async_unload_platforms(
+        entry,
+        PLATFORMS,
+    )

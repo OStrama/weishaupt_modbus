@@ -12,23 +12,10 @@ from .heating_circuit import (
     HEATING_CIRCUIT_ENTITIES4,
     HEATING_CIRCUIT_ENTITIES5,
 )
+from .io import IO_ENTITIES
 from .second_heat_source import SECOND_HEAT_SOURCE_ENTITIES
 from .stats import STATISTICS_ENTITIES
 from .system import SYSTEM_ENTITIES
-
-ENTITIES = (
-    SYSTEM_ENTITIES
-    + HEAT_PUMP_ENTITIES
-    + HEATING_CIRCUIT_ENTITIES
-    + HEATING_CIRCUIT_ENTITIES2
-    + HEATING_CIRCUIT_ENTITIES3
-    + HEATING_CIRCUIT_ENTITIES4
-    # + HEATING_CIRCUIT_ENTITIES5
-    + STATISTICS_ENTITIES
-    + DOMESTIC_HOT_WATER_ENTITIES
-    + SECOND_HEAT_SOURCE_ENTITIES
-    + CALCULATERD_ENTITIES
-)
 
 
 def get_entities(entry) -> list:
@@ -42,6 +29,7 @@ def get_entities(entry) -> list:
         + SECOND_HEAT_SOURCE_ENTITIES
         + STATISTICS_ENTITIES
         + CALCULATERD_ENTITIES
+        + IO_ENTITIES
     )
     if entry.data.get(CONF.HK2, False) is True:
         readings += HEATING_CIRCUIT_ENTITIES2

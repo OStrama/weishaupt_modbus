@@ -5,6 +5,7 @@ from modbus_connection.model import ComponentGroup, Device, UpdateReport
 from .domestic_hot_water import DomesticHotWaterConfig, DomesticHotWaterInput
 from .heat_pump import HeatPumpConfig, HeatPumpInput
 from .heating_circuit import HeatingCircuitConfigs, HeatingCircuitInputs
+from .io import IOConfig, IOInput
 from .second_heat_source import SecondHeatSourceConfig, SecondHeatSourceInput
 from .stats import StatisticsInput
 from .system import SystemConfig, SystemStatus
@@ -127,6 +128,17 @@ class Weishaupt(Device):
         self.statistics = ComponentGroup(
             unit,
             [self.statistics_input],
+        )
+
+        self.io_config = IOConfig(unit)
+        self.io_input = IOInput(unit)
+
+        self.io = ComponentGroup(
+            unit,
+            [
+                self.io_config,
+                self.io_input,
+            ],
         )
 
     async def async_update(self) -> UpdateReport:

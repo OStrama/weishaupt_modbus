@@ -320,3 +320,11 @@ HEATING_CURVE = NumberParams(
     native_max_value=3.00,
     native_step=0.01,
 )
+
+
+IO = SensorParams(
+    device_class=None,
+    state_class=None,
+    native_unit_of_measurement=None,
+    suggested_display_precision=None,
+)

@@ -11,7 +11,7 @@ from .params import (
     TEMPERATURE,
 )
 
-from ...coordinator import WeishauptCoordinator
+from ..coordinator import WeishauptCoordinator
 
 
 def calculate_thermal_power(

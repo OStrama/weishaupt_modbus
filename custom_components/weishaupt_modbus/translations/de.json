@@ -63,40 +63,64 @@
     },
     "device": {
         "dev_system": {
-            "name": "WH System"
+            "name": "System"
         },
         "dev_heat_pump": {
-            "name": "WH W\u00e4rmepumpe"
+            "name": "W\u00e4rmepumpe"
         },
         "dev_domestic_hot_water": {
-            "name": "WH Warmwasser"
+            "name": "Warmwasser"
         },
         "dev_heating_circuit": {
-            "name": "WH Heizkreis"
+            "name": "Heizkreis"
         },
         "dev_heating_circuit2": {
-            "name": "WH Heizkreis2"
+            "name": "Heizkreis2"
         },
         "dev_heating_circuit3": {
-            "name": "WH Heizkreis3"
+            "name": "Heizkreis3"
         },
         "dev_heating_circuit4": {
-            "name": "WH Heizkreis4"
+            "name": "Heizkreis4"
         },
         "dev_heating_circuit5": {
-            "name": "WH Heizkreis5"
+            "name": "Heizkreis5"
         },
         "dev_second_heat_source": {
-            "name": "WH 2. W\u00e4rmeerzeuger"
+            "name": "2. W\u00e4rmeerzeuger"
         },
         "dev_statistics": {
-            "name": "WH Statistik"
+            "name": "Statistik"
         },
         "dev_unknown": {
-            "name": "WH Unbekannt"
+            "name": "Unbekannt"
         },
-        "dev_ein_aus": {
-            "name": "WH Eing\u00e4nge/Ausg\u00e4nge"
+        "dev_io": {
+            "name": "Eing\u00e4nge/Ausg\u00e4nge"
+        },
+        "dev_webif_statistics": {
+            "name": "WebIf Statistik"
+        },
+        "dev_webif_heat_pump": {
+            "name": "WebIf W\u00e4rmepumpe"
+        },
+        "dev_webif_electric_heater": {
+            "name": "WebIf 2. W\u00e4rmeerzeuger"
+        },
+        "dev_webif_heating_circuit": {
+            "name": "WebIf Heizkreis"
+        },
+        "dev_webif_heating_circuit2": {
+            "name": "WebIf Heizkreis2"
+        },
+        "dev_webif_heating_circuit3": {
+            "name": "WebIf Heizkreis3"
+        },
+        "dev_webif_heating_circuit4": {
+            "name": "WebIf Heizkreis4"
+        },
+        "dev_webif_heating_circuit5": {
+            "name": "WebIf Heizkreis5"
         }
     },
     "entity": {
@@ -239,7 +263,6 @@
             "domestic_hot_water_normal_temperature": {
                 "name": "Warmwasser Normal"
             },
-
             "heat_pump_heating_flow_rate_setpoint": {
                 "name": "Sollwert Volumenstrom Heizen"
             },
@@ -597,7 +620,6 @@
                     "system_operating_mode_standby": "Standby"
                 }
             },
-
             "domestic_hot_water_push": {
                 "name": "Warmwasser Push",
                 "state": {
@@ -792,8 +814,175 @@
             },
             "heat_pump_pump_start_type": {
                 "name": "Pumpe Einschaltart"
+            },
+            "io_select_sg_ready_1": {
+                "name": "Konf. Eingang SGR1",
+                "state": {
+                    "io_select_sg_ready_1_0": "SG Ready",
+                    "io_select_sg_ready_1_1": "EVU-Sperre",
+                    "io_select_sg_ready_1_10": "Erzeugersperre HZ und WW",
+                    "io_select_sg_ready_1_11": "Warmwasser Standby",
+                    "io_select_sg_ready_1_12": "Warmwasser Absenk",
+                    "io_select_sg_ready_1_13": "Warmwasser Normal",
+                    "io_select_sg_ready_1_14": "Warmwasser PUSH",
+                    "io_select_sg_ready_1_15": "Taupunktw\u00e4chter",
+                    "io_select_sg_ready_1_16": "Heizkreis \u2026 Standby",
+                    "io_select_sg_ready_1_17": "Heizkreis \u2026 Absenk",
+                    "io_select_sg_ready_1_18": "Heizkreis \u2026 Normal",
+                    "io_select_sg_ready_1_19": "Heizkreis \u2026 Komfort",
+                    "io_select_sg_ready_1_2": "Erh\u00f6hter Betrieb",
+                    "io_select_sg_ready_1_20": "2.WEZ",
+                    "io_select_sg_ready_1_21": "Sperre Verdichter",
+                    "io_select_sg_ready_1_3": "HK-Sperre",
+                    "io_select_sg_ready_1_4": "Umschaltung Hz/K\u00fc",
+                    "io_select_sg_ready_1_5": "Ruhemodus",
+                    "io_select_sg_ready_1_6": "Not-Aus",
+                    "io_select_sg_ready_1_65535": "AUS",
+                    "io_select_sg_ready_1_7": "System Standby",
+                    "io_select_sg_ready_1_8": "Erzeugersperre HZ",
+                    "io_select_sg_ready_1_9": "Erzeugersperre WW"
+                }
+            },
+            "io_select_sg_ready_2": {
+                "name": "Konf. Eingang SGR2",
+                "state": {
+                    "io_select_sg_ready_2_0": "SG Ready",
+                    "io_select_sg_ready_2_1": "EVU-Sperre",
+                    "io_select_sg_ready_2_10": "Erzeugersperre HZ und WW",
+                    "io_select_sg_ready_2_11": "Warmwasser Standby",
+                    "io_select_sg_ready_2_12": "Warmwasser Absenk",
+                    "io_select_sg_ready_2_13": "Warmwasser Normal",
+                    "io_select_sg_ready_2_14": "Warmwasser PUSH",
+                    "io_select_sg_ready_2_15": "Taupunktw\u00e4chter",
+                    "io_select_sg_ready_2_16": "Heizkreis \u2026 Standby",
+                    "io_select_sg_ready_2_17": "Heizkreis \u2026 Absenk",
+                    "io_select_sg_ready_2_18": "Heizkreis \u2026 Normal",
+                    "io_select_sg_ready_2_19": "Heizkreis \u2026 Komfort",
+                    "io_select_sg_ready_2_2": "Erh\u00f6hter Betrieb",
+                    "io_select_sg_ready_2_20": "2.WEZ",
+                    "io_select_sg_ready_2_21": "Sperre Verdichter",
+                    "io_select_sg_ready_2_3": "HK-Sperre",
+                    "io_select_sg_ready_2_4": "Umschaltung Hz/K\u00fc",
+                    "io_select_sg_ready_2_5": "Ruhemodus",
+                    "io_select_sg_ready_2_6": "Not-Aus",
+                    "io_select_sg_ready_2_65535": "AUS",
+                    "io_select_sg_ready_2_7": "System Standby",
+                    "io_select_sg_ready_2_8": "Erzeugersperre HZ",
+                    "io_select_sg_ready_2_9": "Erzeugersperre WW"
+                }
+            },
+                        "io_select_output_h1_2": {
+                "name": "Konf. Ausgang H1.2",
+                "state": {
+                    "io_select_output_h1_2_0": "0",
+                    "io_select_output_h1_2_1": "1",
+                    "io_select_output_h1_2_2": "2",
+                    "io_select_output_h1_2_3": "3",
+                    "io_select_output_h1_2_4": "4",
+                    "io_select_output_h1_2_5": "5",
+                    "io_select_output_h1_2_6": "6",
+                    "io_select_output_h1_2_65535": "65535",
+                    "io_select_output_h1_2_7": "7"
+                }
+            },
+            "io_select_output_h1_3": {
+                "name": "Konf. Ausgang  H1.3",
+                "state": {
+                    "io_select_output_h1_3_0": "0",
+                    "io_select_output_h1_3_1": "1",
+                    "io_select_output_h1_3_2": "2",
+                    "io_select_output_h1_3_3": "3",
+                    "io_select_output_h1_3_4": "4",
+                    "io_select_output_h1_3_5": "5",
+                    "io_select_output_h1_3_6": "6",
+                    "io_select_output_h1_3_65535": "65535",
+                    "io_select_output_h1_3_7": "7"
+                }
+            },
+            "io_select_output_h1_4": {
+                "name": "Konf. Ausgang  H1.4",
+                "state": {
+                    "io_select_output_h1_4_0": "0",
+                    "io_select_output_h1_4_1": "1",
+                    "io_select_output_h1_4_2": "2",
+                    "io_select_output_h1_4_3": "3",
+                    "io_select_output_h1_4_4": "4",
+                    "io_select_output_h1_4_5": "5",
+                    "io_select_output_h1_4_6": "6",
+                    "io_select_output_h1_4_65535": "65535",
+                    "io_select_output_h1_4_7": "7"
+                }
+            },
+            "io_select_output_h1_5": {
+                "name": "Konf. Ausgang  H1.5",
+                "state": {
+                    "io_select_output_h1_5_0": "0",
+                    "io_select_output_h1_5_1": "1",
+                    "io_select_output_h1_5_2": "2",
+                    "io_select_output_h1_5_3": "3",
+                    "io_select_output_h1_5_4": "4",
+                    "io_select_output_h1_5_5": "5",
+                    "io_select_output_h1_5_6": "6",
+                    "io_select_output_h1_5_65535": "65535",
+                    "io_select_output_h1_5_7": "7"
+                }
+            },
+            "io_select_input_de1": {
+                "name": "Konf. Eingang DE1",
+                "state": {
+                    "io_select_input_de1_0": "SG Ready",
+                    "io_select_input_de1_1": "EVU-Sperre",
+                    "io_select_input_de1_10": "Erzeugersperre HZ und WW",
+                    "io_select_input_de1_11": "Warmwasser Standby",
+                    "io_select_input_de1_12": "Warmwasser Absenk",
+                    "io_select_input_de1_13": "Warmwasser Normal",
+                    "io_select_input_de1_14": "Warmwasser PUSH",
+                    "io_select_input_de1_15": "Taupunktw\u00e4chter",
+                    "io_select_input_de1_16": "Heizkreis \u2026 Standby",
+                    "io_select_input_de1_17": "Heizkreis \u2026 Absenk",
+                    "io_select_input_de1_18": "Heizkreis \u2026 Normal",
+                    "io_select_input_de1_19": "Heizkreis \u2026 Komfort",
+                    "io_select_input_de1_2": "Erh\u00f6hter Betrieb",
+                    "io_select_input_de1_20": "2.WEZ",
+                    "io_select_input_de1_21": "Sperre Verdichter",
+                    "io_select_input_de1_3": "HK-Sperre",
+                    "io_select_input_de1_4": "Umschaltung Hz/K\u00fc",
+                    "io_select_input_de1_5": "Ruhemodus",
+                    "io_select_input_de1_6": "Not-Aus",
+                    "io_select_input_de1_65535": "AUS",
+                    "io_select_input_de1_7": "System Standby",
+                    "io_select_input_de1_8": "Erzeugersperre HZ",
+                    "io_select_input_de1_9": "Erzeugersperre WW"
+                }
+            },
+            "io_select_input_de2": {
+                "name": "Konf. Eingang DE2",
+                "state": {
+                    "io_select_input_de2_0": "SG Ready",
+                    "io_select_input_de2_1": "EVU-Sperre",
+                    "io_select_input_de2_10": "Erzeugersperre HZ und WW",
+                    "io_select_input_de2_11": "Warmwasser Standby",
+                    "io_select_input_de2_12": "Warmwasser Absenk",
+                    "io_select_input_de2_13": "Warmwasser Normal",
+                    "io_select_input_de2_14": "Warmwasser PUSH",
+                    "io_select_input_de2_15": "Taupunktw\u00e4chter",
+                    "io_select_input_de2_16": "Heizkreis \u2026 Standby",
+                    "io_select_input_de2_17": "Heizkreis \u2026 Absenk",
+                    "io_select_input_de2_18": "Heizkreis \u2026 Normal",
+                    "io_select_input_de2_19": "Heizkreis \u2026 Komfort",
+                    "io_select_input_de2_2": "Erh\u00f6hter Betrieb",
+                    "io_select_input_de2_20": "2.WEZ",
+                    "io_select_input_de2_21": "Sperre Verdichter",
+                    "io_select_input_de2_3": "HK-Sperre",
+                    "io_select_input_de2_4": "Umschaltung Hz/K\u00fc",
+                    "io_select_input_de2_5": "Ruhemodus",
+                    "io_select_input_de2_6": "Not-Aus",
+                    "io_select_input_de2_65535": "AUS",
+                    "io_select_input_de2_7": "System Standby",
+                    "io_select_input_de2_8": "Erzeugersperre HZ",
+                    "io_select_input_de2_9": "Erzeugersperre WW"
+                }
             }
-
         },
         "sensor": {
             "statistics_defrost_energy_yesterday": {
@@ -826,216 +1015,308 @@
             "statistics_adr36801": {
                 "name": "Adr. 36801"
             },
-
             "heat_pump_regenerative_flow_temperature": {
                 "name": "Anforderung(Vorlauf regenerativ)"
             },
-            "ausg_h12": {
+            "io_sensor_input_output_h1_2": {
                 "name": "Ausgang H1.2"
             },
-            "ausg_h13": {
+            "io_sensor_output_h1_3": {
                 "name": "Ausgang H1.3"
             },
-            "ausg_h14": {
+            "io_sensor_output_h1_4": {
                 "name": "Ausgang H1.4"
             },
-            "ausg_h15": {
+            "io_sensor_output_h1_5": {
                 "name": "Ausgang H1.5"
             },
-            "webif_info_heizkreis1_aussentemperatur": {
-                "name": "Au\u00dfentemperatur"
+            "webif_heating_circuit_outside_temperature": {
+                "name": "Außentemperatur"
             },
-            "webif_info_heizkreis1_at_mittelwert": {
+            "webif_heating_circuit_outside_temperature_average": {
                 "name": "AT Mittelwert"
             },
-            "webif_info_heizkreis1_at_langzeitwert": {
+            "webif_heating_circuit_outside_temperature_long_term": {
                 "name": "AT Langzeitwert"
             },
-            "webif_info_heizkreis1_raumsolltemperatur": {
+            "webif_heating_circuit_room_target_temperature": {
                 "name": "Raumsolltemperatur"
             },
-            "webif_info_heizkreis1_vorlauftemperatur": {
+            "webif_heating_circuit_flow_target_temperature": {
+                "name": "Vorlaufsolltemperatur"
+            },
+            "webif_heating_circuit_flow_temperature": {
                 "name": "Vorlauftemperatur"
             },
-            "webif_info_waermepumpe_betrieb": {
+            "webif_heating_circuit1_outside_temperature": {
+                "name": "Außentemperatur"
+            },
+            "webif_heating_circuit1_outside_temperature_average": {
+                "name": "AT Mittelwert"
+            },
+            "webif_heating_circuit1_outside_temperature_long_term": {
+                "name": "AT Langzeitwert"
+            },
+            "webif_heating_circuit1_room_target_temperature": {
+                "name": "Raumsolltemperatur"
+            },
+            "webif_heating_circuit1_flow_target_temperature": {
+                "name": "Vorlaufsolltemperatur"
+            },
+            "webif_heating_circuit1_flow_temperature": {
+                "name": "Vorlauftemperatur"
+            },
+            "webif_heat_pump_operating_mode": {
                 "name": "Betrieb"
             },
-            "webif_info_waermepumpe_stoermeldung": {
-                "name": "St\u00f6rmeldung"
+            "webif_heat_pump_fault_message": {
+                "name": "Störmeldung"
             },
-            "webif_info_waermepumpe_warmwassertemperatur": {
+            "webif_heat_pump_domestic_hot_water_temperature": {
                 "name": "Warmwassertemperatur"
             },
-            "webif_info_waermepumpe_leistungsanforderung": {
+            "webif_heat_pump_power_request": {
                 "name": "Leistungsanforderung"
             },
-            "webif_info_waermepumpe_solltemperatur": {
+            "webif_heat_pump_target_temperature": {
                 "name": "Solltemperatur"
             },
-            "webif_info_waermepumpe_anforderung": {
+            "webif_heat_pump_request": {
                 "name": "Anforderung"
             },
-            "webif_info_waermepumpe_schaltdifferenz_dynamisch": {
+            "webif_heat_pump_dynamic_switching_difference": {
                 "name": "Schaltdifferenz dynamisch"
             },
-            "webif_info_waermepumpe_vorlauftemperatur": {
+            "webif_heat_pump_flow_temperature": {
                 "name": "Vorlauftemperatur"
             },
-            "webif_info_waermepumpe_ruecklauftemperatur": {
-                "name": "R\u00fccklauftemperatur"
+            "webif_heat_pump_return_temperature": {
+                "name": "Rücklauftemperatur"
             },
-            "webif_info_waermepumpe_drehzahl_pumpe_m1": {
+            "webif_heat_pump_pump_m1_speed": {
                 "name": "Drehzahl Pumpe M1"
             },
-            "webif_info_waermepumpe_volumenstrom": {
+            "webif_heat_pump_volume_flow": {
                 "name": "Volumenstrom"
             },
-            "webif_info_waermepumpe_stellung_umschaltventil": {
+            "webif_heat_pump_diverter_valve_position": {
                 "name": "Stellung Umschaltventil"
             },
-            "webif_info_waermepumpe_version_wwp_sg": {
+            "webif_heat_pump_wwp_sg_version": {
                 "name": "Version WWP-SG"
             },
-            "webif_info_waermepumpe_version_wwp_ec_wbb": {
+            "webif_heat_pump_wwp_ec_wbb_version": {
                 "name": "Version WWP-EC WBB"
             },
-            "webif_info_waermepumpe_soll_leistung": {
+            "webif_heat_pump_target_power": {
                 "name": "Soll Leistung"
             },
-            "webif_info_waermepumpe_ist_leistung": {
+            "webif_heat_pump_actual_power": {
                 "name": "Ist Leistung"
             },
-            "webif_info_waermepumpe_expansionsventil_ag_eintr": {
+            "webif_heat_pump_expansion_valve_outdoor_unit_inlet": {
                 "name": "Expansionsventil AG Eintr"
             },
-            "webif_info_waermepumpe_luftansaugtemperatur": {
+            "webif_heat_pump_air_intake_temperature": {
                 "name": "Luftansaugtemperatur"
             },
-            "webif_info_waermepumpe_waermetauscher_ag_austrit": {
-                "name": "W\u00e4rmetauscher AG Austrit"
+            "webif_heat_pump_heat_exchanger_outdoor_unit_outlet_temperature": {
+                "name": "Wärmetauscher AG Austrit"
             },
-            "webif_info_waermepumpe_verdichtersauggastemp": {
+            "webif_heat_pump_compressor_suction_gas_temperature": {
                 "name": "Verdichtersauggastemp."
             },
-            "webif_info_waermepumpe_evi_sauggastemperatur": {
+            "webif_heat_pump_evi_suction_gas_temperature": {
                 "name": "EVI Sauggastemperatur"
             },
-            "webif_info_waermepumpe_kaeltemittel_ig_austritt": {
-                "name": "K\u00e4ltemittel IG Austritt"
+            "webif_heat_pump_refrigerant_indoor_unit_outlet_temperature": {
+                "name": "Kältemittel IG Austritt"
             },
-            "webif_info_waermepumpe_oelsumpftemperatur": {
-                "name": "\u00d6lsumpftemperatur"
+            "webif_heat_pump_oil_sump_temperature": {
+                "name": "Ölsumpftemperatur"
             },
-            "webif_info_waermepumpe_druckgastemperatur": {
+            "webif_heat_pump_discharge_gas_temperature": {
                 "name": "Druckgastemperatur"
             },
-            "webif_info_waermepumpe_niederdruck": {
+            "webif_heat_pump_low_pressure": {
                 "name": "Niederdruck"
             },
-            "webif_info_waermepumpe_verdampfungstemperatur": {
+            "webif_heat_pump_evaporation_temperature": {
                 "name": "Verdampfungstemperatur"
             },
-            "webif_info_waermepumpe_hochdruck": {
+            "webif_heat_pump_high_pressure": {
                 "name": "Hochdruck"
             },
-            "webif_info_waermepumpe_kondensationstemperatur": {
+            "webif_heat_pump_condensation_temperature": {
                 "name": "Kondensationstemperatur"
             },
-            "webif_info_waermepumpe_mitteldruck": {
+            "webif_heat_pump_medium_pressure": {
                 "name": "Mitteldruck"
             },
-            "webif_info_waermepumpe_saettigungstemperatur_evi": {
-                "name": "S\u00e4ttigungstemperatur EVI"
+            "webif_heat_pump_evi_saturation_temperature": {
+                "name": "Sättigungstemperatur EVI"
             },
-            "webif_info_waermepumpe_ueberhitzung_heizen": {
-                "name": "\u00dcberhitzung Heizen"
+            "webif_heat_pump_heating_superheat": {
+                "name": "Überhitzung Heizen"
             },
-            "webif_info_waermepumpe_oeffnungsgrad_exv_heizen": {
-                "name": "\u00d6ffnungsgrad EXV Heizen"
+            "webif_heat_pump_heating_exv_opening": {
+                "name": "Öffnungsgrad EXV Heizen"
             },
-            "webif_info_waermepumpe_ueberhitzung_verdichter": {
-                "name": "\u00dcberhitzung Verdichter"
+            "webif_heat_pump_compressor_superheat": {
+                "name": "Überhitzung Verdichter"
             },
-            "webif_info_waermepumpe_oeffnungsgrad_exv_kuehlen": {
-                "name": "\u00d6ffnungsgrad EXV K\u00fchlen"
+            "webif_heat_pump_cooling_exv_opening": {
+                "name": "Öffnungsgrad EXV Kühlen"
             },
-            "webif_info_waermepumpe_ueberhitzung_evi": {
-                "name": "\u00dcberhitzung EVI"
+            "webif_heat_pump_evi_superheat": {
+                "name": "Überhitzung EVI"
             },
-            "webif_info_waermepumpe_oeffnungsgrad_evi": {
-                "name": "\u00d6ffnungsgrad EVI"
+            "webif_heat_pump_evi_opening": {
+                "name": "Öffnungsgrad EVI"
             },
-            "webif_info_waermepumpe_betriebsstd_verdichter": {
+            "webif_heat_pump_compressor_operating_hours": {
                 "name": "Betriebsstd. Verdichter"
             },
-            "webif_info_waermepumpe_schaltspiele_verdichter": {
+            "webif_heat_pump_compressor_switching_cycles": {
                 "name": "Schaltspiele Verdichter"
             },
-            "webif_info_waermepumpe_schaltspiele_abtauen": {
+            "webif_heat_pump_defrost_switching_cycles": {
                 "name": "Schaltspiele Abtauen"
             },
-            "webif_info_waermepumpe_verdichter": {
+            "webif_heat_pump_compressor": {
                 "name": "Verdichter"
             },
-            "webif_info_waermepumpe_aussengeraet_variante": {
-                "name": "Au\u00dfenger\u00e4t Variante"
+            "webif_heat_pump_outdoor_unit_variant": {
+                "name": "Außengerät Variante"
             },
-            "webif_info_2wez_status": {
+            "webif_electric_heater_status": {
                 "name": "Status"
             },
-            "webif_info_2wez_status_e_heizung_1": {
+            "webif_electric_heater_electric_heater_1_status": {
                 "name": "Status E-Heizung 1"
             },
-            "webif_info_2wez_status_e_heizung_2": {
+            "webif_electric_heater_electric_heater_2_status": {
                 "name": "Status E-Heizung 2"
             },
-            "webif_info_2wez_betriebsstunden_e1": {
+            "webif_electric_heater_electric_heater_1_operating_hours": {
                 "name": "Betriebsstunden E1"
             },
-            "webif_info_2wez_betriebsstunden_e2": {
+            "webif_electric_heater_electric_heater_2_operating_hours": {
                 "name": "Betriebsstunden E2"
             },
-            "webif_info_2wez_schaltspiele_e1": {
+            "webif_electric_heater_electric_heater_1_switching_cycles": {
                 "name": "Schaltspiele E1"
             },
-            "webif_info_2wez_schaltspiele_e2": {
+            "webif_electric_heater_electric_heater_2_switching_cycles": {
                 "name": "Schaltspiele E2"
             },
-            "webif_info_statistik_th_energie_heizen_tag": {
+            "webif_statistics_thermal_energy_heating_day": {
                 "name": "th. Energie Heizen Tag"
             },
-            "webif_info_statistik_th_energie_ww_tag": {
+            "webif_statistics_thermal_energy_dhw_day": {
                 "name": "th. Energie WW Tag"
             },
-            "webif_info_statistik_th_energie_gesamt_tag": {
+            "webif_statistics_thermal_energy_total_day": {
                 "name": "th. Energie gesamt Tag"
             },
-            "webif_info_statistik_elektrische_energie_tag": {
+            "webif_statistics_electrical_energy_day": {
                 "name": "elektrische Energie Tag"
             },
-            "webif_info_statistik_th_energie_heizen_monat": {
+            "webif_statistics_thermal_energy_heating_month": {
                 "name": "th. Energie Heizen Monat"
             },
-            "webif_info_statistik_th_energie_ww_monat": {
+            "webif_statistics_thermal_energy_dhw_month": {
                 "name": "th. Energie WW Monat"
             },
-            "webif_info_statistik_th_energie_gesamt_monat": {
+            "webif_statistics_thermal_energy_total_month": {
                 "name": "th. Energie gesamt Monat"
             },
-            "webif_info_statistik_elektrische_energie_monat": {
+            "webif_statistics_electrical_energy_month": {
                 "name": "elektrische Energie Monat"
             },
-            "webif_info_statistik_th_energie_heizen_jahr": {
+            "webif_statistics_thermal_energy_heating_year": {
                 "name": "th. Energie Heizen Jahr"
             },
-            "webif_info_statistik_th_energie_ww_jahr": {
+            "webif_statistics_thermal_energy_dhw_year": {
                 "name": "th. Energie WW Jahr"
             },
-            "webif_info_statistik_th_energie_gesamt_jahr": {
+            "webif_statistics_thermal_energy_total_year": {
                 "name": "th. Energie gesamt Jahr"
             },
-            "webif_info_statistik_elektrische_energie_jahr": {
+            "webif_statistics_electrical_energy_year": {
                 "name": "elektrische Energie Jahr"
+            },
+            "webif_heating_circuit2_outside_temperature": {
+                "name": "Außentemperatur"
+            },
+            "webif_heating_circuit2_outside_temperature_average": {
+                "name": "AT Mittelwert"
+            },
+            "webif_heating_circuit2_outside_temperature_long_term": {
+                "name": "AT Langzeitwert"
+            },
+            "webif_heating_circuit2_room_target_temperature": {
+                "name": "Raumsolltemperatur"
+            },
+            "webif_heating_circuit2_flow_target_temperature": {
+                "name": "Vorlaufsolltemperatur"
+            },
+            "webif_heating_circuit2_flow_temperature": {
+                "name": "Vorlauftemperatur"
+            },
+            "webif_heating_circuit3_outside_temperature": {
+                "name": "Außentemperatur"
+            },
+            "webif_heating_circuit3_outside_temperature_average": {
+                "name": "AT Mittelwert"
+            },
+            "webif_heating_circuit3_outside_temperature_long_term": {
+                "name": "AT Langzeitwert"
+            },
+            "webif_heating_circuit3_room_target_temperature": {
+                "name": "Raumsolltemperatur"
+            },
+            "webif_heating_circuit3_flow_target_temperature": {
+                "name": "Vorlaufsolltemperatur"
+            },
+            "webif_heating_circuit3_flow_temperature": {
+                "name": "Vorlauftemperatur"
+            },
+            "webif_heating_circuit4_outside_temperature": {
+                "name": "Außentemperatur"
+            },
+            "webif_heating_circuit4_outside_temperature_average": {
+                "name": "AT Mittelwert"
+            },
+            "webif_heating_circuit4_outside_temperature_long_term": {
+                "name": "AT Langzeitwert"
+            },
+            "webif_heating_circuit4_room_target_temperature": {
+                "name": "Raumsolltemperatur"
+            },
+            "webif_heating_circuit4_flow_target_temperature": {
+                "name": "Vorlaufsolltemperatur"
+            },
+            "webif_heating_circuit4_flow_temperature": {
+                "name": "Vorlauftemperatur"
+            },
+            "webif_heating_circuit5_outside_temperature": {
+                "name": "Außentemperatur"
+            },
+            "webif_heating_circuit5_outside_temperature_average": {
+                "name": "AT Mittelwert"
+            },
+            "webif_heating_circuit5_outside_temperature_long_term": {
+                "name": "AT Langzeitwert"
+            },
+            "webif_heating_circuit5_room_target_temperature": {
+                "name": "Raumsolltemperatur"
+            },
+            "webif_heating_circuit5_flow_target_temperature": {
+                "name": "Vorlaufsolltemperatur"
+            },
+            "webif_heating_circuit5_flow_temperature": {
+                "name": "Vorlauftemperatur"
             },
             "system_outside_temperature": {
                 "name": "Aussentemperatur"
@@ -1091,18 +1372,18 @@
             "second_heat_source_electric_heater_2_operating_hours": {
                 "name": "Betriebsstunden E2"
             },
-            "eing_de1": {
+            "io_sensor_input_de1": {
                 "name": "Eingang DE1",
                 "state": {
-                    "w2_status_aus": "aus",
-                    "w2_status_ein": "ein"
+                    "io_sensor_input_de1_0": "aus",
+                    "sensor_input_de1_1": "ein"
                 }
             },
-            "eing_de2": {
+            "io_sensor_input_de2": {
                 "name": "Eingang DE2",
                 "state": {
-                    "w2_status_aus": "aus",
-                    "w2_status_ein": "ein"
+                    "io_sensor_input_de2_0": "aus",
+                    "io_sensor_input_de2_1": "ein"
                 }
             },
             "statistics_electric_energy_yesterday": {
@@ -1299,8 +1580,6 @@
             "statistics_heating_energy_month": {
                 "name": "Heizen Energie Monat"
             },
-
-
             "heating_circuit_flow_temperature": {
                 "name": "HZ_Vorlauftemperatur"
             },
@@ -1331,63 +1610,8 @@
             "heating_circuit5_flow_target_temperature": {
                 "name": "HZ_Vorlaufsolltemperatur5"
             },
-            "konf_ausg_h12": {
-                "name": "Konf. Ausgang H1.2",
-                "state": {
-                    "io_konf_0": "0",
-                    "io_konf_1": "1",
-                    "io_konf_2": "2",
-                    "io_konf_3": "3",
-                    "io_konf_4": "4",
-                    "io_konf_5": "5",
-                    "io_konf_6": "6",
-                    "io_konf_65535": "65535",
-                    "io_konf_7": "7"
-                }
-            },
-            "konf_ausg_h13": {
-                "name": "Konf. Ausgang  H1.3",
-                "state": {
-                    "io_konf_0": "0",
-                    "io_konf_1": "1",
-                    "io_konf_2": "2",
-                    "io_konf_3": "3",
-                    "io_konf_4": "4",
-                    "io_konf_5": "5",
-                    "io_konf_6": "6",
-                    "io_konf_65535": "65535",
-                    "io_konf_7": "7"
-                }
-            },
-            "konf_ausg_h14": {
-                "name": "Konf. Ausgang  H1.4",
-                "state": {
-                    "io_konf_0": "0",
-                    "io_konf_1": "1",
-                    "io_konf_2": "2",
-                    "io_konf_3": "3",
-                    "io_konf_4": "4",
-                    "io_konf_5": "5",
-                    "io_konf_6": "6",
-                    "io_konf_65535": "65535",
-                    "io_konf_7": "7"
-                }
-            },
-            "konf_ausg_h15": {
-                "name": "Konf. Ausgang  H1.5",
-                "state": {
-                    "io_konf_0": "0",
-                    "io_konf_1": "1",
-                    "io_konf_2": "2",
-                    "io_konf_3": "3",
-                    "io_konf_4": "4",
-                    "io_konf_5": "5",
-                    "io_konf_6": "6",
-                    "io_konf_65535": "65535",
-                    "io_konf_7": "7"
-                }
-            },
-            "konf_eing_de1": {
+
+            "sensor_input_de1": {
                 "name": "Konf. Eingang DE1",
                 "state": {
                     "io_konf_in_0": "SG Ready",
@@ -1415,7 +1639,7 @@
                     "io_konf_in_9": "Erzeugersperre WW"
                 }
             },
-            "konf_eing_de2": {
+            "io_input_de2": {
                 "name": "Konf. Eingang DE2",
                 "state": {
                     "io_konf_in_0": "SG Ready",
@@ -1443,62 +1667,8 @@
                     "io_konf_in_9": "Erzeugersperre WW"
                 }
             },
-            "konf_eing_sgr1": {
-                "name": "Konf. Eingang SGR1",
-                "state": {
-                    "io_konf_in_0": "SG Ready",
-                    "io_konf_in_1": "EVU-Sperre",
-                    "io_konf_in_10": "Erzeugersperre HZ und WW",
-                    "io_konf_in_11": "Warmwasser Standby",
-                    "io_konf_in_12": "Warmwasser Absenk",
-                    "io_konf_in_13": "Warmwasser Normal",
-                    "io_konf_in_14": "Warmwasser PUSH",
-                    "io_konf_in_15": "Taupunktw\u00e4chter",
-                    "io_konf_in_16": "Heizkreis \u2026 Standby",
-                    "io_konf_in_17": "Heizkreis \u2026 Absenk",
-                    "io_konf_in_18": "Heizkreis \u2026 Normal",
-                    "io_konf_in_19": "Heizkreis \u2026 Komfort",
-                    "io_konf_in_2": "Erh\u00f6hter Betrieb",
-                    "io_konf_in_20": "2.WEZ",
-                    "io_konf_in_21": "Sperre Verdichter",
-                    "io_konf_in_3": "HK-Sperre",
-                    "io_konf_in_4": "Umschaltung Hz/K\u00fc",
-                    "io_konf_in_5": "Ruhemodus",
-                    "io_konf_in_6": "Not-Aus",
-                    "io_konf_in_65535": "AUS",
-                    "io_konf_in_7": "System Standby",
-                    "io_konf_in_8": "Erzeugersperre HZ",
-                    "io_konf_in_9": "Erzeugersperre WW"
-                }
-            },
-            "konf_eing_sgr2": {
-                "name": "Konf. Eingang SGR2",
-                "state": {
-                    "io_konf_in_0": "SG Ready",
-                    "io_konf_in_1": "EVU-Sperre",
-                    "io_konf_in_10": "Erzeugersperre HZ und WW",
-                    "io_konf_in_11": "Warmwasser Standby",
-                    "io_konf_in_12": "Warmwasser Absenk",
-                    "io_konf_in_13": "Warmwasser Normal",
-                    "io_konf_in_14": "Warmwasser PUSH",
-                    "io_konf_in_15": "Taupunktw\u00e4chter",
-                    "io_konf_in_16": "Heizkreis \u2026 Standby",
-                    "io_konf_in_17": "Heizkreis \u2026 Absenk",
-                    "io_konf_in_18": "Heizkreis \u2026 Normal",
-                    "io_konf_in_19": "Heizkreis \u2026 Komfort",
-                    "io_konf_in_2": "Erh\u00f6hter Betrieb",
-                    "io_konf_in_20": "2.WEZ",
-                    "io_konf_in_21": "Sperre Verdichter",
-                    "io_konf_in_3": "HK-Sperre",
-                    "io_konf_in_4": "Umschaltung Hz/K\u00fc",
-                    "io_konf_in_5": "Ruhemodus",
-                    "io_konf_in_6": "Not-Aus",
-                    "io_konf_in_65535": "AUS",
-                    "io_konf_in_7": "System Standby",
-                    "io_konf_in_8": "Erzeugersperre HZ",
-                    "io_konf_in_9": "Erzeugersperre WW"
-                }
-            },
+
+
             "statistics_cooling_energy_yesterday": {
                 "name": "K\u00fchlen Energie gestern"
             },
@@ -1568,20 +1738,28 @@
             "heat_pump_return_temperature": {
                 "name": "R\u00fccklauftemperatur"
             },
-
             "second_heat_source_electric_heater_1_switch_cycles": {
                 "name": "Schaltspiele E-Heizung 1"
             },
             "second_heat_source_electric_heater_2_switch_cycles": {
                 "name": "Schaltspiele E-Heizung 2"
             },
-            "sgr1": {
-                "name": "SG-Ready 1"
-            },
-            "sgr2": {
-                "name": "SG-Ready 2"
-            },
+            "io_sensor_sg_ready_1": {
+                "name": "SG-Ready 1",
+                "state": {
+                    "io_sensor_sg_ready_1_0": "aus",
+                    "io_sensor_sg_ready_1_1": "ein"
+                }
 
+            },
+            "io_sensor_sg_ready_2": {
+                "name": "SG-Ready 2",
+                "state": {
+                    "io_sensor_sg_ready_2_0": "aus",
+                    "io_sensor_sg_ready_2_1": "ein"
+                }
+
+            },
             "second_heat_source_status": {
                 "name": "Status 2. WEZ",
                 "state": {
@@ -1615,7 +1793,6 @@
             "heat_pump_flow_temperature": {
                 "name": "Vorlauftemperatur"
             },
-
             "heat_pump_thermal_power": {
                 "name": "W\u00e4rmeleistung"
             },
@@ -1806,7 +1983,6 @@
                     "heat_pump_operation_43": "Ölrückführung"
                 }
             },
-
             "heat_pump_fault": {
                 "name": "St\u00f6rmeldung",
                 "state": {
@@ -1841,7 +2017,6 @@
             "statistics_hot_water_energy_month": {
                 "name": "Warmwasser Energie Monat"
             },
-
             "domestic_hot_water_target_temperature": {
                 "name": "Warmwassersolltemperatur"
             },

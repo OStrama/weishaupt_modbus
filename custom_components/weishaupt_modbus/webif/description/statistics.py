@@ -1,0 +1,68 @@
+from config.custom_components.weishaupt_modbus.webif.description.description import (
+    WebifSensorDescription,
+)
+
+from .params import PARAMS_ENERGY_WEBIF
+
+WEBIF_STATISTICS: list[WebifSensorDescription] = [
+    WebifSensorDescription(
+        key="thermal_energy_heating_day",
+        report_name="statistics",
+        params=PARAMS_ENERGY_WEBIF,
+    ),
+    WebifSensorDescription(
+        key="thermal_energy_dhw_day",
+        report_name="statistics",
+        params=PARAMS_ENERGY_WEBIF,
+    ),
+    WebifSensorDescription(
+        key="thermal_energy_total_day",
+        report_name="statistics",
+        params=PARAMS_ENERGY_WEBIF,
+    ),
+    WebifSensorDescription(
+        key="electrical_energy_day",
+        report_name="statistics",
+        params=PARAMS_ENERGY_WEBIF,
+    ),
+    WebifSensorDescription(
+        key="thermal_energy_heating_month",
+        report_name="statistics",
+        params=PARAMS_ENERGY_WEBIF,
+    ),
+    WebifSensorDescription(
+        key="thermal_energy_dhw_month",
+        report_name="statistics",
+        params=PARAMS_ENERGY_WEBIF,
+    ),
+    WebifSensorDescription(
+        key="thermal_energy_total_month",
+        report_name="statistics",
+        params=PARAMS_ENERGY_WEBIF,
+    ),
+    WebifSensorDescription(
+        key="electrical_energy_month",
+        report_name="statistics",
+        params=PARAMS_ENERGY_WEBIF,
+    ),
+    WebifSensorDescription(
+        key="thermal_energy_heating_year",
+        report_name="statistics",
+        params=PARAMS_ENERGY_WEBIF,
+    ),
+    WebifSensorDescription(
+        key="thermal_energy_dhw_year",
+        report_name="statistics",
+        params=PARAMS_ENERGY_WEBIF,
+    ),
+    WebifSensorDescription(
+        key="thermal_energy_total_year",
+        report_name="statistics",
+        params=PARAMS_ENERGY_WEBIF,
+    ),
+    WebifSensorDescription(
+        key="electrical_energy_year",
+        report_name="statistics",
+        params=PARAMS_ENERGY_WEBIF,
+    ),
+]

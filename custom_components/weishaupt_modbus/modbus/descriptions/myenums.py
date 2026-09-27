@@ -463,3 +463,70 @@ class Dummy(IntEnum):
     einhundertachtundneunzig = 198
     einhundertneunundneunzig = 199
     zweihundert = 200
+    minus_1 = -1
+    idontknow = -32768
+
+
+class IoConfigInput(IntEnum):
+    """I/O input configuration."""
+
+    io_config_input_n1 = -1
+    io_config_input_1 = 1
+    io_config_input_2 = 2
+    io_config_input_3 = 3
+    io_config_input_4 = 4
+    io_config_input_5 = 5
+    io_config_input_6 = 6
+    io_config_input_7 = 7
+    io_config_input_8 = 8
+    io_config_input_9 = 9
+    io_config_input_10 = 10
+    io_config_input_11 = 11
+    io_config_input_12 = 12
+    io_config_input_13 = 13
+    io_config_input_14 = 14
+    io_config_input_15 = 15
+    io_config_input_16 = 16
+    io_config_input_17 = 17
+    io_config_input_18 = 18
+    io_config_input_19 = 19
+    io_config_input_20 = 20
+    io_config_input_21 = 21
+    io_config_input_65535 = 65535
+
+
+class IoConfigOutput(IntEnum):
+    """I/O output configuration."""
+
+    io_config_output_n1 = -1
+    io_config_output_0 = 0
+    io_config_output_1 = 1
+    io_config_output_2 = 2
+    io_config_output_3 = 3
+    io_config_output_4 = 4
+    io_config_output_5 = 5
+    io_config_output_6 = 6
+    io_config_output_7 = 7
+    io_config_output_8 = 8
+    io_config_output_9 = 9
+    io_config_output_10 = 10
+    io_config_output_11 = 11
+    io_config_output_12 = 12
+    io_config_output_13 = 13
+    io_config_output_14 = 14
+    io_config_output_15 = 15
+    io_config_output_65535 = 65535
+
+
+class IoConfigSgr(IntEnum):
+    """SG Ready input configuration."""
+
+    io_config_sgr_0 = 0
+    io_config_sgr_1 = 1
+    io_config_sgr_2 = 2
+    io_config_sgr_3 = 3
+    io_config_sgr_4 = 4
+    io_config_sgr_5 = 5
+    io_config_sgr_6 = 6
+    io_config_sgr_7 = 7
+    io_config_sgr_65535 = 65535
