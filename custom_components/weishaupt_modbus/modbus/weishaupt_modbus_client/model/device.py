@@ -1,6 +1,6 @@
 """Weishaupt device model."""
 
-from modbus_connection.model import ComponentGroup, Device, UpdateReport
+from ..weishaupt_modbus_connection.model import ComponentGroup, Device, UpdateReport
 
 from .domestic_hot_water import DomesticHotWaterConfig, DomesticHotWaterInput
 from .heat_pump import HeatPumpConfig, HeatPumpInput

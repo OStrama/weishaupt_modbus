@@ -1,6 +1,6 @@
 """Weishaupt domestic hot water register models."""
 
-from modbus_connection.model import Component, gauge, integer
+from ..weishaupt_modbus_connection.model import Component, gauge, integer
 
 
 class DomesticHotWaterInput(Component):

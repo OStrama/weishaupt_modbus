@@ -15,7 +15,6 @@
     "weishaupt_modbus"
   ],
 "requirements": [
-    "modbus-connection==4.12.1",
     "aiofiles==25.1.0",
     "beautifulsoup4==4.13.3",
     "httpx==0.28.1",

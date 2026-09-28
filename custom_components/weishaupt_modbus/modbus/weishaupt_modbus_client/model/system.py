@@ -1,6 +1,6 @@
 """Weishaupt system register models."""
 
-from modbus_connection.model import Component, enum, gauge, integer
+from ..weishaupt_modbus_connection.model import Component, enum, gauge, integer
 
 from .enums import SysError, SysOperatingDisplay, SysOperatingMode
 

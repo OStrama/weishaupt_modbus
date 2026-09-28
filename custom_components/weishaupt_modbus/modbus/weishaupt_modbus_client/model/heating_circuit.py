@@ -1,6 +1,12 @@
 """Weishaupt heating circuit register models."""
 
-from modbus_connection.model import Component, enum, gauge, integer, repeating_group
+from ..weishaupt_modbus_connection.model import (
+    Component,
+    enum,
+    gauge,
+    integer,
+    repeating_group,
+)
 
 from .enums import (
     HeatingCircuitConfiguration,

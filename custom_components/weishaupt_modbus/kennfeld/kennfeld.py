@@ -5,13 +5,14 @@ import json
 import logging
 from pathlib import Path
 import shutil
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import aiofiles
 
 from homeassistant.core import HomeAssistant
 
-from ..configentry import MyConfigEntry
+if TYPE_CHECKING:
+    from ..configentry import MyConfigEntry
 from ..const import CONF, CONST
 
 _LOGGER = logging.getLogger(__name__)

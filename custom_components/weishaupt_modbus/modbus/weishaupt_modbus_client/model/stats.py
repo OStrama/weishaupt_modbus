@@ -1,6 +1,6 @@
 """Weishaupt statistics register models."""
 
-from modbus_connection.model import Component, integer
+from ..weishaupt_modbus_connection.model import Component, integer
 
 
 class StatisticsInput(Component):
