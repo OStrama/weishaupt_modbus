@@ -4,7 +4,7 @@ import asyncio
 from datetime import timedelta
 import logging
 
-from modbus_connection.model import UpdateReport
+from .weishaupt_modbus_client.weishaupt_modbus_connection.model import UpdateReport
 
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
