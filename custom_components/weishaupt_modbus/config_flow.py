@@ -53,7 +53,7 @@ class ConfigFlow(
 ):  # pylint: disable=abstract-method
     """Class config flow."""
 
-    VERSION = 8
+    VERSION = 9
     MINOR_VERSION = 1
     CONNECTION_CLASS = config_entries.CONN_CLASS_LOCAL_PUSH
 
