@@ -1,6 +1,6 @@
 {
   "domain": "weishaupt_modbus",
-  "name": "Weishaupt WBB",
+  "name": "Weishaupt Modbus",
   "codeowners": [
     "@OStrama, @MadOne"
   ],
@@ -19,7 +19,8 @@
     "beautifulsoup4==4.13.3",
     "httpx==0.28.1",
     "weishaupt-webif-api==0.1.5",
-    "pygal==3.1.3"
+    "pygal==3.1.3",
+    "modbus_connection==4.10.0"
 
 ],
 

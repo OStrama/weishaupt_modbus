@@ -1,26 +1,25 @@
-"""The ``Device`` base class: a library's top-level object over its components."""
-
-from __future__ import annotations
+"""This is borrowed from a newer release of modbus-connection."""
+# As soon as modbus-connection 4.12.0 is integrated in HomeAssistant this file can be removed"""
 
 from collections.abc import Iterable
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
-from ..exceptions import (
+from modbus_connection.exceptions import (
     IllegalDataAddressError,
     IllegalFunctionError,
     ModbusConnectionError,
     ModbusError,
     ModbusTimeoutError,
 )
-from ._const import Raw
-from ._planning import _merge_raw, _sorted_raw
+from modbus_connection.model._const import Raw
+from modbus_connection.model._planning import _merge_raw
 
 if TYPE_CHECKING:
-    from .._protocol import ModbusUnit
-    from .component import Component
-    from .component_group import ComponentGroup
-    from .manual import ManualComponent
+    from modbus_connection._protocol import ModbusUnit
+    from modbus_connection.model.component import Component
+    from modbus_connection.model.component_group import ComponentGroup
+    from modbus_connection.model.manual import ManualComponent
 
 
 @dataclass
@@ -46,7 +45,7 @@ async def read_optional[C: Component | ComponentGroup | ManualComponent](
     """
     try:
         await component.async_update()
-    except (IllegalDataAddressError, IllegalFunctionError):
+    except IllegalDataAddressError, IllegalFunctionError:
         return None
     return component
 
@@ -55,6 +54,7 @@ class Device:
     """Hold a device's components and poll them by attribute name."""
 
     def __init__(self, unit: ModbusUnit) -> None:
+        """Init."""
         self.modbus_unit = unit
         self._setup_done = False
 
@@ -127,4 +127,4 @@ class Device:
             if component is None:
                 continue
             _merge_raw(raw, await component.async_read_raw(notify=False))
-        return _sorted_raw(raw)
+        return raw

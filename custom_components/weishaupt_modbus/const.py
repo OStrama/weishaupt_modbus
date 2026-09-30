@@ -31,6 +31,8 @@ class ConfConstants:
     CB_WEBIF_WP: str = "Poll Wärmepumpe"
     CB_WEBIF_2WEZ: str = "Poll 2. Wärmeerzeuger"
     CB_WEBIF_SATISTICS: str = "Poll Statistik"
+    UID_MIGRATION: str = "entity_uid_migration"
+    DEVICE_POSTFIX: str = "Device Postfix"
 
 
 CONF = ConfConstants()

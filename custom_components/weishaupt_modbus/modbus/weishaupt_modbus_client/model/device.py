@@ -1,11 +1,12 @@
 """Weishaupt device model."""
 
-from ..weishaupt_modbus_connection.model import ComponentGroup, Device, UpdateReport
+from modbus_connection.model import ComponentGroup
 
 from .domestic_hot_water import DomesticHotWaterConfig, DomesticHotWaterInput
 from .heat_pump import HeatPumpConfig, HeatPumpInput
 from .heating_circuit import HeatingCircuitConfigs, HeatingCircuitInputs
 from .io import IOConfig, IOInput
+from .modbus_connection_device import Device, UpdateReport
 from .second_heat_source import SecondHeatSourceConfig, SecondHeatSourceInput
 from .stats import StatisticsInput
 from .system import SystemConfig, SystemStatus
@@ -91,16 +92,6 @@ class Weishaupt(Device):
             ],
         )
 
-        self.domestic_hot_water_config = DomesticHotWaterConfig(unit)
-        self.domestic_hot_water_input = DomesticHotWaterInput(unit)
-
-        self.domestic_hot_water = ComponentGroup(
-            unit,
-            [
-                self.domestic_hot_water_config,
-                self.domestic_hot_water_input,
-            ],
-        )
         self.domestic_hot_water_config = DomesticHotWaterConfig(unit)
         self.domestic_hot_water_input = DomesticHotWaterInput(unit)
 

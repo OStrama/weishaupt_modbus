@@ -1,6 +1,6 @@
 """Weishaupt IO register models."""
 
-from ..weishaupt_modbus_connection.model import Component, gauge, integer
+from modbus_connection.model import Component, gauge, integer
 
 
 class IOInput(Component):

@@ -1,6 +1,6 @@
 """Weishaupt heat pump register models."""
 
-from ..weishaupt_modbus_connection.model import Component, enum, gauge, integer
+from modbus_connection.model import Component, enum, gauge, integer
 
 from .enums import (
     HeatPumpConfiguration,
