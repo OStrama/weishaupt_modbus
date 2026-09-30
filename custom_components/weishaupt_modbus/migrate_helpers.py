@@ -4,7 +4,7 @@ from dataclasses import dataclass
 import logging
 from typing import TYPE_CHECKING
 
-from homeassistant.core import callback
+from homeassistant.core import HomeAssistant
 from homeassistant.helpers import entity_registry as er
 
 from .const import CONF
@@ -31,20 +31,18 @@ def new_unique_id(base_id: str, mac: str) -> str:
     return f"{mac}_{base_id}"
 
 
-def migrate_entities(
-    config_entry: MyConfigEntry,
-) -> None:
+def migrate_entities(config_entry: MyConfigEntry, hass: HomeAssistant) -> None:
 
     _LOGGER.info("Starting entity migration!")
 
-    postfix = config_entry.data[CONF.DEVICE_POSTFIX]
-    prefix = config_entry.data[CONF.NAME_DEVICE_PREFIX]
+    postfix = config_entry.data.get(CONF.DEVICE_POSTFIX)
+    prefix = config_entry.data.get(CONF.NAME_DEVICE_PREFIX)
 
-    mac = config_entry.data[CONF.MAC]
+    mac = config_entry.data.get(CONF.MAC)
     if mac == "CHANGEME":
         return
 
-    entity_registry = er.async_get(config_entry.runtime_data.hass)
+    entity_registry = er.async_get(hass)
     unique_id_migrations: dict[str, str] = {}
     for item in OLD_MODBUS_SYS_ITEMS:
         old_uid = old_unique_id(postfix, prefix, item.name)

@@ -3,7 +3,13 @@
 from dataclasses import dataclass
 from datetime import timedelta
 
-from homeassistant.const import CONF_HOST, CONF_PASSWORD, CONF_PORT, CONF_USERNAME
+from homeassistant.const import (
+    CONF_HOST,
+    CONF_PASSWORD,
+    CONF_PORT,
+    CONF_PREFIX,
+    CONF_USERNAME,
+)
 
 
 @dataclass(frozen=True)
@@ -32,7 +38,10 @@ class ConfConstants:
     CB_WEBIF_2WEZ: str = "Poll 2. Wärmeerzeuger"
     CB_WEBIF_SATISTICS: str = "Poll Statistik"
     UID_MIGRATION: str = "entity_uid_migration"
-    DEVICE_POSTFIX: str = "Device Postfix"
+    PREFIX: str = CONF_PREFIX
+    DEVICE_POSTFIX: str = "Device-Postfix"
+    NAME_DEVICE_PREFIX: str = "Name-Device-Prefix"
+    NAME_TOPIC_PREFIX: str = "Name-Topic-Prefix"
 
 
 CONF = ConfConstants()
