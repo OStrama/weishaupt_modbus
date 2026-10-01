@@ -7,9 +7,17 @@ import logging
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
-from .weishaupt_modbus_client.model.device import UpdateReport, Weishaupt
+from .weishaupt_modbus_client.model.device import Weishaupt
 
 _LOGGER = logging.getLogger(__name__)
+
+
+try:
+    from modbus_connection.model import UpdateReport
+except ImportError:
+    from .weishaupt_modbus_client.model.modbus_connection_device import UpdateReport
+
+    _LOGGER.debug("Using local Device/UpdateReport compatibility implementation")
 
 
 class WeishauptCoordinator(DataUpdateCoordinator[UpdateReport]):
