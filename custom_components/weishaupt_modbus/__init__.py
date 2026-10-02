@@ -33,6 +33,12 @@ PLATFORMS: list[str] = [
 
 async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
     """Set up entry."""
+
+    _LOGGER.warning(
+        "Loading config_entry: %s",
+        entry.entry_id,
+    )
+
     if entry.data.get(CONF.MAC) == "CHANGEME":
         _LOGGER.error("MAC Address not set. Reconfigure integration and set MAC")
         _LOGGER.error(

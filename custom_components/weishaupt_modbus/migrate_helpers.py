@@ -39,7 +39,7 @@ def new_unique_id(base_id: str, mac: str) -> str:
 
 def migrate_entities(config_entry: MyConfigEntry, hass: HomeAssistant) -> None:
 
-    _LOGGER.info("Starting entity migration!")
+    _LOGGER.warning("Starting entity migration!")
 
     postfix = config_entry.data.get(CONF.DEVICE_POSTFIX)
     prefix = config_entry.data.get(CONF.PREFIX)
@@ -54,12 +54,12 @@ def migrate_entities(config_entry: MyConfigEntry, hass: HomeAssistant) -> None:
         old_uid = old_unique_id(postfix, prefix, item.name)
         new_uid = new_unique_id(item.new_key, mac)
         unique_id_migrations[old_uid] = new_uid
-    _LOGGER.info("Migration map: %s", unique_id_migrations)
+    _LOGGER.warning("Migration map: %s", unique_id_migrations)
 
     entities = entity_registry.entities.get_entries_for_config_entry_id(
         config_entry.entry_id
     )
-    _LOGGER.info(
+    _LOGGER.warning(
         "Entity migration: config_entry_id=%s, entity_count=%d",
         config_entry.entry_id,
         len(entities),
@@ -68,7 +68,7 @@ def migrate_entities(config_entry: MyConfigEntry, hass: HomeAssistant) -> None:
     for entity in entities:
         new_uid = unique_id_migrations.get(entity.unique_id)
         old_uid = entity.unique_id
-        _LOGGER.info("Old id: %s; new id: %s", old_uid, new_uid)
+        _LOGGER.warning("Old id: %s; new id: %s", old_uid, new_uid)
         if new_uid is None:
             continue
 
@@ -77,7 +77,7 @@ def migrate_entities(config_entry: MyConfigEntry, hass: HomeAssistant) -> None:
             new_unique_id=new_uid,
         )
 
-        _LOGGER.info(
+        _LOGGER.warning(
             "Changed old UID: %s to new UID: %s",
             old_uid,
             new_uid,
