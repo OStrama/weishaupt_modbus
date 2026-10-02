@@ -239,7 +239,7 @@ HZ_UID_MAPPINGS: tuple[tuple[str, str], ...] = (
 
 HEATING_CIRCUIT_UID_MIGRATIONS: tuple[OldModbusItem, ...] = tuple(
     OldModbusItem(
-        name=f"{old_name}",
+        name=f"{old_name}{suffix}",
         new_key=f"{report_name}_{new_key}",
     )
     for circuit, (report_name, suffix) in enumerate(
