@@ -42,7 +42,7 @@ def migrate_entities(config_entry: MyConfigEntry, hass: HomeAssistant) -> None:
     _LOGGER.info("Starting entity migration!")
 
     postfix = config_entry.data.get(CONF.DEVICE_POSTFIX)
-    prefix = config_entry.data.get(CONF.NAME_DEVICE_PREFIX)
+    prefix = config_entry.data.get(CONF.DEVICE_POSTFIX)
 
     mac = config_entry.data.get(CONF.MAC)
     if mac == "CHANGEME":
