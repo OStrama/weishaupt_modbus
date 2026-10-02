@@ -18,12 +18,18 @@ _LOGGER = logging.getLogger(__name__)
 
 def old_unique_id(postfix: str, prefix: str, old_name: str) -> str:
     """Create an UID according to old style."""
-    dev_postfix = f"_{postfix}"
 
-    if dev_postfix == "_":
-        dev_postfix = ""
+    if postfix is None:
+        postfix = ""
+    else:
+        postfix = f"_{postfix}"
 
-    return f"{prefix}{old_name}{dev_postfix}"
+    if prefix is None:
+        prefix = ""
+    else:
+        prefix = f"{prefix}_"
+
+    return f"{prefix}{old_name}{postfix}"
 
 
 def new_unique_id(base_id: str, mac: str) -> str:
@@ -48,17 +54,18 @@ def migrate_entities(config_entry: MyConfigEntry, hass: HomeAssistant) -> None:
         old_uid = old_unique_id(postfix, prefix, item.name)
         new_uid = new_unique_id(item.new_key, mac)
         unique_id_migrations[old_uid] = new_uid
-
+    print(unique_id_migrations)
     entities = entity_registry.entities.get_entries_for_config_entry_id(
         config_entry.entry_id
     )
+    # print(entities)
 
     for entity in entities:
         new_uid = unique_id_migrations.get(entity.unique_id)
+        old_uid = entity.unique_id
+        print("old id: {}; new id: {}", old_uid, new_uid)
         if new_uid is None:
             continue
-
-        old_uid = entity.unique_id
 
         entity_registry.async_update_entity(
             entity.entity_id,
