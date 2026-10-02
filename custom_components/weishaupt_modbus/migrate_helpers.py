@@ -54,16 +54,16 @@ def migrate_entities(config_entry: MyConfigEntry, hass: HomeAssistant) -> None:
         old_uid = old_unique_id(postfix, prefix, item.name)
         new_uid = new_unique_id(item.new_key, mac)
         unique_id_migrations[old_uid] = new_uid
-    print(unique_id_migrations)
+    _LOGGER.info("Migration map: %s", unique_id_migrations)
+
     entities = entity_registry.entities.get_entries_for_config_entry_id(
         config_entry.entry_id
     )
-    # print(entities)
 
     for entity in entities:
         new_uid = unique_id_migrations.get(entity.unique_id)
         old_uid = entity.unique_id
-        print("old id: {}; new id: {}", old_uid, new_uid)
+        _LOGGER.info("Old id: %s; new id: %s", old_uid, new_uid)
         if new_uid is None:
             continue
 
