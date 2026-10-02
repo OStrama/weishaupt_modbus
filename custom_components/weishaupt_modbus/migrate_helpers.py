@@ -59,6 +59,11 @@ def migrate_entities(config_entry: MyConfigEntry, hass: HomeAssistant) -> None:
     entities = entity_registry.entities.get_entries_for_config_entry_id(
         config_entry.entry_id
     )
+    _LOGGER.info(
+        "Entity migration: config_entry_id=%s, entity_count=%d",
+        config_entry.entry_id,
+        len(entities),
+    )
 
     for entity in entities:
         new_uid = unique_id_migrations.get(entity.unique_id)
