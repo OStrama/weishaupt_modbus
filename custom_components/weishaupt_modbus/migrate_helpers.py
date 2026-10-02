@@ -16,18 +16,16 @@ if TYPE_CHECKING:
 _LOGGER = logging.getLogger(__name__)
 
 
-def old_unique_id(postfix: str, prefix: str, old_name: str) -> str:
+def old_unique_id(postfix: str | None, prefix: str | None, old_name: str) -> str:
     """Create an UID according to old style."""
 
-    if postfix is None:
-        postfix = ""
-    else:
+    if postfix:
         postfix = f"_{postfix}"
+    else:
+        postfix = ""
 
     if prefix is None:
         prefix = ""
-    else:
-        prefix = f"{prefix}"
 
     return f"{prefix}{old_name}{postfix}"
 
