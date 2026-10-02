@@ -27,7 +27,7 @@ def old_unique_id(postfix: str, prefix: str, old_name: str) -> str:
     if prefix is None:
         prefix = ""
     else:
-        prefix = f"{prefix}_"
+        prefix = f"{prefix}"
 
     return f"{prefix}{old_name}{postfix}"
 
