@@ -55,6 +55,12 @@ def migrate_entities(config_entry: MyConfigEntry, hass: HomeAssistant) -> None:
         unique_id_migrations[old_uid] = new_uid
     _LOGGER.warning("Migration map: %s", unique_id_migrations)
 
+    unique_id_deletions: set[str] = set()
+    for item in DELETIONS:
+        old_uid = old_unique_id(postfix, prefix, item)
+        unique_id_deletions.add(old_uid)
+    _LOGGER.debug("Deletion list: %s", unique_id_deletions)
+
     entities = entity_registry.entities.get_entries_for_config_entry_id(
         config_entry.entry_id
     )
@@ -65,6 +71,17 @@ def migrate_entities(config_entry: MyConfigEntry, hass: HomeAssistant) -> None:
     )
 
     for entity in entities:
+        # Delte ids that were converted from Sensor to Select or Switch
+        if entity.unique_id in unique_id_deletions:
+            _LOGGER.info(
+                "Removing obsolete entity: %s (%s)",
+                entity.entity_id,
+                entity.unique_id,
+            )
+            entity_registry.async_remove(entity.entity_id)
+            continue
+
+        # Rename entities that
         new_uid = unique_id_migrations.get(entity.unique_id)
         old_uid = entity.unique_id
         _LOGGER.warning("Old id: %s; new id: %s", old_uid, new_uid)
@@ -525,6 +542,35 @@ IO_UID_MIGRATIONS: tuple[OldModbusItem, ...] = (
     ),
 )
 
+CALCULATED_UID_MIGRATIONS = (
+    # old calculated COP sensors
+    OldModbusItem(
+        name="Tagesarbeitszahl heute",
+        new_key="statistics_daily_cop",
+    ),
+    OldModbusItem(
+        name="Tagesarbeitszahl gestern",
+        new_key="statistics_yesterday_cop",
+    ),
+    OldModbusItem(
+        name="Monatsarbeitszahl",
+        new_key="statistics_monthly_cop",
+    ),
+    OldModbusItem(
+        name="Jahresarbeitszahl",
+        new_key="statistics_yearly_cop",
+    ),
+    # need exact old names
+    OldModbusItem(
+        name="Wärmeleistung",
+        new_key="heat_pump_thermal_power",
+    ),
+    OldModbusItem(
+        name="Spreizung",
+        new_key="heat_pump_temperature_spread",
+    ),
+)
+
 MIGRATION = (
     OLD_MODBUS_SYS_ITEMS
     + HEAT_PUMP_UID_MIGRATIONS
@@ -533,4 +579,34 @@ MIGRATION = (
     + SECOND_HEAT_SOURCE_UID_MIGRATIONS
     + STATISTICS_UID_MIGRATIONS
     + IO_UID_MIGRATIONS
+    + CALCULATED_UID_MIGRATIONS
+)
+
+
+delete_Waermepumpe = "Konfiguration, Ruhemodus, Pumpe Einschaltart, Sollwert Pumpe Leistung Heizen, Sollwert Pumpe Leistung Kühlen, Sollwert Pumpe Leistung Warmwasser, Sollwert Pumpe Leistung Abtaubetrieb, Sollwert Volumenstrom Heizen, Sollwert Volumenstrom Kühlen, Sollwert Volumenstrom Warmwasser"
+
+DELETIONS = (
+    "WW_Konfiguration",
+    "HZ_Konfiguration",
+    "Konf. Eingang SGR1",
+    "Konf. Eingang SGR2",
+    "Konf. Ausgang H1.2",
+    "Konf. Ausgang  H1.3",
+    "Konf. Ausgang  H1.4",
+    "Konf. Ausgang  H1.5",
+    "Konf. Eingang DE1",
+    "Konf. Eingang DE2",
+    "W2_Konfiguration",
+    "Konfiguration EP1",
+    "Konfiguration EP2",
+    "Konfiguration",
+    "Ruhemodus",
+    "Pumpe Einschaltart",
+    "Sollwert Pumpe Leistung Heizen",
+    "Sollwert Pumpe Leistung Kühlen",
+    "Sollwert Pumpe Leistung Warmwasser",
+    "Sollwert Pumpe Leistung Abtaubetrieb",
+    "Sollwert Volumenstrom Heizen",
+    "Sollwert Volumenstrom Kühlen",
+    "Sollwert Volumenstrom Warmwasser",
 )
