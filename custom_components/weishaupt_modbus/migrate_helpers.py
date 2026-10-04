@@ -122,7 +122,6 @@ def migrate_entities(config_entry: MyConfigEntry, hass: HomeAssistant) -> None:
         )
 
         old_identifiers = {(CONST.DOMAIN, old_device)}
-        new_identifiers = {(CONST.DOMAIN, mac, migration.report_name)}
 
         device = dev_registry.async_get_device(
             identifiers=old_identifiers,
@@ -135,6 +134,32 @@ def migrate_entities(config_entry: MyConfigEntry, hass: HomeAssistant) -> None:
             )
             continue
 
+        if (
+            (
+                migration.report_name == "heating_circuit2"
+                and config_entry.data.get(CONF.HK2) is False
+            )
+            or (
+                migration.report_name == "heating_circuit3"
+                and config_entry.data.get(CONF.HK3) is False
+            )
+            or (
+                migration.report_name == "heating_circuit4"
+                and config_entry.data.get(CONF.HK4) is False
+            )
+            or (
+                migration.report_name == "heating_circuit5"
+                and config_entry.data.get(CONF.HK5) is False
+            )
+        ):
+            _LOGGER.info(
+                "Removing inactive heating circuit device: %s",
+                old_identifiers,
+            )
+            dev_registry.async_remove_device(device.id)
+            continue
+
+        new_identifiers = {(CONST.DOMAIN, mac, migration.report_name)}
         _LOGGER.info(
             "Migrating device: %s -> %s",
             old_identifiers,
