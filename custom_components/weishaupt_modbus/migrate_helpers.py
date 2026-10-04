@@ -4,8 +4,9 @@ from dataclasses import dataclass
 import logging
 from typing import TYPE_CHECKING
 
+# from homeassistant.components.device_tracker import config_entry
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers import device_registry, entity_registry as er
+from homeassistant.helpers import device_registry as dr, entity_registry as er
 
 from .const import CONF, CONST, DeviceConstants
 
@@ -39,6 +40,7 @@ def old_device_identifier(
     device: str,
     postfix: str | None,
 ) -> str:
+    """Create an old device identifier."""
     if postfix is None:
         postfix = ""
     if postfix != "":
@@ -66,8 +68,10 @@ def migrate_entities(config_entry: MyConfigEntry, hass: HomeAssistant) -> None:
         unique_id_migrations[old_uid] = new_uid
     _LOGGER.warning("Migration map: %s", unique_id_migrations)
 
+    deletions = DELETIONS + remove_heating_circuit_entities(config_entry, hass)
+
     unique_id_deletions: set[str] = set()
-    for item in DELETIONS:
+    for item in deletions:
         old_uid = old_unique_id(postfix, prefix, item)
         unique_id_deletions.add(old_uid)
     _LOGGER.debug("Deletion list: %s", unique_id_deletions)
@@ -109,7 +113,7 @@ def migrate_entities(config_entry: MyConfigEntry, hass: HomeAssistant) -> None:
             old_uid,
             new_uid,
         )
-    dev_registry = device_registry.async_get(hass)
+    dev_registry = dr.async_get(hass)
 
     for migration in DEVICE_MIGRATIONS:
         old_device = old_device_identifier(
@@ -674,3 +678,25 @@ DEVICE_MIGRATIONS = (
     DeviceMigration(DeviceConstants.ST, "statistics"),
     DeviceMigration(DeviceConstants.IO, "io"),
 )
+
+
+def remove_heating_circuit_entities(
+    config_entry: MyConfigEntry, hass: HomeAssistant
+) -> tuple[str, ...]:
+    """Return entities for inactive heating circuits."""
+
+    deletions: list[str] = []
+
+    if config_entry.data.get(CONF.HK2) is False:
+        deletions.extend(f"{old_name}2" for old_name, _new_key in HZ_UID_MAPPINGS)
+
+    if config_entry.data.get(CONF.HK3) is False:
+        deletions.extend(f"{old_name}3" for old_name, _new_key in HZ_UID_MAPPINGS)
+
+    if config_entry.data.get(CONF.HK4) is False:
+        deletions.extend(f"{old_name}4" for old_name, _new_key in HZ_UID_MAPPINGS)
+
+    if config_entry.data.get(CONF.HK5) is False:
+        deletions.extend(f"{old_name}5" for old_name, _new_key in HZ_UID_MAPPINGS)
+
+    return tuple(deletions)
