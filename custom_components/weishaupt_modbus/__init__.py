@@ -46,7 +46,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
         )
         return False
 
-    if True:  # not entry.data.get(CONF.UID_MIGRATION, False):
+    if not entry.data.get(CONF.UID_MIGRATION, False):
         migrate_entities(entry, hass)
 
         hass.config_entries.async_update_entry(

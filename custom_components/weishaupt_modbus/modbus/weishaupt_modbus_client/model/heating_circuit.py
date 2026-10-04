@@ -144,7 +144,7 @@ class HeatingCircuitInputs(Component):
     """Repeated Weishaupt heating circuit input registers."""
 
     heating_circuits = repeating_group(
-        4,
+        5,
         HeatingCircuitInput,
         stride=100,
     )
@@ -154,7 +154,7 @@ class HeatingCircuitConfigs(Component):
     """Repeated Weishaupt heating circuit configuration registers."""
 
     heating_circuits = repeating_group(
-        4,
+        5,
         HeatingCircuitConfig,
         stride=100,
     )

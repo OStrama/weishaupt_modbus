@@ -101,6 +101,17 @@ class Weishaupt(Device):
             ],
         )
 
+        self.heating_circuit_config5 = self.heating_circuit_configs.heating_circuits[4]
+        self.heating_circuit_input5 = self.heating_circuit_inputs.heating_circuits[4]
+
+        self.heating_circuit5 = ComponentGroup(
+            unit,
+            [
+                self.heating_circuit_config5,
+                self.heating_circuit_input5,
+            ],
+        )
+
         self.domestic_hot_water_config = DomesticHotWaterConfig(unit)
         self.domestic_hot_water_input = DomesticHotWaterInput(unit)
 

@@ -672,4 +672,5 @@ DEVICE_MIGRATIONS = (
     DeviceMigration(DeviceConstants.HZ5, "heating_circuit5"),
     DeviceMigration(DeviceConstants.W2, "second_heat_source"),
     DeviceMigration(DeviceConstants.ST, "statistics"),
+    DeviceMigration(DeviceConstants.IO, "io"),
 )
