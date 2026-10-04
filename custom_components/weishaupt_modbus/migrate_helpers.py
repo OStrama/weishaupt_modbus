@@ -5,9 +5,9 @@ import logging
 from typing import TYPE_CHECKING
 
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers import entity_registry as er
+from homeassistant.helpers import device_registry, entity_registry as er
 
-from .const import CONF
+from .const import CONF, CONST, DeviceConstants
 
 if TYPE_CHECKING:
     from .configentry import MyConfigEntry
@@ -33,6 +33,17 @@ def old_unique_id(postfix: str | None, prefix: str | None, old_name: str) -> str
 def new_unique_id(base_id: str, mac: str) -> str:
     """Create an UID according to new style."""
     return f"{mac}_{base_id}"
+
+
+def old_device_identifier(
+    device: str,
+    postfix: str | None,
+) -> str:
+    if postfix is None:
+        postfix = ""
+    if postfix != "":
+        postfix = "_" + postfix
+    return device + postfix
 
 
 def migrate_entities(config_entry: MyConfigEntry, hass: HomeAssistant) -> None:
@@ -97,6 +108,38 @@ def migrate_entities(config_entry: MyConfigEntry, hass: HomeAssistant) -> None:
             "Changed old UID: %s to new UID: %s",
             old_uid,
             new_uid,
+        )
+    dev_registry = device_registry.async_get(hass)
+
+    for migration in DEVICE_MIGRATIONS:
+        old_device = old_device_identifier(
+            migration.old_device,
+            postfix,
+        )
+
+        old_identifiers = {(CONST.DOMAIN, old_device)}
+        new_identifiers = {(CONST.DOMAIN, mac, migration.report_name)}
+
+        device = dev_registry.async_get_device(
+            identifiers=old_identifiers,
+        )
+
+        if device is None:
+            _LOGGER.debug(
+                "No legacy device found for identifiers: %s",
+                old_identifiers,
+            )
+            continue
+
+        _LOGGER.info(
+            "Migrating device: %s -> %s",
+            old_identifiers,
+            new_identifiers,
+        )
+
+        dev_registry.async_update_device(
+            device.id,
+            new_identifiers=new_identifiers,
         )
 
 
@@ -583,8 +626,6 @@ MIGRATION = (
 )
 
 
-delete_Waermepumpe = "Konfiguration, Ruhemodus, Pumpe Einschaltart, Sollwert Pumpe Leistung Heizen, Sollwert Pumpe Leistung Kühlen, Sollwert Pumpe Leistung Warmwasser, Sollwert Pumpe Leistung Abtaubetrieb, Sollwert Volumenstrom Heizen, Sollwert Volumenstrom Kühlen, Sollwert Volumenstrom Warmwasser"
-
 DELETIONS = (
     "WW_Konfiguration",
     "HZ_Konfiguration",
@@ -609,4 +650,26 @@ DELETIONS = (
     "Sollwert Volumenstrom Heizen",
     "Sollwert Volumenstrom Kühlen",
     "Sollwert Volumenstrom Warmwasser",
+)
+
+
+@dataclass(frozen=True)
+class DeviceMigration:
+    """Device migration."""
+
+    old_device: str
+    report_name: str
+
+
+DEVICE_MIGRATIONS = (
+    DeviceMigration(DeviceConstants.SYS, "system"),
+    DeviceMigration(DeviceConstants.WP, "heat_pump"),
+    DeviceMigration(DeviceConstants.WW, "domestic_hot_water"),
+    DeviceMigration(DeviceConstants.HZ, "heating_circuit"),
+    DeviceMigration(DeviceConstants.HZ2, "heating_circuit2"),
+    DeviceMigration(DeviceConstants.HZ3, "heating_circuit3"),
+    DeviceMigration(DeviceConstants.HZ4, "heating_circuit4"),
+    DeviceMigration(DeviceConstants.HZ5, "heating_circuit5"),
+    DeviceMigration(DeviceConstants.W2, "second_heat_source"),
+    DeviceMigration(DeviceConstants.ST, "statistics"),
 )
