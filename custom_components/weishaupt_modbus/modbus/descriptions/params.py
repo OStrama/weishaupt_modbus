@@ -67,7 +67,7 @@ ROOM_TEMPERATURE = NumberParams(
     native_unit_of_measurement=UnitOfTemperature.CELSIUS,
 )
 
-CONST_TEEP_HEATING = NumberParams(
+CONST_TEMP_HEATING = NumberParams(
     device_class=NumberDeviceClass.TEMPERATURE,
     native_min_value=30,
     native_max_value=60,
@@ -122,11 +122,6 @@ NUMBER_PERCENTAGE = NumberParams(
     native_unit_of_measurement=PERCENTAGE,
 )
 
-HEATING_CURVE = NumberParams(
-    native_min_value=0.05,
-    native_max_value=1.5,
-    native_step=0.05,
-)
 
 FLOW_RATE = NumberParams(
     native_min_value=0,
@@ -165,7 +160,7 @@ PRESSURE = SensorParams(
 
 HOURS = SensorParams(
     device_class=SensorDeviceClass.DURATION,
-    state_class=SensorStateClass.MEASUREMENT,
+    state_class=SensorStateClass.TOTAL_INCREASING,
     native_unit_of_measurement=UnitOfTime.HOURS,
     suggested_display_precision=0,
 )
@@ -184,7 +179,7 @@ KELVIN = SensorParams(
 )
 
 PV_POWER = NumberParams(
-    device_class=SensorDeviceClass.POWER,
+    device_class=NumberDeviceClass.POWER,
     native_unit_of_measurement=UnitOfPower.WATT,
     native_min_value=0.0,
     native_max_value=65535,
@@ -227,7 +222,7 @@ HUMIDITY = SensorParams(
 
 
 NUMBER_POWER = NumberParams(
-    device_class=SensorDeviceClass.POWER,
+    device_class=NumberDeviceClass.POWER,
     native_unit_of_measurement=UnitOfPower.WATT,
     native_min_value=0.0,
     native_max_value=10000,
@@ -311,7 +306,7 @@ BIVALENCE_TEMPERATURE = NumberParams(
 
 COP = SensorParams(
     device_class=None,
-    state_class=None,
+    state_class=SensorStateClass.MEASUREMENT,
     native_unit_of_measurement=None,
     suggested_display_precision=2,
 )

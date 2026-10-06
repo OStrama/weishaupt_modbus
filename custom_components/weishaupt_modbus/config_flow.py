@@ -3,7 +3,7 @@
 from typing import Any
 
 from aiofiles.os import scandir
-import voluptuous as vol
+import probatio
 
 from homeassistant import config_entries, exceptions
 from homeassistant.core import HomeAssistant
@@ -94,44 +94,44 @@ class ConfigFlow(
                 errors["base"] = "unknown"
 
         # Define Schema for Page 1
-        schema_page1 = vol.Schema(
+        schema_page1 = probatio.Schema(
             schema={
-                vol.Required(
+                probatio.Required(
                     schema=CONF.HOST,
                     default=self._stored_data.get(CONF.HOST, ""),
                 ): str,
-                vol.Required(
+                probatio.Required(
                     CONF.MAC,
                     default=self._stored_data.get(CONF.MAC, ""),
                 ): str,
-                vol.Optional(
+                probatio.Optional(
                     schema=CONF.PORT,
                     default=self._stored_data.get(CONF.PORT, "502"),
                 ): cv.port,
-                vol.Optional(
+                probatio.Optional(
                     schema=CONF.KENNFELD_FILE,
                     default=self._stored_data.get(
                         CONF.KENNFELD_FILE,
                         "weishaupt_wbb_kennfeld.json",
                     ),
-                ): vol.In(container=await build_kennfeld_list(self.hass)),
-                vol.Optional(
+                ): probatio.In(container=await build_kennfeld_list(self.hass)),
+                probatio.Optional(
                     schema=CONF.HK2,
                     default=self._stored_data.get(CONF.HK2, False),
                 ): bool,
-                vol.Optional(
+                probatio.Optional(
                     schema=CONF.HK3,
                     default=self._stored_data.get(CONF.HK3, False),
                 ): bool,
-                vol.Optional(
+                probatio.Optional(
                     schema=CONF.HK4,
                     default=self._stored_data.get(CONF.HK4, False),
                 ): bool,
-                vol.Optional(
+                probatio.Optional(
                     schema=CONF.HK5,
                     default=self._stored_data.get(CONF.HK5, False),
                 ): bool,
-                vol.Optional(
+                probatio.Optional(
                     schema=CONF.CB_WEBIF,
                     default=self._stored_data.get(CONF.CB_WEBIF, False),
                 ): bool,
@@ -166,53 +166,53 @@ class ConfigFlow(
             )
 
         # Define Schema for Page 2
-        schema_page2 = vol.Schema(
+        schema_page2 = probatio.Schema(
             schema={
-                vol.Optional(
+                probatio.Optional(
                     schema=CONF.CB_WEBIF_MOCKUP_DATA,
                     default=self._stored_data.get(CONF.CB_WEBIF_MOCKUP_DATA, False),
                 ): bool,
-                vol.Optional(
+                probatio.Optional(
                     schema=CONF.USERNAME,
                     default=self._stored_data.get(CONF.USERNAME, ""),
                 ): str,
-                vol.Optional(
+                probatio.Optional(
                     schema=CONF.PASSWORD,
                     default=self._stored_data.get(CONF.PASSWORD, ""),
                 ): str,
-                vol.Optional(
+                probatio.Optional(
                     schema=CONF.WEBIF_TOKEN,
                     default=self._stored_data.get(CONF.WEBIF_TOKEN, ""),
                 ): str,
-                vol.Optional(
+                probatio.Optional(
                     schema=CONF.CB_WEBIF_HK1,
                     default=self._stored_data.get(CONF.CB_WEBIF_HK1, False),
                 ): bool,
-                vol.Optional(
+                probatio.Optional(
                     schema=CONF.CB_WEBIF_HK2,
                     default=self._stored_data.get(CONF.CB_WEBIF_HK2, False),
                 ): bool,
-                vol.Optional(
+                probatio.Optional(
                     schema=CONF.CB_WEBIF_HK3,
                     default=self._stored_data.get(CONF.CB_WEBIF_HK3, False),
                 ): bool,
-                vol.Optional(
+                probatio.Optional(
                     schema=CONF.CB_WEBIF_HK4,
                     default=self._stored_data.get(CONF.CB_WEBIF_HK4, False),
                 ): bool,
-                vol.Optional(
+                probatio.Optional(
                     schema=CONF.CB_WEBIF_HK5,
                     default=self._stored_data.get(CONF.CB_WEBIF_HK5, False),
                 ): bool,
-                vol.Optional(
+                probatio.Optional(
                     schema=CONF.CB_WEBIF_WP,
                     default=self._stored_data.get(CONF.CB_WEBIF_WP, False),
                 ): bool,
-                vol.Optional(
+                probatio.Optional(
                     schema=CONF.CB_WEBIF_2WEZ,
                     default=self._stored_data.get(CONF.CB_WEBIF_2WEZ, False),
                 ): bool,
-                vol.Optional(
+                probatio.Optional(
                     schema=CONF.CB_WEBIF_SATISTICS,
                     default=self._stored_data.get(CONF.CB_WEBIF_SATISTICS, False),
                 ): bool,
@@ -279,41 +279,41 @@ class ConfigFlow(
                 errors["base"] = "unknown"
 
         # We display the same schema as user step 1 for consistency
-        schema_reconfigure = vol.Schema(
+        schema_reconfigure = probatio.Schema(
             schema={
-                vol.Required(
+                probatio.Required(
                     schema=CONF.HOST,
                     default=self._stored_data.get(CONF.HOST, ""),
                 ): str,
-                vol.Required(
+                probatio.Required(
                     CONF.MAC,
                     default=self._stored_data.get(CONF.MAC, ""),
                 ): str,
-                vol.Optional(
+                probatio.Optional(
                     schema=CONF.PORT,
                     default=self._stored_data.get(CONF.PORT, "502"),
                 ): cv.port,
-                vol.Optional(
+                probatio.Optional(
                     schema=CONF.KENNFELD_FILE,
                     default=self._stored_data.get(CONF.KENNFELD_FILE),
-                ): vol.In(container=await build_kennfeld_list(hass=self.hass)),
-                vol.Optional(
+                ): probatio.In(container=await build_kennfeld_list(hass=self.hass)),
+                probatio.Optional(
                     schema=CONF.HK2,
                     default=self._stored_data.get(CONF.HK2, False),
                 ): bool,
-                vol.Optional(
+                probatio.Optional(
                     schema=CONF.HK3,
                     default=self._stored_data.get(CONF.HK3, False),
                 ): bool,
-                vol.Optional(
+                probatio.Optional(
                     schema=CONF.HK4,
                     default=self._stored_data.get(CONF.HK4, False),
                 ): bool,
-                vol.Optional(
+                probatio.Optional(
                     schema=CONF.HK5,
                     default=self._stored_data.get(CONF.HK5, False),
                 ): bool,
-                vol.Optional(
+                probatio.Optional(
                     schema=CONF.CB_WEBIF,
                     default=self._stored_data.get(CONF.CB_WEBIF, False),
                 ): bool,

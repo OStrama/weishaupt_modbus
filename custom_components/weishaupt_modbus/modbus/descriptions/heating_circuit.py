@@ -13,7 +13,7 @@ from .myenums import (
     HeatingCircuitWaterConfiguration,
 )
 from .params import (
-    CONST_TEEP_HEATING,
+    CONST_TEMP_HEATING,
     EMPTY,
     HEATING_CURVE,
     HUMIDITY,
@@ -220,7 +220,7 @@ def _heating_circuit_entities(
         ),
         NumberDescription(
             key="constant_heating_temperature",
-            params=CONST_TEEP_HEATING,
+            params=CONST_TEMP_HEATING,
             report_name=report_name,
             value_fn=lambda device, i=circuit: (
                 device.heating_circuit_configs.heating_circuits[

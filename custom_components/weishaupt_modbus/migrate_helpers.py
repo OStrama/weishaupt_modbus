@@ -51,7 +51,7 @@ def old_device_identifier(
 def migrate_entities(config_entry: MyConfigEntry, hass: HomeAssistant) -> None:
     """Migrate entities from old unique_id to new unique_id."""
 
-    _LOGGER.warning("Starting entity migration!")
+    # _LOGGER.warning("Starting entity migration!")
 
     postfix = config_entry.data.get(CONF.DEVICE_POSTFIX)
     prefix = config_entry.data.get(CONF.PREFIX)
@@ -66,7 +66,7 @@ def migrate_entities(config_entry: MyConfigEntry, hass: HomeAssistant) -> None:
         old_uid = old_unique_id(postfix, prefix, item.name)
         new_uid = new_unique_id(item.new_key, mac)
         unique_id_migrations[old_uid] = new_uid
-    _LOGGER.warning("Migration map: %s", unique_id_migrations)
+    # _LOGGER.warning("Migration map: %s", unique_id_migrations)
 
     deletions = DELETIONS + remove_heating_circuit_entities(config_entry, hass)
 
@@ -74,16 +74,16 @@ def migrate_entities(config_entry: MyConfigEntry, hass: HomeAssistant) -> None:
     for item in deletions:
         old_uid = old_unique_id(postfix, prefix, item)
         unique_id_deletions.add(old_uid)
-    _LOGGER.debug("Deletion list: %s", unique_id_deletions)
+    # _LOGGER.debug("Deletion list: %s", unique_id_deletions)
 
     entities = entity_registry.entities.get_entries_for_config_entry_id(
         config_entry.entry_id
     )
-    _LOGGER.warning(
-        "Entity migration: config_entry_id=%s, entity_count=%d",
-        config_entry.entry_id,
-        len(entities),
-    )
+    # _LOGGER.warning(
+    #    "Entity migration: config_entry_id=%s, entity_count=%d",
+    #    config_entry.entry_id,
+    #    len(entities),
+    # )
 
     for entity in entities:
         # Delte ids that were converted from Sensor to Select or Switch
@@ -121,10 +121,13 @@ def migrate_entities(config_entry: MyConfigEntry, hass: HomeAssistant) -> None:
             postfix,
         )
 
-        old_identifiers = {(CONST.DOMAIN, old_device)}
+        old_identifiers = (CONST.DOMAIN, old_device)
 
-        device = dev_registry.async_get_device(
-            identifiers=old_identifiers,
+        # device = dev_registry.async_get_device(
+        #    identifiers=old_identifiers,
+        # )
+        device = dev_registry.async_get_device_by_identifier(
+            old_identifiers, config_entry
         )
 
         if device is None:
