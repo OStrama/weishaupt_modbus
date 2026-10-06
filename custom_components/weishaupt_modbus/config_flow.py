@@ -7,7 +7,6 @@ import probatio
 
 from homeassistant import config_entries, exceptions
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.device_registry import format_mac
 
 from .const import CONF, CONST
@@ -20,13 +19,13 @@ async def build_kennfeld_list(hass: HomeAssistant) -> list[str]:
 
     try:
         dir_iterator = await scandir(get_filepath(hass))
-        for item in dir_iterator:
-            if "kennfeld.json" in item.name:
-                kennfelder.append(item.name)
+        kennfelder.extend(
+            item.name for item in dir_iterator if "kennfeld.json" in item.name
+        )
     except OSError:
         pass
 
-    if len(kennfelder) < 1:
+    if not kennfelder:
         kennfelder.append("weishaupt_wbb_kennfeld.json")
 
     return kennfelder
@@ -107,7 +106,7 @@ class ConfigFlow(
                 probatio.Optional(
                     schema=CONF.PORT,
                     default=self._stored_data.get(CONF.PORT, "502"),
-                ): cv.port,
+                ): probatio.Port,
                 probatio.Optional(
                     schema=CONF.KENNFELD_FILE,
                     default=self._stored_data.get(
@@ -292,7 +291,7 @@ class ConfigFlow(
                 probatio.Optional(
                     schema=CONF.PORT,
                     default=self._stored_data.get(CONF.PORT, "502"),
-                ): cv.port,
+                ): probatio.port,
                 probatio.Optional(
                     schema=CONF.KENNFELD_FILE,
                     default=self._stored_data.get(CONF.KENNFELD_FILE),
