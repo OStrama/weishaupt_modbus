@@ -1,75 +1,121 @@
-# Weishaupt_modbus
+# Weishaupt Modbus
 
-This integration lets you monitor and control your weishaupt heatpump through modbus.
-This is how it might look:
-![image](https://github.com/user-attachments/assets/00e7b8fa-1779-428d-9361-7c66e228c2c6)
+A Home Assistant custom integration for monitoring and controlling compatible Weishaupt heat pumps via their built-in Modbus TCP interface.
 
-If you have the weishaupt modbus module seperately this intgegration will not work. Maybe [this](https://github.com/BorgNumberOne/Weishaupt_CanApiJson/) is something for you?
+The integration provides sensors and controls for values exposed by the heat pump, including heating circuits, domestic hot water, heat pump data, statistics and configurable setpoints.
+
+This integration is **not compatible with Weishaupt heat pumps that only provide the separate Weishaupt Modbus module/interface**. It requires the Modbus TCP interface supported by the heat pump firmware.
+
+For more information about Weishaupt heat pumps, see the [official Weishaupt website](https://www.weishaupt.de/).
 
 ## Installation
 
-[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=OStrama&repository=weishaupt_modbus&category=Integration)
+### HACS — recommended
 
-[![Start Config Flow](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start?domain=weishaupt_modbus)
+This integration is available through HACS.
 
+[![Open your Home Assistant instance and open this repository in HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=OStrama&repository=weishaupt_modbus&category=Integration)
 
-### HACS (prefered)
+1. Open HACS in Home Assistant.
+2. Search for **Weishaupt Modbus**.
+3. Open the integration and select **Download**.
+4. Restart Home Assistant.
+5. Add **Weishaupt Modbus** through **Settings → Devices & services → Add Integration**.
 
-This integration is now in HACS repository. Just install it.
+### Manual installation
 
-### Manual install
+1. Create the following directory in your Home Assistant configuration directory:
 
-Create a directory called `weishaupt_modbus` in the `<config directory>/custom_components/` directory on your Home Assistant
-instance. Install this component by copying all files in `/custom_components/weishaupt_modbus/` folder from this repo into the
-new `<config directory>/custom_components/weishaupt-modbus/` directory you just created.
+   ```text
+   custom_components/weishaupt_modbus
+   ```
 
-This is how your custom_components directory should look like:
+2. Copy the contents of the `custom_components/weishaupt_modbus` directory from this repository into the newly created directory.
 
-```bash
-custom_components
-├── weishaupt_modbus
-│   ├── __init__.py
-│   ├── ...
-│   ├── ...
-│   ├── ...
-│   └── wp.py
-```
-## Configuration
+3. Restart Home Assistant.
 
-![image](https://github.com/user-attachments/assets/8549938f-a059-4a92-988c-ba329f3cd758)
+4. Add **Weishaupt Modbus** through **Settings → Devices & services → Add Integration**.
 
-The only mandatory parameter is the IP-Address of your heatpump. The port should be ok at default unless you changed it in the Heatpump configuration.
+## Prerequisites
 
-The "prefix" should only be changed when migrating from MadOnes original integration to this one to avoid splitting of sensor history
+Before adding the integration, Modbus TCP must be enabled on the heat pump.
 
-The "Device Postfix" has a default value of "". It can be used to add multiple heat pumps to one home assistant. For compatibility this should be left empty. If you want to add another heat pump, use a name that help to identify the devices.
+On supported devices, go to:
 
-### The power mapping file
-The "Kennfeld-File" can be choosen to read in the right power mapping according to your type of heat pump:
+**User → Settings → Modbus TCP**
 
-The heat power "Wärmeleistung" is calculated from the "Leistungsanforderung" in dependency of outside temperature and water temperature.
-This is type specific. The data stored in the integration fit to a WBB 12. If the file you've parameterized does not exist, the integration will create a file that fits for a WBB12. If you have another heat pump please update the Kennfeld-File file according to the graphs found in the documentation of your heat pump and change the name of the used file by reconfiguring the integration and change only the file name. It may be necessary to restart home assistant after changing the filename.
-When no file is available, a new file with the defined name will be created that contains the parameters read out from the graphs found in the documentation of WBB 12 in a manual way. This file can be used as a template for another type of heatpump.
-(Note: It would be great if you could provide files from other types of heatpumps to us, so that we can integrate them in further versions ;-))
-
-
-You have to enable modbus in your heatpump settings.
-
-## Setting up the HeatPump
-
-In order to use this integration you have to enable modbus in your heatpump.
-Go to:
-User -> Settings (second Page) -> Modbus TCP
+Enable:
 
 **Parameter: On**
 
-**Network**: Here you have 2 options. Either you place the IP of your HomeAssistant to exclusively allow this ip to connect to the heatpump via ModBus or you place your network to allow all the IPs in that range.
-For example: **192.168.178.123** (Home Assistant IP) or 192.168.178.0 for all ips between 192.168.178.1 and 192.167.178.254.
-Option 1 is the savest but Option 2 enables you to connect to the heatpump from multiple devices(developing machine, or maybe my possibly upcoming dedicated android app?). I suggest to go for option 1 (HomeAssistant IP).
+Configure the **Network** and **Netmask** according to your network.
 
-**Netmask**: Select the netmask of your network. This will be **255.255.255.000** for you otherwise you would know the correct one ;)
+The safest configuration is to allow only the IP address of your Home Assistant instance to connect to the heat pump.
 
-# Disclaimer
-The developers of this integration are not affiliated with Weishaupt. They have created the integration as open source in their spare time on the basis of publicly accessible information.
-The use of the integration is at the user's own risk and responsibility. The developers are not liable for any damages arising from the use of the integration.
+For example:
 
+```text
+Network: 192.168.178.123
+Netmask: 255.255.255.0
+```
+
+Alternatively, you can allow the complete local network if other devices also need to access the heat pump through Modbus TCP.
+
+## Configuration
+
+After installation, add the integration through the Home Assistant UI.
+
+The main required setting is the **IP address of the heat pump**. The default Modbus TCP port should normally be correct unless it has been changed in the heat pump configuration.
+Starting with 2.0.0 a valid MAC Address is also required.
+
+The integration also supports optional EXPERIMENTAL WebIF functionality for supported installations.
+
+### Power mapping
+
+The integration can use a power-mapping file to calculate the heat output of the heat pump from the reported power demand, outside temperature and water temperature.
+
+The supplied mapping data is based on a Weishaupt WBB 12. Different heat-pump models may require a different mapping.
+
+If no mapping file exists, the integration creates a default file based on the available WBB 12 data. This file can be used as a template and adjusted according to the performance graphs in the documentation for your heat-pump model.
+
+If you have a power mapping for another Weishaupt model, contributions are welcome.
+
+## Troubleshooting
+
+If the integration cannot connect to the heat pump, check the following:
+
+- Modbus TCP is enabled on the heat pump.
+- The IP address is correct.
+- The configured Modbus TCP port is correct.
+- The Home Assistant IP address is allowed by the heat pump's network configuration.
+- The heat pump and Home Assistant are reachable on the network.
+
+## Removal
+
+To remove the integration:
+
+1. Go to **Settings → Devices & services**.
+2. Find **Weishaupt Modbus**.
+3. Open the integration.
+4. Select the three-dot menu.
+5. Select **Delete**.
+
+If the integration was installed manually, also remove:
+
+```text
+config/custom_components/weishaupt_modbus
+```
+
+from your Home Assistant configuration directory.
+
+## Support
+
+If you find this integration useful, consider supporting its development on Ko-fi:
+
+[☕ Support me on Ko-fi](https://ko-fi.com/mad_one)
+
+## Disclaimer
+
+The developers of this integration are not affiliated with Weishaupt. This project is open source and was developed independently using publicly accessible information.
+
+The integration is provided without warranty. Use it at your own risk and responsibility. The developers are not liable for damage resulting from the use of this integration.
