@@ -3,11 +3,22 @@
 from typing import Any
 
 from aiofiles.os import scandir
+from modbus_connection import ModbusConnectionError
 import probatio
+from probatio.validators import MacAddress
 
 from homeassistant import config_entries, exceptions
-from homeassistant.core import HomeAssistant
+from homeassistant.components.modbus.connection import ModbusConnection, ModbusTcpParams
+from homeassistant.core import _LOGGER, HomeAssistant
 from homeassistant.helpers.device_registry import format_mac
+from homeassistant.helpers.selector import (
+    BooleanSelector,
+    NumberSelector,
+    NumberSelectorConfig,
+    SelectSelector,
+    SelectSelectorConfig,
+    TextSelector,
+)
 
 from .const import CONF, CONST
 from .kennfeld.kennfeld import get_filepath
@@ -31,19 +42,27 @@ async def build_kennfeld_list(hass: HomeAssistant) -> list[str]:
     return kennfelder
 
 
-async def validate_input(data: dict[str, Any]) -> dict[str, Any]:
-    """Validate the input and return normalized configuration data."""
-    if len(data.get(CONF.HOST, "")) < 3:
+def validate_input(
+    data: dict[str, Any],
+    *,
+    validate_mac: bool = True,
+) -> dict[str, Any]:
+    """Validate and normalize configuration input."""
+    host = str(data.get(CONF.HOST, "")).strip()
+
+    if not host:
         raise InvalidHost
 
-    try:
-        mac = format_mac(data[CONF.MAC])
-    except (TypeError, ValueError) as err:
-        raise InvalidMac from err
-
-    return {
-        CONF.MAC: mac,
+    validated_data = {
+        CONF.HOST: host,
     }
+
+    if validate_mac:
+        mac = str(data.get(CONF.MAC, "")).strip()
+        MacAddress()(mac)
+        validated_data[CONF.MAC] = format_mac(mac)
+
+    return validated_data
 
 
 class ConfigFlow(
@@ -61,6 +80,128 @@ class ConfigFlow(
         self._stored_data: dict[str, Any] = {}
         self._reconfigure_entry: config_entries.ConfigEntry | None = None
 
+    async def _build_core_schema(
+        self,
+        *,
+        include_mac: bool = True,
+    ) -> probatio.Schema:
+        """Build the core configuration schema."""
+        return probatio.Schema(
+            schema={
+                probatio.Required(
+                    schema=CONF.HOST,
+                    default=self._stored_data.get(CONF.HOST, ""),
+                ): TextSelector(),
+                **(
+                    {
+                        probatio.Required(
+                            schema=CONF.MAC,
+                            default=self._stored_data.get(CONF.MAC, ""),
+                        ): MacAddress()
+                    }
+                    if include_mac
+                    else {}
+                ),
+                probatio.Optional(
+                    schema=CONF.PORT,
+                    default=self._stored_data.get(CONF.PORT, 502),
+                ): NumberSelector(
+                    NumberSelectorConfig(
+                        min=1,
+                        max=65535,
+                        mode="box",
+                    )
+                ),
+                probatio.Optional(
+                    schema=CONF.KENNFELD_FILE,
+                    default=self._stored_data.get(
+                        CONF.KENNFELD_FILE,
+                        "weishaupt_wbb_kennfeld.json",
+                    ),
+                ): SelectSelector(
+                    SelectSelectorConfig(
+                        options=await build_kennfeld_list(self.hass),
+                        mode="dropdown",
+                    )
+                ),
+                probatio.Optional(
+                    schema=CONF.HK2,
+                    default=self._stored_data.get(CONF.HK2, False),
+                ): BooleanSelector(),
+                probatio.Optional(
+                    schema=CONF.HK3,
+                    default=self._stored_data.get(CONF.HK3, False),
+                ): BooleanSelector(),
+                probatio.Optional(
+                    schema=CONF.HK4,
+                    default=self._stored_data.get(CONF.HK4, False),
+                ): BooleanSelector(),
+                probatio.Optional(
+                    schema=CONF.HK5,
+                    default=self._stored_data.get(CONF.HK5, False),
+                ): BooleanSelector(),
+                probatio.Optional(
+                    schema=CONF.CB_WEBIF,
+                    default=self._stored_data.get(CONF.CB_WEBIF, False),
+                ): BooleanSelector(),
+            }
+        )
+
+    def _build_webif_schema(self) -> probatio.Schema:
+        """Build the WebIF configuration schema."""
+        return probatio.Schema(
+            schema={
+                probatio.Optional(
+                    schema=CONF.CB_WEBIF_MOCKUP_DATA,
+                    default=self._stored_data.get(CONF.CB_WEBIF_MOCKUP_DATA, False),
+                ): BooleanSelector(),
+                probatio.Optional(
+                    schema=CONF.USERNAME,
+                    default=self._stored_data.get(CONF.USERNAME, ""),
+                ): TextSelector(),
+                probatio.Optional(
+                    schema=CONF.PASSWORD,
+                    default=self._stored_data.get(CONF.PASSWORD, ""),
+                ): TextSelector(),
+                probatio.Optional(
+                    schema=CONF.WEBIF_TOKEN,
+                    default=self._stored_data.get(CONF.WEBIF_TOKEN, ""),
+                ): TextSelector(),
+                probatio.Optional(
+                    schema=CONF.CB_WEBIF_HK1,
+                    default=self._stored_data.get(CONF.CB_WEBIF_HK1, False),
+                ): BooleanSelector(),
+                probatio.Optional(
+                    schema=CONF.CB_WEBIF_HK2,
+                    default=self._stored_data.get(CONF.CB_WEBIF_HK2, False),
+                ): BooleanSelector(),
+                probatio.Optional(
+                    schema=CONF.CB_WEBIF_HK3,
+                    default=self._stored_data.get(CONF.CB_WEBIF_HK3, False),
+                ): BooleanSelector(),
+                probatio.Optional(
+                    schema=CONF.CB_WEBIF_HK4,
+                    default=self._stored_data.get(CONF.CB_WEBIF_HK4, False),
+                ): BooleanSelector(),
+                probatio.Optional(
+                    schema=CONF.CB_WEBIF_HK5,
+                    default=self._stored_data.get(CONF.CB_WEBIF_HK5, False),
+                ): BooleanSelector(),
+                probatio.Optional(
+                    schema=CONF.CB_WEBIF_WP,
+                    default=self._stored_data.get(CONF.CB_WEBIF_WP, False),
+                ): BooleanSelector(),
+                probatio.Optional(
+                    schema=CONF.CB_WEBIF_2WEZ,
+                    default=self._stored_data.get(CONF.CB_WEBIF_2WEZ, False),
+                ): BooleanSelector(),
+                probatio.Optional(
+                    schema=CONF.CB_WEBIF_SATISTICS,
+                    default=self._stored_data.get(CONF.CB_WEBIF_SATISTICS, False),
+                ): BooleanSelector(),
+            }
+        )
+
     async def async_step_user(
         self,
         user_input: dict[str, Any] | None = None,
@@ -70,72 +211,39 @@ class ConfigFlow(
 
         if user_input is not None:
             try:
-                validated_data = await validate_input(user_input)
+                validated_data = validate_input(user_input)
 
                 self._stored_data.update(user_input)
                 self._stored_data.update(validated_data)
 
-                # Check if we need to progress to Page 2 (Web Interface)
-                if user_input.get(CONF.CB_WEBIF):
-                    return await self.async_step_webif()
-
-                # Otherwise, complete configuration immediately
-                return self.async_create_entry(
-                    title=self._stored_data[CONF.HOST],
-                    data=self._stored_data,
-                )
-
             except InvalidHost:
                 errors["base"] = "invalid_host"
-            except InvalidMac:
-                errors["base"] = "invalid_mac"
-            except Exception:  # noqa: BLE001
-                errors["base"] = "unknown"
+            except probatio.MacAddressInvalid:
+                errors[CONF.MAC] = "invalid_mac"
+            else:
+                await self.async_set_unique_id(validated_data[CONF.MAC])
+                self._abort_if_unique_id_configured()
 
-        # Define Schema for Page 1
-        schema_page1 = probatio.Schema(
-            schema={
-                probatio.Required(
-                    schema=CONF.HOST,
-                    default=self._stored_data.get(CONF.HOST, ""),
-                ): str,
-                probatio.Required(
-                    CONF.MAC,
-                    default=self._stored_data.get(CONF.MAC, ""),
-                ): str,
-                probatio.Optional(
-                    schema=CONF.PORT,
-                    default=self._stored_data.get(CONF.PORT, "502"),
-                ): probatio.Port,
-                probatio.Optional(
-                    schema=CONF.KENNFELD_FILE,
-                    default=self._stored_data.get(
-                        CONF.KENNFELD_FILE,
-                        "weishaupt_wbb_kennfeld.json",
-                    ),
-                ): probatio.In(container=await build_kennfeld_list(self.hass)),
-                probatio.Optional(
-                    schema=CONF.HK2,
-                    default=self._stored_data.get(CONF.HK2, False),
-                ): bool,
-                probatio.Optional(
-                    schema=CONF.HK3,
-                    default=self._stored_data.get(CONF.HK3, False),
-                ): bool,
-                probatio.Optional(
-                    schema=CONF.HK4,
-                    default=self._stored_data.get(CONF.HK4, False),
-                ): bool,
-                probatio.Optional(
-                    schema=CONF.HK5,
-                    default=self._stored_data.get(CONF.HK5, False),
-                ): bool,
-                probatio.Optional(
-                    schema=CONF.CB_WEBIF,
-                    default=self._stored_data.get(CONF.CB_WEBIF, False),
-                ): bool,
-            }
-        )
+                try:
+                    await test_modbus(
+                        validated_data[CONF.HOST],
+                        validated_data.get(CONF.PORT, 502),
+                    )
+
+                    if user_input.get(CONF.CB_WEBIF):
+                        return await self.async_step_webif()
+
+                    return self.async_create_entry(
+                        title=self._stored_data[CONF.HOST],
+                        data=self._stored_data,
+                    )
+
+                except ConnectionFailed:
+                    errors["base"] = "cannot_connect"
+                except Exception:  # noqa: BLE001
+                    _LOGGER.exception("Unexpected error during configuration")
+                    errors["base"] = "unknown"
+        schema_page1 = await self._build_core_schema()
 
         return self.async_show_form(
             step_id="user",
@@ -164,59 +272,7 @@ class ConfigFlow(
                 data=self._stored_data,
             )
 
-        # Define Schema for Page 2
-        schema_page2 = probatio.Schema(
-            schema={
-                probatio.Optional(
-                    schema=CONF.CB_WEBIF_MOCKUP_DATA,
-                    default=self._stored_data.get(CONF.CB_WEBIF_MOCKUP_DATA, False),
-                ): bool,
-                probatio.Optional(
-                    schema=CONF.USERNAME,
-                    default=self._stored_data.get(CONF.USERNAME, ""),
-                ): str,
-                probatio.Optional(
-                    schema=CONF.PASSWORD,
-                    default=self._stored_data.get(CONF.PASSWORD, ""),
-                ): str,
-                probatio.Optional(
-                    schema=CONF.WEBIF_TOKEN,
-                    default=self._stored_data.get(CONF.WEBIF_TOKEN, ""),
-                ): str,
-                probatio.Optional(
-                    schema=CONF.CB_WEBIF_HK1,
-                    default=self._stored_data.get(CONF.CB_WEBIF_HK1, False),
-                ): bool,
-                probatio.Optional(
-                    schema=CONF.CB_WEBIF_HK2,
-                    default=self._stored_data.get(CONF.CB_WEBIF_HK2, False),
-                ): bool,
-                probatio.Optional(
-                    schema=CONF.CB_WEBIF_HK3,
-                    default=self._stored_data.get(CONF.CB_WEBIF_HK3, False),
-                ): bool,
-                probatio.Optional(
-                    schema=CONF.CB_WEBIF_HK4,
-                    default=self._stored_data.get(CONF.CB_WEBIF_HK4, False),
-                ): bool,
-                probatio.Optional(
-                    schema=CONF.CB_WEBIF_HK5,
-                    default=self._stored_data.get(CONF.CB_WEBIF_HK5, False),
-                ): bool,
-                probatio.Optional(
-                    schema=CONF.CB_WEBIF_WP,
-                    default=self._stored_data.get(CONF.CB_WEBIF_WP, False),
-                ): bool,
-                probatio.Optional(
-                    schema=CONF.CB_WEBIF_2WEZ,
-                    default=self._stored_data.get(CONF.CB_WEBIF_2WEZ, False),
-                ): bool,
-                probatio.Optional(
-                    schema=CONF.CB_WEBIF_SATISTICS,
-                    default=self._stored_data.get(CONF.CB_WEBIF_SATISTICS, False),
-                ): bool,
-            }
-        )
+        schema_page2 = self._build_webif_schema()
 
         return self.async_show_form(
             step_id="webif",
@@ -232,22 +288,37 @@ class ConfigFlow(
         errors: dict[str, str] = {}
         self._reconfigure_entry = self._get_reconfigure_entry()
 
-        # Pre-seed internal state dictionary with the current saved entry data
+        # Pre-seed internal state dictionary with the current saved entry data.
         if not self._stored_data:
             self._stored_data.update(self._reconfigure_entry.data)
 
         if user_input is not None:
             try:
-                validated_data = await validate_input(user_input)
+                validated_data = validate_input(
+                    user_input,
+                    validate_mac=False,
+                )
 
-                self._stored_data.update(user_input)
-                self._stored_data.update(validated_data)
+                # Build the prospective configuration without modifying the
+                # current stored data until the connection test succeeds.
+                test_data = {
+                    **self._stored_data,
+                    **user_input,
+                    **validated_data,
+                }
 
-                # Route to WebIF step if it was activated (or kept active)
-                if user_input.get(CONF.CB_WEBIF):
+                await test_modbus(
+                    test_data[CONF.HOST],
+                    test_data.get(CONF.PORT, 502),
+                )
+
+                self._stored_data.update(test_data)
+
+                # Route to WebIF step if it was activated (or kept active).
+                if self._stored_data.get(CONF.CB_WEBIF):
                     return await self.async_step_webif()
 
-                # If CB_WEBIF is false, clear any stale webif settings
+                # If CB_WEBIF is false, clear any stale WebIF settings
                 # from stored data.
                 for key in [
                     CONF.CB_WEBIF_MOCKUP_DATA,
@@ -272,52 +343,15 @@ class ConfigFlow(
 
             except InvalidHost:
                 errors["base"] = "invalid_host"
-            except InvalidMac:
-                errors["base"] = "invalid_mac"
+            except ConnectionFailed:
+                errors["base"] = "cannot_connect"
+            except probatio.MacAddressInvalid:
+                errors[CONF.MAC] = "invalid_mac"
             except Exception:  # noqa: BLE001
+                _LOGGER.exception("Unexpected error during reconfiguration")
                 errors["base"] = "unknown"
 
-        # We display the same schema as user step 1 for consistency
-        schema_reconfigure = probatio.Schema(
-            schema={
-                probatio.Required(
-                    schema=CONF.HOST,
-                    default=self._stored_data.get(CONF.HOST, ""),
-                ): str,
-                probatio.Required(
-                    CONF.MAC,
-                    default=self._stored_data.get(CONF.MAC, ""),
-                ): str,
-                probatio.Optional(
-                    schema=CONF.PORT,
-                    default=self._stored_data.get(CONF.PORT, "502"),
-                ): probatio.port,
-                probatio.Optional(
-                    schema=CONF.KENNFELD_FILE,
-                    default=self._stored_data.get(CONF.KENNFELD_FILE),
-                ): probatio.In(container=await build_kennfeld_list(hass=self.hass)),
-                probatio.Optional(
-                    schema=CONF.HK2,
-                    default=self._stored_data.get(CONF.HK2, False),
-                ): bool,
-                probatio.Optional(
-                    schema=CONF.HK3,
-                    default=self._stored_data.get(CONF.HK3, False),
-                ): bool,
-                probatio.Optional(
-                    schema=CONF.HK4,
-                    default=self._stored_data.get(CONF.HK4, False),
-                ): bool,
-                probatio.Optional(
-                    schema=CONF.HK5,
-                    default=self._stored_data.get(CONF.HK5, False),
-                ): bool,
-                probatio.Optional(
-                    schema=CONF.CB_WEBIF,
-                    default=self._stored_data.get(CONF.CB_WEBIF, False),
-                ): bool,
-            }
-        )
+        schema_reconfigure = await self._build_core_schema(include_mac=False)
 
         return self.async_show_form(
             step_id="reconfigure",
@@ -329,12 +363,27 @@ class ConfigFlow(
         )
 
 
+async def test_modbus(host: str, port: int) -> bool:
+    """Test the connection to the Weishaupt heat pump."""
+    params = ModbusTcpParams(
+        host=host,
+        port=port,
+    )
+
+    connection = ModbusConnection(params)
+
+    try:
+        await connection.connect()
+    except (OSError, TimeoutError, ModbusConnectionError) as err:
+        raise ConnectionFailed from err
+    finally:
+        await connection.close()
+
+    return True
+
+
 class InvalidHost(exceptions.HomeAssistantError):
     """Error to indicate there is an invalid hostname."""
-
-
-class InvalidMac(exceptions.HomeAssistantError):
-    """Error to indicate there is an invalid MAC address."""
 
 
 class ConnectionFailed(exceptions.HomeAssistantError):
