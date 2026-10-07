@@ -107,6 +107,12 @@ config/custom_components/weishaupt_modbus
 
 from your Home Assistant configuration directory.
 
+## Support
+
+If you find this integration useful, consider supporting its development on Ko-fi:
+
+[☕ Support me on Ko-fi](https://ko-fi.com/mad_one)
+
 ## Disclaimer
 
 The developers of this integration are not affiliated with Weishaupt. This project is open source and was developed independently using publicly accessible information.
