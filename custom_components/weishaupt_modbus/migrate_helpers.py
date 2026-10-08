@@ -2,17 +2,16 @@
 
 from dataclasses import dataclass
 import logging
-from typing import TYPE_CHECKING
+
+from custom_components.weishaupt_modbus.configentry import MyConfigEntry
+from custom_components.weishaupt_modbus.const import CONF, CONST, DeviceConstants
 
 # from homeassistant.components.device_tracker import config_entry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import device_registry as dr, entity_registry as er
 
-from .const import CONF, CONST, DeviceConstants
-
-if TYPE_CHECKING:
-    from .configentry import MyConfigEntry
-
+# from .configentry import MyConfigEntry
+# from .const import CONF, CONST, DeviceConstants
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -57,22 +56,22 @@ def migrate_entities(config_entry: MyConfigEntry, hass: HomeAssistant) -> None:
     prefix = config_entry.data.get(CONF.PREFIX)
 
     mac = config_entry.data.get(CONF.MAC)
-    if mac == "CHANGEME":
+    if not mac or mac == "CHANGEME":
         return
 
     entity_registry = er.async_get(hass)
     unique_id_migrations: dict[str, str] = {}
-    for item in MIGRATION:
-        old_uid = old_unique_id(postfix, prefix, item.name)
-        new_uid = new_unique_id(item.new_key, mac)
+    for migration in MIGRATION:
+        old_uid = old_unique_id(postfix, prefix, migration.name)
+        new_uid = new_unique_id(migration.new_key, mac)
         unique_id_migrations[old_uid] = new_uid
     # _LOGGER.warning("Migration map: %s", unique_id_migrations)
 
     deletions = DELETIONS + remove_heating_circuit_entities(config_entry, hass)
 
     unique_id_deletions: set[str] = set()
-    for item in deletions:
-        old_uid = old_unique_id(postfix, prefix, item)
+    for deletion in deletions:
+        old_uid = old_unique_id(postfix, prefix, deletion)
         unique_id_deletions.add(old_uid)
     # _LOGGER.debug("Deletion list: %s", unique_id_deletions)
 
@@ -97,27 +96,31 @@ def migrate_entities(config_entry: MyConfigEntry, hass: HomeAssistant) -> None:
             continue
 
         # Rename entities that
-        new_uid = unique_id_migrations.get(entity.unique_id)
-        old_uid = entity.unique_id
-        _LOGGER.warning("Old id: %s; new id: %s", old_uid, new_uid)
-        if new_uid is None:
+        old_entity_uid = entity.unique_id
+        new_entity_uid = unique_id_migrations.get(old_entity_uid)
+        _LOGGER.warning(
+            "Old id: %s; new id: %s",
+            old_entity_uid,
+            new_entity_uid,
+        )
+        if new_entity_uid is None:
             continue
 
         entity_registry.async_update_entity(
             entity.entity_id,
-            new_unique_id=new_uid,
+            new_unique_id=new_entity_uid,
         )
 
         _LOGGER.warning(
             "Changed old UID: %s to new UID: %s",
-            old_uid,
-            new_uid,
+            old_entity_uid,
+            new_entity_uid,
         )
     dev_registry = dr.async_get(hass)
 
-    for migration in DEVICE_MIGRATIONS:
+    for dev_migration in DEVICE_MIGRATIONS:
         old_device = old_device_identifier(
-            migration.old_device,
+            dev_migration.old_device,
             postfix,
         )
 
@@ -127,7 +130,8 @@ def migrate_entities(config_entry: MyConfigEntry, hass: HomeAssistant) -> None:
         #    identifiers=old_identifiers,
         # )
         device = dev_registry.async_get_device_by_identifier(
-            old_identifiers, config_entry
+            old_identifiers,
+            config_entry.entry_id,
         )
 
         if device is None:
@@ -139,19 +143,19 @@ def migrate_entities(config_entry: MyConfigEntry, hass: HomeAssistant) -> None:
 
         if (
             (
-                migration.report_name == "heating_circuit2"
+                dev_migration.report_name == "heating_circuit2"
                 and config_entry.data.get(CONF.HK2) is False
             )
             or (
-                migration.report_name == "heating_circuit3"
+                dev_migration.report_name == "heating_circuit3"
                 and config_entry.data.get(CONF.HK3) is False
             )
             or (
-                migration.report_name == "heating_circuit4"
+                dev_migration.report_name == "heating_circuit4"
                 and config_entry.data.get(CONF.HK4) is False
             )
             or (
-                migration.report_name == "heating_circuit5"
+                dev_migration.report_name == "heating_circuit5"
                 and config_entry.data.get(CONF.HK5) is False
             )
         ):
@@ -162,7 +166,12 @@ def migrate_entities(config_entry: MyConfigEntry, hass: HomeAssistant) -> None:
             dev_registry.async_remove_device(device.id)
             continue
 
-        new_identifiers = {(CONST.DOMAIN, mac, migration.report_name)}
+        new_identifiers = {
+            (
+                CONST.DOMAIN,
+                f"{mac}_{dev_migration.report_name}",
+            )
+        }
         _LOGGER.info(
             "Migrating device: %s -> %s",
             old_identifiers,

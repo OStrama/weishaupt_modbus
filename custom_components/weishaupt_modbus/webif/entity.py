@@ -1,5 +1,9 @@
+"""Entrities for Weishaupt WebIF sensors."""
+
+from typing import override
+
 from homeassistant.components.sensor import SensorEntity
-from homeassistant.helpers.entity import DeviceInfo
+from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from ..configentry import MyConfigEntry
@@ -42,6 +46,7 @@ class WebifSensor(CoordinatorEntity[WeishauptWebifCoordinator], SensorEntity):
             description.params.suggested_display_precision
         )
 
+    @override
     @property
     def native_value(self) -> float | str | None:
         """Return the sensor value."""
@@ -55,6 +60,7 @@ class WebifSensor(CoordinatorEntity[WeishauptWebifCoordinator], SensorEntity):
 
         return value
 
+    @override
     @property
     def device_info(self) -> DeviceInfo:
         """Return device info."""
@@ -62,7 +68,7 @@ class WebifSensor(CoordinatorEntity[WeishauptWebifCoordinator], SensorEntity):
 
         return DeviceInfo(
             identifiers={
-                (CONST.DOMAIN, "webif", self._mac, report_name),
+                (CONST.DOMAIN, f"{self._mac}_webif_{report_name}"),
             },
             translation_key=f"dev_webif_{report_name}",
             sw_version="Device_SW_Version",

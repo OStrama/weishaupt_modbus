@@ -1,6 +1,6 @@
 """Config flow."""
 
-from typing import Any
+from typing import Any, override
 
 from aiofiles.os import scandir
 from modbus_connection import ModbusConnectionError
@@ -15,8 +15,10 @@ from homeassistant.helpers.selector import (
     BooleanSelector,
     NumberSelector,
     NumberSelectorConfig,
+    NumberSelectorMode,
     SelectSelector,
     SelectSelectorConfig,
+    SelectSelectorMode,
     TextSelector,
 )
 
@@ -26,7 +28,7 @@ from .kennfeld.kennfeld import get_filepath
 
 async def build_kennfeld_list(hass: HomeAssistant) -> list[str]:
     """Browse integration directory for heat pump operation map ("kennfeld") files."""
-    kennfelder = []
+    kennfelder: list[str] = []
 
     try:
         dir_iterator = await scandir(get_filepath(hass))
@@ -109,7 +111,7 @@ class ConfigFlow(
                     NumberSelectorConfig(
                         min=1,
                         max=65535,
-                        mode="box",
+                        mode=NumberSelectorMode.BOX,
                     )
                 ),
                 probatio.Optional(
@@ -121,7 +123,7 @@ class ConfigFlow(
                 ): SelectSelector(
                     SelectSelectorConfig(
                         options=await build_kennfeld_list(self.hass),
-                        mode="dropdown",
+                        mode=SelectSelectorMode.DROPDOWN,
                     )
                 ),
                 probatio.Optional(
@@ -202,6 +204,7 @@ class ConfigFlow(
             }
         )
 
+    @override
     async def async_step_user(
         self,
         user_input: dict[str, Any] | None = None,

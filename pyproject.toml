@@ -361,6 +361,12 @@ log_date_format = "%Y-%m-%d %H:%M:%S"
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 
+[tool.coverage.run]
+omit = [
+  "custom_components/weishaupt_modbus/modbus/weishaupt_modbus_client/*",
+  "custom_components/weishaupt_modbus/webif/*",
+]
+
 [tool.coverage.report]
 exclude_lines = [
   # Have to re-enable the standard pragma

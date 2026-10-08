@@ -31,14 +31,15 @@ def _heating_circuit_entities(
     report_name: str,
 ) -> tuple[EntityDescription, ...]:
     """Return entity descriptions for a heating circuit."""
+
     return (
         SensorDescription(
             key="room_target_temperature",
             params=TEMPERATURE,
             report_name=report_name,
-            value_fn=lambda device, i=circuit: (
+            value_fn=lambda device: (
                 device.heating_circuit_inputs.heating_circuits[
-                    i
+                    circuit
                 ].room_target_temperature
             ),
         ),
@@ -46,25 +47,25 @@ def _heating_circuit_entities(
             key="room_temperature",
             params=TEMPERATURE,
             report_name=report_name,
-            value_fn=lambda device, i=circuit: (
-                device.heating_circuit_inputs.heating_circuits[i].room_temperature
+            value_fn=lambda device: (
+                device.heating_circuit_inputs.heating_circuits[circuit].room_temperature
             ),
         ),
         SensorDescription(
             key="room_humidity",
             params=HUMIDITY,
             report_name=report_name,
-            value_fn=lambda device, i=circuit: (
-                device.heating_circuit_inputs.heating_circuits[i].room_humidity
+            value_fn=lambda device: (
+                device.heating_circuit_inputs.heating_circuits[circuit].room_humidity
             ),
         ),
         SensorDescription(
             key="flow_target_temperature",
             params=TEMPERATURE,
             report_name=report_name,
-            value_fn=lambda device, i=circuit: (
+            value_fn=lambda device: (
                 device.heating_circuit_inputs.heating_circuits[
-                    i
+                    circuit
                 ].flow_target_temperature
             ),
         ),
@@ -72,27 +73,27 @@ def _heating_circuit_entities(
             key="flow_temperature",
             params=TEMPERATURE,
             report_name=report_name,
-            value_fn=lambda device, i=circuit: (
-                device.heating_circuit_inputs.heating_circuits[i].flow_temperature
+            value_fn=lambda device: (
+                device.heating_circuit_inputs.heating_circuits[circuit].flow_temperature
             ),
         ),
         SensorDescription(
             key="adr31106",
             params=EMPTY,
             report_name=report_name,
-            value_fn=lambda device, i=circuit: (
-                device.heating_circuit_inputs.heating_circuits[i].register_31106
+            value_fn=lambda device: (
+                device.heating_circuit_inputs.heating_circuits[circuit].register_31106
             ),
         ),
         SelectDescription(
             key="water_configuration",
             enum=HeatingCircuitWaterConfiguration,
             report_name=report_name,
-            value_fn=lambda device, i=circuit: (
-                device.heating_circuit_configs.heating_circuits[i].configuration
+            value_fn=lambda device: (
+                device.heating_circuit_configs.heating_circuits[circuit].configuration
             ),
-            set_value_fn=lambda device, value, i=circuit: (
-                device.heating_circuit_configs.heating_circuits[i].write(
+            set_value_fn=lambda device, value: (
+                device.heating_circuit_configs.heating_circuits[circuit].write(
                     "configuration",
                     value,
                 )
@@ -102,11 +103,11 @@ def _heating_circuit_entities(
             key="demand",
             enum=HeatingCircuitDemand,
             report_name=report_name,
-            value_fn=lambda device, i=circuit: (
-                device.heating_circuit_configs.heating_circuits[i].demand
+            value_fn=lambda device: (
+                device.heating_circuit_configs.heating_circuits[circuit].demand
             ),
-            set_value_fn=lambda device, value, i=circuit: (
-                device.heating_circuit_configs.heating_circuits[i].write(
+            set_value_fn=lambda device, value: (
+                device.heating_circuit_configs.heating_circuits[circuit].write(
                     "demand",
                     value,
                 )
@@ -116,11 +117,11 @@ def _heating_circuit_entities(
             key="operation_mode",
             enum=HeatingCircuitOperation,
             report_name=report_name,
-            value_fn=lambda device, i=circuit: (
-                device.heating_circuit_configs.heating_circuits[i].operation_mode
+            value_fn=lambda device: (
+                device.heating_circuit_configs.heating_circuits[circuit].operation_mode
             ),
-            set_value_fn=lambda device, value, i=circuit: (
-                device.heating_circuit_configs.heating_circuits[i].write(
+            set_value_fn=lambda device, value: (
+                device.heating_circuit_configs.heating_circuits[circuit].write(
                     "operation_mode",
                     value,
                 )
@@ -130,11 +131,11 @@ def _heating_circuit_entities(
             key="party_pause",
             enum=HeatingCircuitPartyPause,
             report_name=report_name,
-            value_fn=lambda device, i=circuit: (
-                device.heating_circuit_configs.heating_circuits[i].party_pause
+            value_fn=lambda device: (
+                device.heating_circuit_configs.heating_circuits[circuit].party_pause
             ),
-            set_value_fn=lambda device, value, i=circuit: (
-                device.heating_circuit_configs.heating_circuits[i].write(
+            set_value_fn=lambda device, value: (
+                device.heating_circuit_configs.heating_circuits[circuit].write(
                     "party_pause",
                     value,
                 )
@@ -144,13 +145,13 @@ def _heating_circuit_entities(
             key="comfort_room_target_temperature",
             params=ROOM_TEMP_COMFORT,
             report_name=report_name,
-            value_fn=lambda device, i=circuit: (
+            value_fn=lambda device: (
                 device.heating_circuit_configs.heating_circuits[
-                    i
+                    circuit
                 ].comfort_room_target_temperature
             ),
-            set_value_fn=lambda device, value, i=circuit: (
-                device.heating_circuit_configs.heating_circuits[i].write(
+            set_value_fn=lambda device, value: (
+                device.heating_circuit_configs.heating_circuits[circuit].write(
                     "comfort_room_target_temperature",
                     value,
                 )
@@ -160,13 +161,13 @@ def _heating_circuit_entities(
             key="normal_room_target_temperature",
             params=ROOM_TEMP_NORMAL,
             report_name=report_name,
-            value_fn=lambda device, i=circuit: (
+            value_fn=lambda device: (
                 device.heating_circuit_configs.heating_circuits[
-                    i
+                    circuit
                 ].normal_room_target_temperature
             ),
-            set_value_fn=lambda device, value, i=circuit: (
-                device.heating_circuit_configs.heating_circuits[i].write(
+            set_value_fn=lambda device, value: (
+                device.heating_circuit_configs.heating_circuits[circuit].write(
                     "normal_room_target_temperature",
                     value,
                 )
@@ -176,13 +177,13 @@ def _heating_circuit_entities(
             key="lowering_room_target_temperature",
             params=ROOM_TEMP_LOW,
             report_name=report_name,
-            value_fn=lambda device, i=circuit: (
+            value_fn=lambda device: (
                 device.heating_circuit_configs.heating_circuits[
-                    i
+                    circuit
                 ].lowering_room_target_temperature
             ),
-            set_value_fn=lambda device, value, i=circuit: (
-                device.heating_circuit_configs.heating_circuits[i].write(
+            set_value_fn=lambda device, value: (
+                device.heating_circuit_configs.heating_circuits[circuit].write(
                     "lowering_room_target_temperature",
                     value,
                 )
@@ -192,11 +193,11 @@ def _heating_circuit_entities(
             key="heating_curve",
             params=HEATING_CURVE,
             report_name=report_name,
-            value_fn=lambda device, i=circuit: (
-                device.heating_circuit_configs.heating_circuits[i].heating_curve
+            value_fn=lambda device: (
+                device.heating_circuit_configs.heating_circuits[circuit].heating_curve
             ),
-            set_value_fn=lambda device, value, i=circuit: (
-                device.heating_circuit_configs.heating_circuits[i].write(
+            set_value_fn=lambda device, value: (
+                device.heating_circuit_configs.heating_circuits[circuit].write(
                     "heating_curve",
                     value,
                 )
@@ -206,13 +207,13 @@ def _heating_circuit_entities(
             key="summer_winter_switch_temperature",
             params=SUMMER_WINTER_SWITCH_TEMPERATURE,
             report_name=report_name,
-            value_fn=lambda device, i=circuit: (
+            value_fn=lambda device: (
                 device.heating_circuit_configs.heating_circuits[
-                    i
+                    circuit
                 ].summer_winter_switch_temperature
             ),
-            set_value_fn=lambda device, value, i=circuit: (
-                device.heating_circuit_configs.heating_circuits[i].write(
+            set_value_fn=lambda device, value: (
+                device.heating_circuit_configs.heating_circuits[circuit].write(
                     "summer_winter_switch_temperature",
                     value,
                 )
@@ -222,13 +223,13 @@ def _heating_circuit_entities(
             key="constant_heating_temperature",
             params=CONST_TEMP_HEATING,
             report_name=report_name,
-            value_fn=lambda device, i=circuit: (
+            value_fn=lambda device: (
                 device.heating_circuit_configs.heating_circuits[
-                    i
+                    circuit
                 ].constant_heating_temperature
             ),
-            set_value_fn=lambda device, value, i=circuit: (
-                device.heating_circuit_configs.heating_circuits[i].write(
+            set_value_fn=lambda device, value: (
+                device.heating_circuit_configs.heating_circuits[circuit].write(
                     "constant_heating_temperature",
                     value,
                 )
@@ -238,13 +239,13 @@ def _heating_circuit_entities(
             key="constant_heating_lowering_temperature",
             params=ROOM_TEMPERATURE,
             report_name=report_name,
-            value_fn=lambda device, i=circuit: (
+            value_fn=lambda device: (
                 device.heating_circuit_configs.heating_circuits[
-                    i
+                    circuit
                 ].constant_heating_lowering_temperature
             ),
-            set_value_fn=lambda device, value, i=circuit: (
-                device.heating_circuit_configs.heating_circuits[i].write(
+            set_value_fn=lambda device, value: (
+                device.heating_circuit_configs.heating_circuits[circuit].write(
                     "constant_heating_lowering_temperature",
                     value,
                 )
@@ -254,13 +255,13 @@ def _heating_circuit_entities(
             key="constant_cooling_temperature",
             params=ROOM_TEMPERATURE,
             report_name=report_name,
-            value_fn=lambda device, i=circuit: (
+            value_fn=lambda device: (
                 device.heating_circuit_configs.heating_circuits[
-                    i
+                    circuit
                 ].constant_cooling_temperature
             ),
-            set_value_fn=lambda device, value, i=circuit: (
-                device.heating_circuit_configs.heating_circuits[i].write(
+            set_value_fn=lambda device, value: (
+                device.heating_circuit_configs.heating_circuits[circuit].write(
                     "constant_cooling_temperature",
                     value,
                 )

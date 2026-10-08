@@ -2,24 +2,19 @@
 
 import asyncio
 import logging
-from typing import TYPE_CHECKING
 
 from homeassistant.components.modbus.connection import ModbusTcpParams, async_get_unit
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
-from .configentry import MyData
+from .configentry import MyConfigEntry, MyData
+from .const import CONF, CONST
+from .kennfeld.kennfeld import PowerMap
 from .migrate_helpers import migrate_entities
 from .modbus.coordinator import WeishauptCoordinator
 from .modbus.weishaupt_modbus_client.model.device import Weishaupt
 from .webif.coordinator import WeishauptWebifCoordinator
 from .webif.description.description import WebifConnection
-
-if TYPE_CHECKING:
-    from .configentry import MyConfigEntry
-
-from .const import CONF, CONST
-from .kennfeld.kennfeld import PowerMap
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -144,14 +139,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
 
     _LOGGER.info("Init done")
     for state in hass.states.async_all("sensor"):
-        unit = state.attributes.get("unit_of_measurement")
+        sensor_unit = state.attributes.get("unit_of_measurement")
 
-        if not isinstance(unit, (str, type(None))):
+        if not isinstance(sensor_unit, (str, type(None))):
             _LOGGER.error(
                 "INVALID GLOBAL SENSOR UNIT: %s -> %r (%s), attributes=%r",
                 state.entity_id,
-                unit,
-                type(unit).__name__,
+                sensor_unit,
+                type(sensor_unit).__name__,
                 state.attributes,
             )
 

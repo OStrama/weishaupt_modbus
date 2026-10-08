@@ -1,8 +1,5 @@
 """Weishaupt heating circuit entity descriptions."""
 
-# from ..kennfeld import power
-from homeassistant.core import _LOGGER
-
 from ...kennfeld.kennfeld import PowerMap
 from ..coordinator import WeishauptCoordinator
 from .description import EntityDescription, SensorDescription
@@ -34,6 +31,14 @@ def calculate_thermal_power(
     return power_request / 100 * power
 
 
+def round_cop(value: float | None) -> float | None:
+    """Round a COP value."""
+    if value is None:
+        return None
+
+    return round(value, 2)
+
+
 CALCULATERD_ENTITIES: tuple[EntityDescription, ...] = (
     SensorDescription(
         key="thermal_power",
@@ -46,25 +51,25 @@ CALCULATERD_ENTITIES: tuple[EntityDescription, ...] = (
         key="daily_cop",
         params=COP,
         report_name="statistics",
-        value_fn=lambda device: round(device.statistics_input.daily_cop, 2),
+        value_fn=lambda device: round_cop(device.statistics_input.daily_cop),
     ),
     SensorDescription(
         key="yesterday_cop",
         params=COP,
         report_name="statistics",
-        value_fn=lambda device: round(device.statistics_input.yesterday_cop, 2),
+        value_fn=lambda device: round_cop(device.statistics_input.yesterday_cop),
     ),
     SensorDescription(
         key="monthly_cop",
         params=COP,
         report_name="statistics",
-        value_fn=lambda device: round(device.statistics_input.monthly_cop, 2),
+        value_fn=lambda device: round_cop(device.statistics_input.monthly_cop),
     ),
     SensorDescription(
         key="yearly_cop",
         params=COP,
         report_name="statistics",
-        value_fn=lambda device: round(device.statistics_input.yearly_cop, 2),
+        value_fn=lambda device: round_cop(device.statistics_input.yearly_cop),
     ),
     SensorDescription(
         key="temperature_spread",

@@ -1,3 +1,5 @@
+"""Description of Weishaupt WebIf secondary heat source sensors."""
+
 from .description import WebifSensorDescription
 from .params import PARAMS_HOURS, PARAMS_INTEGER, PARAMS_TEXT
 

@@ -56,6 +56,7 @@ class MainConstants:
     UNIQUE_ID: str = "unique_id"
     APPID: int = 100
     DEF_KENNFELDFILE: str = "weishaupt_wbb_kennfeld.json"
+    DEF_PREFIX: str = "weishaupt_wbb"
 
 
 CONST = MainConstants()

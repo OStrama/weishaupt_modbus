@@ -58,55 +58,79 @@ IO_ENTITIES: tuple[EntityDescription, ...] = (
         enum=IoConfigSgr,
         report_name="io",
         value_fn=lambda device: device.io_config.sg_ready_1,
-        set_value_fn=lambda device, value: device.io_config.sg_ready_1(value),
+        set_value_fn=lambda device, value: device.io_config.write(
+            "sg_ready_1",
+            value,
+        ),
     ),
     SelectDescription(
         key="select_sg_ready_2",
         enum=IoConfigSgr,
         report_name="io",
         value_fn=lambda device: device.io_config.sg_ready_2,
-        set_value_fn=lambda device, value: device.io_config.sg_ready_2(value),
+        set_value_fn=lambda device, value: device.io_config.write(
+            "sg_ready_2",
+            value,
+        ),
     ),
     SelectDescription(
         key="select_output_h1_2",
         enum=IoConfigOutput,
         report_name="io",
         value_fn=lambda device: device.io_config.output_h1_2,
-        set_value_fn=lambda device, value: device.io_config.output_h1_2(value),
+        set_value_fn=lambda device, value: device.io_config.write(
+            "output_h1_2",
+            value,
+        ),
     ),
     SelectDescription(
         key="select_output_h1_3",
         enum=IoConfigOutput,
         report_name="io",
         value_fn=lambda device: device.io_config.output_h1_3,
-        set_value_fn=lambda device, value: device.io_config.output_h1_3(value),
+        set_value_fn=lambda device, value: device.io_config.write(
+            "output_h1_3",
+            value,
+        ),
     ),
     SelectDescription(
         key="select_output_h1_4",
         enum=IoConfigOutput,
         report_name="io",
         value_fn=lambda device: device.io_config.output_h1_4,
-        set_value_fn=lambda device, value: device.io_config.output_h1_4(value),
+        set_value_fn=lambda device, value: device.io_config.write(
+            "output_h1_4",
+            value,
+        ),
     ),
     SelectDescription(
         key="select_output_h1_5",
         enum=IoConfigOutput,
         report_name="io",
         value_fn=lambda device: device.io_config.output_h1_5,
-        set_value_fn=lambda device, value: device.io_config.output_h1_5(value),
+        set_value_fn=lambda device, value: device.io_config.write(
+            "output_h1_5",
+            value,
+        ),
     ),
     SelectDescription(
         key="select_input_de1",
         enum=IoConfigInput,
         report_name="io",
         value_fn=lambda device: device.io_config.input_de1,
-        set_value_fn=lambda device, value: device.io_config.input_de1(value),
+        set_value_fn=lambda device, value: device.io_config.write(
+            "input_de1",
+            value,
+        ),
     ),
     SelectDescription(
         key="select_input_de2",
         enum=IoConfigInput,
         report_name="io",
         value_fn=lambda device: device.io_config.input_de2,
-        set_value_fn=lambda device, value: device.io_config.input_de2(value),
+        set_value_fn=lambda device, value: device.io_config.write(
+            "input_de2",
+            value,
+        ),
     ),
 )

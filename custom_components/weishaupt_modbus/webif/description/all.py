@@ -1,4 +1,6 @@
-"""This is where all WebIf entieties come together."""
+"""All WebIf entieties come together here."""
+
+from homeassistant import config_entries
 
 from ...const import CONF
 from .heating_circuits import (
@@ -13,7 +15,7 @@ from .statistics import WEBIF_STATISTICS
 from .waermepumpe import WEBIF_HEAT_PUMP
 
 
-def get_webif_entities(entry) -> list:
+def get_webif_entities(entry: config_entries.ConfigEntry) -> list:
     """Get the WebIF entities selected in the config entry."""
     entities = []
 

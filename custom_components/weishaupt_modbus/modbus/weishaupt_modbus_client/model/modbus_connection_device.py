@@ -1,10 +1,11 @@
-"""This is borrowed from a newer release of modbus-connection."""
+"""Code is borrowed from a newer release of modbus-connection."""
 # As soon as modbus-connection 4.12.0 is integrated in HomeAssistant this file can be removed"""
 
 from collections.abc import Iterable
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
+from modbus_connection._protocol import ModbusUnit
 from modbus_connection.exceptions import (
     IllegalDataAddressError,
     IllegalFunctionError,
@@ -16,7 +17,6 @@ from modbus_connection.model._const import Raw
 from modbus_connection.model._planning import _merge_raw
 
 if TYPE_CHECKING:
-    from modbus_connection._protocol import ModbusUnit
     from modbus_connection.model.component import Component
     from modbus_connection.model.component_group import ComponentGroup
     from modbus_connection.model.manual import ManualComponent

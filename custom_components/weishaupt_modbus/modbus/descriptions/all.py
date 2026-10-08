@@ -1,5 +1,6 @@
 """All entities from the different modules."""
 
+from ...configentry import MyConfigEntry
 from ...const import CONF
 from .calculated import CALCULATERD_ENTITIES
 from .domestic_hot_water import DOMESTIC_HOT_WATER_ENTITIES
@@ -17,7 +18,7 @@ from .stats import STATISTICS_ENTITIES
 from .system import SYSTEM_ENTITIES
 
 
-def get_entities(entry) -> list:
+def get_entities(entry: MyConfigEntry) -> tuple:
     """Get all entities for the given config entry."""
 
     readings = (

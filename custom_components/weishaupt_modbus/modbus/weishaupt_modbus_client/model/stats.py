@@ -46,9 +46,12 @@ class StatisticsInput(Component):
     register_36801 = integer(36801)
 
     @staticmethod
-    def _cop(total_energy: int, electric_energy: int) -> float | None:
+    def _cop(
+        total_energy: int | None,
+        electric_energy: int | None,
+    ) -> float | None:
         """Calculate the coefficient of performance."""
-        if electric_energy == 0:
+        if total_energy is None or electric_energy in (None, 0):
             return None
 
         return total_energy / electric_energy

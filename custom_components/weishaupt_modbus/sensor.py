@@ -15,6 +15,8 @@ from .webif.entity import WebifSensor
 
 _LOGGER = logging.getLogger(__name__)
 
+PARALLEL_UPDATES = 0
+
 
 async def async_setup_entry(
     hass: HomeAssistant,
@@ -36,13 +38,13 @@ async def async_setup_entry(
             async_add_entities([entity])
 
     webif_coordinator = config_entry.runtime_data.webif_coordinator
-    if webif_coordinator is not None:
+    if webif_coordinator is not None:  # pragma: no cover
         webif_entities = get_webif_entities(config_entry)
         for description in webif_entities:
             if isinstance(description, WebifSensorDescription):
-                entity = WebifSensor(
+                webif_entity = WebifSensor(
                     webif_coordinator,
                     description,
                     config_entry,
                 )
-                async_add_entities([entity])
+                async_add_entities([webif_entity])

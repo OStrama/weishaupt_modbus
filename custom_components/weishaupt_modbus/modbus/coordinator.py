@@ -3,6 +3,7 @@
 import asyncio
 from datetime import timedelta
 import logging
+from typing import TYPE_CHECKING, override
 
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
@@ -12,12 +13,15 @@ from .weishaupt_modbus_client.model.device import Weishaupt
 _LOGGER = logging.getLogger(__name__)
 
 
-try:
+if TYPE_CHECKING:
     from modbus_connection.model import UpdateReport
-except ImportError:
-    from .weishaupt_modbus_client.model.modbus_connection_device import UpdateReport
+else:
+    try:
+        from modbus_connection.model import UpdateReport
+    except ImportError:  # pragma: no cover
+        from .weishaupt_modbus_client.model.modbus_connection_device import UpdateReport
 
-    _LOGGER.debug("Using local Device/UpdateReport compatibility implementation")
+        _LOGGER.debug("Using local Device/UpdateReport compatibility implementation")
 
 
 class WeishauptCoordinator(DataUpdateCoordinator[UpdateReport]):
@@ -39,7 +43,16 @@ class WeishauptCoordinator(DataUpdateCoordinator[UpdateReport]):
         self.device = device
         self._mcu_lock = mcu_lock
 
+    @override
     async def _async_update_data(self) -> UpdateReport:
         """Update the Weishaupt device."""
         async with self._mcu_lock:
-            return await self.device.async_update()
+            report = await self.device.async_update()
+
+        if report.failed:
+            _LOGGER.warning(
+                "Failed to update Weishaupt reports: %s",
+                ", ".join(f"{name}: {error}" for name, error in report.failed.items()),
+            )
+
+        return report

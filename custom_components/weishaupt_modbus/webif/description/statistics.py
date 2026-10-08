@@ -1,3 +1,5 @@
+"""Description of Weishaupt WebIf statistics sensors."""
+
 from .description import WebifSensorDescription
 from .params import PARAMS_ENERGY_WEBIF
 

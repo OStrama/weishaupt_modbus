@@ -89,7 +89,7 @@ class HeatPumpInput(Component):
     @property
     def temperature_spread(self) -> float | None:
         """Return the temperature spread between flow and return."""
-        if self.flow_temperature is None or self.return_temperature is None:
+        if self.precise_flow_temperature is None or self.return_temperature is None:
             return None
 
         return self.precise_flow_temperature - self.return_temperature

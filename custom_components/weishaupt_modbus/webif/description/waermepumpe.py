@@ -1,3 +1,5 @@
+"""Description of Weishaupt WebIf heat pump sensors."""
+
 from .description import WebifSensorDescription
 from .params import (
     PARAMS_ENERGY,

@@ -5,14 +5,13 @@ import json
 import logging
 from pathlib import Path
 import shutil
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 import aiofiles
 
 from homeassistant.core import HomeAssistant
 
-if TYPE_CHECKING:
-    from ..configentry import MyConfigEntry
+from ..configentry import MyConfigEntry
 from ..const import CONF, CONST
 
 _LOGGER = logging.getLogger(__name__)
@@ -30,20 +29,20 @@ NUMPY_AVAILABLE = importlib.util.find_spec("numpy") is not None
 SCIPY_AVAILABLE = importlib.util.find_spec("scipy") is not None
 PYGAL_AVAILABLE = importlib.util.find_spec("pygal") is not None
 
-if not NUMPY_AVAILABLE:
+if not NUMPY_AVAILABLE:  # pragma: no cover
     _LOGGER.warning(
-        "Numpy is not available. Raw power map compilation will be disabled."
+        "Numpy is not available. Raw power map compilation will be disabled"
     )
 
-if not SCIPY_AVAILABLE:
+if not SCIPY_AVAILABLE:  # pragma: no cover
     _LOGGER.warning(
-        "SciPy is not available. CubicSpline high-precision compilation is disabled."
+        "SciPy is not available. CubicSpline high-precision compilation is disabled"
     )
 
-if not PYGAL_AVAILABLE:
+if not PYGAL_AVAILABLE:  # pragma: no cover
     _LOGGER.warning(
         "Pygal is not available. Adding 'pygal' to manifest.json is recommended "
-        "to enable dynamic SVG dashboard maps."
+        "to enable dynamic SVG dashboard maps"
     )
 
 
@@ -67,13 +66,13 @@ class PowerMap:
         # 1. Optionally compile all missing grids in the folder first (non-blocking)
         if COMPILE_ALL_MISSING:
             if NUMPY_AVAILABLE:
-                _LOGGER.info("Scanning for missing pre-compiled grids...")
+                _LOGGER.info("Scanning for missing pre-compiled grids")
                 await self.hass.async_add_executor_job(
                     self._compile_all_missing_blocking
                 )
             else:
                 _LOGGER.error(
-                    "Cannot compile missing curves: Numpy is missing on this host."
+                    "Cannot compile missing curves: Numpy is missing on this host"
                 )
 
         # 2. Load the specific active configuration curve
@@ -117,12 +116,12 @@ class PowerMap:
                 # 4. Fallback for the active curve if COMPILE_ALL_MISSING was False
                 if not NUMPY_AVAILABLE:
                     _LOGGER.error(
-                        "Cannot compile raw curve: Numpy is missing on this host."
+                        "Cannot compile raw curve: Numpy is missing on this host"
                     )
                     return
 
                 _LOGGER.warning(
-                    "Pre-compiled grid missing in %s. Compiling once...", filepath.name
+                    "Pre-compiled grid missing in %s. Compiling once", filepath.name
                 )
                 self._compiled_grid = await self.hass.async_add_executor_job(
                     self._compile_and_save_kennfeld_blocking, data, filepath
@@ -176,7 +175,6 @@ class PowerMap:
     ) -> dict[str, list[float]]:
         """Run CubicSpline compilation and write the compact grid back to the JSON file."""
         # On-demand import of Numpy (executed safely inside the thread pool)
-        import numpy as np  # noqa: PLC0415
 
         known_x = data["known_x"]
         known_y = data["known_y"]
@@ -250,7 +248,7 @@ class PowerMap:
         import pygal  # noqa: PLC0415
         from pygal.style import Style  # noqa: PLC0415
 
-        compiled_grid = data.get("compiled_grid")
+        compiled_grid: dict[str, list[float]] = data["compiled_grid"]
         known_t = sorted(data.get("known_t", [35, 55]))
         known_x = data.get("known_x", [-30, 40])
 
@@ -337,7 +335,14 @@ class PowerMap:
                 style=custom_style,
                 legend_at_bottom=True,
             )
-            chart.title = f"Betriebspunkt Kennfeld ({curr_power / 1000:.1f} kW) | VL: {curr_flow:.1f}°C | AT: {curr_out:.1f}°C"
+            power_text = (
+                f"{curr_power / 1000:.1f} kW" if curr_power is not None else "– kW"
+            )
+
+            chart.title = (
+                f"Betriebspunkt Kennfeld ({power_text}) | "
+                f"VL: {curr_flow:.1f}°C | AT: {curr_out:.1f}°C"
+            )
 
             # 1. Add compiled curves
             for r_idx, flow_val in enumerate(self._known_t):
@@ -400,7 +405,7 @@ class PowerMap:
                 "Failed to copy power map image to local www directory: %s", err
             )
 
-    def map(self, outside_temp_raw: float, flow_temp_raw: float) -> float:
+    def map(self, outside_temp_raw: float, flow_temp_raw: float) -> float | None:
         """Map raw temperature values using 1D flow temperature interpolation on the compact grid."""
         if not self._compiled_grid:
             return 0.0
@@ -422,17 +427,13 @@ class PowerMap:
         if not vals:
             return 0.0
 
-        # 2. Find surrounding Flow Temp curve intervals in known_t
+        # 2. Find surrounding Flow Temp curve interval in known_t
         y0_idx = 0
         for i in range(len(self._known_t) - 1):
             if self._known_t[i] <= flow_temp <= self._known_t[i + 1]:
                 y0_idx = i
                 break
-        else:
-            if flow_temp < self._known_t[0]:
-                y0_idx = 0
-            else:
-                y0_idx = len(self._known_t) - 2
+
         y1_idx = y0_idx + 1
 
         # 3. Grab the 2 flow temp boundary values at this outside temperature

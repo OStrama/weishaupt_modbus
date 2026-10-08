@@ -8,6 +8,8 @@ from .modbus.descriptions.all import get_entities
 from .modbus.descriptions.description import SelectDescription
 from .modbus.entities import WeishauptSelect
 
+PARALLEL_UPDATES = 1
+
 
 async def async_setup_entry(
     hass: HomeAssistant,

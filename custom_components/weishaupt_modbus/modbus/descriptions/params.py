@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass
 
-from homeassistant.components.number import NumberDeviceClass
+from homeassistant.components.number import NumberDeviceClass, NumberMode
 from homeassistant.components.sensor import SensorDeviceClass, SensorStateClass
 from homeassistant.const import (
     PERCENTAGE,
@@ -38,7 +38,7 @@ class NumberParams:
     native_max_value: float = 100
     native_step: float = 1
     icon: str | None = None
-    mode: str = "auto"
+    mode: NumberMode = NumberMode.AUTO
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -184,7 +184,7 @@ PV_POWER = NumberParams(
     native_min_value=0.0,
     native_max_value=65535,
     native_step=500,
-    mode="box",
+    mode=NumberMode.BOX,
 )
 
 
@@ -299,7 +299,7 @@ BIVALENCE_TEMPERATURE = NumberParams(
     native_min_value=-20,
     native_max_value=40,
     native_step=0.5,
-    device_class=SensorDeviceClass.TEMPERATURE,
+    device_class=NumberDeviceClass.TEMPERATURE,
     native_unit_of_measurement=UnitOfTemperature.CELSIUS,
 )
 

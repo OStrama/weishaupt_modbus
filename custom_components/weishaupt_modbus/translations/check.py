@@ -1,10 +1,9 @@
-#!/usr/bin/env python3
+"""Test that all translation files have the same keys as de.json."""
 
 import json
 from pathlib import Path
 
-
-TRANSLATION_DIR = Path("")
+TRANSLATION_DIR = Path()
 MASTER = TRANSLATION_DIR / "de.json"
 
 
@@ -51,7 +50,7 @@ def check_translation_keys() -> None:
 def main() -> int:
     """Run the translation check."""
     check_translation_keys()
-    print("All translation files have the same keys as de.json.")
+    print("All translation files have the same keys as de.json.")  # noqa: T201
     return 0
 
 

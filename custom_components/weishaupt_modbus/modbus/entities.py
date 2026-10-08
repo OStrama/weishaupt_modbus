@@ -1,6 +1,6 @@
 """Entity classes used in this integration."""
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, override
 
 from homeassistant.components.number import NumberEntity
 from homeassistant.components.select import SelectEntity
@@ -40,6 +40,7 @@ class WeishauptEntity(CoordinatorEntity[WeishauptCoordinator]):
 
         self.description = description
         self._mac = config_entry.data[CONF.MAC]
+        self._weishaupt_config_entry = config_entry
 
         self._attr_has_entity_name = True
         self._attr_unique_id = (
@@ -48,6 +49,7 @@ class WeishauptEntity(CoordinatorEntity[WeishauptCoordinator]):
         self._attr_translation_key = f"{description.report_name}_{description.key}"
 
     @property
+    @override
     def available(self) -> bool:
         """Return whether the entity is available."""
         return (
@@ -56,13 +58,14 @@ class WeishauptEntity(CoordinatorEntity[WeishauptCoordinator]):
         )
 
     @property
+    @override
     def device_info(self) -> DeviceInfo:
         """Return device info."""
         report_name = self.description.report_name
 
         return DeviceInfo(
             identifiers={
-                (CONST.DOMAIN, self._mac, report_name),
+                (CONST.DOMAIN, f"{self._mac}_{report_name}"),
             },
             translation_key=f"dev_{report_name}",
             sw_version="Device_SW_Version",
@@ -95,12 +98,15 @@ class WeishauptSensor(WeishauptEntity, SensorEntity):
         )
 
     @property
+    @override
     def native_value(self) -> float | str | None:
         """Return the sensor value."""
+        value: float | str | None
+
         if self.description.calculated_value_fn is not None:
             value = self.description.calculated_value_fn(
                 self.coordinator,
-                self.coordinator.config_entry.runtime_data.powermap,
+                self._weishaupt_config_entry.runtime_data.powermap,
             )
         else:
             value = self.description.value_fn(self.coordinator.device)
@@ -138,10 +144,12 @@ class WeishauptNumber(WeishauptEntity, NumberEntity):
         self._attr_mode = description.params.mode
 
     @property
+    @override
     def native_value(self) -> float | None:
         """Return the current value."""
         return self.description.value_fn(self.coordinator.device)
 
+    @override
     async def async_set_native_value(self, value: float) -> None:
         """Set the value."""
         await self.description.set_value_fn(
@@ -167,9 +175,10 @@ class WeishauptSelect(WeishauptEntity, SelectEntity):
 
         self._enum = description.enum
 
-        self._attr_options = tuple(member.name for member in self._enum)
+        self._attr_options = [member.name for member in self._enum]
 
     @property
+    @override
     def current_option(self) -> str | None:
         """Return the current option."""
         value = self.description.value_fn(self.coordinator.device)
@@ -179,6 +188,7 @@ class WeishauptSelect(WeishauptEntity, SelectEntity):
 
         return self._enum(value).name
 
+    @override
     async def async_select_option(self, option: str) -> None:
         """Set the selected option."""
         value = self._enum[option].value

@@ -3,7 +3,7 @@
 import asyncio
 from datetime import timedelta
 import logging
-from typing import Any
+from typing import Any, override
 
 from weishaupt_webif_api import WebifConnection, WeishauptWebifError
 
@@ -44,6 +44,7 @@ class WeishauptWebifCoordinator(
         self.data: dict[str, Any] = {}
         self._category_queue: list[str] = []
 
+    @override
     async def _async_update_data(self) -> dict[str, Any]:
         """Fetch data from the WebIF endpoint."""
         active_categories = self._get_categories()
@@ -94,16 +95,6 @@ class WeishauptWebifCoordinator(
             ) from err
         except WeishauptWebifError as err:
             raise UpdateFailed(f"Error fetching WebIF data: {err}") from err
-
-    async def _async_update_data(self):
-        try:
-            categories = self._get_categories()
-            if self.entry.data.get(CONF.CB_WEBIF_MOCKUP_DATA):
-                return await self.api.update_all_mock(categories)
-            else:
-                return await self.api.update_all(categories)
-        except Exception as err:
-            raise UpdateFailed(err) from err
 
     def _get_categories(self) -> list[str]:
         """Return the configured WebIF categories."""

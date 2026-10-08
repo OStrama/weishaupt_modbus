@@ -1,7 +1,7 @@
 """Weishaupt statistics entity descriptions."""
 
 from .description import EntityDescription, SensorDescription
-from .params import ENERGY, EMPTY
+from .params import EMPTY, ENERGY
 
 STATISTICS_ENTITIES: tuple[EntityDescription, ...] = (
     SensorDescription(

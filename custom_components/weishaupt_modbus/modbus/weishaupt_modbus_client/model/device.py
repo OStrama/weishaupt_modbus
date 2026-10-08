@@ -1,6 +1,8 @@
 """Weishaupt device model."""
 
+from collections.abc import Iterable
 import logging
+from typing import TYPE_CHECKING, Any
 
 from modbus_connection.model import ComponentGroup
 
@@ -13,12 +15,16 @@ from .stats import StatisticsInput
 from .system import SystemConfig, SystemStatus
 
 _LOGGER = logging.getLogger(__name__)
-try:
-    from modbus_connection.model import Device, UpdateReport
-except ImportError:
-    from .modbus_connection_device import Device, UpdateReport
 
-    _LOGGER.warning("Using local Device/UpdateReport compatibility implementation")
+if TYPE_CHECKING:
+    from modbus_connection.model import Device, UpdateReport
+else:
+    try:
+        from modbus_connection.model import Device, UpdateReport
+    except ImportError:  # pragma: no cover
+        from .modbus_connection_device import Device, UpdateReport
+
+        _LOGGER.warning("Using local Device/UpdateReport compatibility implementation")
 
 # READINGS = (
 #    "system",
@@ -37,7 +43,7 @@ except ImportError:
 class Weishaupt(Device):
     """Weishaupt WBB device reached through a ModbusUnit."""
 
-    def __init__(self, unit, readings) -> None:
+    def __init__(self, unit: Any, readings: Iterable[str]) -> None:
         """__init__ ."""
         super().__init__(unit)
         self._readings = readings
