@@ -63,12 +63,19 @@ Alternatively, you can allow the complete local network if other devices also ne
 
 ## Configuration
 
-After installation, add the integration through the Home Assistant UI.
+The integration is configured through the Home Assistant UI.
 
-The main required setting is the **IP address of the heat pump**. The default Modbus TCP port should normally be correct unless it has been changed in the heat pump configuration.
-Starting with 2.0.0 a valid MAC Address is also required.
+The following information is required during setup:
 
-The integration also supports optional EXPERIMENTAL WebIF functionality for supported installations.
+| ModBus Parameter | Description |
+|---|---|
+| **Host** | IP address or hostname of the Weishaupt heat pump. |
+| **Port** | Modbus TCP port of the heat pump. |
+| **MAC address** | MAC address of the heat pump. This is used to uniquely identify the device. |
+| **HK2–HK5** | Enable the heating circuits that are present on the heat pump. |
+| **WebIF** | Optional **experimental** WebIF support. See the [WebIF setup guide](https://github.com/OStrama/weishaupt_modbus/wiki/Enable-Webif) for details. |
+
+
 
 ### Power mapping
 
