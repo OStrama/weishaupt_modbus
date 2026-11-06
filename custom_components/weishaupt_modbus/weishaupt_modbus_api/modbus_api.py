@@ -1,6 +1,7 @@
 """Modbus_API."""
 
 import asyncio
+import contextlib
 import logging
 
 from pymodbus.client import AsyncModbusTcpClient
@@ -12,12 +13,12 @@ from .const import (
     BACKOFF_MAX_SECONDS,
     BACKOFF_THRESHOLD_FAILURES,
     DEFAULT_PORT,
+    MAX_BLOCK_READ_COUNT,
 )
 from .exceptions import ConnectionFailedError, WriteError
 
 # Import Modbus formatting models from local hpconst file
-from .hpconst import DEVICELISTS, FORMATS, ModbusItem
-import contextlib
+from .hpconst import DEVICELISTS, FORMATS, TYPES, ModbusItem
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -180,6 +181,25 @@ class WeishauptModbusClient:
             if self._client.connected:
                 self._client.close()
 
+    async def _read_individual_registers(
+        self, start: int, count: int, is_holding: bool
+    ) -> dict[int, int]:
+        """Read a partially supported block individually while the caller holds the lock."""
+        reader = (
+            self._client.read_holding_registers
+            if is_holding
+            else self._client.read_input_registers
+        )
+        values: dict[int, int] = {}
+        for address in range(start, start + count):
+            try:
+                response = await reader(address=address, count=1, device_id=1)
+                if not response.isError() and len(response.registers) == 1:
+                    values[address] = response.registers[0]
+            except (TimeoutError, ModbusException, OSError) as err:
+                _LOGGER.debug("Cannot read individual register %d: %s", address, err)
+        return values
+
     async def update(self) -> dict[int, int | None]:
         """Coordinator polls this method to batch-update the entire internal register cache."""
         batches = self._process_and_validate_batches(DEVICELISTS)
@@ -209,14 +229,14 @@ class WeishauptModbusClient:
                         item.is_invalid = False
                         return raw_val
 
-            elif mformat == FORMATS.PERCENTAGE:
+            if mformat == FORMATS.PERCENTAGE:
                 if raw_val == 65535:
                     item.is_invalid = True
                     return None
                 item.is_invalid = False
                 return raw_val
 
-            elif mformat == FORMATS.STATUS:
+            if mformat == FORMATS.STATUS:
                 item.is_invalid = False
                 return raw_val
 
@@ -268,6 +288,14 @@ class WeishauptModbusClient:
                             # Exception 2 (illegal data address) flags item as invalid
                             if response.exception_code == 2:
                                 nullify_batch(start, count)
+                                if count > 1:
+                                    values = await self._read_individual_registers(
+                                        start, count, is_holding
+                                    )
+                                    for address, raw in values.items():
+                                        self.data[address] = process_raw_value(
+                                            address, raw
+                                        )
                                 continue
                         else:
                             _LOGGER.warning(
@@ -277,6 +305,16 @@ class WeishauptModbusClient:
                                 count,
                                 response,
                             )
+                        nullify_batch(start, count)
+                        continue
+
+                    if len(response.registers) != count:
+                        _LOGGER.warning(
+                            "Unexpected register count for block %d: expected %d, received %d",
+                            start,
+                            count,
+                            len(response.registers),
+                        )
                         nullify_batch(start, count)
                         continue
 
@@ -341,40 +379,34 @@ class WeishauptModbusClient:
                     f"Failed to write to register {address}: {err}"
                 ) from err
 
-    def _process_and_validate_batches(self, items: list[ModbusItem]) -> dict[int, int]:
-        """Loops through ModbusItems and limits each batch size."""
-        myitems = []
-        for item in items:
-            myitems = myitems + item
+    def _process_and_validate_batches(
+        self, items: list[list[ModbusItem]]
+    ) -> dict[int, int]:
+        """Build contiguous, unique batches without changing register metadata."""
+        by_address: dict[int, ModbusItem] = {}
+        for group in items:
+            for item in group:
+                if item.type == TYPES.SENSOR_CALC or item.batch is None:
+                    continue
+                by_address.setdefault(item.address, item)
 
-        sorted_items = sorted(
-            [i for i in myitems if getattr(i, "_address", None) is not None],
-            key=lambda x: x._address,
-        )
-
-        self._items_dict = {item._address: item for item in sorted_items}
-
-        batch_sizes: dict[int, int] = {}
-        current_batch_start: int | None = None
-
-        for item in sorted_items:
-            if getattr(item, "_mtype", None) == "SENSOR_CALC" or item.batch is None:
-                continue
-
-            base_batch = item.batch
-
-            if current_batch_start is None:
-                current_batch_start = base_batch
-
+        self._items_dict = by_address
+        batches: dict[int, int] = {}
+        start: int | None = None
+        previous: int | None = None
+        hint: int | None = None
+        for address, item in sorted(by_address.items()):
             if (
-                base_batch != current_batch_start
-                or batch_sizes.get(current_batch_start, 0) >= 5
+                start is None
+                or previous is None
+                or address != previous + 1
+                or item.batch != hint
+                or (address >= 40000) != (start >= 40000)
+                or batches[start] >= MAX_BLOCK_READ_COUNT
             ):
-                current_batch_start = item._address
-                item._batch = current_batch_start
-
-            batch_sizes[current_batch_start] = (
-                batch_sizes.get(current_batch_start, 0) + 1
-            )
-
-        return batch_sizes
+                start = address
+                batches[start] = 0
+            batches[start] += 1
+            previous = address
+            hint = item.batch
+        return batches
