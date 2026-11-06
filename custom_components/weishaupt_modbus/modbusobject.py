@@ -17,6 +17,7 @@ if TYPE_CHECKING:
     from .configentry import MyConfigEntry
 from .const import CONF, FORMATS, TYPES
 from .items import ModbusItem
+from .register_validation import decode_percentage, decode_temperature
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -244,25 +245,9 @@ class ModbusObject:
             Processed temperature value or None if invalid
 
         """
-        match val:
-            case -32768:
-                # No Sensor installed, remove it from the list
-                self._modbus_item.is_invalid = True
-                return None
-            case 32768:
-                # This seems to be zero, should be allowed
-                self._modbus_item.is_invalid = True
-                return None
-            case -32767:
-                # Sensor broken set return value to -99.9 to inform user
-                self._modbus_item.is_invalid = False
-                return -999
-            case _:
-                # Temperature Sensor seems to be Einerkomplement
-                if val > 32768:
-                    val = val - 65536
-                self._modbus_item.is_invalid = False
-                return val
+        value, absent = decode_temperature(val)
+        self._modbus_item.is_invalid = absent
+        return value
 
     def check_percentage(self, val: int) -> int | None:
         """Check availability of percentage item and translate return value to valid int.
@@ -274,11 +259,9 @@ class ModbusObject:
             Processed percentage value or None if invalid
 
         """
-        if val == 65535:
-            self._modbus_item.is_invalid = True
-            return None
-        self._modbus_item.is_invalid = False
-        return val
+        value, absent = decode_percentage(val)
+        self._modbus_item.is_invalid = absent
+        return value
 
     def check_status(self, val: int) -> int:
         """Check general availability of item.
