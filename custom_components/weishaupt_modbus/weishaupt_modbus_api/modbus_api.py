@@ -1,10 +1,16 @@
 """Modbus_API."""
 
 import asyncio
+import contextlib
 import logging
 
 from pymodbus.client import AsyncModbusTcpClient
 from pymodbus.exceptions import ModbusException
+
+from custom_components.weishaupt_modbus.register_validation import (
+    decode_percentage,
+    decode_temperature,
+)
 
 # Import only configuration constants from the local const file
 from .const import (
@@ -17,7 +23,6 @@ from .exceptions import ConnectionFailedError, WriteError
 
 # Import Modbus formatting models from local hpconst file
 from .hpconst import DEVICELISTS, FORMATS, ModbusItem
-import contextlib
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -196,27 +201,16 @@ class WeishauptModbusClient:
             )
 
             if mformat == FORMATS.TEMPERATURE:
-                match raw_val:
-                    case -32768 | 32768:
-                        item.is_invalid = True
-                        return None
-                    case -32767:
-                        item.is_invalid = False
-                        return -999
-                    case _:
-                        if raw_val > 32768:
-                            raw_val -= 65536
-                        item.is_invalid = False
-                        return raw_val
+                value, absent = decode_temperature(raw_val)
+                item.is_invalid = absent
+                return value
 
-            elif mformat == FORMATS.PERCENTAGE:
-                if raw_val == 65535:
-                    item.is_invalid = True
-                    return None
-                item.is_invalid = False
-                return raw_val
+            if mformat == FORMATS.PERCENTAGE:
+                value, absent = decode_percentage(raw_val)
+                item.is_invalid = absent
+                return value
 
-            elif mformat == FORMATS.STATUS:
+            if mformat == FORMATS.STATUS:
                 item.is_invalid = False
                 return raw_val
 
