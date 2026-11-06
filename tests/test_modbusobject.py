@@ -175,7 +175,7 @@ class TestModbusObject:
 
         result = obj.check_temperature(-32767)
 
-        assert result == -999
+        assert result is None
         assert mock_modbus_item.is_invalid is False
 
     def test_check_temperature_negative(self, modbus_api, mock_modbus_item):
