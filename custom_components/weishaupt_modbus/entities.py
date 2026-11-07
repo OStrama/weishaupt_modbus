@@ -480,7 +480,7 @@ class MyWebifSensorEntity(CoordinatorEntity, SensorEntity, MyEntity):
         """Initialize of MySensorEntity."""
         super().__init__(coordinator, context=idx)
         self.idx = idx
-        MyEntity.__init__(self, config_entry, api_item, coordinator)
+        MyEntity.__init__(self, config_entry, api_item)
 
         # Initialize MyEntity with minimal parameters
         self._config_entry = config_entry
@@ -490,6 +490,7 @@ class MyWebifSensorEntity(CoordinatorEntity, SensorEntity, MyEntity):
         self._attr_unique_id = self._api_item.translation_key
         self._attr_translation_key = self._api_item.translation_key
         self._attr_has_entity_name = True
+        self._attr_state_class = self._api_item.params.get("stateclass")
 
         if self._api_item.format == FORMATS.TEXT:
             self._attr_suggested_display_precision = None
