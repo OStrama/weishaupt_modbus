@@ -8,6 +8,7 @@ from .enums import (
     HeatPumpOperation,
     HeatPumpRestMode,
 )
+from .register_values import percentage, sensor_temperature
 
 
 class HeatPumpInput(Component):
@@ -21,69 +22,31 @@ class HeatPumpInput(Component):
     fault = enum(33102, HeatPumpFault)
     """Heat pump fault status."""
 
-    power_request = gauge(
-        33103,
-        1,
-        unit="%",
-    )
+    power_request = percentage(33103)
     """Heat pump power demand."""
 
-    flow_temperature = gauge(
-        33104,
-        0.1,
-        unit="°C",
-    )
+    flow_temperature = sensor_temperature(33104)
     """Heat pump flow temperature."""
 
-    return_temperature = gauge(
-        33105,
-        0.1,
-        unit="°C",
-    )
+    return_temperature = sensor_temperature(33105)
     """Heat pump return temperature."""
 
-    evaporation_temperature = gauge(
-        33106,
-        0.1,
-        unit="°C",
-    )
+    evaporation_temperature = sensor_temperature(33106)
     """Evaporation temperature."""
 
-    compressor_suction_temperature = gauge(
-        33107,
-        0.1,
-        unit="°C",
-    )
+    compressor_suction_temperature = sensor_temperature(33107)
     """Compressor suction gas temperature."""
 
-    diverter_temperature = gauge(
-        33108,
-        0.1,
-        unit="°C",
-        nan=32768,
-    )
+    diverter_temperature = sensor_temperature(33108)
     """Diverter temperature."""
 
-    regenerative_flow_temperature = gauge(
-        33109,
-        0.1,
-        unit="°C",
-        nan=32768,
-    )
+    regenerative_flow_temperature = sensor_temperature(33109)
     """Regenerative flow demand temperature."""
 
-    buffer_temperature = gauge(
-        33110,
-        0.1,
-        unit="°C",
-    )
+    buffer_temperature = sensor_temperature(33110)
     """Buffer temperature."""
 
-    precise_flow_temperature = gauge(
-        33111,
-        0.1,
-        unit="°C",
-    )
+    precise_flow_temperature = sensor_temperature(33111)
     """Precise flow temperature (sum flow B7)."""
 
     @property
