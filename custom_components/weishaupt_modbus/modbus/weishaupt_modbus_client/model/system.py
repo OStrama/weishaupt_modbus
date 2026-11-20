@@ -1,11 +1,12 @@
 """Weishaupt system register models."""
 
-from modbus_connection.model import Component, enum, gauge, integer
+from modbus_connection.model import enum, gauge, integer
 
+from .component import WeishauptComponent
 from .enums import SysError, SysOperatingDisplay, SysOperatingMode
 
 
-class SystemStatus(Component):
+class SystemStatus(WeishauptComponent):
     """Weishaupt system input registers (Input Registers - 3xxxx)."""
 
     register_space = "input"
@@ -37,7 +38,7 @@ class SystemStatus(Component):
     """Operating display status."""
 
 
-class SystemConfig(Component):
+class SystemConfig(WeishauptComponent):
     """Weishaupt system configuration registers (Holding Registers - 4xxxx)."""
 
     register_space = "holding"

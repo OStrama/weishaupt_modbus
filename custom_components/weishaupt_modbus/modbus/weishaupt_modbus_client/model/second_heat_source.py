@@ -1,7 +1,8 @@
 """Weishaupt second heat source register models."""
 
-from modbus_connection.model import Component, enum, gauge, integer
+from modbus_connection.model import enum, gauge, integer
 
+from .component import WeishauptComponent
 from .enums import (
     ElectricHeater1Configuration,
     ElectricHeater2Configuration,
@@ -10,7 +11,7 @@ from .enums import (
 )
 
 
-class SecondHeatSourceInput(Component):
+class SecondHeatSourceInput(WeishauptComponent):
     """Weishaupt second heat source input registers."""
 
     register_space = "input"
@@ -51,7 +52,7 @@ class SecondHeatSourceInput(Component):
     )
 
 
-class SecondHeatSourceConfig(Component):
+class SecondHeatSourceConfig(WeishauptComponent):
     """Weishaupt second heat source configuration registers."""
 
     configuration = enum(

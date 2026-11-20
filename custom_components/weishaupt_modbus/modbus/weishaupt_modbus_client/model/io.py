@@ -1,9 +1,11 @@
 """Weishaupt IO register models."""
 
-from modbus_connection.model import Component, gauge, integer
+from modbus_connection.model import gauge, integer
+
+from .component import WeishauptComponent
 
 
-class IOInput(Component):
+class IOInput(WeishauptComponent):
     """Weishaupt IO input registers."""
 
     register_space = "input"
@@ -41,7 +43,7 @@ class IOInput(Component):
     """DE2 input status."""
 
 
-class IOConfig(Component):
+class IOConfig(WeishauptComponent):
     """Weishaupt IO configuration registers."""
 
     register_space = "holding"

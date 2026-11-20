@@ -1,7 +1,8 @@
 """Weishaupt heating circuit register models."""
 
-from modbus_connection.model import Component, enum, gauge, integer, repeating_group
+from modbus_connection.model import enum, gauge, integer, repeating_group
 
+from .component import WeishauptComponent
 from .enums import (
     HeatingCircuitConfiguration,
     HeatingCircuitDemand,
@@ -9,7 +10,7 @@ from .enums import (
 )
 
 
-class HeatingCircuitInput(Component):
+class HeatingCircuitInput(WeishauptComponent):
     """Weishaupt heating circuit input registers."""
 
     register_space = "input"
@@ -51,7 +52,7 @@ class HeatingCircuitInput(Component):
     register_31106 = integer(31106)
 
 
-class HeatingCircuitConfig(Component):
+class HeatingCircuitConfig(WeishauptComponent):
     """Weishaupt heating circuit configuration registers."""
 
     configuration = enum(
@@ -140,7 +141,7 @@ class HeatingCircuitConfig(Component):
     )
 
 
-class HeatingCircuitInputs(Component):
+class HeatingCircuitInputs(WeishauptComponent):
     """Repeated Weishaupt heating circuit input registers."""
 
     heating_circuits = repeating_group(
@@ -150,7 +151,7 @@ class HeatingCircuitInputs(Component):
     )
 
 
-class HeatingCircuitConfigs(Component):
+class HeatingCircuitConfigs(WeishauptComponent):
     """Repeated Weishaupt heating circuit configuration registers."""
 
     heating_circuits = repeating_group(
