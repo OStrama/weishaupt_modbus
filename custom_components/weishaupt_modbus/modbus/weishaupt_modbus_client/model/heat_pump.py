@@ -1,7 +1,8 @@
 """Weishaupt heat pump register models."""
 
-from modbus_connection.model import Component, enum, gauge, integer
+from modbus_connection.model import enum, gauge, integer
 
+from .component import WeishauptComponent
 from .enums import (
     HeatPumpConfiguration,
     HeatPumpFault,
@@ -11,7 +12,7 @@ from .enums import (
 from .register_values import percentage, sensor_temperature
 
 
-class HeatPumpInput(Component):
+class HeatPumpInput(WeishauptComponent):
     """Weishaupt heat pump input registers."""
 
     register_space = "input"
@@ -58,7 +59,7 @@ class HeatPumpInput(Component):
         return self.precise_flow_temperature - self.return_temperature
 
 
-class HeatPumpConfig(Component):
+class HeatPumpConfig(WeishauptComponent):
     """Weishaupt heat pump configuration registers."""
 
     configuration = enum(

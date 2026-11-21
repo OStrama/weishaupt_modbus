@@ -1,9 +1,11 @@
 """Weishaupt statistics register models."""
 
-from modbus_connection.model import Component, integer
+from modbus_connection.model import integer
+
+from .component import WeishauptComponent
 
 
-class StatisticsInput(Component):
+class StatisticsInput(WeishauptComponent):
     """Weishaupt statistics input registers."""
 
     register_space = "input"

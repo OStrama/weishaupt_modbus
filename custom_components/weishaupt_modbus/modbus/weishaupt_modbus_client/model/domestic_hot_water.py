@@ -1,11 +1,13 @@
 """Weishaupt domestic hot water register models."""
 
-from modbus_connection.model import Component, gauge, integer
+from modbus_connection.model import gauge, integer
+
+from .component import WeishauptComponent
 
 from .register_values import sensor_temperature
 
 
-class DomesticHotWaterInput(Component):
+class DomesticHotWaterInput(WeishauptComponent):
     """Weishaupt domestic hot water input registers."""
 
     register_space = "input"
@@ -20,7 +22,7 @@ class DomesticHotWaterInput(Component):
     temperature = sensor_temperature(32102)
 
 
-class DomesticHotWaterConfig(Component):
+class DomesticHotWaterConfig(WeishauptComponent):
     """Weishaupt domestic hot water configuration registers."""
 
     configuration = integer(
