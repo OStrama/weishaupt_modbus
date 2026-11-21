@@ -1,9 +1,11 @@
 """Weishaupt system register models."""
 
-from modbus_connection.model import enum, gauge, integer
+
+from modbus_connection.model import enum, integer
 
 from .component import WeishauptComponent
 from .enums import SysError, SysOperatingDisplay, SysOperatingMode
+from .register_values import sensor_temperature
 
 
 class SystemStatus(WeishauptComponent):
@@ -11,18 +13,10 @@ class SystemStatus(WeishauptComponent):
 
     register_space = "input"
 
-    outside_temperature = gauge(
-        30001,
-        scale=0.1,
-        unit="°C",
-    )
+    outside_temperature = sensor_temperature(30001)
     """Outside temperature."""
 
-    intake_temperature = gauge(
-        30002,
-        scale=0.1,
-        unit="°C",
-    )
+    intake_temperature = sensor_temperature(30002)
     """Air intake temperature."""
 
     error = enum(30003, SysError)
