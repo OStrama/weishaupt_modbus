@@ -7,6 +7,7 @@ from .enums import (
     HeatingCircuitDemand,
     HeatingCircuitOperation,
 )
+from .register_values import percentage, sensor_temperature
 
 
 class HeatingCircuitInput(Component):
@@ -21,18 +22,9 @@ class HeatingCircuitInput(Component):
         nan=32768,
     )
 
-    room_temperature = gauge(
-        31102,
-        0.1,
-        unit="°C",
-        nan=32768,
-    )
+    room_temperature = sensor_temperature(31102)
 
-    room_humidity = integer(
-        31103,
-        unit="%",
-        nan=65535,
-    )
+    room_humidity = percentage(31103)
 
     flow_target_temperature = gauge(
         31104,
@@ -41,12 +33,7 @@ class HeatingCircuitInput(Component):
         nan=32768,
     )
 
-    flow_temperature = gauge(
-        31105,
-        0.1,
-        unit="°C",
-        nan=32768,
-    )
+    flow_temperature = sensor_temperature(31105)
 
     register_31106 = integer(31106)
 
