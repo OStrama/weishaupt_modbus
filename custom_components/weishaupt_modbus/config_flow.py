@@ -75,7 +75,6 @@ class ConfigFlow(
 
     VERSION = 9
     MINOR_VERSION = 1
-    CONNECTION_CLASS = config_entries.CONN_CLASS_LOCAL_PUSH
 
     def __init__(self) -> None:
         """Initialize the flow."""
@@ -228,7 +227,7 @@ class ConfigFlow(
                 self._abort_if_unique_id_configured()
 
                 try:
-                    await test_modbus(
+                    await check_modbus_connection(
                         validated_data[CONF.HOST],
                         validated_data.get(CONF.PORT, 502),
                     )
@@ -310,7 +309,7 @@ class ConfigFlow(
                     **validated_data,
                 }
 
-                await test_modbus(
+                await check_modbus_connection(
                     test_data[CONF.HOST],
                     test_data.get(CONF.PORT, 502),
                 )
@@ -366,7 +365,7 @@ class ConfigFlow(
         )
 
 
-async def test_modbus(host: str, port: int) -> bool:
+async def check_modbus_connection(host: str, port: int) -> bool:
     """Test the connection to the Weishaupt heat pump."""
     params = ModbusTcpParams(
         host=host,
