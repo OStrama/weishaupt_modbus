@@ -153,6 +153,10 @@ class ConfigFlow(
         return probatio.Schema(
             schema={
                 probatio.Optional(
+                    schema=CONF.CB_WEBIF_WSB,
+                    default=self._stored_data.get(CONF.CB_WEBIF_WSB, False),
+                ): BooleanSelector(),
+                probatio.Optional(
                     schema=CONF.CB_WEBIF_MOCKUP_DATA,
                     default=self._stored_data.get(CONF.CB_WEBIF_MOCKUP_DATA, False),
                 ): BooleanSelector(),
@@ -322,6 +326,7 @@ class ConfigFlow(
 
                 # If CB_WEBIF is false, clear any stale WebIF settings
                 # from stored data.
+                self._stored_data[CONF.CB_WEBIF_WSB] = False
                 for key in [
                     CONF.CB_WEBIF_MOCKUP_DATA,
                     CONF.USERNAME,

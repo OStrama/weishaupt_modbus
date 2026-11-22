@@ -15,6 +15,7 @@ from .modbus.coordinator import WeishauptCoordinator
 from .modbus.weishaupt_modbus_client.model.device import Weishaupt
 from .webif.coordinator import WeishauptWebifCoordinator
 from .webif.description.description import WebifConnection
+from .webif.wsb import WSB_REQUEST_DELAY_SECONDS, WsbWebifCoordinator, use_wsb_webif
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -56,21 +57,26 @@ async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
 
     webif_coordinator = None
 
+    wsb_webif = use_wsb_webif(entry)
     if entry.data.get(CONF.CB_WEBIF):
+        webif_options = {"request_delay": WSB_REQUEST_DELAY_SECONDS} if wsb_webif else {}
         webif_api = WebifConnection(
             ip=entry.data[CONF.HOST],
             user=entry.data[CONF.USERNAME],
             password=entry.data[CONF.PASSWORD],
+            **webif_options,
         )
 
-        webif_coordinator = WeishauptWebifCoordinator(
+        coordinator_type = WsbWebifCoordinator if wsb_webif else WeishauptWebifCoordinator
+        webif_coordinator = coordinator_type(
             hass=hass,
             api=webif_api,
             entry=entry,
             mcu_lock=mcu_lock,
         )
 
-        await webif_coordinator.async_config_entry_first_refresh()
+        if not wsb_webif:
+            await webif_coordinator.async_config_entry_first_refresh()
     else:
         webif_api = None
     readings = [
@@ -111,6 +117,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: MyConfigEntry) -> bool:
         mcu_lock=mcu_lock,
     )
     await weishaupt_coordinator.async_config_entry_first_refresh()
+    if wsb_webif and webif_coordinator is not None:
+        # WebIF supplies optional telemetry. A failed first WebIF poll must
+        # not prevent the Modbus platforms from loading.
+        await webif_coordinator.async_refresh()
 
     entry.runtime_data = MyData(
         config_dir=hass.config.config_dir,

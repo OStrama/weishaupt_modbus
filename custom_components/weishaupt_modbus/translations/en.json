@@ -33,6 +33,12 @@
                     "Poll Statistik": "Retrieve statistics?"
                 }
             },
+            "webif": {
+                "description": "The WSB profile supports the selected heat pump, heating circuit 1 and secondary heat source reports.",
+                "data": {
+                    "webif-wsb": "Use the WSB profile for WEM Lokal"
+                }
+            },
             "reconfigure": {
                 "description": "Please update your Modbus configuration parameters.",
                 "data": {
@@ -1098,6 +1104,42 @@
             },
             "webif_heat_pump_volume_flow": {
                 "name": "Volume flow"
+            },
+            "webif_heat_pump_pump_regulation_heating": {
+                "name": "Pump regulation for heating"
+            },
+            "webif_heat_pump_pump_regulation_hot_water": {
+                "name": "Pump regulation for hot water"
+            },
+            "webif_heat_pump_pump_regulation_cooling": {
+                "name": "Pump regulation for cooling"
+            },
+            "webif_heat_pump_pump_function": {
+                "name": "Circulation pump function"
+            },
+            "webif_heat_pump_pump_utility_lock_release": {
+                "name": "Pump enabled during utility lockout"
+            },
+            "webif_heat_pump_compressor_frequency_target": {
+                "name": "Compressor frequency target"
+            },
+            "webif_heat_pump_compressor_frequency_actual": {
+                "name": "Compressor frequency actual"
+            },
+            "webif_heat_pump_outdoor_heat_exchanger_inlet_temperature": {
+                "name": "Outdoor heat exchanger inlet (OCT)"
+            },
+            "webif_heat_pump_outdoor_heat_exchanger_middle_temperature": {
+                "name": "Outdoor heat exchanger middle (OMT)"
+            },
+            "webif_heat_pump_indoor_heat_exchanger_temperature": {
+                "name": "Indoor heat exchanger (B12)"
+            },
+            "webif_heat_pump_indoor_refrigerant_temperature": {
+                "name": "Indoor refrigerant temperature (B8)"
+            },
+            "webif_heat_pump_control_board_version": {
+                "name": "Control board version (WWP-CPU)"
             },
             "webif_heat_pump_diverter_valve_position": {
                 "name": "Diverter valve position"

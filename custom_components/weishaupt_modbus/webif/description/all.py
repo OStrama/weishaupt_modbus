@@ -1,5 +1,6 @@
 """All WebIf entieties come together here."""
 
+from custom_components.weishaupt_modbus.webif.wsb import WSB_FIELDS, use_wsb_webif
 from homeassistant import config_entries
 
 from ...const import CONF
@@ -13,6 +14,9 @@ from .heating_circuits import (
 from .secondary_heat_source import WEBIF_SECONDARY_HEAT_SOURCE
 from .statistics import WEBIF_STATISTICS
 from .waermepumpe import WEBIF_HEAT_PUMP
+from .wsb import WSB_HEAT_PUMP_DESCRIPTIONS
+
+_WSB_FIELD_KEYS = frozenset((field.report, field.key) for field in WSB_FIELDS)
 
 
 def get_webif_entities(entry: config_entries.ConfigEntry) -> list:
@@ -43,4 +47,12 @@ def get_webif_entities(entry: config_entries.ConfigEntry) -> list:
     if entry.data.get(CONF.CB_WEBIF_SATISTICS):
         entities.extend(WEBIF_STATISTICS)
 
+    if use_wsb_webif(entry):
+        if entry.data.get(CONF.CB_WEBIF_WP):
+            entities.extend(WSB_HEAT_PUMP_DESCRIPTIONS)
+        return [
+            description
+            for description in entities
+            if (description.report_name, description.key) in _WSB_FIELD_KEYS
+        ]
     return entities

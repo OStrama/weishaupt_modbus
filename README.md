@@ -75,7 +75,7 @@ The following information is required during setup:
 | **HK2–HK5** | Enable the heating circuits that are present on the heat pump. |
 | **WebIF** | Optional **experimental** WebIF support. See the [WebIF setup guide](https://github.com/OStrama/weishaupt_modbus/wiki/Enable-Webif) for details. |
 
-
+For a WSB using WEM Lokal, enable WebIF and then select the WSB profile in the WebIF setup step. Choose the reports you want from Heat pump, Heating circuit 1 and Secondary heat source. The WSB reader uses the controller's own report links and polls those reports every five minutes. Pump settings shown by the profile are read-only.
 
 ### Power mapping
 

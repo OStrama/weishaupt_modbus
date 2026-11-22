@@ -12,6 +12,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from ...weishaupt_modbus.const import CONF
+from .description.description import WebifSensorDescription
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -35,6 +36,7 @@ class WeishauptWebifCoordinator(
             name="Weishaupt WebIF",
             update_interval=timedelta(seconds=10),
             always_update=True,
+            config_entry=entry,
         )
 
         self.api = api
@@ -43,6 +45,14 @@ class WeishauptWebifCoordinator(
 
         self.data: dict[str, Any] = {}
         self._category_queue: list[str] = []
+
+    def value_for(self, description: WebifSensorDescription) -> int | float | str | None:
+        """Return a reading using the standard WebIF API."""
+        return description.value(self.api)
+
+    def field_available(self, description: WebifSensorDescription) -> bool:
+        """Follow the coordinator status for the standard WebIF reader."""
+        return True
 
     @override
     async def _async_update_data(self) -> dict[str, Any]:
