@@ -257,6 +257,7 @@ class DomesticHotWaterPush(IntEnum):
     domestic_hot_water_push_225 = 225
     domestic_hot_water_push_230 = 230
     domestic_hot_water_push_235 = 235
+    domestic_hot_water_push_240 = 240
 
 
 class Dummy(IntEnum):
