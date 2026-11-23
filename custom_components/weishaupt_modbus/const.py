@@ -25,6 +25,7 @@ class ConfConstants:
     HK4: str = "Heizkreis 4"
     HK5: str = "Heizkreis 5"
     CB_WEBIF: str = "enable-webif"
+    CB_WEBIF_WSB: str = "webif-wsb"
     PASSWORD: str = CONF_PASSWORD
     USERNAME: str = CONF_USERNAME
     WEBIF_TOKEN: str = "Web-IF-Token"

@@ -48,9 +48,9 @@ class WebifSensor(CoordinatorEntity[WeishauptWebifCoordinator], SensorEntity):
 
     @override
     @property
-    def native_value(self) -> float | str | None:
+    def native_value(self) -> int | float | str | None:
         """Return the sensor value."""
-        value = self.description.value(self.coordinator.api)
+        value = self.coordinator.value_for(self.description)
 
         if value is None:
             return None
@@ -59,6 +59,12 @@ class WebifSensor(CoordinatorEntity[WeishauptWebifCoordinator], SensorEntity):
             return f"{self.description.report_name}_{self.description.key}_{value}"
 
         return value
+
+    @override
+    @property
+    def available(self) -> bool:
+        """Use the coordinator's availability for this field."""
+        return super().available and self.coordinator.field_available(self.description)
 
     @override
     @property

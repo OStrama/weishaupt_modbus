@@ -33,6 +33,12 @@
                     "Poll Statistik": "Statistieken ophalen?"
                 }
             },
+            "webif": {
+                "description": "Het WSB-profiel ondersteunt de geselecteerde rapporten voor de warmtepomp, verwarmingscircuit 1 en de tweede warmtebron.",
+                "data": {
+                    "webif-wsb": "WSB-profiel voor WEM Lokal gebruiken"
+                }
+            },
             "reconfigure": {
                 "description": "Werk uw Modbus-configuratieparameters bij.",
                 "data": {
@@ -1099,6 +1105,42 @@
             },
             "webif_heat_pump_volume_flow": {
                 "name": "Volumestroom"
+            },
+            "webif_heat_pump_pump_regulation_heating": {
+                "name": "Pompregeling verwarmen"
+            },
+            "webif_heat_pump_pump_regulation_hot_water": {
+                "name": "Pompregeling warm water"
+            },
+            "webif_heat_pump_pump_regulation_cooling": {
+                "name": "Pompregeling koelen"
+            },
+            "webif_heat_pump_pump_function": {
+                "name": "Functie circulatiepomp"
+            },
+            "webif_heat_pump_pump_utility_lock_release": {
+                "name": "Pompvrijgave tijdens netblokkering"
+            },
+            "webif_heat_pump_compressor_frequency_target": {
+                "name": "Doelfrequentie compressor"
+            },
+            "webif_heat_pump_compressor_frequency_actual": {
+                "name": "Werkelijke compressorfrequentie"
+            },
+            "webif_heat_pump_outdoor_heat_exchanger_inlet_temperature": {
+                "name": "Inlaat warmtewisselaar buitenunit (OCT)"
+            },
+            "webif_heat_pump_outdoor_heat_exchanger_middle_temperature": {
+                "name": "Midden warmtewisselaar buitenunit (OMT)"
+            },
+            "webif_heat_pump_indoor_heat_exchanger_temperature": {
+                "name": "Warmtewisselaar binnenunit (B12)"
+            },
+            "webif_heat_pump_indoor_refrigerant_temperature": {
+                "name": "Koudemiddeltemperatuur binnenunit (B8)"
+            },
+            "webif_heat_pump_control_board_version": {
+                "name": "Versie regelprint (WWP-CPU)"
             },
             "webif_heat_pump_diverter_valve_position": {
                 "name": "Stand omschakelklep"

@@ -33,6 +33,12 @@
                     "Poll Statistik": "Statistik abrufen?"
                 }
             },
+            "webif": {
+                "description": "Das WSB-Profil unterstützt die ausgewählten Berichte für Wärmepumpe, Heizkreis 1 und 2. Wärmeerzeuger.",
+                "data": {
+                    "webif-wsb": "WSB-Profil für WEM Lokal"
+                }
+            },
             "reconfigure": {
                 "description": "Bitte aktualisieren Sie Ihre Modbus-Konfigurationsparameter.",
                 "data": {
@@ -1099,6 +1105,42 @@
             },
             "webif_heat_pump_volume_flow": {
                 "name": "Volumenstrom"
+            },
+            "webif_heat_pump_pump_regulation_heating": {
+                "name": "Pumpenregelung Heizen"
+            },
+            "webif_heat_pump_pump_regulation_hot_water": {
+                "name": "Pumpenregelung Warmwasser"
+            },
+            "webif_heat_pump_pump_regulation_cooling": {
+                "name": "Pumpenregelung Kühlen"
+            },
+            "webif_heat_pump_pump_function": {
+                "name": "Funktion Umwälzpumpe"
+            },
+            "webif_heat_pump_pump_utility_lock_release": {
+                "name": "Pumpenfreigabe bei EVU-Sperre"
+            },
+            "webif_heat_pump_compressor_frequency_target": {
+                "name": "Verdichterfrequenz Soll"
+            },
+            "webif_heat_pump_compressor_frequency_actual": {
+                "name": "Verdichterfrequenz Ist"
+            },
+            "webif_heat_pump_outdoor_heat_exchanger_inlet_temperature": {
+                "name": "Wärmetauscher Aussengerät Eintritt (OCT)"
+            },
+            "webif_heat_pump_outdoor_heat_exchanger_middle_temperature": {
+                "name": "Wärmetauscher Aussengerät Mitte (OMT)"
+            },
+            "webif_heat_pump_indoor_heat_exchanger_temperature": {
+                "name": "Wärmetauscher Innengerät (B12)"
+            },
+            "webif_heat_pump_indoor_refrigerant_temperature": {
+                "name": "Kältemittel Innengerät (B8)"
+            },
+            "webif_heat_pump_control_board_version": {
+                "name": "Version Geräteelektronik (WWP-CPU)"
             },
             "webif_heat_pump_diverter_valve_position": {
                 "name": "Stellung Umschaltventil"
